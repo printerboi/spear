@@ -4,16 +4,17 @@
 
 #include "RaplReader.h"
 #include <fstream>
+#include <utility>
 #include "iostream"
 #include "cmath"
 #include "ctime"
 using namespace std;
 
-RaplReader::RaplReader() {
-    this->raplpath = "/sys/class/powercap/intel-rapl:0";
+RaplReader::RaplReader(string path) {
+    this->raplpath = std::move(path);
 }
 
-long RaplReader::readEnergy() {
+long RaplReader::readEnergy() const {
     ifstream energyFile;
     string energyStr;
     string buffer;
@@ -40,7 +41,7 @@ long RaplReader::readEnergy() {
 }
 
 
-void RaplReader::benchmarkCode() {
+void RaplReader::benchmarkCode(void (*codeToRun)()) const {
     timespec timeFirst{};
     timespec timeSecond{};
 
@@ -50,7 +51,7 @@ void RaplReader::benchmarkCode() {
     //============================================
     //              Code to benchmark
     //============================================
-    for (long i = 0; i < 100000000000; ++i) {}
+    codeToRun();
     //============================================
 
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &timeFirst);
@@ -67,9 +68,20 @@ void RaplReader::benchmarkCode() {
     printf("Watts used: %.10e W\n", watts);
 }
 
+static void forLoop() {
+    for (int i = 0; i < 1000000; ++i) {}
+}
+
+static void add() {
+    int x = 42;
+    int y = 43;
+    int z = x + y;
+}
+
 int main(){
-    RaplReader RP = RaplReader();
-    RP.benchmarkCode();
+    RaplReader RP = RaplReader("/sys/class/powercap/intel-rapl:0");
+
+    RP.benchmarkCode(&add);
 
     return 0;
 }
