@@ -67,9 +67,9 @@ void RaplReader::benchmarkCode() {
     printf("Watts used: %.10e W\n", watts);
 }
 
-int main(){
+/*int main(){
     RaplReader RP = RaplReader();
     RP.benchmarkCode();
 
     return 0;
-}
+}*/
