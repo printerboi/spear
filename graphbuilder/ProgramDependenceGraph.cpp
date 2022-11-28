@@ -3,3 +3,5 @@
 //
 
 #include "ProgramDependenceGraph.h"
+
+ProgramDependenceGraph::ProgramDependenceGraph() = default;

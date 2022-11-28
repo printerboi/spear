@@ -6,7 +6,7 @@
 #define GRAPHBUILDER_GRAPHBUILDER_H
 
 #include <memory>
-#include "llvm-12/llvm/IR/Module.h"
+#include "llvm/IR/Module.h"
 #include "string"
 #include "ProgramDependenceGraph.h"
 
