@@ -44,4 +44,5 @@ jobs:
       uses: mattnotmitt/doxygen-action@1.9.4
       with:
         doxyfile-path: 'docs/Doxyfile'
+        working-directory: ${{github.workspace}}/docs
 
