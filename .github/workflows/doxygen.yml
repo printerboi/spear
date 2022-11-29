@@ -1,0 +1,14 @@
+name: Doxygen
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  document:
+    name: documenting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mattnotmitt/doxygen-action@1.9.4
+      - with:
+          doxyfile-path: 'docs/Doxygen'
