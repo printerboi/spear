@@ -9,11 +9,11 @@
 #include "ctime"
 using namespace std;
 
-RaplReader::RaplReader() {
-    this->raplpath = "/sys/class/powercap/intel-rapl:0";
+RaplReader::RaplReader(std::string path) {
+    this->raplpath = path;
 }
 
-long RaplReader::readEnergy() {
+long RaplReader::readEnergy() const {
     ifstream energyFile;
     string energyStr;
     string buffer;
