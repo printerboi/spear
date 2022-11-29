@@ -1,0 +1,2 @@
+add_subdirectory(graphbuilder)
+add_subdirectory(rapl-reader)
