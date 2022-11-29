@@ -3,8 +3,8 @@ project(graphbuilder)
 
 set(CMAKE_CXX_STANDARD 14)
 
-find_package(LLVM 12 REQUIRED CONFIG)
-include_directories(/usr/local/llvm-12/include/)
+find_package(LLVM 14 REQUIRED CONFIG)
+include_directories(${LLVM_PATH})
 include_directories(.)
 
 add_executable(graphbuilder
