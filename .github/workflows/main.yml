@@ -62,7 +62,6 @@ jobs:
     steps:
       - name: Download File
         id: download-rip
-        working-directory: "ripper"
-        run: "python overleaf-ripper.py"
+        run: "python ./ripper/overleaf-ripper.py"
         
       
