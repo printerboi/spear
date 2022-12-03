@@ -58,7 +58,7 @@ jobs:
         id: rip
         uses: printerboi/overleaf-ripper@v1
         with:
-          command: python overleaf-ripper.py
+          entryPoint: python overleaf-ripper.py
 
 
 
