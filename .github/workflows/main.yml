@@ -56,10 +56,9 @@ jobs:
     steps:
       - name: Rip the pdf from the source
         id: rip
+        uses: printerboi/overleaf-ripper@v1
         with:
-          image: printerboi/overleaf-ripper@v1
-          options: -v ${{ github.workspace }}/ripper/files:/ripper/files
-          run: python overleaf-ripper.py
+          command: python overleaf-ripper.py
 
 
 
