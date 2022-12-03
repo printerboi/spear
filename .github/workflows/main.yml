@@ -56,9 +56,6 @@ jobs:
     steps:
       - name: Rip the pdf from the source
         id: rip
-        uses: printerboi/overleaf-ripper@v1
-        with:
-          entryPoint: python overleaf-ripper.py
-
+        run: printerboi/overleaf-ripper@v1
 
 
