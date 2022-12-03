@@ -49,4 +49,13 @@ jobs:
           branch: gh-pages
           folder: docs/html
           config_file: Doxyfile
+          
+  overleaf-ripper:
+    runs-on: printerboi/overleaf-ripper
+    name: Ripper
+    steps:
+      - name: Rip the pdf from the source
+        id: rip
+
+
 
