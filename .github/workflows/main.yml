@@ -53,15 +53,12 @@ jobs:
   overleaf-ripper:
     runs-on: ubuntu-latest
     name: Ripper
-    container:
-      image: printerboi/overleaf-ripper@v1
-      env:
-        NODE_ENV: development
-      volumes:
-        - ripper/files:/ripper/files
     steps:
+      - name: Setup Ripper
+        id: setup
+        uses: printerboi/overleaf-ripper@v1
       - name: Download File
         id: download-rip
-        run: "ls -al"
+        run: "docker exec overleaf-ripper \" ls -al \""
         
       
