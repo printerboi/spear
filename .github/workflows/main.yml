@@ -51,12 +51,12 @@ jobs:
           config_file: Doxyfile
           
   overleaf-ripper:
-    runs-on: printerboi/overleaf-ripper
+    runs-on: ubuntu-latest
     name: Ripper
     steps:
       - name: Rip the pdf from the source
         id: rip
-        run: python overleaf-ripper.py
+        uses: printerboi/overleaf-ripper@v1
 
 
 
