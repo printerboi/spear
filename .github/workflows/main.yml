@@ -54,11 +54,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Ripper
     steps:
-      - name: Rip the pdf from the source
+      - name: Setup ripper
         id: rip
         uses: printerboi/overleaf-ripper@v1
-        with:
-          script: |
-                  python overleaf-ripper
-
-
+      - name: Download File
+        id: download-rip
+        run: "ls -al"
+      
