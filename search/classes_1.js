@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['main_9',['main',['../classmain.html',1,'']]]
+  ['raplreader_6',['RaplReader',['../classRaplReader.html',1,'']]],
+  ['registerreader_7',['RegisterReader',['../classRegisterReader.html',1,'']]]
 ];
