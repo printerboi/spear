@@ -40,7 +40,7 @@ long RaplReader::readEnergy() const {
 }
 
 
-void RaplReader::benchmarkCode() {
+void RaplReader::benchmarkCode() const {
     timespec timeFirst{};
     timespec timeSecond{};
 

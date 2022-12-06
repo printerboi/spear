@@ -32,7 +32,7 @@ class RaplReader {
          * Prints out a summary of the time the code ran, and the used energy
          * @param codeToRun Address of the function to benchmark
          */
-        void benchmarkCode(void (*codeToRun)()) const;
+        void benchmarkCode() const;
 };
 
 

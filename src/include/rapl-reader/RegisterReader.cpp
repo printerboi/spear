@@ -35,26 +35,34 @@ uint64_t RegisterReader::read() {
 void RegisterReader::benchmarkCode() {
     timespec timeFirst{};
     timespec timeSecond{};
+    int iterations = 1000000000;
+    uint32_t a = 1;
+    uint32_t b = 3;
 
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &timeFirst);
     uint64_t energyBefore = read();
 
+
     //============================================
     //              Code to benchmark
     //============================================
-    for (long i = 0; i < 1000000; ++i) {}
+    for (long i = 0; i < iterations; ++i) {
+        uint32_t c = a / b;
+    }
     //============================================
 
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &timeFirst);
     uint64_t energyAfter = read();
-
     uint64_t absEnergy = energyAfter - energyBefore;
+    double middled = (double) absEnergy/iterations;
+
     double absTime = (double) timeFirst.tv_nsec - (double) timeSecond.tv_nsec;
 
     printf("Energy-Information for the benchmarked Code:");
     printf("\n\n");
     printf("Time running: %f ns ", absTime);
     printf("Energy consumed: %lu µJ ", absEnergy);
+    printf("Energy consumed per Iteration: %f µJ", middled);
     printf("\n");
 }
 
