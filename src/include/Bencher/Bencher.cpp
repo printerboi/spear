@@ -3,7 +3,6 @@
 //
 
 #include "Bencher.h"
-#include "RegisterReader.h"
 #include "iostream"
 
 Bencher::Bencher(int it, int rep){
@@ -51,11 +50,4 @@ uint64_t Bencher::benchmarkFile(std::string file) {
     }
 
     return engAverage/this->iterations;
-}
-
-int main(){
-    Bencher B = Bencher(10, 100);
-    B.benchmark();
-
-    return 0;
 }

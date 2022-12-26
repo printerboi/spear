@@ -5,6 +5,7 @@
 #ifndef BA_BENCHER_H
 #define BA_BENCHER_H
 
+#include "../Rapl-reader/RegisterReader.h"
 #include "string"
 
 /**
