@@ -14,27 +14,28 @@ void Bencher::benchmark() {
     uint64_t engUsed = 0;
 
     std::cout << "Benchmarking group M...\n" << std::endl;
-    engUsed = benchmarkFile("/home/max/Documents/workbench/bachelorarbeit/llvm-code-under-bench/groupM.ll");
+    engUsed = benchmarkFile("llvm-code-under-bench/groupM.ll");
     printf("Group M: %lu\n", engUsed);
 
     std::cout << "Benchmarking group B...\n" << std::endl;
-    engUsed = benchmarkFile("/home/max/Documents/workbench/bachelorarbeit/llvm-code-under-bench/groupB.ll");
+    engUsed = benchmarkFile("llvm-code-under-bench/groupB.ll");
     printf("Group B: %lu\n", engUsed);
 
     std::cout << "Benchmarking group D...\n" << std::endl;
-    engUsed = benchmarkFile("/home/max/Documents/workbench/bachelorarbeit/llvm-code-under-bench/groupD.ll");
+    engUsed = benchmarkFile("llvm-code-under-bench/groupD.ll");
     printf("Group D: %lu\n", engUsed);
 
     std::cout << "Benchmarking group G...\n" << std::endl;
-    engUsed = benchmarkFile("/home/max/Documents/workbench/bachelorarbeit/llvm-code-under-bench/groupG.ll");
+    engUsed = benchmarkFile("llvm-code-under-bench/groupG.ll");
     printf("Group G: %lu\n", engUsed);
 }
 
 uint64_t Bencher::benchmarkFile(std::string file) {
     RegisterReader regReader = RegisterReader(0);
+    char* relPath = getenv("BA_REL_PATH");
 
     char *command = new char[255];
-    sprintf(command, "lli %s", file.c_str());
+    sprintf(command, "lli %s/%s", relPath ,file.c_str());
     uint64_t engAverage = 0;
 
     for (int i = 0; i < this->iterations; ++i) {
