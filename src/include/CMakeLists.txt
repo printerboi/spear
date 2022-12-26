@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.16)
 
 
-add_subdirectory(rapl-reader)
+add_subdirectory(Rapl-reader)
