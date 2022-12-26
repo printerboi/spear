@@ -78,23 +78,27 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classRegisterReader.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRegisterReader.html">RegisterReader</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keywordtype">int</span> energyReg;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">int</span> unitReg;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">char</span>* regFile = <span class="keyword">new</span> <span class="keywordtype">char</span>[15];</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classRegisterReader.html">RegisterReader</a>(<span class="keywordtype">int</span> core);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> benchmarkCode();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        uint64_t getEnergy();</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        uint64_t getMultiplier();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        uint64_t read(<span class="keywordtype">int</span> reg, <span class="keywordtype">int</span> bytesToRead);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//RAPL_READER_REGISTERREADER_H</span></div>
-<div class="ttc" id="aclassRegisterReader_html"><div class="ttname"><a href="classRegisterReader.html">RegisterReader</a></div><div class="ttdef"><b>Definition:</b> RegisterReader.h:10</div></div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classRegisterReader.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRegisterReader.html">RegisterReader</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">int</span> energyReg;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">int</span> unitReg;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">char</span>* regFile = <span class="keyword">new</span> <span class="keywordtype">char</span>[15];</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189">RegisterReader</a>(<span class="keywordtype">int</span> core);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classRegisterReader.html#a1629470cdf0ce4e87e7a79ce024a583c">benchmarkCode</a>();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        uint64_t <a class="code" href="classRegisterReader.html#a71e704b8291c42006f4743a97b74e2b0">getEnergy</a>();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        uint64_t <a class="code" href="classRegisterReader.html#a20f11a206c2b9911257a76b54386e28e">getMultiplier</a>();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        uint64_t read(<span class="keywordtype">int</span> reg, <span class="keywordtype">int</span> bytesToRead);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;};</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//RAPL_READER_REGISTERREADER_H</span></div>
+<div class="ttc" id="aclassRegisterReader_html"><div class="ttname"><a href="classRegisterReader.html">RegisterReader</a></div><div class="ttdef"><b>Definition:</b> RegisterReader.h:13</div></div>
+<div class="ttc" id="aclassRegisterReader_html_a1629470cdf0ce4e87e7a79ce024a583c"><div class="ttname"><a href="classRegisterReader.html#a1629470cdf0ce4e87e7a79ce024a583c">RegisterReader::benchmarkCode</a></div><div class="ttdeci">void benchmarkCode()</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:45</div></div>
+<div class="ttc" id="aclassRegisterReader_html_a20f11a206c2b9911257a76b54386e28e"><div class="ttname"><a href="classRegisterReader.html#a20f11a206c2b9911257a76b54386e28e">RegisterReader::getMultiplier</a></div><div class="ttdeci">uint64_t getMultiplier()</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:40</div></div>
+<div class="ttc" id="aclassRegisterReader_html_a71e704b8291c42006f4743a97b74e2b0"><div class="ttname"><a href="classRegisterReader.html#a71e704b8291c42006f4743a97b74e2b0">RegisterReader::getEnergy</a></div><div class="ttdeci">uint64_t getEnergy()</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:36</div></div>
+<div class="ttc" id="aclassRegisterReader_html_ae6c04ca1a23d22c2dcd5adcde62d6189"><div class="ttname"><a href="classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189">RegisterReader::RegisterReader</a></div><div class="ttdeci">RegisterReader(int core)</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['registerreader_3',['RegisterReader',['../classRegisterReader.html',1,'']]],
-  ['repetitions_4',['repetitions',['../classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6',1,'Bencher']]]
+  ['iterations_5',['iterations',['../classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326',1,'Bencher']]]
 ];
