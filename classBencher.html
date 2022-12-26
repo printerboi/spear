@@ -69,6 +69,8 @@ $(function() {
 <div class="title">Bencher Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="Bencher_8h_source.html">Bencher.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -79,14 +81,14 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac5fa67b9ea18fe51612e53e7bfcab326"><td class="memItemLeft" align="right" valign="top"><a id="ac5fa67b9ea18fe51612e53e7bfcab326"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>iterations</b></td></tr>
+<tr class="memitem:ac5fa67b9ea18fe51612e53e7bfcab326"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">iterations</a></td></tr>
 <tr class="separator:ac5fa67b9ea18fe51612e53e7bfcab326"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace00f39bb36c3b86ecfba715d0cef8b6"><td class="memItemLeft" align="right" valign="top"><a id="ace00f39bb36c3b86ecfba715d0cef8b6"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>repetitions</b></td></tr>
+<tr class="memitem:ace00f39bb36c3b86ecfba715d0cef8b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">repetitions</a></td></tr>
 <tr class="separator:ace00f39bb36c3b86ecfba715d0cef8b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Simple class to benchmark the llvm-code and output the data in an appropriate format </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aefe635eb500396e9d3dbef949bbea3cb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aefe635eb500396e9d3dbef949bbea3cb">&#9670;&nbsp;</a></span>Bencher()</h2>
 
@@ -146,6 +148,37 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>repetitions</b></td></
       </table>
 </div><div class="memdoc">
 <p>Runs the benchmark and returns the values for the benchmarked files </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ac5fa67b9ea18fe51612e53e7bfcab326"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5fa67b9ea18fe51612e53e7bfcab326">&#9670;&nbsp;</a></span>iterations</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Bencher::iterations</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Times the energy values will be executed. Needed for the average </p>
+
+</div>
+</div>
+<a id="ace00f39bb36c3b86ecfba715d0cef8b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace00f39bb36c3b86ecfba715d0cef8b6">&#9670;&nbsp;</a></span>repetitions</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Bencher::repetitions</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Times a single program will be executed </p>
 
 </div>
 </div>
