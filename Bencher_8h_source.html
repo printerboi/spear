@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Bachelorarbeit: src/include/rapl-reader/RegisterReader.h Source File</title>
+<title>Bachelorarbeit: src/include/Bencher/Bencher.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,40 +61,38 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b0856f6b0d80ccb263b2f415c91f9e17.html">include</a></li><li class="navelem"><a class="el" href="dir_c0a305e438eb07e122ce028734f62e89.html">rapl-reader</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b0856f6b0d80ccb263b2f415c91f9e17.html">include</a></li><li class="navelem"><a class="el" href="dir_94a691fde29c29e22e8491ab5b10394c.html">Bencher</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">RegisterReader.h</div>  </div>
+<div class="title">Bencher.h</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Created by max on 25.11.22.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Created by max on 26.12.22.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef RAPL_READER_REGISTERREADER_H</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define RAPL_READER_REGISTERREADER_H</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef BA_BENCHER_H</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define BA_BENCHER_H</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classRegisterReader.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRegisterReader.html">RegisterReader</a> {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keywordtype">int</span> energyReg;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keywordtype">int</span> unitReg;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">char</span>* regFile = <span class="keyword">new</span> <span class="keywordtype">char</span>[15];</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classRegisterReader.html">RegisterReader</a>(<span class="keywordtype">int</span> core);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> benchmarkCode();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        uint64_t getEnergy();</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        uint64_t getMultiplier();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        uint64_t read(<span class="keywordtype">int</span> reg, <span class="keywordtype">int</span> bytesToRead);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//RAPL_READER_REGISTERREADER_H</span></div>
-<div class="ttc" id="aclassRegisterReader_html"><div class="ttname"><a href="classRegisterReader.html">RegisterReader</a></div><div class="ttdef"><b>Definition:</b> RegisterReader.h:10</div></div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classBencher.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="classBencher.html">Bencher</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">int</span> iterations;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">int</span> repetitions;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classBencher.html#ad08e5fa095c439f5967baca2dc2e0740">benchmark</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        uint64_t benchmarkFile(std::string file);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_BENCHER_H</span></div>
+<div class="ttc" id="aclassBencher_html"><div class="ttname"><a href="classBencher.html">Bencher</a></div><div class="ttdef"><b>Definition:</b> Bencher.h:15</div></div>
+<div class="ttc" id="aclassBencher_html_ad08e5fa095c439f5967baca2dc2e0740"><div class="ttname"><a href="classBencher.html#ad08e5fa095c439f5967baca2dc2e0740">Bencher::benchmark</a></div><div class="ttdeci">void benchmark()</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:14</div></div>
+<div class="ttc" id="aclassBencher_html_aefe635eb500396e9d3dbef949bbea3cb"><div class="ttname"><a href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher::Bencher</a></div><div class="ttdeci">Bencher(int it, int rep)</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:9</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

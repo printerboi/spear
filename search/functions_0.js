@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['benchmarkcode_8',['benchmarkCode',['../classRaplReader.html#a31a8bb1197d608124514f213eb25ee8b',1,'RaplReader']]]
+  ['bencher_5',['Bencher',['../classBencher.html#aefe635eb500396e9d3dbef949bbea3cb',1,'Bencher']]],
+  ['benchmark_6',['benchmark',['../classBencher.html#ad08e5fa095c439f5967baca2dc2e0740',1,'Bencher']]]
 ];
