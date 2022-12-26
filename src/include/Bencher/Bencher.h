@@ -9,12 +9,16 @@
 
 /**
  * Simple class to benchmark the llvm-code and output the data in an appropriate format
- * @property iterations Times the energy values will be executed. Needed for the average
- * @property repetitions Times a single program will be executed
  */
 class Bencher {
     public:
+        /**
+         * Times the energy values will be executed. Needed for the average
+         */
         int iterations;
+        /**
+         * Times a single program will be executed
+         */
         int repetitions;
         /**
          * Creates a Bencher object and sets the iterations and repetitions property according to the parameters
