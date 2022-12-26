@@ -9,12 +9,16 @@
 
 class RegisterReader {
     int energyReg;
+    int unitReg;
     char* regFile = new char[15];
 
     public:
         explicit RegisterReader(int core);
-        uint64_t read();
         void benchmarkCode();
+        uint64_t getEnergy();
+        uint64_t getMultiplier();
+    private:
+        uint64_t read(int reg, int bytesToRead);
 };
 
 
