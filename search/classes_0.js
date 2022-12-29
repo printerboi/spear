@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bencher_8',['Bencher',['../classBencher.html',1,'']]]
+  ['bencher_11',['Bencher',['../classBencher.html',1,'']]]
 ];

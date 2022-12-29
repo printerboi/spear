@@ -77,25 +77,27 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define BA_BENCHER_H</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;../Rapl-reader/RegisterReader.h&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classBencher.html">   14</a></span>&#160;<span class="keyword">class </span><a class="code" href="classBencher.html">Bencher</a> {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">   19</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">iterations</a>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">   23</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">repetitions</a>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classBencher.html#ad08e5fa095c439f5967baca2dc2e0740">benchmark</a>();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        uint64_t benchmarkFile(std::string file);</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_BENCHER_H</span></div>
-<div class="ttc" id="aclassBencher_html"><div class="ttname"><a href="classBencher.html">Bencher</a></div><div class="ttdef"><b>Definition:</b> Bencher.h:14</div></div>
-<div class="ttc" id="aclassBencher_html_ac5fa67b9ea18fe51612e53e7bfcab326"><div class="ttname"><a href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">Bencher::iterations</a></div><div class="ttdeci">int iterations</div><div class="ttdef"><b>Definition:</b> Bencher.h:19</div></div>
-<div class="ttc" id="aclassBencher_html_ace00f39bb36c3b86ecfba715d0cef8b6"><div class="ttname"><a href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">Bencher::repetitions</a></div><div class="ttdeci">int repetitions</div><div class="ttdef"><b>Definition:</b> Bencher.h:23</div></div>
-<div class="ttc" id="aclassBencher_html_ad08e5fa095c439f5967baca2dc2e0740"><div class="ttname"><a href="classBencher.html#ad08e5fa095c439f5967baca2dc2e0740">Bencher::benchmark</a></div><div class="ttdeci">void benchmark()</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:13</div></div>
-<div class="ttc" id="aclassBencher_html_aefe635eb500396e9d3dbef949bbea3cb"><div class="ttname"><a href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher::Bencher</a></div><div class="ttdeci">Bencher(int it, int rep)</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:8</div></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../Rapl-reader/PowercapReader.h&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;vector&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classBencher.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classBencher.html">Bencher</a> {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">   21</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">iterations</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">   25</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">repetitions</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::vector&lt;double&gt; <a class="code" href="classBencher.html#a9255de4cc6243d00e5f331931b913422">benchmark</a>();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">double</span> benchmarkFile(std::string file);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_BENCHER_H</span></div>
+<div class="ttc" id="aclassBencher_html"><div class="ttname"><a href="classBencher.html">Bencher</a></div><div class="ttdef"><b>Definition:</b> Bencher.h:16</div></div>
+<div class="ttc" id="aclassBencher_html_a9255de4cc6243d00e5f331931b913422"><div class="ttname"><a href="classBencher.html#a9255de4cc6243d00e5f331931b913422">Bencher::benchmark</a></div><div class="ttdeci">std::vector&lt; double &gt; benchmark()</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:12</div></div>
+<div class="ttc" id="aclassBencher_html_ac5fa67b9ea18fe51612e53e7bfcab326"><div class="ttname"><a href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">Bencher::iterations</a></div><div class="ttdeci">int iterations</div><div class="ttdef"><b>Definition:</b> Bencher.h:21</div></div>
+<div class="ttc" id="aclassBencher_html_ace00f39bb36c3b86ecfba715d0cef8b6"><div class="ttname"><a href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">Bencher::repetitions</a></div><div class="ttdeci">int repetitions</div><div class="ttdef"><b>Definition:</b> Bencher.h:25</div></div>
+<div class="ttc" id="aclassBencher_html_aefe635eb500396e9d3dbef949bbea3cb"><div class="ttname"><a href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher::Bencher</a></div><div class="ttdeci">Bencher(int it, int rep)</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:7</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['registerreader_9',['RegisterReader',['../classRegisterReader.html',1,'']]]
+  ['csvhandler_12',['CSVHandler',['../classCSVHandler.html',1,'']]]
 ];
