@@ -6,7 +6,9 @@
 #define BA_BENCHER_H
 
 #include "../Rapl-reader/RegisterReader.h"
+#include "../Rapl-reader/PowercapReader.h"
 #include "string"
+#include "vector"
 
 /**
  * Simple class to benchmark the llvm-code and output the data in an appropriate format
@@ -31,14 +33,14 @@ class Bencher {
         /**
          * Runs the benchmark and returns the values for the benchmarked files
          */
-        void benchmark();
+        std::vector<double> benchmark();
     private:
         /**
          * Benchmarks a single file, calculates the used energy and returns the calculated value
          * @param file String to the file that needs to be benchmarked
          * @return The used energy
          */
-        uint64_t benchmarkFile(std::string file);
+        double benchmarkFile(std::string file);
 };
 
 

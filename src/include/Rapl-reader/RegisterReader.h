@@ -43,7 +43,7 @@ class RegisterReader {
          * Method to read the energy-unit from the respective register
          * @return The current multiplier used for the energy-counter
          */
-        uint64_t getMultiplier();
+        double getMultiplier();
     private:
         /**
          * Reads a register in the register-file of the class
@@ -51,7 +51,7 @@ class RegisterReader {
          * @param bytesToRead Bytes to read from the register
          * @return Value in the register as 64-bit unsigned integer
          */
-        uint64_t read(int reg, int bytesToRead);
+        void read(int reg, char (&buffer) [8]);
 };
 
 

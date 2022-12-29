@@ -7,39 +7,48 @@
 #include <utility>
 #include <fcntl.h>
 #include <unistd.h>
+#include <vector>
 #include "iostream"
 #include "cstdio"
 #include "cmath"
+#include <cstring>
 
 
 RegisterReader::RegisterReader(int core) {
-    this->energyReg = 0x611;
+    //Package -> 0x611
+    //Cores -> 0x639
+    this->energyReg = 0x639;
     this->unitReg = 0x606;
     sprintf(this->regFile, "/dev/cpu/%d/msr", core);
 }
 
-uint64_t RegisterReader::read(int reg, int bytesToRead) {
+void RegisterReader::read(int reg, char (&regValBuffer) [8]) {
     int regfd = 0;
-
-    //Specify the buffer to be a 64bit unsigned integer. The read bytes will therefore be converted automatically
-    uint64_t  regValBuffer = 0;
 
     //Open the file containing our registers in readonly mode
     regfd = open(this->regFile, O_RDONLY);
     //read 8 bytes from the registerfile at the offset energyReg and store the contents at the address of
     //our previously defined 64-integer regValBuffer
-    pread(regfd, &regValBuffer, bytesToRead, reg);
+    pread(regfd, &regValBuffer, 8, reg);
 
-    return regValBuffer;
 }
 
 uint64_t RegisterReader::getEnergy() {
-    return read(this->energyReg, 8);
+    char regValBuffer[8] = {};
+    uint64_t result = 0;
+    read(this->energyReg, regValBuffer);
+    std::memcpy(&result, regValBuffer, 8);
+    return result;
 }
 
-uint64_t RegisterReader::getMultiplier() {
-    uint64_t val = read(this->unitReg+1, 4);
-    return (uint64_t) ( 1/pow(2, (double) val) );
+double RegisterReader::getMultiplier() {
+    char buffer[8] = {};
+    uint64_t result = 0;
+    read(this->unitReg, buffer);
+    buffer[1] = (char) (buffer[1] & 0xF);
+    std::memcpy(&result, &buffer[1], 1);
+    double multiplier = pow(0.5, (double) result);
+    return (double) multiplier;
 }
 
 void RegisterReader::benchmarkCode() {

@@ -10,4 +10,4 @@ add_executable(ba
         src/include/Bencher/Bencher.h
         src/include/Rapl-reader/RegisterReader.cpp
         src/include/Rapl-reader/RegisterReader.h
-        )
+        src/include/Rapl-reader/PowercapReader.cpp src/include/Rapl-reader/PowercapReader.h src/include/CSV-Handler/CSVHandler.cpp src/include/CSV-Handler/CSVHandler.h)
