@@ -15,7 +15,7 @@ add_executable(ba
         src/include/Bencher/Bencher.h
         src/include/Rapl-reader/RegisterReader.cpp
         src/include/Rapl-reader/RegisterReader.h
-        src/include/Rapl-reader/PowercapReader.cpp src/include/Rapl-reader/PowercapReader.h src/include/CSV-Handler/CSVHandler.cpp src/include/CSV-Handler/CSVHandler.h src/include/LLVM-Handler/LLVMHandler.cpp src/include/LLVM-Handler/LLVMHandler.h)
+        src/include/Rapl-reader/PowercapReader.cpp src/include/Rapl-reader/PowercapReader.h src/include/CSV-Handler/CSVHandler.cpp src/include/CSV-Handler/CSVHandler.h src/include/LLVM-Handler/LLVMHandler.cpp src/include/LLVM-Handler/LLVMHandler.h src/include/LLVM-Handler/InstructionCategory.cpp src/include/LLVM-Handler/InstructionCategory.h)
 
-llvm_map_components_to_libnames(llvm_libs support core irreader)
+llvm_map_components_to_libnames(llvm_libs support core irreader ir)
 target_link_libraries(ba ${llvm_libs})

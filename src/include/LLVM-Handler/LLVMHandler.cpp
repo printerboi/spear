@@ -3,6 +3,7 @@
 //
 
 #include "LLVMHandler.h"
+#include "InstructionCategory.h"
 
 LLVMHandler::LLVMHandler(std::string file) {
     //this->module = std::move(llvm::parseIRFile(file, this->error, this->context));
@@ -15,15 +16,7 @@ void LLVMHandler::print(  ) {
         for ( auto &BB : F ) {
             for ( auto &I : BB ) {
                 llvm::outs() <<  I.getOpcodeName();
-                if( llvm::isa<llvm::StoreInst>(I) ){
-                    llvm::outs() << " -> Is Store Instruction!" << "\n";
-                }else if(llvm::isa<llvm::CallInst>(I) ){
-                    llvm::outs() << " -> Is Call Instruction!" << "\n";
-                }else if( llvm::isa<llvm::ReturnInst>(I) ){
-                    llvm::outs() << " -> Is Return Instruction!" << "\n";
-                }else{
-                    llvm::outs() << " -> Is Generic Instruction!" << "\n";
-                }
+                llvm::outs() << " -> " << InstructionCategory::toString( InstructionCategory::getCategory( I ) ) << "\n";
             }
             llvm::outs() << "\n=======================================\n";
         }

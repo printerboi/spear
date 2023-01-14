@@ -8,20 +8,38 @@
 #include <filesystem>
 #include "iostream"
 #include "llvm/IR/Module.h"
-#include "llvm/IRReader/IRReader.h"
-#include "llvm/IR/LLVMContext.h"
-#include "llvm/Support/SourceMgr.h"
-#include "llvm/IR/Instructions.h"
+#include <llvm/IRReader/IRReader.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/Support/SourceMgr.h>
+#include <llvm/IR/Instructions.h>
 
 
+/**
+ * [LLVMHandler] Class to handle .ll files
+ */
 class LLVMHandler {
     public:
-        LLVMHandler( std::string file );
-        void print(  );
+        /**
+         * [LLVMHandler] Constructor receiving a string to file. Loads the IR from the file to the class
+         * @param file String containing a valid file path
+         */
+        explicit LLVMHandler( std::string file );
+        /**
+         * [print] Method returning a simple dump of the loaded file
+         */
+        void print();
     private:
-        //std::unique_ptr<llvm::Module> module;
+        /**
+         * Module of the loaded file
+         */
         llvm::Module *module;
+        /**
+         * LLVM Context of the loaded Module
+         */
         llvm::LLVMContext context;
+        /**
+         * LLVM Error Object of the loaded Module
+         */
         llvm::SMDiagnostic error;
 };
 
