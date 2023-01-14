@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['writecsv_10',['writeCSV',['../classCSVHandler.html#a2cc33758d04b92d27309acc5a5791333',1,'CSVHandler']]]
+  ['registerreader_9',['RegisterReader',['../classRegisterReader.html',1,'RegisterReader'],['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader::RegisterReader()']]],
+  ['repetitions_10',['repetitions',['../classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6',1,'Bencher']]]
 ];
