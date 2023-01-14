@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['powercapreader_15',['PowercapReader',['../classPowercapReader.html',1,'']]]
+  ['llvmhandler_20',['LLVMHandler',['../classLLVMHandler.html',1,'']]]
 ];

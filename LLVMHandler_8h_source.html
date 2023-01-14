@@ -79,26 +79,27 @@ $(function() {
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;filesystem&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;iostream&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;llvm/IR/Module.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;llvm/IRReader/IRReader.h&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;llvm/IR/LLVMContext.h&quot;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;llvm/Support/SourceMgr.h&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;llvm/IR/Instructions.h&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;llvm/IRReader/IRReader.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;llvm/IR/LLVMContext.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;llvm/Support/SourceMgr.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;llvm/IR/Instructions.h&gt;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classLLVMHandler.html">   17</a></span>&#160;<span class="keyword">class </span><a class="code" href="classLLVMHandler.html">LLVMHandler</a> {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="classLLVMHandler.html">LLVMHandler</a>( std::string file );</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">void</span> print(  );</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="comment">//std::unique_ptr&lt;llvm::Module&gt; module;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        llvm::Module *module;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        llvm::LLVMContext context;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        llvm::SMDiagnostic error;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_LLVMHANDLER_H</span></div>
-<div class="ttc" id="aclassLLVMHandler_html"><div class="ttname"><a href="classLLVMHandler.html">LLVMHandler</a></div><div class="ttdef"><b>Definition:</b> LLVMHandler.h:17</div></div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classLLVMHandler.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="classLLVMHandler.html">LLVMHandler</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classLLVMHandler.html#aea6435118b7f83c21c71f4ffd9400e3d">LLVMHandler</a>( std::string file );</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classLLVMHandler.html#a3531404d13cb889ff7e771d4f7b3dd83">print</a>();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        llvm::Module *module;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        llvm::LLVMContext context;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        llvm::SMDiagnostic error;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_LLVMHANDLER_H</span></div>
+<div class="ttc" id="aclassLLVMHandler_html"><div class="ttname"><a href="classLLVMHandler.html">LLVMHandler</a></div><div class="ttdef"><b>Definition:</b> LLVMHandler.h:20</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_a3531404d13cb889ff7e771d4f7b3dd83"><div class="ttname"><a href="classLLVMHandler.html#a3531404d13cb889ff7e771d4f7b3dd83">LLVMHandler::print</a></div><div class="ttdeci">void print()</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:13</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_aea6435118b7f83c21c71f4ffd9400e3d"><div class="ttname"><a href="classLLVMHandler.html#aea6435118b7f83c21c71f4ffd9400e3d">LLVMHandler::LLVMHandler</a></div><div class="ttdeci">LLVMHandler(std::string file)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:8</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

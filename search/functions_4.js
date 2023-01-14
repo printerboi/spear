@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['writecsv_24',['writeCSV',['../classCSVHandler.html#a2cc33758d04b92d27309acc5a5791333',1,'CSVHandler']]]
+  ['registerreader_32',['RegisterReader',['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['llvmhandler_14',['LLVMHandler',['../classLLVMHandler.html',1,'']]]
+  ['instructioncategory_19',['InstructionCategory',['../classInstructionCategory.html',1,'']]]
 ];
