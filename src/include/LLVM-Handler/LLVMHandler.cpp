@@ -4,6 +4,7 @@
 
 #include "LLVMHandler.h"
 #include "InstructionCategory.h"
+#include "llvm/Analysis/CostModel.h"
 
 LLVMHandler::LLVMHandler(std::string file) {
     //this->module = std::move(llvm::parseIRFile(file, this->error, this->context));
