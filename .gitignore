@@ -35,5 +35,6 @@
 cmake-build-debug
 docs
 .idea
+venv/
 
 llvm-code-under-bench/compiled
