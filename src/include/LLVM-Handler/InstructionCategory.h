@@ -29,6 +29,8 @@ class InstructionCategory {
          * @return Returns a string representing the category
          */
         static std::string toString( Category category );
+
+        static double getCategoryValue( Category category );
     private:
         /**
          *

@@ -40,7 +40,6 @@ double Bencher::benchmarkFile(std::string file) {
             system(command);
         }
         auto postEng = (double) powReader.getEnergy();
-
         auto absEng = postEng - preEng;
 
         absEng = absEng / this->repetitions;

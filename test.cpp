@@ -6,7 +6,10 @@
 int main(){
     std::cout << "Hello world! :)";
     int x = 4;
-    int y = 2;
-    int z = x/y;
+
+    for (int i = 0; i < 10; ++i) {
+        x = x + i;
+    }
+
     return 0;
 }

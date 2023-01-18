@@ -1,7 +1,8 @@
 #include <cstring>
 #include "src/include/Bencher/Bencher.h"
-#include "src/include/CSV-Handler/CSVHandler.h"
 #include "src/include/LLVM-Handler/LLVMHandler.h"
+#include "src/include/LLVM-Handler/InstructionCategory.h"
+#include "src/include/JSON-Handler/JSONHandler.h"
 
 #include "iostream"
 #include "filesystem"
@@ -31,23 +32,17 @@ int main(int argc, const char **argv){
                 //Calculate the elapsed time by substracting the two timestamps
                 std::chrono::duration<double> timerun = end - start;
 
-                //Format the results of the benchmark to fit in the corresponding vector-layout
-                std::vector<double> groupM(1, result[0]);
-                std::vector<double> groupB(1, result[1]);
-                std::vector<double> groupD(1, result[2]);
-                std::vector<double> groupG(1, result[3]);
-                std::vector<double> base(1, result[4]);
-
                 //Group the vector format of the results
-                std::vector<std::pair<std::string, std::vector<double>>> data = {
-                        {"Group M", groupM},
-                        {"Group B", groupB},
-                        {"Group D", groupD},
-                        {"Group G", groupG},
-                        {"Base", base},
+                std::vector<std::pair<std::string, double>> data = {
+                        {InstructionCategory::toString(InstructionCategory::Category::MEMORY), result[0]},
+                        {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[1]},
+                        {InstructionCategory::toString(InstructionCategory::Category::DIVISION), result[2]},
+                        {InstructionCategory::toString(InstructionCategory::Category::OTHER), result[3]},
+                        {"Base", result[4]},
                 };
-                //Pass the grouped values to the csv handler so it can be written to a file
-                CSVHandler::writeCSV("benchmarkresult.csv", ',' ,data);
+                //Pass the grouped values to the csv handler, so it can be written to a file
+                //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
+                JSONHandler::write("benchmarkresult.json", data);
 
                 std::cout << "Benchmark finished!" << std::endl;
                 std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
@@ -55,10 +50,11 @@ int main(int argc, const char **argv){
                 std::cerr << "The given arguments are not useable as ints";
                 return 1;
             }
-        }else if( std::strcmp( argv[1], "-a" ) == 0 && argc == 3 ){
-            if( std::filesystem::exists( argv[2] ) && !std::filesystem::is_directory( argv[1] ) ){
+        }else if( std::strcmp( argv[1], "-a" ) == 0 && argc == 4 ){
+            if( std::filesystem::exists( argv[2] ) && std::filesystem::exists( argv[3] ) && !std::filesystem::is_directory( argv[2] ) && !std::filesystem::is_directory( argv[3] ) ){
                 //Create a LLVMHandler object
-                LLVMHandler llh = LLVMHandler( argv[2] );
+                Json::Value energyJson = JSONHandler::read( argv[3] );
+                LLVMHandler llh = LLVMHandler( argv[2], energyJson );
 
                 //Debug printing
                 llh.print();

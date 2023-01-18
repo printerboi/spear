@@ -1,10 +1,10 @@
 """
 Little Python program to print out a graph for the benchmarked results.
-Takes as first argument the relative path to the .csv file
+Takes as first argument the relative path to the .json file
 
 """
 
-import csv
+import json
 import sys
 from pathlib import Path
 import pandas as pd
@@ -29,30 +29,25 @@ def cleanData(dictionary):
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
-        # Read the provided csv file
-        with open(Path(sys.argv[1]).resolve(), newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                # Append the read data to our entries array so we can process the data
-                entries.append(row)
+        # Opening JSON file
+        with open(Path(sys.argv[1]).resolve()) as json_file:
+            entries = json.load(json_file)
 
-        # Iterate over the read entries. Each entry represents one data-series
-        for entry in entries:
-            # Convert the entry data to float values
-            conv_to_numeric(entry)
-            # Remove the base value from the entry
-            cleaned = cleanData(entry)
+        # Convert the entry data to float values
+        # Remove the base value from the entry
+        cleaned = cleanData(entries)
 
-            # Construct the dataframe
-            plotdata = pd.DataFrame({"Energy µJ": list(cleaned.values())}, index=list(cleaned.keys()))
-            # Calculate the standard deviation of the entry
-            std = plotdata.std()
-            std.name = "Standardabweichung"
+        # Construct the dataframe
+        plotdata = pd.DataFrame({"Energy µJ": list(cleaned.values())}, index=list(cleaned.keys()))
+        # Calculate the standard deviation of the entry
+        std = plotdata.std()
+        std.name = "Standardabweichung"
 
-            # Plot the data as bar-graph
-            plotdata.plot(kind="bar")
-            # Show the standard deviation as error bars
-            plt.errorbar(list(cleaned.keys()), list(cleaned.values()), yerr=std)
-            plt.show()
+        # Plot the data as bar-graph
+        plotdata.plot(kind="bar")
+        # Show the standard deviation as error bars
+        plt.errorbar(list(cleaned.keys()), list(cleaned.values()), yerr=std)
+        plt.show()
+
     else:
         print("Please provide only one argument. The argument should be a valid .csv file")

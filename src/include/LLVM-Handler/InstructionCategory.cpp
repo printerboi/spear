@@ -56,3 +56,23 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
     return catString;
 }
 
+
+double InstructionCategory::getCategoryValue( InstructionCategory::Category category ){
+    double val = 0;
+    switch (category) {
+        case Category::MEMORY:
+            val = 100;
+            break;
+        case Category::PROGRAMFLOW:
+            val = 200;
+            break;
+        case Category::DIVISION:
+            val = 300;
+            break;
+        case Category::OTHER:
+            val = 400;
+            break;
+    }
+
+    return val;
+}
