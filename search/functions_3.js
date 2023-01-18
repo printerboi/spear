@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['powercapreader_30',['PowercapReader',['../classPowercapReader.html#a415424eaa546b2b86202ba6b06fe2a3c',1,'PowercapReader']]],
-  ['print_31',['print',['../classLLVMHandler.html#a3531404d13cb889ff7e771d4f7b3dd83',1,'LLVMHandler']]]
+  ['llvmhandler_31',['LLVMHandler',['../classLLVMHandler.html#a4dbd2e04ac670544156996bb0abc7e6e',1,'LLVMHandler']]]
 ];
