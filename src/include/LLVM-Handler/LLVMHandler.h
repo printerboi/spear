@@ -26,7 +26,10 @@ class LLVMHandler {
          */
         explicit LLVMHandler( std::string file, Json::Value energy );
 
-        double getBasicBlockSum( llvm::BasicBlock &BB );
+        double getBasicBlockSum(llvm::BasicBlock &BB );
+
+        void sliceBlock(llvm::BasicBlock &BB, std::string v);
+        static std::set<llvm::StringRef> kill(llvm::BasicBlock &BB);
 
         /**
          * [print] Method returning a simple dump of the loaded file

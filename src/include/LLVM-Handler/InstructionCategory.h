@@ -16,7 +16,7 @@ class InstructionCategory {
         /**
          * [Category] - Enum containing the possible categories
          */
-        enum Category { MEMORY, PROGRAMFLOW, DIVISION, OTHER };
+        enum Category { MEMSTORE, MEMLOAD, PROGRAMFLOW, DIVISION, OTHER };
         /**
          * [getCategory] - Calculates the category enum type of the provided Instruction
          * @param Instruction LLVM Instruction to categorize
@@ -30,14 +30,9 @@ class InstructionCategory {
          */
         static std::string toString( Category category );
 
-        static double getCategoryValue( Category category );
-    private:
-        /**
-         *
-         * @param I
-         * @return
-         */
-        static bool isMemoryInstruction( llvm::Instruction &Instruction );
+        static bool isCallInstruction( llvm::Instruction &Instruction );
+        static bool isMemloadInstruction( llvm::Instruction &Instruction );
+        static bool isMemstoreInstruction( llvm::Instruction &Instruction );
         static bool isProgramFlowInstruction( llvm::Instruction &Instruction );
         static bool isDivisionInstruction( llvm::Instruction &Instruction );
 };

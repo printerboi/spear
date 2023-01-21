@@ -4,10 +4,16 @@
 #include "InstructionCategory.h"
 
 
-bool InstructionCategory::isMemoryInstruction( llvm::Instruction &Instruction ){
-    return llvm::isa<llvm::StoreInst>( Instruction ) ||
-            llvm::isa<llvm::LoadInst>( Instruction ) ||
-            llvm::isa<llvm::AllocaInst>( Instruction );
+bool InstructionCategory::isMemloadInstruction(llvm::Instruction &Instruction) {
+    return Instruction.mayReadFromMemory();
+}
+
+bool InstructionCategory::isCallInstruction(llvm::Instruction &Instruction) {
+    return llvm::isa<llvm::CallInst>( Instruction );
+}
+
+bool InstructionCategory::isMemstoreInstruction(llvm::Instruction &Instruction) {
+    return Instruction.mayWriteToMemory();
 }
 
 bool InstructionCategory::isProgramFlowInstruction( llvm::Instruction &Instruction ){
@@ -24,8 +30,10 @@ bool InstructionCategory::isDivisionInstruction( llvm::Instruction &Instruction 
 }
 
 InstructionCategory::Category InstructionCategory::getCategory( llvm::Instruction &Instruction ){
-    if( isMemoryInstruction( Instruction ) ){
-        return InstructionCategory::Category::MEMORY;
+    if( isMemloadInstruction( Instruction ) ){
+        return InstructionCategory::Category::MEMLOAD;
+    }else if( isMemstoreInstruction( Instruction ) ){
+        return InstructionCategory::Category::MEMSTORE;
     }else if( isProgramFlowInstruction( Instruction ) ){
         return InstructionCategory::Category::PROGRAMFLOW;
     }else if( isDivisionInstruction( Instruction ) ){
@@ -39,8 +47,11 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
     std::string catString = "undefined";
 
     switch (category) {
-        case Category::MEMORY:
-            catString = "Memory";
+        case Category::MEMLOAD:
+            catString = "Memload";
+            break;
+        case Category::MEMSTORE:
+            catString = "Memstore";
             break;
         case Category::PROGRAMFLOW:
             catString = "Programflow";
@@ -54,25 +65,4 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
     }
 
     return catString;
-}
-
-
-double InstructionCategory::getCategoryValue( InstructionCategory::Category category ){
-    double val = 0;
-    switch (category) {
-        case Category::MEMORY:
-            val = 100;
-            break;
-        case Category::PROGRAMFLOW:
-            val = 200;
-            break;
-        case Category::DIVISION:
-            val = 300;
-            break;
-        case Category::OTHER:
-            val = 400;
-            break;
-    }
-
-    return val;
 }
