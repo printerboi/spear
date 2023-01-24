@@ -40,17 +40,27 @@ namespace {
         }
 
         bool runOnFunction(Function &F) override {
-            errs().write_escaped(F.getName()) << " ==> ";
+            errs().write_escaped(F.getName()) << "\n\n";
 
 
             for(auto &BB : F){
-                llvm::outs() << round(getBasicBlockSum( BB )) << '\n';
-                std::set<llvm::StringRef> v = LLVMHandler::kill(BB);
-                llvm::outs() << "{";
+                llvm::outs() << "===================================================" << '\n';
+                llvm::outs() << BB.getName() << " " << round(getBasicBlockSum( BB )) << '\n';
+                std::set<llvm::StringRef> v = LLVMHandler::paramsin(BB);
+                std::set<llvm::StringRef> g = LLVMHandler::paramsout(BB);
+
+                llvm::outs() << "Input Args: {";
                 for( auto s : v){
                     llvm::outs() << s << ", ";
                 }
                 llvm::outs() << "}\n";
+
+                llvm::outs() << "Output Args: {";
+                for( auto s : g){
+                    llvm::outs() << s << ", ";
+                }
+                llvm::outs() << "}\n";
+                llvm::outs() << "===================================================" << '\n';
             }
             return false;
         }

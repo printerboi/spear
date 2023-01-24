@@ -13,6 +13,9 @@
 #include <llvm/Support/SourceMgr.h>
 #include <llvm/IR/Instructions.h>
 #include "../../../dist/json/json.h"
+#include "InstructionCategory.h"
+#include "llvm/Analysis/CostModel.h"
+#include "llvm/IR/CFG.h"
 
 
 /**
@@ -28,8 +31,12 @@ class LLVMHandler {
 
         double getBasicBlockSum(llvm::BasicBlock &BB );
 
-        void sliceBlock(llvm::BasicBlock &BB, std::string v);
+        static std::set<llvm::StringRef> paramsin(llvm::BasicBlock &BB);
+
+        static std::set<llvm::StringRef> paramsout(llvm::BasicBlock &BB);
+
         static std::set<llvm::StringRef> kill(llvm::BasicBlock &BB);
+        static std::set<llvm::StringRef> gen(llvm::BasicBlock &BB);
 
         /**
          * [print] Method returning a simple dump of the loaded file
@@ -50,6 +57,12 @@ class LLVMHandler {
         llvm::SMDiagnostic error;
 
         Json::Value energyValues;
+
+        static std::set<llvm::StringRef> ref(llvm::Instruction &I);
+        static std::set<llvm::StringRef> def(llvm::Instruction &I);
+
+        static std::set<llvm::StringRef> paramsin(llvm::BasicBlock &BB, std::set<llvm::StringRef> blockSet);
+        static std::set<llvm::StringRef> paramsout(llvm::BasicBlock &BB, std::set<llvm::StringRef> blockSet);
 };
 
 

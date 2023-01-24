@@ -32,6 +32,6 @@ add_executable(ba
         src/include/JSON-Handler/JSONHandler.h
         dist/jsoncpp.cpp)
 
-llvm_map_components_to_libnames(llvm_libs support core irreader src/passes)
+llvm_map_components_to_libnames(llvm_libs support core irreader passes)
 
 target_link_libraries(ba ${llvm_libs})
