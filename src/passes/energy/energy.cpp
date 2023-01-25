@@ -9,6 +9,10 @@
 #include "../../include/JSON-Handler/JSONHandler.h"
 #include "llvm/Support/FileSystem.h"
 #include "../../include/LLVM-Handler/InstructionCategory.h"
+#include "llvm/Analysis/LoopInfo.h"
+#include "llvm/Analysis/PostDominators.h"
+#include "llvm/Analysis/ScalarEvolution.h"
+#include "llvm/Analysis/ScalarEvolutionExpressions.h"
 
 using namespace llvm;
 
@@ -18,6 +22,7 @@ namespace {
     struct Energy : public FunctionPass {
         static char ID;
         Json::Value energyJson;
+        int MAXITERATIONS = 1000;
 
         Energy() : FunctionPass(ID) {
             std::string filename = energyModelPath;
@@ -27,47 +32,39 @@ namespace {
             }
         }
 
-        double getBasicBlockSum( llvm::BasicBlock &BB ){
-            double blocksum = 0;
-
-            for ( auto &I : BB ) {
-                InstructionCategory::Category cat = InstructionCategory::getCategory(I );
-                double iValue = this->energyJson[InstructionCategory::toString(cat)].asDouble();
-                blocksum += iValue;
-            }
-
-            return blocksum;
-        }
-
         bool runOnFunction(Function &F) override {
             errs().write_escaped(F.getName()) << "\n\n";
+            LLVMHandler handler = LLVMHandler( this->energyJson, MAXITERATIONS );
+
+            auto* DT = new llvm::DominatorTree();
+            DT->recalculate(F);
+            //generate the LoopInfoBase for the current function
+            auto *KLoop = new llvm::LoopInfoBase<llvm::BasicBlock, llvm::Loop>();
+            KLoop->releaseMemory();
+            KLoop->analyze(*DT);
+
+            for (auto i : KLoop->getLoopsInPreorder()) {
+                auto l = i;
+
+                llvm::outs() << l->getName() << "\n";
+                double loopvalue = handler.getLoopSum(l);
 
 
-            for(auto &BB : F){
+                llvm::outs() << "The loop will use " << loopvalue << "µJ of Energy" << "\n";
+                llvm::outs() << "==========================================================";
+            }
+
+            /*for(auto &BB : F){
                 llvm::outs() << "===================================================" << '\n';
                 llvm::outs() << BB.getName() << " " << round(getBasicBlockSum( BB )) << '\n';
-                std::set<llvm::StringRef> v = LLVMHandler::paramsin(BB);
-                std::set<llvm::StringRef> g = LLVMHandler::paramsout(BB);
-
-                llvm::outs() << "Input Args: {";
-                for( auto s : v){
-                    llvm::outs() << s << ", ";
-                }
-                llvm::outs() << "}\n";
-
-                llvm::outs() << "Output Args: {";
-                for( auto s : g){
-                    llvm::outs() << s << ", ";
-                }
-                llvm::outs() << "}\n";
                 llvm::outs() << "===================================================" << '\n';
-            }
+            }*/
             return false;
         }
     }; // end of struct Hello
 }  // end of anonymous namespace
 
 char Energy::ID = 0;
-static RegisterPass<Energy> X("energy", "Hello World Pass",
+static RegisterPass<Energy> X("energy", "Energy Approximation pass",
                              false /* Only looks at CFG */,
                              true /* Analysis Pass */);

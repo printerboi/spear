@@ -1,7 +1,7 @@
 project(ba)
 cmake_minimum_required(VERSION 3.16)
 
-find_package(LLVM 14 REQUIRED CONFIG)
+find_package(LLVM REQUIRED CONFIG)
 include_directories(${LLVM_INCLUDE_PATH})
 
 message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")

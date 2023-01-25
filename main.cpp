@@ -55,10 +55,9 @@ int main(int argc, const char **argv){
             if( std::filesystem::exists( argv[2] ) && std::filesystem::exists( argv[3] ) && !std::filesystem::is_directory( argv[2] ) && !std::filesystem::is_directory( argv[3] ) ){
                 //Create a LLVMHandler object
                 Json::Value energyJson = JSONHandler::read( argv[3] );
-                LLVMHandler llh = LLVMHandler( argv[2], energyJson );
+                LLVMHandler llh = LLVMHandler( energyJson, 5000 );
 
                 //Debug printing
-                llh.print();
             }else{
                 std::cerr << "Error: Please provide a valid file";
                 return 1;
