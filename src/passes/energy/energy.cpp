@@ -40,10 +40,27 @@ namespace {
             DT->recalculate(F);
             //generate the LoopInfoBase for the current function
             auto *KLoop = new llvm::LoopInfoBase<llvm::BasicBlock, llvm::Loop>();
+
+
             KLoop->releaseMemory();
             KLoop->analyze(*DT);
 
-            for (auto i : KLoop->getLoopsInPreorder()) {
+            for (auto liiter = KLoop->begin(); liiter < KLoop->end(); ++liiter) {
+                auto topLoop= *liiter;
+                //auto subloopVector = topLoops->getSubLoops();
+
+                /*for(auto subloop : subloopVector){
+                    llvm::outs() << subloop->getName() << "\n";
+                    double loopvalue = handler.getLoopSum(subloop);
+
+
+                    llvm::outs() << "The loop will use " << loopvalue << "µJ of Energy" << "\n";
+                    llvm::outs() << "==========================================================";
+                }*/
+                energyForLoop( topLoop, handler );
+            }
+
+            /*for (auto i : KLoop->getLoopsInPreorder()) {
                 auto l = i;
 
                 llvm::outs() << l->getName() << "\n";
@@ -52,7 +69,7 @@ namespace {
 
                 llvm::outs() << "The loop will use " << loopvalue << "µJ of Energy" << "\n";
                 llvm::outs() << "==========================================================";
-            }
+            }*/
 
             /*for(auto &BB : F){
                 llvm::outs() << "===================================================" << '\n';
@@ -60,6 +77,17 @@ namespace {
                 llvm::outs() << "===================================================" << '\n';
             }*/
             return false;
+        }
+
+        void energyForLoop(Loop *L, LLVMHandler handler){
+            double loopvalue = handler.getLoopSum(L);
+            llvm::outs() << L->getName() << " " << "Energy used: " << loopvalue << "\n";
+
+            auto subloopVector = L->getSubLoops();
+            llvm::outs() << "==================================================" << "\n";
+            for(auto subloop : subloopVector){
+                energyForLoop(subloop, handler);
+            }
         }
     }; // end of struct Hello
 }  // end of anonymous namespace
