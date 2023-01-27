@@ -13,7 +13,7 @@
 #include <llvm/Support/SourceMgr.h>
 #include <llvm/IR/Instructions.h>
 #include <llvm/Analysis/LoopInfo.h>
-#include "../../../dist/json/json.h"
+#include "json/json.h"
 #include "InstructionCategory.h"
 #include "llvm/Analysis/CostModel.h"
 #include "llvm/IR/CFG.h"

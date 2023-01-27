@@ -1,17 +1,20 @@
 //
-// Created by maximiliank on 21.01.23.
+// Created by maximiliank on 26.01.23.
 //
 
 #ifndef BA_ENERGY_H
 #define BA_ENERGY_H
 
-#include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
-#include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/PassManager.h"
 
-class energy {
 
-};
+namespace llvm {
+    class EnergyPass : public PassInfoMixin<EnergyPass> {
+        public:
+            PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
+    };
+}
+
 
 
 #endif //BA_ENERGY_H

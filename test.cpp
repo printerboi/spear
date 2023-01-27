@@ -11,6 +11,14 @@ int main(){
             }
         }
     }
+
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 33; ++j) {
+            for (int o = 0; o < 333; ++o) {
+                a++;
+            }
+        }
+    }
     int b = a;
 
 

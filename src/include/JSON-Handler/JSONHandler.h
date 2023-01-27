@@ -5,7 +5,7 @@
 #ifndef BA_JSONHANDLER_H
 #define BA_JSONHANDLER_H
 
-#include "../../../dist/json/json.h"
+#include "json/json.h"
 
 /**
  * Class for handling the reading and writing of JSON files to save and load the energy data measured in the benchmark

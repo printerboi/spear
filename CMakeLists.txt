@@ -30,7 +30,10 @@ add_executable(ba
         src/include/LLVM-Handler/InstructionCategory.h
         src/include/JSON-Handler/JSONHandler.cpp
         src/include/JSON-Handler/JSONHandler.h
-        dist/jsoncpp.cpp)
+        dist/jsoncpp.cpp
+        src/include/LLVM-Handler/LoopTree.cpp
+        src/include/LLVM-Handler/LoopTree.h
+        src/passes/energy/energy.h)
 
 llvm_map_components_to_libnames(llvm_libs support core irreader passes)
 
