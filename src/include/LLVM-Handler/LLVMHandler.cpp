@@ -17,8 +17,6 @@ double LLVMHandler::getBasicBlockSum( llvm::BasicBlock &BB ){
     for ( auto &I : BB ) {
         InstructionCategory::Category cat = InstructionCategory::getCategory(I );
         double iValue = this->energyValues[InstructionCategory::toString(cat)].asDouble();
-        I.print(llvm::outs());
-        llvm::outs() << "\n";
         blocksum += iValue;
     }
 

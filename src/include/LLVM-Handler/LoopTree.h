@@ -8,17 +8,20 @@
 
 #include <vector>
 #include <llvm/Analysis/LoopInfo.h>
+#include "LLVMHandler.h"
 
 class LoopTree {
     public:
+        //The Loop Object describing this and all contained loops
         llvm::Loop * mainloop;
         LoopTree * parent;
         std::vector<LoopTree> subTrees;
         std::vector<llvm::BasicBlock *> blocks;
+        LLVMHandler* handler;
         long iterations;
 
         LoopTree();
-        LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LoopTree *parent);
+        LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LoopTree *parent, LLVMHandler *handler);
 
         double calcEnergy();
         void addSubloop( llvm::Loop * L );

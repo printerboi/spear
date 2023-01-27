@@ -35,6 +35,8 @@ class LLVMHandler {
 
         double getLoopSum(llvm::Loop *L);
 
+        static long getLoopUpperBound(llvm::Loop *L, long valueIfIndeterminate);
+
         /**
          * [print] Method returning a simple dump of the loaded file
          */
@@ -56,8 +58,6 @@ class LLVMHandler {
         Json::Value energyValues;
 
         long valueIfIndeterminate;
-
-        static long getLoopUpperBound(llvm::Loop *L, long valueIfIndeterminate);
 
         std::vector<llvm::BasicBlock *> getLoopBlocks(llvm::Loop *L);
 };

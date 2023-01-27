@@ -55,40 +55,12 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
             for (auto liiter = KLoop->begin(); liiter < KLoop->end(); ++liiter) {
                 auto topLoop= *liiter;
-                //auto subloopVector = topLoops->getSubLoops();
 
-                /*for(auto subloop : subloopVector){
-                    llvm::outs() << subloop->getName() << "\n";
-                    double loopvalue = handler.getLoopSum(subloop);
-
-
-                    llvm::outs() << "The loop will use " << loopvalue << "µJ of Energy" << "\n";
-                    llvm::outs() << "==========================================================";
-                }*/
-                //energyForLoop( topLoop, handler );
-                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), nullptr);
+                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), nullptr, &handler);
                 llvm::outs() << "==========================================================\n";
                 LT.printPreOrder();
                 llvm::outs() << "==========================================================\n";
             }
-
-            /*for (auto i : KLoop->getLoopsInPreorder()) {
-                auto l = i;
-
-                llvm::outs() << l->getName() << "\n";
-                double loopvalue = handler.getLoopSum(l);
-
-
-                llvm::outs() << "The loop will use " << loopvalue << "µJ of Energy" << "\n";
-                llvm::outs() << "==========================================================";
-            }*/
-
-            /*for(auto &BB : F){
-                llvm::outs() << "===================================================" << '\n';
-                llvm::outs() << BB.getName() << " " << round(getBasicBlockSum( BB )) << '\n';
-                llvm::outs() << "===================================================" << '\n';
-            }*/
-
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";
         }
