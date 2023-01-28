@@ -17,9 +17,6 @@
 llvm::cl::opt<std::string> energyModelPath("m", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
 
 struct Energy : llvm::PassInfoMixin<Energy> {
-// Main entry point, takes IR unit to run the
-// pass on (&F) and the corresponding pass
-// manager (to be queried/modified if need be)
     Json::Value energyJson;
     int MAXITERATIONS = 1000;
 
@@ -38,7 +35,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
     }
 
-    llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &) {
+    llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) {
         if(this->energyJson){
 
             llvm::errs().write_escaped(F.getName()) << "\n\n";
@@ -56,7 +53,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             for (auto liiter = KLoop->begin(); liiter < KLoop->end(); ++liiter) {
                 auto topLoop= *liiter;
 
-                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), nullptr, &handler);
+                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), &handler);
                 llvm::outs() << "==========================================================\n";
                 LT.printPreOrder();
                 llvm::outs() << "==========================================================\n";

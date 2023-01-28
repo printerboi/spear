@@ -16,7 +16,10 @@
 #include "llvm/Transforms/Scalar/LoopRotation.h"
 
 int main(int argc, const char **argv){
-    std::string helpString = "Usage: ba option <arguments>\n==============================\nOptions:\n\t-b\t Benchmarks the system and generates the energy values used for any further analysis\n\t-a\t ...";
+    std::string helpString = "Usage: ba option <arguments>\n==============================\nOptions:"
+                             "\n\t-b\t Benchmarks the system and generates the energy values used for any further analysis"
+                             "\n\t-a\t ..."
+                             "\n\t-d\t Debug. Please provide a energy JSON file followed by the IR code .ll ";
 
     if( argc >= 2 ){
         if( std::strcmp( argv[1], "-b" ) == 0 && argc == 4 ){
@@ -59,18 +62,8 @@ int main(int argc, const char **argv){
                 return 1;
             }
         }else if( std::strcmp( argv[1], "-a" ) == 0 && argc == 4 ) {
-            if (std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[3]) &&
-                !std::filesystem::is_directory(argv[2]) && !std::filesystem::is_directory(argv[3])) {
-                //Create a LLVMHandler object
-                Json::Value energyJson = JSONHandler::read(argv[3]);
-                LLVMHandler llh = LLVMHandler(energyJson, 5000);
-
-                //Debug printing
-            } else {
-                std::cerr << "Error: Please provide a valid file";
-                return 1;
-            }
-        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc == 2){
+            std::cout << "Not yet implemented" << std::endl;
+        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc == 4){
             llvm::LLVMContext context;
             llvm::SMDiagnostic error;
             llvm::PassBuilder passBuilder;
@@ -81,57 +74,43 @@ int main(int argc, const char **argv){
             llvm::ModulePassManager modulePassManager;
             llvm::FunctionPassManager functionPassManager;
 
-            auto module_up = std::move(llvm::parseIRFile("/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/test.ll", error, context));
+            if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[3] )){
+                auto module_up = std::move(llvm::parseIRFile(argv[3], error, context));
 
-            passBuilder.registerModuleAnalyses(moduleAnalysisManager);
-            passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
-            passBuilder.registerFunctionAnalyses(functionAnalysisManager);
-            passBuilder.registerLoopAnalyses(loopAnalysisManager);
-            passBuilder.crossRegisterProxies(
-                    loopAnalysisManager, functionAnalysisManager, cGSCCAnalysisManager,
-                    moduleAnalysisManager);
+                passBuilder.registerModuleAnalyses(moduleAnalysisManager);
+                passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
+                passBuilder.registerFunctionAnalyses(functionAnalysisManager);
+                passBuilder.registerLoopAnalyses(loopAnalysisManager);
+                passBuilder.crossRegisterProxies(
+                        loopAnalysisManager, functionAnalysisManager, cGSCCAnalysisManager,
+                        moduleAnalysisManager);
 
-            //functionPassManager = passBuilder.buildFunctionSimplificationPipeline(llvm::OptimizationLevel::O2, llvm::ThinOrFullLTOPhase::ThinLTOPostLink);
-            modulePassManager = passBuilder.buildPerModuleDefaultPipeline( llvm::OptimizationLevel::O2 );
 
-            for(auto & F : module_up->getFunctionList()){
-                if( F.getName() == "main" ){
+                for(auto & F : module_up->getFunctionList()){
+                    if( F.getName() == "main" ){
 
-                    //instname
-                    functionPassManager.addPass(llvm::InstructionNamerPass());
-                    //mem2reg
-                    functionPassManager.addPass(llvm::PromotePass());
+                        //instname
+                        functionPassManager.addPass(llvm::InstructionNamerPass());
+                        //mem2reg
+                        functionPassManager.addPass(llvm::PromotePass());
 
-                    //instcombine
-                    //functionPassManager.addPass(llvm::InstCombinePass());
+                        //instcombine
+                        //functionPassManager.addPass(llvm::InstCombinePass());
 
-                    //loop-simplify
-                    functionPassManager.addPass(llvm::LoopSimplifyPass());
+                        //loop-simplify
+                        functionPassManager.addPass(llvm::LoopSimplifyPass());
 
-                    //loop-rotate
-                    functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
+                        //loop-rotate
+                        functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
 
-                    functionPassManager.addPass(Energy("/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug/benchmarkresult.json"));
-                    functionPassManager.run(F, functionAnalysisManager);
+                        functionPassManager.addPass(Energy(argv[2]));
+                        functionPassManager.run(F, functionAnalysisManager);
+                    }
                 }
-
+            }else{
+                std::cerr << helpString;
+                return 1;
             }
-
- /*           //instname
-            functionPassManager.addPass(llvm::InstructionNamerPass());
-            //mem2reg
-            functionPassManager.addPass(llvm::PromotePass());
-
-            //instcombine
-            functionPassManager.addPass(llvm::InstCombinePass());
-
-            //loop-simplify
-            functionPassManager.addPass(llvm::LoopSimplifyPass());
-
-            functionPassManager.addPass(Energy("/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug/benchmarkresult.json"));
-
-            modulePassManager.run(*std::move(module_up), moduleAnalysisManager);*/
-
         }else{
             std::cerr << helpString;
             return 1;

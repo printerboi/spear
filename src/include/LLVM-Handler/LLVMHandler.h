@@ -1,7 +1,3 @@
-//
-// Created by max on 13.01.23.
-//
-
 #ifndef BA_LLVMHANDLER_H
 #define BA_LLVMHANDLER_H
 
@@ -21,45 +17,43 @@
 
 
 /**
- * [LLVMHandler] Class to handle .ll files
+ * LLVMHandler -  Class for combining LLVM IR with energy values to reason about the energy consumption of a program
  */
 class LLVMHandler {
     public:
         /**
-         * [LLVMHandler] Constructor receiving a string to file. Loads the IR from the file to the class
+         * Constructor receiving a string to file. Loads the IR from the file to the class
+         * @param energyModel JSON Object containing the energy model
          * @param file String containing a valid file path
          */
-        explicit LLVMHandler( Json::Value energy, long valueIfInteterminate );
+        explicit LLVMHandler( Json::Value energyModel, long valueIfInteterminate );
 
+        /**
+         * Method to calculate the energy-consumption of block with respect to the given energy model
+         * @param BB Basic block to analyze
+         * @return Double value of the approximated energy
+         */
         double getBasicBlockSum(llvm::BasicBlock &BB );
 
-        double getLoopSum(llvm::Loop *L);
-
-        static long getLoopUpperBound(llvm::Loop *L, long valueIfIndeterminate);
-
         /**
-         * [print] Method returning a simple dump of the loaded file
+         * Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be
+         * calculated the parameter valueIfIndeterminate will be used as upper bound
+         * @param L The loop to analyze
+         * @return The long value representing the iterations the given loop will approximately run
          */
-        void print();
+         long getLoopUpperBound(llvm::Loop *L);
+
     private:
         /**
-         * Module of the loaded file
+         * JSON-Value containin the energy model used for the calculations
          */
-        //llvm::Module *module;
-        /**
-         * LLVM Context of the loaded Module
-         */
-        //llvm::LLVMContext context;
-        /**
-         * LLVM Error Object of the loaded Module
-         */
-        //llvm::SMDiagnostic error;
-
         Json::Value energyValues;
 
+        /**
+         * Fallback value of the loop bound calculation representing an upper bound
+         */
         long valueIfIndeterminate;
 
-        std::vector<llvm::BasicBlock *> getLoopBlocks(llvm::Loop *L);
 };
 
 
