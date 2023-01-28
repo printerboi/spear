@@ -23,18 +23,23 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
     explicit Energy(std::string filename){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
-            //Create a LLVMHandler object
+            //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( filename );
         }
     }
 
     Energy(){
         if( llvm::sys::fs::exists( energyModelPath ) && !llvm::sys::fs::is_directory( energyModelPath ) ){
-            //Create a LLVMHandler object
+            //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( energyModelPath );
         }
     }
 
+    /**
+     * Main runner of the energy pass. The pass will apply function-wise.
+     * @param F Reference to a function
+     * @param FAM Reference to a FunctionAnalysisManager
+     */
     llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) {
         if(this->energyJson){
 
@@ -68,9 +73,10 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     static bool isRequired() { return true; }
 };
 
-
-llvm::PassPluginLibraryInfo getHelloWorldPluginInfo() {
-
+/**
+ * Method for providing some basic information about the pass
+ */
+llvm::PassPluginLibraryInfo getEnergyPluginInfo() {
     return {LLVM_PLUGIN_API_VERSION, "Energy", LLVM_VERSION_STRING,
             [](llvm::PassBuilder &PB) {
                 PB.registerPipelineParsingCallback(
@@ -85,10 +91,8 @@ llvm::PassPluginLibraryInfo getHelloWorldPluginInfo() {
             }};
 }
 
-// This is the core interface for pass plugins. It guarantees that 'opt' will
-// be able to recognize HelloWorld when added to the pass pipeline on the
-// command line, i.e. via '-passes=hello-world'
+//Register the pass in llvm, so it is useable with opt
 extern "C" LLVM_ATTRIBUTE_WEAK ::llvm::PassPluginLibraryInfo
 llvmGetPassPluginInfo() {
-    return getHelloWorldPluginInfo();
+    return getEnergyPluginInfo();
 }

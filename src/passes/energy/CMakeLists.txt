@@ -1,6 +1,5 @@
 
 add_llvm_library(Energy MODULE
-        energy.h
         energy.cpp
         ../../include/LLVM-Handler/LLVMHandler.h
         ../../include/LLVM-Handler/LLVMHandler.cpp

@@ -34,7 +34,7 @@ InstructionCategory::Category InstructionCategory::getCategory( llvm::Instructio
         return InstructionCategory::Category::MEMLOAD;
     }else if( isMemstoreInstruction( Instruction ) ){
         return InstructionCategory::Category::MEMSTORE;
-    }else if( isProgramFlowInstruction( Instruction ) ){
+    }else if( isProgramFlowInstruction( Instruction ) || isCallInstruction( Instruction ) ){
         return InstructionCategory::Category::PROGRAMFLOW;
     }else if( isDivisionInstruction( Instruction ) ){
         return InstructionCategory::Category::DIVISION;
