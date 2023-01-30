@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bencher_28',['Bencher',['../classBencher.html',1,'']]]
+  ['energy_28',['Energy',['../structEnergy.html',1,'']]]
 ];

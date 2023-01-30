@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['llvmhandler_32',['LLVMHandler',['../classLLVMHandler.html',1,'']]],
-  ['looptree_33',['LoopTree',['../classLoopTree.html',1,'']]]
+  ['powercapreader_33',['PowercapReader',['../classPowercapReader.html',1,'']]],
+  ['profiler_34',['Profiler',['../classProfiler.html',1,'']]]
 ];

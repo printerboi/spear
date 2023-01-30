@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['repetitions_59',['repetitions',['../classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6',1,'Bencher']]]
+  ['repetitions_59',['repetitions',['../classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf',1,'Profiler']]]
 ];

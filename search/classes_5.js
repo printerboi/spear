@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['powercapreader_34',['PowercapReader',['../classPowercapReader.html',1,'']]]
+  ['registerreader_35',['RegisterReader',['../classRegisterReader.html',1,'']]]
 ];

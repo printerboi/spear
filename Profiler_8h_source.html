@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Bachelorarbeit: src/include/Bencher/Bencher.h Source File</title>
+<title>Bachelorarbeit: src/main/include/Profiler/Profiler.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,43 +61,43 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_b0856f6b0d80ccb263b2f415c91f9e17.html">include</a></li><li class="navelem"><a class="el" href="dir_94a691fde29c29e22e8491ab5b10394c.html">Bencher</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5eb159725f84c66aafd839904a4acdd0.html">main</a></li><li class="navelem"><a class="el" href="dir_df3bee86fdbfb464c3a94507855b0bdc.html">include</a></li><li class="navelem"><a class="el" href="dir_b49b6fca6a632e5b485e4e14c69ade6b.html">Profiler</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Bencher.h</div>  </div>
+<div class="title">Profiler.h</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Created by max on 26.12.22.</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef BA_BENCHER_H</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define BA_BENCHER_H</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef BA_PROFILER_H</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define BA_PROFILER_H</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;../Rapl-reader/RegisterReader.h&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../Rapl-reader/PowercapReader.h&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;vector&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classBencher.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classBencher.html">Bencher</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classProfiler.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classProfiler.html">Profiler</a> {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">   21</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">iterations</a>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">   25</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">repetitions</a>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::vector&lt;double&gt; <a class="code" href="classBencher.html#a9255de4cc6243d00e5f331931b913422">benchmark</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classProfiler.html#ad9c3c73e305f81758670e6020d31fa89">   21</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classProfiler.html#ad9c3c73e305f81758670e6020d31fa89">iterations</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">   25</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">repetitions</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1">Profiler</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::vector&lt;double&gt; <a class="code" href="classProfiler.html#a5799063b93ab7cb2679ae11ee4a29446">benchmark</a>();</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">double</span> benchmarkFile(std::string file);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_BENCHER_H</span></div>
-<div class="ttc" id="aclassBencher_html"><div class="ttname"><a href="classBencher.html">Bencher</a></div><div class="ttdef"><b>Definition:</b> Bencher.h:16</div></div>
-<div class="ttc" id="aclassBencher_html_a9255de4cc6243d00e5f331931b913422"><div class="ttname"><a href="classBencher.html#a9255de4cc6243d00e5f331931b913422">Bencher::benchmark</a></div><div class="ttdeci">std::vector&lt; double &gt; benchmark()</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:12</div></div>
-<div class="ttc" id="aclassBencher_html_ac5fa67b9ea18fe51612e53e7bfcab326"><div class="ttname"><a href="classBencher.html#ac5fa67b9ea18fe51612e53e7bfcab326">Bencher::iterations</a></div><div class="ttdeci">int iterations</div><div class="ttdef"><b>Definition:</b> Bencher.h:21</div></div>
-<div class="ttc" id="aclassBencher_html_ace00f39bb36c3b86ecfba715d0cef8b6"><div class="ttname"><a href="classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6">Bencher::repetitions</a></div><div class="ttdeci">int repetitions</div><div class="ttdef"><b>Definition:</b> Bencher.h:25</div></div>
-<div class="ttc" id="aclassBencher_html_aefe635eb500396e9d3dbef949bbea3cb"><div class="ttname"><a href="classBencher.html#aefe635eb500396e9d3dbef949bbea3cb">Bencher::Bencher</a></div><div class="ttdeci">Bencher(int it, int rep)</div><div class="ttdef"><b>Definition:</b> Bencher.cpp:7</div></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_PROFILER_H</span></div>
+<div class="ttc" id="aclassProfiler_html"><div class="ttname"><a href="classProfiler.html">Profiler</a></div><div class="ttdef"><b>Definition:</b> Profiler.h:16</div></div>
+<div class="ttc" id="aclassProfiler_html_a5799063b93ab7cb2679ae11ee4a29446"><div class="ttname"><a href="classProfiler.html#a5799063b93ab7cb2679ae11ee4a29446">Profiler::benchmark</a></div><div class="ttdeci">std::vector&lt; double &gt; benchmark()</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:12</div></div>
+<div class="ttc" id="aclassProfiler_html_a7f4dbb498902f7de106e2420f7a4f4b1"><div class="ttname"><a href="classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1">Profiler::Profiler</a></div><div class="ttdeci">Profiler(int it, int rep)</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:7</div></div>
+<div class="ttc" id="aclassProfiler_html_ac5a4b7ec83464e2039eb4787f0ed6acf"><div class="ttname"><a href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">Profiler::repetitions</a></div><div class="ttdeci">int repetitions</div><div class="ttdef"><b>Definition:</b> Profiler.h:25</div></div>
+<div class="ttc" id="aclassProfiler_html_ad9c3c73e305f81758670e6020d31fa89"><div class="ttname"><a href="classProfiler.html#ad9c3c73e305f81758670e6020d31fa89">Profiler::iterations</a></div><div class="ttdeci">int iterations</div><div class="ttdef"><b>Definition:</b> Profiler.h:21</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
