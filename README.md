@@ -1,6 +1,5 @@
 # SPEAR
 
----
 Welcome to SPEAR, the 
 **S**tatic **P**redictive **E**nergy **A**nalysis Tool based on **R**APL.
 
