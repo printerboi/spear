@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['read_13',['read',['../classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b',1,'JSONHandler']]],
-  ['registerreader_14',['RegisterReader',['../classRegisterReader.html',1,'RegisterReader'],['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader::RegisterReader()']]],
-  ['repetitions_15',['repetitions',['../classBencher.html#ace00f39bb36c3b86ecfba715d0cef8b6',1,'Bencher']]]
+  ['llvmhandler_16',['LLVMHandler',['../classLLVMHandler.html',1,'LLVMHandler'],['../classLLVMHandler.html#ae940748859bbf6c89aa08809b2533709',1,'LLVMHandler::LLVMHandler()']]],
+  ['looptree_17',['LoopTree',['../classLoopTree.html',1,'LoopTree'],['../classLoopTree.html#a41adfcea0bf35ede6eb2c43e5b802eb2',1,'LoopTree::LoopTree()']]]
 ];

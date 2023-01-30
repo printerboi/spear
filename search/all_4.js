@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jsonhandler_9',['JSONHandler',['../classJSONHandler.html',1,'JSONHandler'],['../classJSONHandler.html#a8fb7b9d53805c97b3516130beaca0536',1,'JSONHandler::JSONHandler()']]]
+  ['handler_12',['handler',['../classLoopTree.html#a15b900fb894985bdc881842d75bd5f9a',1,'LoopTree']]]
 ];

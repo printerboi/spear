@@ -73,19 +73,18 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4dbd2e04ac670544156996bb0abc7e6e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a4dbd2e04ac670544156996bb0abc7e6e">LLVMHandler</a> (std::string file, Json::Value energy)</td></tr>
-<tr class="separator:a4dbd2e04ac670544156996bb0abc7e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43307ff5842d607f0404964500e98c12"><td class="memItemLeft" align="right" valign="top"><a id="a43307ff5842d607f0404964500e98c12"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>getBasicBlockSum</b> (llvm::BasicBlock &amp;BB)</td></tr>
+<tr class="memitem:ae940748859bbf6c89aa08809b2533709"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#ae940748859bbf6c89aa08809b2533709">LLVMHandler</a> (Json::Value energyModel, long valueIfInteterminate)</td></tr>
+<tr class="separator:ae940748859bbf6c89aa08809b2533709"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43307ff5842d607f0404964500e98c12"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a43307ff5842d607f0404964500e98c12">getBasicBlockSum</a> (llvm::BasicBlock &amp;BB)</td></tr>
 <tr class="separator:a43307ff5842d607f0404964500e98c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3531404d13cb889ff7e771d4f7b3dd83"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a3531404d13cb889ff7e771d4f7b3dd83">print</a> ()</td></tr>
-<tr class="separator:a3531404d13cb889ff7e771d4f7b3dd83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d14386c23be3cbea28255394985f786"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a6d14386c23be3cbea28255394985f786">getLoopUpperBound</a> (llvm::Loop *L)</td></tr>
+<tr class="separator:a6d14386c23be3cbea28255394985f786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>[<a class="el" href="classLLVMHandler.html">LLVMHandler</a>] Class to handle .ll files </p>
+<div class="textblock"><p><a class="el" href="classLLVMHandler.html">LLVMHandler</a> - Class for combining LLVM IR with energy values to reason about the energy consumption of a program </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a4dbd2e04ac670544156996bb0abc7e6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4dbd2e04ac670544156996bb0abc7e6e">&#9670;&nbsp;</a></span>LLVMHandler()</h2>
+<a id="ae940748859bbf6c89aa08809b2533709"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae940748859bbf6c89aa08809b2533709">&#9670;&nbsp;</a></span>LLVMHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -96,14 +95,14 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getBasicBlockSum</b
         <tr>
           <td class="memname">LLVMHandler::LLVMHandler </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>file</em>, </td>
+          <td class="paramtype">Json::Value&#160;</td>
+          <td class="paramname"><em>energyModel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Json::Value&#160;</td>
-          <td class="paramname"><em>energy</em>&#160;</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>valueIfInteterminate</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -117,8 +116,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getBasicBlockSum</b
   </tr>
 </table>
 </div><div class="memdoc">
-<p>[<a class="el" href="classLLVMHandler.html">LLVMHandler</a>] Constructor receiving a string to file. Loads the IR from the file to the class </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Constructor receiving a string to file. Loads the IR from the file to the class </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">energyModel</td><td>JSON Object containing the energy model </td></tr>
     <tr><td class="paramname">file</td><td>String containing a valid file path </td></tr>
   </table>
   </dd>
@@ -127,21 +127,53 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getBasicBlockSum</b
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3531404d13cb889ff7e771d4f7b3dd83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3531404d13cb889ff7e771d4f7b3dd83">&#9670;&nbsp;</a></span>print()</h2>
+<a id="a43307ff5842d607f0404964500e98c12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43307ff5842d607f0404964500e98c12">&#9670;&nbsp;</a></span>getBasicBlockSum()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LLVMHandler::print </td>
+          <td class="memname">double LLVMHandler::getBasicBlockSum </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">llvm::BasicBlock &amp;&#160;</td>
+          <td class="paramname"><em>BB</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>[print] Method returning a simple dump of the loaded file </p>
+<p>Method to calculate the energy-consumption of block with respect to the given energy model </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">BB</td><td>Basic block to analyze </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Double value of the approximated energy </dd></dl>
+
+</div>
+</div>
+<a id="a6d14386c23be3cbea28255394985f786"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d14386c23be3cbea28255394985f786">&#9670;&nbsp;</a></span>getLoopUpperBound()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long LLVMHandler::getLoopUpperBound </td>
+          <td>(</td>
+          <td class="paramtype">llvm::Loop *&#160;</td>
+          <td class="paramname"><em>L</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be calculated the parameter valueIfIndeterminate will be used as upper bound </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">L</td><td>The loop to analyze </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The long value representing the iterations the given loop will approximately run </dd></dl>
 
 </div>
 </div>

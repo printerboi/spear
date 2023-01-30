@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['instructioncategory_19',['InstructionCategory',['../classInstructionCategory.html',1,'']]]
+  ['energy_29',['Energy',['../structEnergy.html',1,'']]]
 ];

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['getcategory_27',['getCategory',['../classInstructionCategory.html#a186de65cac60f25541ff34085dbdb158',1,'InstructionCategory']]],
-  ['getenergy_28',['getEnergy',['../classPowercapReader.html#a8c44917db28ace079d27c10b6fa9043a',1,'PowercapReader::getEnergy()'],['../classRegisterReader.html#a71e704b8291c42006f4743a97b74e2b0',1,'RegisterReader::getEnergy()']]],
-  ['getmultiplier_29',['getMultiplier',['../classRegisterReader.html#a5206015b7b87e3a509d35ca1996fcec9',1,'RegisterReader']]]
+  ['calcenergy_39',['calcEnergy',['../classLoopTree.html#ae0845dbdf362f32d6443f3d1b405c626',1,'LoopTree']]]
 ];
