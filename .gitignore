@@ -37,4 +37,4 @@ docs
 .idea
 venv/
 
-llvm-code-under-bench/compiled
+profile/compiled

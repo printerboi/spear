@@ -1,18 +1,16 @@
 #include <cstring>
-#include "src/include/Bencher/Bencher.h"
-#include "src/include/LLVM-Handler/LLVMHandler.h"
-#include "src/include/LLVM-Handler/InstructionCategory.h"
-#include "src/include/JSON-Handler/JSONHandler.h"
-#include "src/passes/energy/energy.cpp"
+#include "src/main/include/Profiler/Profiler.h"
+#include "src/main/include/LLVM-Handler/LLVMHandler.h"
+#include "src/main/include/LLVM-Handler/InstructionCategory.h"
+#include "src/main/include/JSON-Handler/JSONHandler.h"
+#include "src/main/passes/energy/energy.cpp"
 
 #include "iostream"
 #include "filesystem"
 #include <chrono>
-#include <llvm/IR/LegacyPassManager.h>
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Transforms/Utils/InstructionNamer.h"
 #include "llvm/Transforms/Utils/Mem2Reg.h"
-#include "llvm/Transforms/InstCombine/InstCombine.h"
 #include "llvm/Transforms/Scalar/LoopRotation.h"
 
 int main(int argc, const char **argv){
@@ -28,8 +26,8 @@ int main(int argc, const char **argv){
                 int rep = std::stoi( argv[2] );
                 int ite = std::stoi( argv[3] );
 
-                //Create a Bencher-object
-                Bencher B = Bencher(ite, rep);
+                //Create a Profiler-object
+                Profiler B = Profiler(ite, rep);
 
                 std::cout << "Starting the benchmark..." << std::endl;
 

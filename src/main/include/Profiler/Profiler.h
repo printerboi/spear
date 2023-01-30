@@ -2,8 +2,8 @@
 // Created by max on 26.12.22.
 //
 
-#ifndef BA_BENCHER_H
-#define BA_BENCHER_H
+#ifndef BA_PROFILER_H
+#define BA_PROFILER_H
 
 #include "../Rapl-reader/RegisterReader.h"
 #include "../Rapl-reader/PowercapReader.h"
@@ -13,7 +13,7 @@
 /**
  * Simple class to benchmark the llvm-code and output the data in an appropriate format
  */
-class Bencher {
+class Profiler {
     public:
         /**
          * Times the energy values will be executed. Needed for the average
@@ -24,12 +24,12 @@ class Bencher {
          */
         int repetitions;
         /**
-         * Creates a Bencher object and sets the iterations and repetitions property according to the parameters
+         * Creates a Profiler object and sets the iterations and repetitions property according to the parameters
          * @constructor
          * @param it Iterations for the average
          * @param rep Times a program will be executed repeatedly
          */
-        explicit Bencher(int it, int rep);
+        explicit Profiler(int it, int rep);
         /**
          * Runs the benchmark and returns the values for the benchmarked files
          */
@@ -44,4 +44,4 @@ class Bencher {
 };
 
 
-#endif //BA_BENCHER_H
+#endif //BA_PROFILER_H

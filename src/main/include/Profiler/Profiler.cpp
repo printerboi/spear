@@ -2,19 +2,19 @@
 // Created by max on 26.12.22.
 //
 
-#include "Bencher.h"
+#include "Profiler.h"
 
-Bencher::Bencher(int it, int rep){
+Profiler::Profiler(int it, int rep){
     this->iterations = it;
     this->repetitions = rep;
 }
 
-std::vector<double> Bencher::benchmark() {
-    double baseValue = benchmarkFile("llvm-code-under-bench/compiled/base");
-    double groupM = benchmarkFile("llvm-code-under-bench/compiled/groupM");
-    double groupB = benchmarkFile("llvm-code-under-bench/compiled/groupB");
-    double groupD = benchmarkFile("llvm-code-under-bench/compiled/groupD");
-    double groupG = benchmarkFile("llvm-code-under-bench/compiled/groupG");
+std::vector<double> Profiler::benchmark() {
+    double baseValue = benchmarkFile("profile/compiled/base");
+    double groupM = benchmarkFile("profile/compiled/groupM");
+    double groupB = benchmarkFile("profile/compiled/groupB");
+    double groupD = benchmarkFile("profile/compiled/groupD");
+    double groupG = benchmarkFile("profile/compiled/groupG");
 
     return {
             groupM,
@@ -25,7 +25,7 @@ std::vector<double> Bencher::benchmark() {
     };
 }
 
-double Bencher::benchmarkFile(std::string file) {
+double Profiler::benchmarkFile(std::string file) {
     PowercapReader powReader = PowercapReader();
     char* relPath = getenv("BA_REL_PATH");
 
