@@ -29,12 +29,12 @@ int main(int argc, const char **argv){
                 //Create a Profiler-object
                 Profiler B = Profiler(ite, rep);
 
-                std::cout << "Starting the benchmark..." << std::endl;
+                std::cout << "Starting the profile..." << std::endl;
 
                 //Start the time measurement
                 auto start = std::chrono::system_clock::now();
                 //Launch the benchmarking
-                std::vector<double> result = B.benchmark();
+                std::vector<double> result = B.profile();
                 //Stop the time measurement
                 auto end = std::chrono::system_clock::now();
                 //Calculate the elapsed time by substracting the two timestamps

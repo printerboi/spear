@@ -11,7 +11,7 @@
 #include "vector"
 
 /**
- * Simple class to benchmark the llvm-code and output the data in an appropriate format
+ * Simple class to profile the llvm-code and output the data in an appropriate format
  */
 class Profiler {
     public:
@@ -31,9 +31,9 @@ class Profiler {
          */
         explicit Profiler(int it, int rep);
         /**
-         * Runs the benchmark and returns the values for the benchmarked files
+         * Runs the profile and returns the values for the benchmarked files
          */
-        std::vector<double> benchmark();
+        std::vector<double> profile();
     private:
         /**
          * Benchmarks a single file, calculates the used energy and returns the calculated value

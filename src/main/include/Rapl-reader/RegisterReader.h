@@ -31,7 +31,7 @@ class RegisterReader {
          */
         explicit RegisterReader(int core);
         /**
-         * Placeholder method to benchmark c code directly. DO NOT USE!!!
+         * Placeholder method to profile c code directly. DO NOT USE!!!
          */
         void benchmarkCode();
         /**

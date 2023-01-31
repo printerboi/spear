@@ -8,7 +8,7 @@
 #include "json/json.h"
 
 /**
- * Class for handling the reading and writing of JSON files to save and load the energy data measured in the benchmark
+ * Class for handling the reading and writing of JSON files to save and load the energy data measured in the profile
  */
 class JSONHandler {
     public:

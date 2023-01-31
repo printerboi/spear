@@ -9,7 +9,7 @@ Profiler::Profiler(int it, int rep){
     this->repetitions = rep;
 }
 
-std::vector<double> Profiler::benchmark() {
+std::vector<double> Profiler::profile() {
     double baseValue = benchmarkFile("profile/compiled/base");
     double groupM = benchmarkFile("profile/compiled/groupM");
     double groupB = benchmarkFile("profile/compiled/groupB");

@@ -43,15 +43,16 @@ class LLVMHandler {
          */
          long getLoopUpperBound(llvm::Loop *L);
 
-    private:
-        /**
-         * JSON-Value containin the energy model used for the calculations
-         */
-        Json::Value energyValues;
 
-        /**
-         * Fallback value of the loop bound calculation representing an upper bound
-         */
+private:
+
+    /**
+     * JSON-Value containin the energy model used for the calculations
+     */
+    Json::Value energyValues;
+    /**
+     * Fallback value of the loop bound calculation representing an upper bound
+     */
         long valueIfIndeterminate;
 
 };
