@@ -13,6 +13,7 @@ class CoastlineTree {
     CoastlineTree();
     std::vector<CoastlineTree> predecessors;
     std::vector<CoastlineTree> successors;
+    CoastlineTree construct(llvm::BasicBlock *bb);
 };
 
 

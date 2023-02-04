@@ -28,8 +28,6 @@ ProgramTree ProgramTree::construct(llvm::Region *region) {
 
         P.calcBlocks();
 
-
-
         return P;
     }
 }
