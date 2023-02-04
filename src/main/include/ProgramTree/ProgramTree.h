@@ -7,16 +7,25 @@
 
 
 #include <vector>
+#include <llvm/Analysis/RegionInfo.h>
 #include "llvm/IR/BasicBlock.h"
 
 class ProgramTree {
     public:
-        std::vector<ProgramTree *> subtrees;
+        ProgramTree(llvm::Region *region);
+
+        std::vector<ProgramTree> subtrees;
+        llvm::Region *region;
         std::vector<llvm::BasicBlock *> blocks;
 
-        virtual bool isLeaf();
-        virtual void printPreOrder() = 0;
-        virtual void calcEnergy() = 0;
+        static ProgramTree construct(llvm::Region *reg);
+        bool isLeaf();
+        void printPreOrder() ;
+        void calcEnergy();
+    private:
+        static bool regionHasSubregion(llvm::Region *reg);
+        std::vector<llvm::BasicBlock *> calcBlocks();
+        boo
 };
 
 

@@ -1,4 +1,5 @@
 #include <llvm/Passes/PassBuilder.h>
+#include <llvm/Analysis/RegionInfo.h>
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
@@ -10,8 +11,8 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Analysis/PostDominators.h"
 #include "../../include/JSON-Handler/JSONHandler.h"
-#include "../../include/ProgramTree/LoopTree.h"
-#include "../../include/ProgramTree/IfTree.h"
+#include "../../include/ProgramTree/ProgramTree.h"
+#include "../../include/LoopTree/LoopTree.h"
 
 
 llvm::cl::opt<std::string> energyModelPath("m", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
@@ -35,6 +36,16 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
     }
 
+    void visitor(const llvm::Region &region){
+        llvm::outs() << region.getNameStr() << "\n";
+        for (auto &it : region) {
+            auto subregion = it.get();
+            visitor(*subregion);
+        }
+    }
+
+
+
     /**
      * Main runner of the energy pass. The pass will apply function-wise.
      * @param F Reference to a function
@@ -49,59 +60,39 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             auto* DT = new llvm::DominatorTree();
             DT->recalculate(F);
             //generate the LoopInfoBase for the current function
-            auto *KLoop = new llvm::LoopInfoBase<llvm::BasicBlock, llvm::Loop>();
-            KLoop->releaseMemory();
-            KLoop->analyze(*DT);
+            auto &KLoop = FAM.getResult<llvm::LoopAnalysis>(F);
+            auto &regres = FAM.getResult<llvm::RegionInfoAnalysis>(F);
+            llvm::Region &entry = *regres.getTopLevelRegion();
+            auto loops = KLoop.getTopLevelLoops();
 
-            llvm::outs() << F.getName() << " " << KLoop->empty() << "\n";
+            //visitor(entry);
+            ProgramTree PT = ProgramTree::construct(&entry);
+            PT.printPreOrder();
+
+            //KLoop.releaseMemory();
+            //KLoop->analyze(*DT);
+
+            llvm::outs() << F.getName() << " " << loops.empty() << "\n";
 
 
-            if(!KLoop->empty()){
+            if(!loops.empty()){
                 //Inputprogramm contains for loops
                 std::vector<LoopTree *> trees;
                 std::vector<llvm::BasicBlock *> latches;
-                for (auto liiter = KLoop->begin(); liiter < KLoop->end(); ++liiter) {
+                for (auto liiter = loops.begin(); liiter < loops.end(); ++liiter) {
                     auto topLoop= *liiter;
 
                     LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), &handler);
-                    //llvm::outs() << "==========================================================\n";
-                    //LT.printPreOrder();
-                    //llvm::outs() << "==========================================================\n";
+                    llvm::outs() << "==========================================================\n";
+                    LT.printPreOrder();
+                    llvm::outs() << "==========================================================\n";
                     trees.push_back(&LT);
                     for (auto &bb : LT.getLatches()) {
                         latches.push_back(bb);
                     }
                 }
 
-
-                std::vector<llvm::BasicBlock *> ifblocks;
-                for (auto &bb : F) {
-                    if(bb.getTerminator()->getNumSuccessors() == 2){
-                        if(std::find(latches.begin(), latches.end(), &bb) == latches.end()){
-                            ifblocks.push_back(&bb);
-                        }
-                    }
-                }
-
-                for (auto &fb : ifblocks) {
-                    fb->print(llvm::outs());
-                }
-
             }else{
-                //Programm is loop-free
-                std::vector<llvm::BasicBlock *> blockList;
-                for (auto &bb : F) {
-                    blockList.push_back(&bb);
-                }
-
-                for (auto &bb : blockList) {
-                    if(bb->getTerminator()->getNumSuccessors() == 2){
-                        llvm::outs() << "Found possible header " << bb->getName() << "\n";
-                    }
-                }
-
-                //std::vector<IfTree> ifs = IfTree::constructCondition(blockList);
-
 
 
             }

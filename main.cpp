@@ -9,6 +9,7 @@
 #include "filesystem"
 #include <chrono>
 #include "llvm/Passes/PassBuilder.h"
+#include "llvm/Analysis/RegionPass.h"
 #include "llvm/Transforms/Utils/InstructionNamer.h"
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 #include "llvm/Transforms/Scalar/LoopRotation.h"
@@ -94,7 +95,6 @@ int main(int argc, const char **argv){
 
                         //instcombine
                         //functionPassManager.addPass(llvm::InstCombinePass());
-
                         //loop-simplify
                         functionPassManager.addPass(llvm::LoopSimplifyPass());
 
