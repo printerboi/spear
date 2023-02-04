@@ -65,6 +65,9 @@ void LoopTree::printPreOrder() {
         llvm::outs() << "-------------------------------------------\n";
         llvm::outs() << this->mainloop->getName() << " (LEAF) " << "i=" << this->iterations << " e=" << (long) this->calcEnergy() << " n= " << this->mainloop->getBlocksVector().size() << "\n";
         llvm::outs() << "-------------------------------------------\n";
+        /*for (auto bb : this->blocks) {
+            bb->print(llvm::outs());
+        }*/
     }else{
         for (auto slt: this->subTrees) {
             slt.printPreOrder();
@@ -72,6 +75,9 @@ void LoopTree::printPreOrder() {
         llvm::outs() << "-------------------------------------------\n";
         llvm::outs() << this->mainloop->getName() << " (NODE) "<< "i=" << this->iterations << " e=" << (long) this->calcEnergy() << " n= " << this->mainloop->getBlocksVector().size() << "\n";
         llvm::outs() << "-------------------------------------------\n";
+        /*for (auto bb : this->blocks) {
+            bb->print(llvm::outs());
+        }*/
 
     }
 }
@@ -100,5 +106,27 @@ double LoopTree::calcEnergy() {
         result = sum * (double) this->iterations;
 
         return result;
+    }
+}
+
+std::vector<llvm::BasicBlock *> LoopTree::getLatches() {
+    if(this->isLeaf()){
+        std::vector<llvm::BasicBlock *> latches;
+        latches.push_back(this->mainloop->getLoopLatch());
+        return latches;
+    }else{
+        std::vector<llvm::BasicBlock *> latches;
+
+        for (auto sT : this->subTrees) {
+            std::vector<llvm::BasicBlock *> calced = sT.getLatches();
+            calced.push_back(this->mainloop->getLoopLatch());
+            for(auto &lb : calced){
+                if(std::find(latches.begin(), latches.end(), lb) == latches.end()){
+                    latches.push_back(lb);
+                }
+            }
+        }
+
+        return latches;
     }
 }

@@ -16,7 +16,7 @@ include(AddLLVM)
 
 
 
-add_executable(ba)
+add_executable(ba src/main/include/ProgramTree/ProgramTree.cpp src/main/include/ProgramTree/ProgramTree.cpp src/main/include/ProgramTree/ProgramTree.h)
 add_subdirectory(src)
 target_sources(ba
         PUBLIC main.cpp

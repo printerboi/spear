@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <llvm/Analysis/LoopInfo.h>
-#include "LLVMHandler.h"
+#include "../LLVM-Handler/LLVMHandler.h"
 
 /**
  * LoopTree - A recursive datastructure to handle encapsulated loops
@@ -48,6 +48,8 @@ class LoopTree {
          * Prints this node in preorder
          */
         void printPreOrder();
+
+        std::vector<llvm::BasicBlock *> getLatches();
     private:
         /**
          * The over approximated iterations of the loop contained in this node

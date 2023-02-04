@@ -3,6 +3,7 @@
 #include "../../main/include/LLVM-Handler/LLVMHandler.h"
 #include "../../main/include/JSON-Handler/JSONHandler.h"
 #include <llvm/IR/Instructions.h>
+#include <llvm/Analysis/ScalarEvolution.h>
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/IRReader/IRReader.h"
 
@@ -28,3 +29,4 @@ TEST(LLVM_HANDLER_TEST, BASICBLOCKSUMTEST){
 
     EXPECT_EQ(calced, 160481.14999999999);
 }
+

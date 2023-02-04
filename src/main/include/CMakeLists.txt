@@ -9,10 +9,11 @@ target_sources(ba
         PUBLIC LLVM-Handler/InstructionCategory.h
         PUBLIC LLVM-Handler/LLVMHandler.cpp
         PUBLIC LLVM-Handler/LLVMHandler.h
-        PUBLIC LLVM-Handler/LoopTree.cpp
-        PUBLIC LLVM-Handler/LoopTree.h
+        PUBLIC ProgramTree/LoopTree.cpp
+        PUBLIC ProgramTree/LoopTree.h
         PUBLIC Profiler/Profiler.cpp
         PUBLIC Profiler/Profiler.h
+        ProgramTree/IfTree.cpp ProgramTree/IfTree.h
         )
 
 add_library(spear SHARED
@@ -24,9 +25,9 @@ add_library(spear SHARED
         LLVM-Handler/InstructionCategory.h
         LLVM-Handler/LLVMHandler.cpp
         LLVM-Handler/LLVMHandler.h
-        LLVM-Handler/LoopTree.cpp
-        LLVM-Handler/LoopTree.h
+        ProgramTree/LoopTree.cpp
+        ProgramTree/LoopTree.h
         Profiler/Profiler.cpp
         Profiler/Profiler.h
         ../../../external/json/jsoncpp.cpp
-        )
+        ProgramTree/IfTree.cpp ProgramTree/IfTree.h ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.h)

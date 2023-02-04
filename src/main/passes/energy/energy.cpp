@@ -10,7 +10,8 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Analysis/PostDominators.h"
 #include "../../include/JSON-Handler/JSONHandler.h"
-#include "../../include/LLVM-Handler/LoopTree.h"
+#include "../../include/ProgramTree/LoopTree.h"
+#include "../../include/ProgramTree/IfTree.h"
 
 
 llvm::cl::opt<std::string> energyModelPath("m", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
@@ -54,13 +55,55 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
             llvm::outs() << F.getName() << " " << KLoop->empty() << "\n";
 
-            for (auto liiter = KLoop->begin(); liiter < KLoop->end(); ++liiter) {
-                auto topLoop= *liiter;
 
-                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), &handler);
-                llvm::outs() << "==========================================================\n";
-                LT.printPreOrder();
-                llvm::outs() << "==========================================================\n";
+            if(!KLoop->empty()){
+                //Inputprogramm contains for loops
+                std::vector<LoopTree *> trees;
+                std::vector<llvm::BasicBlock *> latches;
+                for (auto liiter = KLoop->begin(); liiter < KLoop->end(); ++liiter) {
+                    auto topLoop= *liiter;
+
+                    LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), &handler);
+                    //llvm::outs() << "==========================================================\n";
+                    //LT.printPreOrder();
+                    //llvm::outs() << "==========================================================\n";
+                    trees.push_back(&LT);
+                    for (auto &bb : LT.getLatches()) {
+                        latches.push_back(bb);
+                    }
+                }
+
+
+                std::vector<llvm::BasicBlock *> ifblocks;
+                for (auto &bb : F) {
+                    if(bb.getTerminator()->getNumSuccessors() == 2){
+                        if(std::find(latches.begin(), latches.end(), &bb) == latches.end()){
+                            ifblocks.push_back(&bb);
+                        }
+                    }
+                }
+
+                for (auto &fb : ifblocks) {
+                    fb->print(llvm::outs());
+                }
+
+            }else{
+                //Programm is loop-free
+                std::vector<llvm::BasicBlock *> blockList;
+                for (auto &bb : F) {
+                    blockList.push_back(&bb);
+                }
+
+                for (auto &bb : blockList) {
+                    if(bb->getTerminator()->getNumSuccessors() == 2){
+                        llvm::outs() << "Found possible header " << bb->getName() << "\n";
+                    }
+                }
+
+                //std::vector<IfTree> ifs = IfTree::constructCondition(blockList);
+
+
+
             }
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";
