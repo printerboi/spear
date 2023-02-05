@@ -71,8 +71,13 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
             //KLoop.releaseMemory();
             //KLoop->analyze(*DT);
+            std::vector<llvm::BasicBlock *> functionBlocks;
 
-            ProgramTree *PT = ProgramTree::construct(F);
+            for(auto &blocks : F){
+                functionBlocks.push_back(&blocks);
+            }
+
+            ProgramTree *PT = ProgramTree::construct(functionBlocks);
 
 
             if(!loops.empty()){
@@ -91,7 +96,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                         latches.push_back(bb);
                     }
 
-                    LoopNode *LN = new LoopNode(&LT);
+                    LoopNode *LN = LoopNode::construct(&LT);
                     auto succeeded = PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
 
                 }

@@ -8,14 +8,8 @@
 #include "vector"
 #include "llvm/IR/BasicBlock.h"
 
-class Node {
-    public:
-        std::vector<llvm::BasicBlock *> predecessors;
-        std::vector<llvm::BasicBlock *> successors;
-        std::vector<llvm::BasicBlock *> blocks;
 
-    virtual std::string toString();
-};
+
 
 
 #endif //BA_NODE_H

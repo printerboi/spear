@@ -2,7 +2,7 @@
 // Created by maximiliank on 05.02.23.
 //
 
-#include "Edge.h"
+#include "ProgramTree.h"
 
 Edge::Edge(Node *start, Node *end) {
     this->start = start;

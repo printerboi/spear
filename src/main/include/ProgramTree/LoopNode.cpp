@@ -3,6 +3,7 @@
 //
 
 #include "LoopNode.h"
+#include "ProgramTree.h"
 
 LoopNode::LoopNode(LoopTree *LT) {
     this->loopTree = LT;
@@ -19,4 +20,17 @@ std::string LoopNode::toString() {
     output.append(ss.str());
 
     return output;
+}
+
+bool LoopNode::isLeafNode() {
+    return this->loopTree->subTrees.empty();
+}
+
+LoopNode* LoopNode::construct(LoopTree *lptr) {
+    LoopNode *LN = new LoopNode(lptr);
+
+    ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
+    LN->subtrees.push_back(PT);
+
+    return LN;
 }

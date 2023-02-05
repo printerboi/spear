@@ -4,20 +4,20 @@
 
 #include "ProgramTree.h"
 
-ProgramTree* ProgramTree::construct(llvm::Function &F) {
+ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset) {
     auto *PT = new ProgramTree();
     std::vector<llvm::BasicBlock *> bbs;
 
 
-    for(auto &BB : F.getBasicBlockList()){
+    for(auto BB : blockset){
         auto *NN = new Node();
-        NN->blocks.push_back(&BB);
+        NN->blocks.push_back(BB);
         PT->nodes.push_back(NN);
     }
 
-    for (auto &BB : F.getBasicBlockList()) {
-        for (auto succ : llvm::successors(&BB)) {
-            Node *start = PT->findBlock(&BB);
+    for (auto BB : blockset) {
+        for (auto succ : llvm::successors(BB)) {
+            Node *start = PT->findBlock(BB);
             Node *end = PT->findBlock(succ);
 
             if(start != nullptr && end != nullptr){
@@ -35,7 +35,15 @@ void ProgramTree::printNodes() {
     for (auto N : this->nodes) {
         llvm::outs() << "\n----------------------------------------------------------------------\n";
         llvm::outs() << N->toString() << "\n";
-        llvm::outs() << "\n----------------------------------------------------------------------\n";
+        if(dynamic_cast<LoopNode*>(N) != nullptr){
+
+            for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
+                llvm::outs() << "\n|\t\t\t\t\tBEGIN Subnodes\t\t\t\t\t|\n";
+                sPT->printNodes();
+                llvm::outs() << "\n|\t\t\t\t\tEND Subnodes\t\t\t\t\t|\n";
+            }
+        }
+        llvm::outs() << "----------------------------------------------------------------------\n";
     }
 
 }
@@ -94,6 +102,8 @@ bool ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> block
             }
         }
         this->removeOrphanedEdges();
+
+
 
         return true;
     }else{

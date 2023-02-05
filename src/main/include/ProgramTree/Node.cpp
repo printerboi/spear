@@ -2,7 +2,8 @@
 // Created by maximiliank on 05.02.23.
 //
 
-#include "Node.h"
+#include "ProgramTree.h"
+
 
 std::string Node::toString() {
     std::string output;

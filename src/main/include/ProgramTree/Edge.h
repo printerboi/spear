@@ -5,16 +5,12 @@
 #ifndef BA_EDGE_H
 #define BA_EDGE_H
 
+#pragma once
 #include "Node.h"
 
-class Edge {
-    public:
-        Node * start;
-        Node * end;
+class Node;
 
-        Edge(Node *start, Node *end);
-        std::string toString();
-};
+
 
 
 #endif //BA_EDGE_H
