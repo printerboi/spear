@@ -30,4 +30,4 @@ add_library(spear SHARED
         Profiler/Profiler.cpp
         Profiler/Profiler.h
         ../../../external/json/jsoncpp.cpp
-        ProgramTree/IfTree.cpp ProgramTree/IfTree.h ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.h)
+        ProgramTree/IfTree.cpp ProgramTree/IfTree.h ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.h ProgramTree/Node.cpp ProgramTree/Node.h ProgramTree/LoopNode.cpp ProgramTree/LoopNode.h ProgramTree/IfNode.cpp ProgramTree/IfNode.h)

@@ -8,15 +8,13 @@
 
 #include <vector>
 #include "llvm/IR/BasicBlock.h"
+#include "Node.h"
 
 class ProgramTree {
     public:
-        std::vector<ProgramTree *> subtrees;
-        std::vector<llvm::BasicBlock *> blocks;
-
-        virtual bool isLeaf();
-        virtual void printPreOrder() = 0;
-        virtual void calcEnergy() = 0;
+        ProgramTree(Node *start);
+        ProgramTree constructPhaseITree(llvm::BasicBlock * blocks);
+        Node *startNode;
 };
 
 
