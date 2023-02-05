@@ -65,9 +65,9 @@ void LoopTree::printPreOrder() {
         llvm::outs() << "-------------------------------------------\n";
         llvm::outs() << this->mainloop->getName() << " (LEAF) " << "i=" << this->iterations << " e=" << (long) this->calcEnergy() << " n= " << this->mainloop->getBlocksVector().size() << "\n";
         llvm::outs() << "-------------------------------------------\n";
-        /*for (auto bb : this->blocks) {
+        for (auto bb : this->blocks) {
             bb->print(llvm::outs());
-        }*/
+        }
     }else{
         for (auto slt: this->subTrees) {
             slt.printPreOrder();
@@ -75,9 +75,9 @@ void LoopTree::printPreOrder() {
         llvm::outs() << "-------------------------------------------\n";
         llvm::outs() << this->mainloop->getName() << " (NODE) "<< "i=" << this->iterations << " e=" << (long) this->calcEnergy() << " n= " << this->mainloop->getBlocksVector().size() << "\n";
         llvm::outs() << "-------------------------------------------\n";
-        /*for (auto bb : this->blocks) {
+        for (auto bb : this->blocks) {
             bb->print(llvm::outs());
-        }*/
+        }
 
     }
 }

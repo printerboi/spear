@@ -16,7 +16,7 @@ include(AddLLVM)
 
 
 
-add_executable(ba src/main/include/LoopTree/LoopTree.cpp src/main/include/LoopTree/LoopTree.h src/main/include/ProgramTree/LoopRegion.cpp src/main/include/ProgramTree/LoopRegion.h src/main/include/ProgramTree/CoastlineTree.cpp src/main/include/ProgramTree/CoastlineTree.h src/main/include/ProgramTree/CoastlineNode.cpp src/main/include/ProgramTree/CoastlineNode.h)
+add_executable(ba)
 add_subdirectory(src)
 target_sources(ba
         PUBLIC main.cpp

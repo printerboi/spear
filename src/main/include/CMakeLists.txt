@@ -14,6 +14,14 @@ target_sources(ba
         PUBLIC Profiler/Profiler.h
         PUBLIC ProgramTree/ProgramTree.cpp
         PUBLIC ProgramTree/ProgramTree.h
+        LoopTree/LoopTree.cpp
+        LoopTree/LoopTree.h
+        ProgramTree/LoopNode.cpp
+        ProgramTree/LoopNode.h
+        ProgramTree/Node.cpp
+        ProgramTree/Node.h
+        ProgramTree/Edge.cpp
+        ProgramTree/Edge.h
         )
 
 add_library(spear SHARED
@@ -28,4 +36,15 @@ add_library(spear SHARED
         Profiler/Profiler.cpp
         Profiler/Profiler.h
         ../../../external/json/jsoncpp.cpp
-        ProgramTree/ProgramTree.cpp ProgramTree/ProgramTree.h ../passes/energy/energy.cpp LoopTree/LoopTree.cpp LoopTree/LoopTree.h ProgramTree/LoopRegion.cpp ProgramTree/LoopRegion.h ProgramTree/CoastlineTree.cpp ProgramTree/CoastlineTree.h ProgramTree/CoastlineNode.cpp ProgramTree/CoastlineNode.h)
+        ProgramTree/ProgramTree.cpp
+        ProgramTree/ProgramTree.h
+        ../passes/energy/energy.cpp
+        LoopTree/LoopTree.cpp
+        LoopTree/LoopTree.h
+        ProgramTree/LoopNode.cpp
+        ProgramTree/LoopNode.h
+        ProgramTree/Node.cpp
+        ProgramTree/Node.h
+        ProgramTree/Edge.cpp
+        ProgramTree/Edge.h
+        )

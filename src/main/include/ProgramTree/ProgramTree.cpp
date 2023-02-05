@@ -4,105 +4,127 @@
 
 #include "ProgramTree.h"
 
-bool ProgramTree::isLeaf() {
-    return this->subtrees.empty();
+ProgramTree* ProgramTree::construct(llvm::Function &F) {
+    auto *PT = new ProgramTree();
+    std::vector<llvm::BasicBlock *> bbs;
+
+
+    for(auto &BB : F.getBasicBlockList()){
+        auto *NN = new Node();
+        NN->blocks.push_back(&BB);
+        PT->nodes.push_back(NN);
+    }
+
+    for (auto &BB : F.getBasicBlockList()) {
+        for (auto succ : llvm::successors(&BB)) {
+            Node *start = PT->findBlock(&BB);
+            Node *end = PT->findBlock(succ);
+
+            if(start != nullptr && end != nullptr){
+                auto *E = new Edge(start, end);
+                PT->edges.push_back(E);
+            }
+        }
+    }
+
+    return PT;
 }
 
-ProgramTree ProgramTree::construct(llvm::Region *region) {
-    if(!regionHasSubregion(region)){
-        ProgramTree P = ProgramTree(region);
-        for (auto *bb : region->blocks()) {
-            P.blocks.push_back(bb);
+void ProgramTree::printNodes() {
+
+    for (auto N : this->nodes) {
+        llvm::outs() << "\n----------------------------------------------------------------------\n";
+        llvm::outs() << N->toString() << "\n";
+        llvm::outs() << "\n----------------------------------------------------------------------\n";
+    }
+
+}
+
+Node *ProgramTree::findBlock(llvm::BasicBlock *BB) {
+    for(auto Node : this->nodes){
+        if(std::find(Node->blocks.begin(), Node->blocks.end(), BB) != Node->blocks.end()){
+            return Node;
         }
+    }
 
-        return P;
-    }else{
-        ProgramTree P = ProgramTree(region);
-        P.region = region;
+    return nullptr;
+}
 
-        for (auto &sr : *region) {
-            auto subregion = sr.get();
-            ProgramTree srPT = construct(subregion);
-            P.subtrees.push_back(srPT);
-        }
-
-        P.calcBlocks();
-
-        return P;
+void ProgramTree::printEdges() {
+    llvm::outs() << "Programtree got " << this->edges.size() << "\n";
+    for (auto E : edges) {
+        llvm::outs() << "\n";
+        llvm::outs() << E->toString() << "\n";
     }
 }
 
-bool ProgramTree::regionHasSubregion(llvm::Region *reg) {
-    int subRegCounter = 0;
-    for (auto &sr : *reg) {
-        subRegCounter++;
+bool ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
+    std::vector<Node *> nodesToReplace;
+    for (auto bb : blocks) {
+        Node *toReplace = this->findBlock(bb);
+        if(toReplace != nullptr){
+            nodesToReplace.push_back(toReplace);
+        }
     }
 
-    return subRegCounter != 0;
-}
 
-ProgramTree::ProgramTree(llvm::Region *region) {
-    this->region = region;
-}
+    this->nodes.push_back(LPN);
 
-void ProgramTree::printPreOrder() {
-    if(this->isLeaf()){
-        llvm::outs() << "=================================\n";
-        llvm::outs() << this->region->getNameStr() << " (LEAF) \n";
-        for (auto *bb : this->blocks) {
-            bb->print(llvm::outs());
-        }
-        llvm::outs() << "=================================\n";
-    }else{
-        for (auto spt : this->subtrees) {
-            spt.printPreOrder();
-        }
+    if(!nodesToReplace.empty()){
+        Node *entry = this->findBlock(LPN->loopTree->mainloop->getBlocksVector()[0]);
+        auto entryname = entry->toString();
+        Node *exit = this->findBlock(LPN->loopTree->mainloop->getLoopLatch());
+        auto exiname = exit->toString();
 
-        llvm::outs() << "=================================\n";
-        llvm::outs() << this->region->getNameStr() << " (NODE) \n";
-        for (auto *bb : this->calcBlocks()) {
-            bb->print(llvm::outs());
-        }
-        llvm::outs() << "=================================\n";
-    }
-}
 
-std::vector<llvm::BasicBlock *> ProgramTree::calcBlocks() {
-    if(this->isLeaf()){
-        std::vector<llvm::BasicBlock *> bbset;
-        for (auto *bb : region->blocks()) {
-            bbset.push_back(bb);
-        }
+        for (auto edge : this->edges) {
+            if(edge->end == entry){
+                edge->end = LPN;
+            }
 
-        bbset.push_back(this->region->getExit());
-
-        this->blocks = bbset;
-
-        return bbset;
-    }else{
-        std::vector<llvm::BasicBlock *> bbSubset;
-        std::vector<llvm::BasicBlock *> diff;
-        std::vector<llvm::BasicBlock *> all;
-        for (auto spt : this->subtrees) {
-            std::vector<llvm::BasicBlock *> singleBBSubs = spt.calcBlocks();
-
-            for (auto bb : spt.region->blocks()) {
-                bbSubset.push_back(bb);
+            if(edge->start == exit){
+                edge->start = LPN;
             }
         }
 
-        for (auto *bb : region->blocks()) {
-            all.push_back(bb);
+        for(auto ntrpl : nodesToReplace){
+            this->removeNode(ntrpl);
+            for (auto bb : ntrpl->blocks) {
+                bb->print(llvm::outs());
+            }
         }
+        this->removeOrphanedEdges();
 
-        for (auto *bb : all) {
-            if (std::find(bbSubset.begin(), bbSubset.end(), bb) == bbSubset.end()){
-                diff.push_back(bb);
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void ProgramTree::removeNode(Node *N) {
+    std::vector<Node *> newNodes;
+
+    for (auto node : this->nodes) {
+        if(node != N){
+            newNodes.push_back(node);
+        }
+    }
+
+    this->nodes = newNodes;
+}
+
+void ProgramTree::removeOrphanedEdges() {
+    std::vector<Edge *> cleanedEdges;
+
+    for (auto edge : this->edges) {
+        if(std::find(this->nodes.begin(), this->nodes.end(), edge->start) != this->nodes.end() && std::find(this->nodes.begin(), this->nodes.end(), edge->end) != this->nodes.end() ){
+            if(edge->start != edge->end){
+                cleanedEdges.push_back(edge);
             }
         }
 
-
-
-        return diff;
     }
+
+    this->edges = cleanedEdges;
 }
+

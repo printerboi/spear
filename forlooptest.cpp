@@ -7,15 +7,7 @@ int main(){
     for (int i = 0; i < 1; ++i) {
         for (int j = 0; j < 2; ++j) {
             for (int o = 0; o < 3; ++o) {
-                if ( i%2 == 0 ){
-                    int b = a;
-                }else{
-                    a--;
-                }
 
-                if(i%2 == 1){
-                    a = a/2;
-                }
             }
         }
     }
@@ -29,8 +21,7 @@ int main(){
             }
         }
     }
-    int b = a;
 
 
-    return b;
+    return 0;
 }

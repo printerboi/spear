@@ -9,23 +9,22 @@
 #include <vector>
 #include <llvm/Analysis/RegionInfo.h>
 #include "llvm/IR/BasicBlock.h"
+#include "Node.h"
+#include "Edge.h"
+#include "LoopNode.h"
 
 class ProgramTree {
     public:
-        ProgramTree(llvm::Region *region);
+        std::vector<Node *> nodes;
+        std::vector<Edge *> edges;
 
-        std::vector<ProgramTree> subtrees;
-        llvm::Region *region;
-        std::vector<llvm::BasicBlock *> blocks;
-
-        static ProgramTree construct(llvm::Region *reg);
-        bool isLeaf();
-        void printPreOrder() ;
-        void calcEnergy();
-    private:
-        static bool regionHasSubregion(llvm::Region *reg);
-        std::vector<llvm::BasicBlock *> calcBlocks();
-        boo
+        static ProgramTree* construct(llvm::Function &F);
+        void printNodes();
+        void printEdges();
+        Node *findBlock(llvm::BasicBlock *BB);
+        void removeNode(Node *N);
+        void removeOrphanedEdges();
+        bool replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN);
 };
 
 

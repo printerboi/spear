@@ -61,12 +61,48 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             DT->recalculate(F);
             //generate the LoopInfoBase for the current function
             auto &KLoop = FAM.getResult<llvm::LoopAnalysis>(F);
+            auto &regres = FAM.getResult<llvm::RegionInfoAnalysis>(F);
+            llvm::Region &entry = *regres.getTopLevelRegion();
             auto loops = KLoop.getTopLevelLoops();
 
-            for (auto ) {
+            //visitor(entry);
+            //ProgramTree PT = ProgramTree::construct(&entry);
+            //PT.printPreOrder();
+
+            //KLoop.releaseMemory();
+            //KLoop->analyze(*DT);
+
+            ProgramTree *PT = ProgramTree::construct(F);
+
+
+            if(!loops.empty()){
+                //Inputprogramm contains for loops
+                std::vector<LoopTree *> trees;
+                std::vector<llvm::BasicBlock *> latches;
+                for (auto liiter = loops.begin(); liiter < loops.end(); ++liiter) {
+                    auto topLoop= *liiter;
+
+                    LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), &handler);
+                    /*llvm::outs() << "==========================================================\n";
+                    LT.printPreOrder();
+                    llvm::outs() << "==========================================================\n";*/
+                    trees.push_back(&LT);
+                    for (auto &bb : LT.getLatches()) {
+                        latches.push_back(bb);
+                    }
+
+                    LoopNode *LN = new LoopNode(&LT);
+                    auto succeeded = PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
+
+                }
+
+                PT->printNodes();
+                PT->printEdges();
+
+            }else{
+
 
             }
-
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";
         }
