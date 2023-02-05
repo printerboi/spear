@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['read_23',['read',['../classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b',1,'JSONHandler']]],
-  ['registerreader_24',['RegisterReader',['../classRegisterReader.html',1,'RegisterReader'],['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader::RegisterReader()']]],
-  ['repetitions_25',['repetitions',['../classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf',1,'Profiler']]],
-  ['run_26',['run',['../structEnergy.html#a5a45bf1196ff2476bd5ac07aa2a811df',1,'Energy']]]
+  ['powercapreader_21',['PowercapReader',['../classPowercapReader.html',1,'PowercapReader'],['../classPowercapReader.html#a415424eaa546b2b86202ba6b06fe2a3c',1,'PowercapReader::PowercapReader()']]],
+  ['printpreorder_22',['printPreOrder',['../classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34',1,'LoopTree']]],
+  ['profile_23',['profile',['../classProfiler.html#a1ac482be9a580fd4d65f83604de19b65',1,'Profiler']]],
+  ['profiler_24',['Profiler',['../classProfiler.html',1,'Profiler'],['../classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1',1,'Profiler::Profiler()']]],
+  ['programtree_25',['ProgramTree',['../classProgramTree.html',1,'']]]
 ];

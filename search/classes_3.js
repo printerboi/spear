@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['llvmhandler_34',['LLVMHandler',['../classLLVMHandler.html',1,'']]],
-  ['looptree_35',['LoopTree',['../classLoopTree.html',1,'']]]
+  ['llvmhandler_38',['LLVMHandler',['../classLLVMHandler.html',1,'']]],
+  ['loopnode_39',['LoopNode',['../classLoopNode.html',1,'']]],
+  ['looptree_40',['LoopTree',['../classLoopTree.html',1,'']]]
 ];
