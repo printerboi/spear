@@ -2,7 +2,6 @@
 // Created by maximiliank on 05.02.23.
 //
 
-#include "LoopNode.h"
 #include "ProgramTree.h"
 
 LoopNode::LoopNode(LoopTree *LT, ProgramTree *parent) : Node(parent) {
