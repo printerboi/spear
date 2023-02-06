@@ -10,17 +10,22 @@
 #include <llvm/Analysis/RegionInfo.h>
 #include "llvm/IR/BasicBlock.h"
 #include "../LoopTree/LoopTree.h"
+#include <cfloat>
 
 class ProgramTree;
 
 class Node {
-public:
-    std::vector<llvm::BasicBlock *> predecessors;
-    std::vector<llvm::BasicBlock *> successors;
-    std::vector<llvm::BasicBlock *> blocks;
+    public:
+        ProgramTree *parent;
+        std::vector<llvm::BasicBlock *> blocks;
 
+        Node(ProgramTree *parent);
 
-    virtual std::string toString();
+        virtual std::string toString();
+        virtual double getEnergy(LLVMHandler *handler);
+
+protected:
+    std::vector<Node *> getAdjacentNodes();
 };
 
 class Edge {
@@ -34,12 +39,13 @@ public:
 
 class LoopNode : public Node {
 public:
-    LoopNode(LoopTree *LT);
+    LoopNode(LoopTree *LT, ProgramTree *parent);
     LoopTree *loopTree;
     std::vector<ProgramTree *> subtrees;
-    static LoopNode* construct(LoopTree *lptr);
+    static LoopNode* construct(LoopTree *lptr, ProgramTree *parent);
     bool isLeafNode();
-
+    double getEnergy(LLVMHandler *handler);
+    void removeLoopEdgesFromSubtrees();
 
     std::string toString();
 };
@@ -51,12 +57,19 @@ class ProgramTree {
 
         static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset);
 
-        void printNodes();
+        void printNodes(LLVMHandler *handler);
         void printEdges();
         Node *findBlock(llvm::BasicBlock *BB);
+        std::vector<Edge *> findEdgesStartingAtNode(Node *N);
         void removeNode(Node *N);
         void removeOrphanedEdges();
-        bool replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN);
+        void replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN);
+        double getEnergy(LLVMHandler *handler);
+        void removeLoopEdges();
+        std::vector<LoopNode *> getLoopNodes();
+        bool containsLoopNodes();
+
+
 };
 
 

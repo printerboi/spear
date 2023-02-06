@@ -54,7 +54,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     llvm::PreservedAnalyses run(llvm::Function &F, llvm::FunctionAnalysisManager &FAM) {
         if(this->energyJson){
 
-            llvm::errs().write_escaped(F.getName()) << "\n\n";
             LLVMHandler handler = LLVMHandler( this->energyJson, MAXITERATIONS );
 
             auto* DT = new llvm::DominatorTree();
@@ -95,17 +94,18 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                         latches.push_back(bb);
                     }
 
-                    LoopNode *LN = LoopNode::construct(&LT);
-                    auto succeeded = PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
+                    LoopNode *LN = LoopNode::construct(&LT, PT);
+                    PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
 
                 }
 
-                PT->printNodes();
-                PT->printEdges();
+                PT->printNodes(&handler);
+                llvm::outs() << "\n\n\n\n";
+                //PT->printEdges();
 
+                llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
             }else{
-
-
+                llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
             }
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";

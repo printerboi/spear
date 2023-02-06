@@ -10,7 +10,7 @@ ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset) {
 
 
     for(auto BB : blockset){
-        auto *NN = new Node();
+        auto *NN = new Node(PT);
         NN->blocks.push_back(BB);
         PT->nodes.push_back(NN);
     }
@@ -30,16 +30,16 @@ ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset) {
     return PT;
 }
 
-void ProgramTree::printNodes() {
+void ProgramTree::printNodes(LLVMHandler *handler) {
 
     for (auto N : this->nodes) {
         llvm::outs() << "\n----------------------------------------------------------------------\n";
-        llvm::outs() << N->toString() << "\n";
+        llvm::outs() << N->toString() <<  "\n";
         if(dynamic_cast<LoopNode*>(N) != nullptr){
-
+            llvm::outs() << "(" << dynamic_cast<LoopNode*>(N)->loopTree->iterations << ") " << this->getEnergy(handler) << " µJ" << ")";
             for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
                 llvm::outs() << "\n|\t\t\t\t\tBEGIN Subnodes\t\t\t\t\t|\n";
-                sPT->printNodes();
+                sPT->printNodes(handler);
                 llvm::outs() << "\n|\t\t\t\t\tEND Subnodes\t\t\t\t\t|\n";
             }
         }
@@ -59,21 +59,43 @@ Node *ProgramTree::findBlock(llvm::BasicBlock *BB) {
 }
 
 void ProgramTree::printEdges() {
-    llvm::outs() << "Programtree got " << this->edges.size() << "\n";
     for (auto E : edges) {
         llvm::outs() << "\n";
         llvm::outs() << E->toString() << "\n";
     }
+
+    for (auto N : this->nodes) {
+        if(dynamic_cast<LoopNode*>(N) != nullptr){
+
+            for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
+                llvm::outs() << "\n|\t\t\t\t\tBEGIN Subedges\t\t\t\t\t|\n";
+                sPT->printEdges();
+                llvm::outs() << "\n|\t\t\t\t\tEND Subedges\t\t\t\t\t|\n";
+            }
+        }
+    }
 }
 
-bool ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
+void ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
     std::vector<Node *> nodesToReplace;
+
+    std::vector<std::string> allblocks;
+    std::vector<std::string> toRemoveBlocks;
+
     for (auto bb : blocks) {
         Node *toReplace = this->findBlock(bb);
         if(toReplace != nullptr){
             nodesToReplace.push_back(toReplace);
+            for(auto nb : toReplace->blocks){
+                toRemoveBlocks.push_back(nb->getName().str());
+            }
+        }
+
+        for(auto nb : toReplace->blocks){
+            allblocks.push_back(nb->getName().str());
         }
     }
+
 
 
     this->nodes.push_back(LPN);
@@ -101,11 +123,6 @@ bool ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> block
         }
         this->removeOrphanedEdges();
 
-
-
-        return true;
-    }else{
-        return false;
     }
 }
 
@@ -130,9 +147,52 @@ void ProgramTree::removeOrphanedEdges() {
                 cleanedEdges.push_back(edge);
             }
         }
-
     }
 
     this->edges = cleanedEdges;
+}
+
+double ProgramTree::getEnergy(LLVMHandler *handler) {
+    double sum = 0.0;
+    auto currnode = this->nodes[0];
+
+    sum = currnode->getEnergy(handler);
+
+
+    return sum;
+}
+
+std::vector<Edge *> ProgramTree::findEdgesStartingAtNode(Node *N) {
+    std::vector<Edge *> selection;
+    for(auto E : this->edges){
+        if(E->start == N){
+            selection.push_back(E);
+        }
+    }
+
+    return selection;
+}
+
+void ProgramTree::removeLoopEdges() {
+    for(auto lpn : this->getLoopNodes()){
+        lpn->removeLoopEdgesFromSubtrees();
+    }
+}
+
+bool ProgramTree::containsLoopNodes() {
+    return !this->getLoopNodes().empty();
+}
+
+std::vector<LoopNode *> ProgramTree::getLoopNodes() {
+    std::vector<LoopNode *> loopnodes;
+
+    for(auto n : this->nodes){
+        LoopNode *LPNCandicate = dynamic_cast<LoopNode *>(n);
+        if(LPNCandicate != nullptr){
+            loopnodes.push_back(LPNCandicate);
+        }
+    }
+
+    return loopnodes;
 }
 

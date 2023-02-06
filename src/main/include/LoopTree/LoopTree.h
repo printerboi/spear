@@ -18,7 +18,7 @@ public:
     /**
      * Vector storing all subtrees extending from this treenode
      */
-    std::vector<LoopTree> subTrees;
+    std::vector<LoopTree *> subTrees;
 
     /**
      * The basic blocks of the loop excluding the blocks of the subloops
@@ -50,11 +50,12 @@ public:
     void printPreOrder();
 
     std::vector<llvm::BasicBlock *> getLatches();
+
+/**
+ * The over approximated iterations of the loop contained in this node
+ */
+long iterations;
 private:
-    /**
-     * The over approximated iterations of the loop contained in this node
-     */
-    long iterations;
 
     /**
      * Method for calculating the difference of all blocks present in the loop and the subloops

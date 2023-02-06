@@ -9,7 +9,7 @@ LoopTree::LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHan
     //Iterate over the given Subloops
     for (auto sl : subloops) {
         //For each subloop create a new LoopTree with parameters regarding this subloop
-        LoopTree Slt = LoopTree(sl, sl->getSubLoops(), this->handler);
+        LoopTree *Slt = new LoopTree(sl, sl->getSubLoops(), this->handler);
 
         //Add the subtree to the vector of subtrees
         this->subTrees.push_back(Slt);
@@ -38,7 +38,7 @@ std::vector<llvm::BasicBlock *> LoopTree::calcBlocks(){
         //of all subloops and the initblocks present in this subloop
         for(auto subloop : this->subTrees){
             //Calculate the union of all subloops
-            unized.insert(unized.end(), subloop.mainloop->getBlocksVector().begin(), subloop.mainloop->getBlocksVector().end());
+            unized.insert(unized.end(), subloop->mainloop->getBlocksVector().begin(), subloop->mainloop->getBlocksVector().end());
         }
 
         //Iterate over the blocks in this loop. Find the blocks that are not present in the union but in this loop
@@ -63,17 +63,17 @@ void LoopTree::printPreOrder() {
 
     if (this->isLeaf()) {
         llvm::outs() << "-------------------------------------------\n";
-        llvm::outs() << this->mainloop->getName() << " (LEAF) " << "i=" << this->iterations << " e=" << (long) this->calcEnergy() << " n= " << this->mainloop->getBlocksVector().size() << "\n";
+        llvm::outs() << this->mainloop->getName() << " (LEAF) " << "i=" << this->iterations << "\n";
         llvm::outs() << "-------------------------------------------\n";
         for (auto bb : this->blocks) {
             bb->print(llvm::outs());
         }
     }else{
         for (auto slt: this->subTrees) {
-            slt.printPreOrder();
+            slt->printPreOrder();
         }
         llvm::outs() << "-------------------------------------------\n";
-        llvm::outs() << this->mainloop->getName() << " (NODE) "<< "i=" << this->iterations << " e=" << (long) this->calcEnergy() << " n= " << this->mainloop->getBlocksVector().size() << "\n";
+        llvm::outs() << this->mainloop->getName() << " (NODE) "<< "i=" << this->iterations  << "\n";
         llvm::outs() << "-------------------------------------------\n";
         for (auto bb : this->blocks) {
             bb->print(llvm::outs());
@@ -100,7 +100,7 @@ double LoopTree::calcEnergy() {
         }
 
         for (auto subTree : this->subTrees) {
-            sum = sum + subTree.calcEnergy();
+            sum = sum + subTree->calcEnergy();
         }
 
         result = sum * (double) this->iterations;
@@ -118,7 +118,7 @@ std::vector<llvm::BasicBlock *> LoopTree::getLatches() {
         std::vector<llvm::BasicBlock *> latches;
 
         for (auto sT : this->subTrees) {
-            std::vector<llvm::BasicBlock *> calced = sT.getLatches();
+            std::vector<llvm::BasicBlock *> calced = sT->getLatches();
             calced.push_back(this->mainloop->getLoopLatch());
             for(auto &lb : calced){
                 if(std::find(latches.begin(), latches.end(), lb) == latches.end()){
