@@ -79,7 +79,8 @@ bool ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> block
     this->nodes.push_back(LPN);
 
     if(!nodesToReplace.empty()){
-        Node *entry = this->findBlock(LPN->loopTree->mainloop->getBlocksVector()[0]);
+        auto entrycandidate = LPN->loopTree->mainloop->getBlocksVector()[0];
+        Node *entry = this->findBlock(entrycandidate);
         auto entryname = entry->toString();
         Node *exit = this->findBlock(LPN->loopTree->mainloop->getLoopLatch());
         auto exiname = exit->toString();
@@ -97,9 +98,6 @@ bool ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> block
 
         for(auto ntrpl : nodesToReplace){
             this->removeNode(ntrpl);
-            for (auto bb : ntrpl->blocks) {
-                bb->print(llvm::outs());
-            }
         }
         this->removeOrphanedEdges();
 

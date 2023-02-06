@@ -29,8 +29,18 @@ bool LoopNode::isLeafNode() {
 LoopNode* LoopNode::construct(LoopTree *lptr) {
     LoopNode *LN = new LoopNode(lptr);
 
-    ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
-    LN->subtrees.push_back(PT);
+    if(LN->isLeafNode()){
+        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
+        LN->subtrees.push_back(PT);
+    }else{
+        for(auto subTree : LN->loopTree->subTrees){
+            ProgramTree *PT = ProgramTree::construct(subTree.mainloop->getBlocksVector());
+            LN->subtrees.push_back(PT);
+
+            LoopNode *subLN = LoopNode::construct(&subTree);
+            auto replaceWorked = PT->replaceNodesWithLoopNode(subTree.mainloop->getBlocksVector(), subLN);
+        }
+    }
 
     return LN;
 }

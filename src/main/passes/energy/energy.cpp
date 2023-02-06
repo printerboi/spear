@@ -81,7 +81,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
 
             if(!loops.empty()){
-                //Inputprogramm contains for loops
                 std::vector<LoopTree *> trees;
                 std::vector<llvm::BasicBlock *> latches;
                 for (auto liiter = loops.begin(); liiter < loops.end(); ++liiter) {
