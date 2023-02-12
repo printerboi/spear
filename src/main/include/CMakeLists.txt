@@ -17,11 +17,8 @@ target_sources(ba
         LoopTree/LoopTree.cpp
         LoopTree/LoopTree.h
         ProgramTree/LoopNode.cpp
-        ProgramTree/LoopNode.h
         ProgramTree/Node.cpp
-        ProgramTree/Node.h
         ProgramTree/Edge.cpp
-        ProgramTree/Edge.h
         )
 
 add_library(spear SHARED
@@ -42,9 +39,6 @@ add_library(spear SHARED
         LoopTree/LoopTree.cpp
         LoopTree/LoopTree.h
         ProgramTree/LoopNode.cpp
-        ProgramTree/LoopNode.h
         ProgramTree/Node.cpp
-        ProgramTree/Node.h
         ProgramTree/Edge.cpp
-        ProgramTree/Edge.h
         )
