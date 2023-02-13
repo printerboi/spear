@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['tostring_31',['toString',['../classInstructionCategory.html#a057f079222bee2c118ec344f5e7e7601',1,'InstructionCategory']]]
+  ['start_45',['start',['../classEdge.html#acb0a11f7502dad1933c71477d8b97ad4',1,'Edge']]],
+  ['subtrees_46',['subTrees',['../classLoopTree.html#a032808e139ad8b36c3eaa909dedb930a',1,'LoopTree']]],
+  ['subtrees_47',['subtrees',['../classLoopNode.html#a2294c2dc9d0dbcdc32b9bc22c2bab1ba',1,'LoopNode']]]
 ];

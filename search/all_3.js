@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['getbasicblocksum_5',['getBasicBlockSum',['../classLLVMHandler.html#a43307ff5842d607f0404964500e98c12',1,'LLVMHandler']]],
-  ['getcategory_6',['getCategory',['../classInstructionCategory.html#a186de65cac60f25541ff34085dbdb158',1,'InstructionCategory']]],
-  ['getenergy_7',['getEnergy',['../classPowercapReader.html#a8c44917db28ace079d27c10b6fa9043a',1,'PowercapReader::getEnergy()'],['../classRegisterReader.html#a71e704b8291c42006f4743a97b74e2b0',1,'RegisterReader::getEnergy()']]],
-  ['getloopupperbound_8',['getLoopUpperBound',['../classLLVMHandler.html#a6d14386c23be3cbea28255394985f786',1,'LLVMHandler']]],
-  ['getmultiplier_9',['getMultiplier',['../classRegisterReader.html#a5206015b7b87e3a509d35ca1996fcec9',1,'RegisterReader']]]
+  ['findblock_10',['findBlock',['../classProgramTree.html#afa41b9c99c447616f8bb000b9c4b3dbf',1,'ProgramTree']]],
+  ['findedgesstartingatnode_11',['findEdgesStartingAtNode',['../classProgramTree.html#a6a8148bdd4ff177664c0a3b6c80ddbf4',1,'ProgramTree']]]
 ];

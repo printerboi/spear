@@ -63,12 +63,15 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classLoopNode-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">LoopNode Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ProgramTree_8h_source.html">ProgramTree.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for LoopNode:</div>
 <div class="dyncontent">
@@ -81,21 +84,240 @@ Inheritance diagram for LoopNode:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa0b76d9d1e466345aef0649bef58f0eb"><td class="memItemLeft" align="right" valign="top"><a id="aa0b76d9d1e466345aef0649bef58f0eb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LoopNode</b> (long iters)</td></tr>
-<tr class="separator:aa0b76d9d1e466345aef0649bef58f0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46f0be9b24ed1c12757b0ff4c5873cdf"><td class="memItemLeft" align="right" valign="top"><a id="a46f0be9b24ed1c12757b0ff4c5873cdf"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>calcEnergy</b> ()</td></tr>
-<tr class="separator:a46f0be9b24ed1c12757b0ff4c5873cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa263771a5de50de2b51e066563bbc8a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#aa263771a5de50de2b51e066563bbc8a6">LoopNode</a> (<a class="el" href="classLoopTree.html">LoopTree</a> *lpTree, <a class="el" href="classProgramTree.html">ProgramTree</a> *parent)</td></tr>
+<tr class="separator:aa263771a5de50de2b51e066563bbc8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4afd2722296ce93e0559a35f1c715900"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a4afd2722296ce93e0559a35f1c715900">isLeafNode</a> () const</td></tr>
+<tr class="separator:a4afd2722296ce93e0559a35f1c715900"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76da3fb01528cbe4f8a9d8ffb6507909"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a76da3fb01528cbe4f8a9d8ffb6507909">getEnergy</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler) override</td></tr>
+<tr class="separator:a76da3fb01528cbe4f8a9d8ffb6507909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf52f39d97166bc126ce0d1467d8e6be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#acf52f39d97166bc126ce0d1467d8e6be">removeLoopEdgesFromSubtrees</a> ()</td></tr>
+<tr class="separator:acf52f39d97166bc126ce0d1467d8e6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af948b34b636a7ae9dabfd7ae25b76f0e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e">toString</a> () override</td></tr>
+<tr class="separator:af948b34b636a7ae9dabfd7ae25b76f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:acae8d110e2cea879f260917db3dfb6f4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classLoopNode.html">LoopNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#acae8d110e2cea879f260917db3dfb6f4">construct</a> (<a class="el" href="classLoopTree.html">LoopTree</a> *lptr, <a class="el" href="classProgramTree.html">ProgramTree</a> *parent)</td></tr>
+<tr class="separator:acae8d110e2cea879f260917db3dfb6f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a1de7b217eb1d683ae29c8fb5ff1a5b9c"><td class="memItemLeft" align="right" valign="top"><a id="a1de7b217eb1d683ae29c8fb5ff1a5b9c"></a>
-long&#160;</td><td class="memItemRight" valign="bottom"><b>iterations</b></td></tr>
-<tr class="separator:a1de7b217eb1d683ae29c8fb5ff1a5b9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34181dd8b9ba9b9ce1c8a99126427993"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classLoopTree.html">LoopTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a34181dd8b9ba9b9ce1c8a99126427993">loopTree</a></td></tr>
+<tr class="separator:a34181dd8b9ba9b9ce1c8a99126427993"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2294c2dc9d0dbcdc32b9bc22c2bab1ba"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classProgramTree.html">ProgramTree</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a2294c2dc9d0dbcdc32b9bc22c2bab1ba">subtrees</a></td></tr>
+<tr class="separator:a2294c2dc9d0dbcdc32b9bc22c2bab1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classLoopNode.html">LoopNode</a> - A specialization of the <a class="el" href="classNode.html">Node</a> to represent loops extracted from the program. LoopNodes may contain further ProgramTrees representing a recursive structure </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa263771a5de50de2b51e066563bbc8a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa263771a5de50de2b51e066563bbc8a6">&#9670;&nbsp;</a></span>LoopNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">LoopNode::LoopNode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classLoopTree.html">LoopTree</a> *&#160;</td>
+          <td class="paramname"><em>lpTree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classProgramTree.html">ProgramTree</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Constructor. Creates a <a class="el" href="classLoopNode.html">LoopNode</a> with the given <a class="el" href="classLoopTree.html">LoopTree</a> and the surrounding <a class="el" href="classProgramTree.html">ProgramTree</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lpTree</td><td>Reference to the <a class="el" href="classLoopTree.html">LoopTree</a> for the loop to represent </td></tr>
+    <tr><td class="paramname">parent</td><td>The parent <a class="el" href="classProgramTree.html">ProgramTree</a>, this <a class="el" href="classLoopNode.html">LoopNode</a> is contained in </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="acae8d110e2cea879f260917db3dfb6f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acae8d110e2cea879f260917db3dfb6f4">&#9670;&nbsp;</a></span>construct()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classLoopNode.html">LoopNode</a>* LoopNode::construct </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classLoopTree.html">LoopTree</a> *&#160;</td>
+          <td class="paramname"><em>lptr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classProgramTree.html">ProgramTree</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Static Method for constructing a <a class="el" href="classLoopNode.html">LoopNode</a> recursivly trough the given <a class="el" href="classLoopTree.html">LoopTree</a> and the parent <a class="el" href="classProgramTree.html">ProgramTree</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lptr</td><td><a class="el" href="classLoopTree.html">LoopTree</a> to construct the <a class="el" href="classLoopNode.html">LoopNode</a> for </td></tr>
+    <tr><td class="paramname">parent</td><td><a class="el" href="classProgramTree.html">ProgramTree</a> the <a class="el" href="classLoopNode.html">LoopNode</a> should be contained in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns a reference to the constructed <a class="el" href="classLoopNode.html">LoopNode</a> </dd></dl>
+
+</div>
+</div>
+<a id="a76da3fb01528cbe4f8a9d8ffb6507909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76da3fb01528cbe4f8a9d8ffb6507909">&#9670;&nbsp;</a></span>getEnergy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double LoopNode::getEnergy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> *&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Method for calculating the energy of this <a class="el" href="classLoopNode.html">LoopNode</a>. Calculates the energy with respect to all contained subloops. Multiplies the contained energy, by the iterations of this nodes loop. Overrides the inherited getEnergy method </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handler</td><td>A <a class="el" href="classLLVMHandler.html">LLVMHandler</a> used for energy calculation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the calculated energy as double </dd></dl>
+
+</div>
+</div>
+<a id="a4afd2722296ce93e0559a35f1c715900"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4afd2722296ce93e0559a35f1c715900">&#9670;&nbsp;</a></span>isLeafNode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LoopNode::isLeafNode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method for determining if the current <a class="el" href="classLoopNode.html">LoopNode</a> is a "Leaf". A leaf-LoopNode does not contain any further loops </p><dl class="section return"><dt>Returns</dt><dd>Returns true if this <a class="el" href="classLoopNode.html">LoopNode</a> does not contain any further loops. False if otherwise </dd></dl>
+
+</div>
+</div>
+<a id="acf52f39d97166bc126ce0d1467d8e6be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf52f39d97166bc126ce0d1467d8e6be">&#9670;&nbsp;</a></span>removeLoopEdgesFromSubtrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void LoopNode::removeLoopEdgesFromSubtrees </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method for breaking cycles in the subtrees of this <a class="el" href="classLoopNode.html">LoopNode</a>. Prevents infity-calculations while dealing with recursion. </p>
+
+</div>
+</div>
+<a id="af948b34b636a7ae9dabfd7ae25b76f0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af948b34b636a7ae9dabfd7ae25b76f0e">&#9670;&nbsp;</a></span>toString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string LoopNode::toString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Method for representing the <a class="el" href="classLoopNode.html">LoopNode</a> as string. Overrides the inherited method for better representing the contained programtrees </p><dl class="section return"><dt>Returns</dt><dd>Returns a string representing the <a class="el" href="classLoopNode.html">LoopNode</a> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a34181dd8b9ba9b9ce1c8a99126427993"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34181dd8b9ba9b9ce1c8a99126427993">&#9670;&nbsp;</a></span>loopTree</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classLoopTree.html">LoopTree</a>* LoopNode::loopTree</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Reference to a <a class="el" href="classLoopTree.html">LoopTree</a> object storing the information of the loop represented by this <a class="el" href="classLoopNode.html">LoopNode</a> </p>
+
+</div>
+</div>
+<a id="a2294c2dc9d0dbcdc32b9bc22c2bab1ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2294c2dc9d0dbcdc32b9bc22c2bab1ba">&#9670;&nbsp;</a></span>subtrees</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classProgramTree.html">ProgramTree</a> *&gt; LoopNode::subtrees</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Vector storing the references to the subtrees encapsulated by this <a class="el" href="classLoopNode.html">LoopNode</a> </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/main/include/ProgramTree/<a class="el" href="LoopNode_8h_source.html">LoopNode.h</a></li>
+<li>src/main/include/ProgramTree/<a class="el" href="ProgramTree_8h_source.html">ProgramTree.h</a></li>
 <li>src/main/include/ProgramTree/LoopNode.cpp</li>
 </ul>
 </div><!-- contents -->
