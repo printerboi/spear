@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['read_86',['read',['../classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b',1,'JSONHandler']]],
-  ['registerreader_87',['RegisterReader',['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader']]],
-  ['removeloopedgesfromsubtrees_88',['removeLoopEdgesFromSubtrees',['../classLoopNode.html#acf52f39d97166bc126ce0d1467d8e6be',1,'LoopNode']]],
-  ['removenode_89',['removeNode',['../classProgramTree.html#a87cea211c885b76bc6d3db978aac8fdf',1,'ProgramTree']]],
-  ['removeorphanededges_90',['removeOrphanedEdges',['../classProgramTree.html#a294b17e26cd1683b6f710725dfc37790',1,'ProgramTree']]],
-  ['replacenodeswithloopnode_91',['replaceNodesWithLoopNode',['../classProgramTree.html#a3694bc0e40cefec4afb7ea88d8fe294a',1,'ProgramTree']]],
-  ['run_92',['run',['../structEnergy.html#a5a45bf1196ff2476bd5ac07aa2a811df',1,'Energy']]]
+  ['powercapreader_84',['PowercapReader',['../classPowercapReader.html#a415424eaa546b2b86202ba6b06fe2a3c',1,'PowercapReader']]],
+  ['printedges_85',['printEdges',['../classProgramTree.html#a7e219d8d054b7fd89211528252e8e4e9',1,'ProgramTree']]],
+  ['printnodes_86',['printNodes',['../classProgramTree.html#a80d7f88d10f629399e755754728c30eb',1,'ProgramTree']]],
+  ['printpreorder_87',['printPreOrder',['../classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34',1,'LoopTree']]],
+  ['profile_88',['profile',['../classProfiler.html#a1ac482be9a580fd4d65f83604de19b65',1,'Profiler']]],
+  ['profiler_89',['Profiler',['../classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1',1,'Profiler']]]
 ];

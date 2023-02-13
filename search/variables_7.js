@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['repetitions_103',['repetitions',['../classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf',1,'Profiler']]]
+  ['parent_107',['parent',['../classNode.html#a2945004f52e476554f488eb93ff7747f',1,'Node']]]
 ];

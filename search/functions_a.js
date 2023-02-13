@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['tostring_93',['toString',['../classInstructionCategory.html#a057f079222bee2c118ec344f5e7e7601',1,'InstructionCategory::toString()'],['../classEdge.html#aa5867b3b3fb5f2ce22783f05ed8d9438',1,'Edge::toString()'],['../classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e',1,'LoopNode::toString()']]]
+  ['read_90',['read',['../classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b',1,'JSONHandler']]],
+  ['registerreader_91',['RegisterReader',['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader']]],
+  ['removeloopedgesfromsubtrees_92',['removeLoopEdgesFromSubtrees',['../classLoopNode.html#acf52f39d97166bc126ce0d1467d8e6be',1,'LoopNode']]],
+  ['removenode_93',['removeNode',['../classProgramTree.html#a87cea211c885b76bc6d3db978aac8fdf',1,'ProgramTree']]],
+  ['removeorphanededges_94',['removeOrphanedEdges',['../classProgramTree.html#a294b17e26cd1683b6f710725dfc37790',1,'ProgramTree']]],
+  ['replacenodeswithloopnode_95',['replaceNodesWithLoopNode',['../classProgramTree.html#a3694bc0e40cefec4afb7ea88d8fe294a',1,'ProgramTree']]],
+  ['run_96',['run',['../structEnergy.html#a5a45bf1196ff2476bd5ac07aa2a811df',1,'Energy']]]
 ];
