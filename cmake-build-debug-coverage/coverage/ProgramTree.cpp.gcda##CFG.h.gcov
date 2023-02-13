@@ -1,0 +1,468 @@
+        -:    0:Source:/usr/include/llvm/IR/CFG.h
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.gcda
+        -:    0:Runs:1
+        -:    1://===- CFG.h ----------------------------------------------------*- C++ -*-===//
+        -:    2://
+        -:    3:// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+        -:    4:// See https://llvm.org/LICENSE.txt for license information.
+        -:    5:// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+        -:    6://
+        -:    7://===----------------------------------------------------------------------===//
+        -:    8:/// \file
+        -:    9:///
+        -:   10:/// This file provides various utilities for inspecting and working with the
+        -:   11:/// control flow graph in LLVM IR. This includes generic facilities for
+        -:   12:/// iterating successors and predecessors of basic blocks, the successors of
+        -:   13:/// specific terminator instructions, etc. It also defines specializations of
+        -:   14:/// GraphTraits that allow Function and BasicBlock graphs to be treated as
+        -:   15:/// proper graphs for generic algorithms.
+        -:   16:///
+        -:   17://===----------------------------------------------------------------------===//
+        -:   18:
+        -:   19:#ifndef LLVM_IR_CFG_H
+        -:   20:#define LLVM_IR_CFG_H
+        -:   21:
+        -:   22:#include "llvm/ADT/GraphTraits.h"
+        -:   23:#include "llvm/ADT/iterator.h"
+        -:   24:#include "llvm/ADT/iterator_range.h"
+        -:   25:#include "llvm/IR/BasicBlock.h"
+        -:   26:#include "llvm/IR/Function.h"
+        -:   27:#include "llvm/IR/Value.h"
+        -:   28:#include <cassert>
+        -:   29:#include <cstddef>
+        -:   30:#include <iterator>
+        -:   31:
+        -:   32:namespace llvm {
+        -:   33:
+        -:   34:class Instruction;
+        -:   35:class Use;
+        -:   36:
+        -:   37://===----------------------------------------------------------------------===//
+        -:   38:// BasicBlock pred_iterator definition
+        -:   39://===----------------------------------------------------------------------===//
+        -:   40:
+        -:   41:template <class Ptr, class USE_iterator> // Predecessor Iterator
+        -:   42:class PredIterator {
+        -:   43:public:
+        -:   44:  using iterator_category = std::forward_iterator_tag;
+        -:   45:  using value_type = Ptr;
+        -:   46:  using difference_type = std::ptrdiff_t;
+        -:   47:  using pointer = Ptr *;
+        -:   48:  using reference = Ptr *;
+        -:   49:
+        -:   50:private:
+        -:   51:  using Self = PredIterator<Ptr, USE_iterator>;
+        -:   52:  USE_iterator It;
+        -:   53:
+        -:   54:  inline void advancePastNonTerminators() {
+        -:   55:    // Loop to ignore non-terminator uses (for example BlockAddresses).
+        -:   56:    while (!It.atEnd()) {
+        -:   57:      if (auto *Inst = dyn_cast<Instruction>(*It))
+        -:   58:        if (Inst->isTerminator())
+        -:   59:          break;
+        -:   60:
+        -:   61:      ++It;
+        -:   62:    }
+        -:   63:  }
+        -:   64:
+        -:   65:public:
+        -:   66:  PredIterator() = default;
+        -:   67:  explicit inline PredIterator(Ptr *bb) : It(bb->user_begin()) {
+        -:   68:    advancePastNonTerminators();
+        -:   69:  }
+        -:   70:  inline PredIterator(Ptr *bb, bool) : It(bb->user_end()) {}
+        -:   71:
+        -:   72:  inline bool operator==(const Self& x) const { return It == x.It; }
+        -:   73:  inline bool operator!=(const Self& x) const { return !operator==(x); }
+        -:   74:
+        -:   75:  inline reference operator*() const {
+        -:   76:    assert(!It.atEnd() && "pred_iterator out of range!");
+        -:   77:    return cast<Instruction>(*It)->getParent();
+        -:   78:  }
+        -:   79:  inline pointer *operator->() const { return &operator*(); }
+        -:   80:
+        -:   81:  inline Self& operator++() {   // Preincrement
+        -:   82:    assert(!It.atEnd() && "pred_iterator out of range!");
+        -:   83:    ++It; advancePastNonTerminators();
+        -:   84:    return *this;
+        -:   85:  }
+        -:   86:
+        -:   87:  inline Self operator++(int) { // Postincrement
+        -:   88:    Self tmp = *this; ++*this; return tmp;
+        -:   89:  }
+        -:   90:
+        -:   91:  /// getOperandNo - Return the operand number in the predecessor's
+        -:   92:  /// terminator of the successor.
+        -:   93:  unsigned getOperandNo() const {
+        -:   94:    return It.getOperandNo();
+        -:   95:  }
+        -:   96:
+        -:   97:  /// getUse - Return the operand Use in the predecessor's terminator
+        -:   98:  /// of the successor.
+        -:   99:  Use &getUse() const {
+        -:  100:    return It.getUse();
+        -:  101:  }
+        -:  102:};
+        -:  103:
+        -:  104:using pred_iterator = PredIterator<BasicBlock, Value::user_iterator>;
+        -:  105:using const_pred_iterator =
+        -:  106:    PredIterator<const BasicBlock, Value::const_user_iterator>;
+        -:  107:using pred_range = iterator_range<pred_iterator>;
+        -:  108:using const_pred_range = iterator_range<const_pred_iterator>;
+        -:  109:
+        -:  110:inline pred_iterator pred_begin(BasicBlock *BB) { return pred_iterator(BB); }
+        -:  111:inline const_pred_iterator pred_begin(const BasicBlock *BB) {
+        -:  112:  return const_pred_iterator(BB);
+        -:  113:}
+        -:  114:inline pred_iterator pred_end(BasicBlock *BB) { return pred_iterator(BB, true);}
+        -:  115:inline const_pred_iterator pred_end(const BasicBlock *BB) {
+        -:  116:  return const_pred_iterator(BB, true);
+        -:  117:}
+        -:  118:inline bool pred_empty(const BasicBlock *BB) {
+        -:  119:  return pred_begin(BB) == pred_end(BB);
+        -:  120:}
+        -:  121:/// Get the number of predecessors of \p BB. This is a linear time operation.
+        -:  122:/// Use \ref BasicBlock::hasNPredecessors() or hasNPredecessorsOrMore if able.
+        -:  123:inline unsigned pred_size(const BasicBlock *BB) {
+        -:  124:  return std::distance(pred_begin(BB), pred_end(BB));
+        -:  125:}
+        -:  126:inline pred_range predecessors(BasicBlock *BB) {
+        -:  127:  return pred_range(pred_begin(BB), pred_end(BB));
+        -:  128:}
+        -:  129:inline const_pred_range predecessors(const BasicBlock *BB) {
+        -:  130:  return const_pred_range(pred_begin(BB), pred_end(BB));
+        -:  131:}
+        -:  132:
+        -:  133://===----------------------------------------------------------------------===//
+        -:  134:// Instruction and BasicBlock succ_iterator helpers
+        -:  135://===----------------------------------------------------------------------===//
+        -:  136:
+        -:  137:template <class InstructionT, class BlockT>
+        -:  138:class SuccIterator
+        -:  139:    : public iterator_facade_base<SuccIterator<InstructionT, BlockT>,
+        -:  140:                                  std::random_access_iterator_tag, BlockT, int,
+        -:  141:                                  BlockT *, BlockT *> {
+        -:  142:public:
+        -:  143:  using difference_type = int;
+        -:  144:  using pointer = BlockT *;
+        -:  145:  using reference = BlockT *;
+        -:  146:
+        -:  147:private:
+        -:  148:  InstructionT *Inst;
+        -:  149:  int Idx;
+        -:  150:  using Self = SuccIterator<InstructionT, BlockT>;
+        -:  151:
+function _ZN4llvm12SuccIteratorINS_11InstructionENS_10BasicBlockEE14index_is_validEi called 0 returned 0% blocks executed 0%
+    #####:  152:  inline bool index_is_valid(int Idx) {
+        -:  153:    // Note that we specially support the index of zero being valid even in the
+        -:  154:    // face of a null instruction.
+    #####:  155:    return Idx >= 0 && (Idx == 0 || Idx <= (int)Inst->getNumSuccessors());
+    %%%%%:  155-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:  155-block  1
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:  155-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:  155-block  3
+    %%%%%:  155-block  4
+    %%%%%:  155-block  5
+        -:  156:  }
+        -:  157:
+        -:  158:  /// Proxy object to allow write access in operator[]
+        -:  159:  class SuccessorProxy {
+        -:  160:    Self It;
+        -:  161:
+        -:  162:  public:
+        -:  163:    explicit SuccessorProxy(const Self &It) : It(It) {}
+        -:  164:
+        -:  165:    SuccessorProxy(const SuccessorProxy &) = default;
+        -:  166:
+        -:  167:    SuccessorProxy &operator=(SuccessorProxy RHS) {
+        -:  168:      *this = reference(RHS);
+        -:  169:      return *this;
+        -:  170:    }
+        -:  171:
+        -:  172:    SuccessorProxy &operator=(reference RHS) {
+        -:  173:      It.Inst->setSuccessor(It.Idx, RHS);
+        -:  174:      return *this;
+        -:  175:    }
+        -:  176:
+        -:  177:    operator reference() const { return *It; }
+        -:  178:  };
+        -:  179:
+        -:  180:public:
+        -:  181:  // begin iterator
+function _ZN4llvm12SuccIteratorINS_11InstructionENS_10BasicBlockEEC2EPS1_ called 0 returned 0% blocks executed 0%
+    #####:  182:  explicit inline SuccIterator(InstructionT *Inst) : Inst(Inst), Idx(0) {}
+        -:  183:  // end iterator
+function _ZN4llvm12SuccIteratorINS_11InstructionENS_10BasicBlockEEC2EPS1_b called 0 returned 0% blocks executed 0%
+    #####:  184:  inline SuccIterator(InstructionT *Inst, bool) : Inst(Inst) {
+    #####:  185:    if (Inst)
+    %%%%%:  185-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:  186:      Idx = Inst->getNumSuccessors();
+    %%%%%:  186-block  0
+Aufruf  0 niemals ausgeführt
+        -:  187:    else
+        -:  188:      // Inst == NULL happens, if a basic block is not fully constructed and
+        -:  189:      // consequently getTerminator() returns NULL. In this case we construct
+        -:  190:      // a SuccIterator which describes a basic block that has zero
+        -:  191:      // successors.
+        -:  192:      // Defining SuccIterator for incomplete and malformed CFGs is especially
+        -:  193:      // useful for debugging.
+    #####:  194:      Idx = 0;
+    %%%%%:  194-block  0
+    #####:  195:  }
+        -:  196:
+        -:  197:  /// This is used to interface between code that wants to
+        -:  198:  /// operate on terminator instructions directly.
+        -:  199:  int getSuccessorIndex() const { return Idx; }
+        -:  200:
+function _ZNK4llvm12SuccIteratorINS_11InstructionENS_10BasicBlockEEeqERKS3_ called 0 returned 0% blocks executed 0%
+    #####:  201:  inline bool operator==(const Self &x) const { return Idx == x.Idx; }
+    %%%%%:  201-block  0
+        -:  202:
+function _ZNK4llvm12SuccIteratorINS_11InstructionENS_10BasicBlockEEdeEv called 0 returned 0% blocks executed 0%
+    #####:  203:  inline BlockT *operator*() const { return Inst->getSuccessor(Idx); }
+    %%%%%:  203-block  0
+Aufruf  0 niemals ausgeführt
+        -:  204:
+        -:  205:  // We use the basic block pointer directly for operator->.
+        -:  206:  inline BlockT *operator->() const { return operator*(); }
+        -:  207:
+        -:  208:  inline bool operator<(const Self &RHS) const {
+        -:  209:    assert(Inst == RHS.Inst && "Cannot compare iterators of different blocks!");
+        -:  210:    return Idx < RHS.Idx;
+        -:  211:  }
+        -:  212:
+        -:  213:  int operator-(const Self &RHS) const {
+        -:  214:    assert(Inst == RHS.Inst && "Cannot compare iterators of different blocks!");
+        -:  215:    return Idx - RHS.Idx;
+        -:  216:  }
+        -:  217:
+function _ZN4llvm12SuccIteratorINS_11InstructionENS_10BasicBlockEEpLEi called 0 returned 0% blocks executed 0%
+    #####:  218:  inline Self &operator+=(int RHS) {
+    #####:  219:    int NewIdx = Idx + RHS;
+    #####:  220:    assert(index_is_valid(NewIdx) && "Iterator index out of bound");
+    %%%%%:  220-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  220-block  1
+    %%%%%:  220-block  2
+Aufruf  3 niemals ausgeführt
+    #####:  221:    Idx = NewIdx;
+    #####:  222:    return *this;
+    %%%%%:  222-block  0
+        -:  223:  }
+        -:  224:
+        -:  225:  inline Self &operator-=(int RHS) { return operator+=(-RHS); }
+        -:  226:
+        -:  227:  // Specially implement the [] operation using a proxy object to support
+        -:  228:  // assignment.
+        -:  229:  inline SuccessorProxy operator[](int Offset) {
+        -:  230:    Self TmpIt = *this;
+        -:  231:    TmpIt += Offset;
+        -:  232:    return SuccessorProxy(TmpIt);
+        -:  233:  }
+        -:  234:
+        -:  235:  /// Get the source BlockT of this iterator.
+        -:  236:  inline BlockT *getSource() {
+        -:  237:    assert(Inst && "Source not available, if basic block was malformed");
+        -:  238:    return Inst->getParent();
+        -:  239:  }
+        -:  240:};
+        -:  241:
+        -:  242:using succ_iterator = SuccIterator<Instruction, BasicBlock>;
+        -:  243:using const_succ_iterator = SuccIterator<const Instruction, const BasicBlock>;
+        -:  244:using succ_range = iterator_range<succ_iterator>;
+        -:  245:using const_succ_range = iterator_range<const_succ_iterator>;
+        -:  246:
+        -:  247:inline succ_iterator succ_begin(Instruction *I) { return succ_iterator(I); }
+        -:  248:inline const_succ_iterator succ_begin(const Instruction *I) {
+        -:  249:  return const_succ_iterator(I);
+        -:  250:}
+        -:  251:inline succ_iterator succ_end(Instruction *I) { return succ_iterator(I, true); }
+        -:  252:inline const_succ_iterator succ_end(const Instruction *I) {
+        -:  253:  return const_succ_iterator(I, true);
+        -:  254:}
+        -:  255:inline bool succ_empty(const Instruction *I) {
+        -:  256:  return succ_begin(I) == succ_end(I);
+        -:  257:}
+        -:  258:inline unsigned succ_size(const Instruction *I) {
+        -:  259:  return std::distance(succ_begin(I), succ_end(I));
+        -:  260:}
+        -:  261:inline succ_range successors(Instruction *I) {
+        -:  262:  return succ_range(succ_begin(I), succ_end(I));
+        -:  263:}
+        -:  264:inline const_succ_range successors(const Instruction *I) {
+        -:  265:  return const_succ_range(succ_begin(I), succ_end(I));
+        -:  266:}
+        -:  267:
+function _ZN4llvm10succ_beginEPNS_10BasicBlockE called 0 returned 0% blocks executed 0%
+    #####:  268:inline succ_iterator succ_begin(BasicBlock *BB) {
+    #####:  269:  return succ_iterator(BB->getTerminator());
+    %%%%%:  269-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  269-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  269-block  2
+        -:  270:}
+        -:  271:inline const_succ_iterator succ_begin(const BasicBlock *BB) {
+        -:  272:  return const_succ_iterator(BB->getTerminator());
+        -:  273:}
+function _ZN4llvm8succ_endEPNS_10BasicBlockE called 0 returned 0% blocks executed 0%
+    #####:  274:inline succ_iterator succ_end(BasicBlock *BB) {
+    #####:  275:  return succ_iterator(BB->getTerminator(), true);
+    %%%%%:  275-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  275-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:  275-block  2
+    %%%%%:  275-block  3
+        -:  276:}
+        -:  277:inline const_succ_iterator succ_end(const BasicBlock *BB) {
+        -:  278:  return const_succ_iterator(BB->getTerminator(), true);
+        -:  279:}
+        -:  280:inline bool succ_empty(const BasicBlock *BB) {
+        -:  281:  return succ_begin(BB) == succ_end(BB);
+        -:  282:}
+        -:  283:inline unsigned succ_size(const BasicBlock *BB) {
+        -:  284:  return std::distance(succ_begin(BB), succ_end(BB));
+        -:  285:}
+function _ZN4llvm10successorsEPNS_10BasicBlockE called 0 returned 0% blocks executed 0%
+    #####:  286:inline succ_range successors(BasicBlock *BB) {
+    #####:  287:  return succ_range(succ_begin(BB), succ_end(BB));
+    %%%%%:  287-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+        -:  288:}
+        -:  289:inline const_succ_range successors(const BasicBlock *BB) {
+        -:  290:  return const_succ_range(succ_begin(BB), succ_end(BB));
+        -:  291:}
+        -:  292:
+        -:  293://===--------------------------------------------------------------------===//
+        -:  294:// GraphTraits specializations for basic block graphs (CFGs)
+        -:  295://===--------------------------------------------------------------------===//
+        -:  296:
+        -:  297:// Provide specializations of GraphTraits to be able to treat a function as a
+        -:  298:// graph of basic blocks...
+        -:  299:
+        -:  300:template <> struct GraphTraits<BasicBlock*> {
+        -:  301:  using NodeRef = BasicBlock *;
+        -:  302:  using ChildIteratorType = succ_iterator;
+        -:  303:
+        -:  304:  static NodeRef getEntryNode(BasicBlock *BB) { return BB; }
+        -:  305:  static ChildIteratorType child_begin(NodeRef N) { return succ_begin(N); }
+        -:  306:  static ChildIteratorType child_end(NodeRef N) { return succ_end(N); }
+        -:  307:};
+        -:  308:
+        -:  309:template <> struct GraphTraits<const BasicBlock*> {
+        -:  310:  using NodeRef = const BasicBlock *;
+        -:  311:  using ChildIteratorType = const_succ_iterator;
+        -:  312:
+        -:  313:  static NodeRef getEntryNode(const BasicBlock *BB) { return BB; }
+        -:  314:
+        -:  315:  static ChildIteratorType child_begin(NodeRef N) { return succ_begin(N); }
+        -:  316:  static ChildIteratorType child_end(NodeRef N) { return succ_end(N); }
+        -:  317:};
+        -:  318:
+        -:  319:// Provide specializations of GraphTraits to be able to treat a function as a
+        -:  320:// graph of basic blocks... and to walk it in inverse order.  Inverse order for
+        -:  321:// a function is considered to be when traversing the predecessor edges of a BB
+        -:  322:// instead of the successor edges.
+        -:  323://
+        -:  324:template <> struct GraphTraits<Inverse<BasicBlock*>> {
+        -:  325:  using NodeRef = BasicBlock *;
+        -:  326:  using ChildIteratorType = pred_iterator;
+        -:  327:
+        -:  328:  static NodeRef getEntryNode(Inverse<BasicBlock *> G) { return G.Graph; }
+        -:  329:  static ChildIteratorType child_begin(NodeRef N) { return pred_begin(N); }
+        -:  330:  static ChildIteratorType child_end(NodeRef N) { return pred_end(N); }
+        -:  331:};
+        -:  332:
+        -:  333:template <> struct GraphTraits<Inverse<const BasicBlock*>> {
+        -:  334:  using NodeRef = const BasicBlock *;
+        -:  335:  using ChildIteratorType = const_pred_iterator;
+        -:  336:
+        -:  337:  static NodeRef getEntryNode(Inverse<const BasicBlock *> G) { return G.Graph; }
+        -:  338:  static ChildIteratorType child_begin(NodeRef N) { return pred_begin(N); }
+        -:  339:  static ChildIteratorType child_end(NodeRef N) { return pred_end(N); }
+        -:  340:};
+        -:  341:
+        -:  342://===--------------------------------------------------------------------===//
+        -:  343:// GraphTraits specializations for function basic block graphs (CFGs)
+        -:  344://===--------------------------------------------------------------------===//
+        -:  345:
+        -:  346:// Provide specializations of GraphTraits to be able to treat a function as a
+        -:  347:// graph of basic blocks... these are the same as the basic block iterators,
+        -:  348:// except that the root node is implicitly the first node of the function.
+        -:  349://
+        -:  350:template <> struct GraphTraits<Function*> : public GraphTraits<BasicBlock*> {
+        -:  351:  static NodeRef getEntryNode(Function *F) { return &F->getEntryBlock(); }
+        -:  352:
+        -:  353:  // nodes_iterator/begin/end - Allow iteration over all nodes in the graph
+        -:  354:  using nodes_iterator = pointer_iterator<Function::iterator>;
+        -:  355:
+        -:  356:  static nodes_iterator nodes_begin(Function *F) {
+        -:  357:    return nodes_iterator(F->begin());
+        -:  358:  }
+        -:  359:
+        -:  360:  static nodes_iterator nodes_end(Function *F) {
+        -:  361:    return nodes_iterator(F->end());
+        -:  362:  }
+        -:  363:
+        -:  364:  static size_t size(Function *F) { return F->size(); }
+        -:  365:};
+        -:  366:template <> struct GraphTraits<const Function*> :
+        -:  367:  public GraphTraits<const BasicBlock*> {
+        -:  368:  static NodeRef getEntryNode(const Function *F) { return &F->getEntryBlock(); }
+        -:  369:
+        -:  370:  // nodes_iterator/begin/end - Allow iteration over all nodes in the graph
+        -:  371:  using nodes_iterator = pointer_iterator<Function::const_iterator>;
+        -:  372:
+        -:  373:  static nodes_iterator nodes_begin(const Function *F) {
+        -:  374:    return nodes_iterator(F->begin());
+        -:  375:  }
+        -:  376:
+        -:  377:  static nodes_iterator nodes_end(const Function *F) {
+        -:  378:    return nodes_iterator(F->end());
+        -:  379:  }
+        -:  380:
+        -:  381:  static size_t size(const Function *F) { return F->size(); }
+        -:  382:};
+        -:  383:
+        -:  384:// Provide specializations of GraphTraits to be able to treat a function as a
+        -:  385:// graph of basic blocks... and to walk it in inverse order.  Inverse order for
+        -:  386:// a function is considered to be when traversing the predecessor edges of a BB
+        -:  387:// instead of the successor edges.
+        -:  388://
+        -:  389:template <> struct GraphTraits<Inverse<Function*>> :
+        -:  390:  public GraphTraits<Inverse<BasicBlock*>> {
+        -:  391:  static NodeRef getEntryNode(Inverse<Function *> G) {
+        -:  392:    return &G.Graph->getEntryBlock();
+        -:  393:  }
+        -:  394:};
+        -:  395:template <> struct GraphTraits<Inverse<const Function*>> :
+        -:  396:  public GraphTraits<Inverse<const BasicBlock*>> {
+        -:  397:  static NodeRef getEntryNode(Inverse<const Function *> G) {
+        -:  398:    return &G.Graph->getEntryBlock();
+        -:  399:  }
+        -:  400:};
+        -:  401:
+        -:  402:} // end namespace llvm
+        -:  403:
+        -:  404:#endif // LLVM_IR_CFG_H

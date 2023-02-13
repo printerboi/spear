@@ -17,6 +17,7 @@ class ProgramTree;
  */
 class Node {
     public:
+<<<<<<< HEAD
         /**
          * Reference to the Tree this node is contained in
          */
@@ -235,8 +236,6 @@ class ProgramTree {
          * @return Returns true if the ProgramTree contains LoopNodes. False if otherwise
          */
         bool containsLoopNodes();
-
-
 };
 
 

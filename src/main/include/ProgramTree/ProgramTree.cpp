@@ -259,4 +259,3 @@ std::vector<LoopNode *> ProgramTree::getLoopNodes() {
     //Return the list of LoopNodes
     return loopnodes;
 }
-

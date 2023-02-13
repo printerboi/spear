@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "ProgramTree.h"
 
 //Create a Node by setting the parent property with the given ProgramTree
@@ -72,3 +73,31 @@ std::vector<Node *> Node::getAdjacentNodes() {
     //Return the adjacent nodes vector
     return adjacent;
 }
+=======
+//
+// Created by maximiliank on 05.02.23.
+//
+
+#include "Node.h"
+
+bool Node::IsStart() {
+    return this->predecessor == nullptr;
+}
+
+bool Node::IsEnd() {
+    return this->successor == nullptr;
+}
+
+Node::Node(llvm::BasicBlock *block) {
+    this->blocks.push_back(block);
+}
+
+double Node::calcEnergy() {
+    double sum = 0;
+    for (auto &bb : this->blocks) {
+        sum = sum + this->handler.getBasicBlockSum(*bb);
+    }
+
+    return sum;
+}
+>>>>>>> 9787770661171057603f22be26e1130031402e27

@@ -1,0 +1,180 @@
+        -:    0:Source:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.gcda
+        -:    0:Runs:1
+        -:    1:#include "ProgramTree.h"
+        -:    2:
+        -:    3://Create a Node by setting the parent property with the given ProgramTree
+function _ZN4NodeC2EP11ProgramTree called 0 returned 0% blocks executed 0%
+    #####:    4:Node::Node(ProgramTree *parent) {
+    %%%%%:    4-block  0
+Aufruf  0 niemals ausgeführt
+    #####:    5:    this->parent = parent;
+    #####:    6:}
+        -:    7:
+function _ZN4Node8toStringB5cxx11Ev called 0 returned 0% blocks executed 0%
+    #####:    8:std::string Node::toString() {
+        -:    9:    //Init the output-string
+    #####:   10:    std::string output;
+    %%%%%:   10-block  0
+Aufruf  0 niemals ausgeführt
+        -:   11:
+        -:   12:    //Iterate over the contained blocks
+    #####:   13:    for (auto BB : this->blocks) {
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   13-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:   13-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+        -:   14:        //Add the current basicblocks name to the output string
+    #####:   15:        output.append(BB->getName());
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   15-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   15-block  1
+Aufruf  6 niemals ausgeführt
+    $$$$$:   15-block  2
+        -:   16:    }
+        -:   17:
+        -:   18:    //Return the string
+    #####:   19:    return output;
+    %%%%%:   19-block  0
+    %%%%%:   19-block  1
+    =====:   20:}
+    $$$$$:   20-block  0
+Aufruf  0 niemals ausgeführt
+        -:   21:
+        -:   22://Calculate the energy of this Node. Is capable of dealing with if-conditions
+function _ZN4Node9getEnergyEP11LLVMHandler called 0 returned 0% blocks executed 0%
+    #####:   23:double Node::getEnergy(LLVMHandler *handler) {
+        -:   24:    //Init the result of the calculation
+    #####:   25:    double sum = 0.0;
+        -:   26:
+        -:   27:    //Calculate the adjacent nodes of this node
+    #####:   28:    auto adjsNodes = this->getAdjacentNodes();
+    %%%%%:   28-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   29:
+        -:   30:    //If there are adjacent nodes...
+    #####:   31:    if(!adjsNodes.empty()){
+    %%%%%:   31-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   32:        //todo Distinguish between bestcase, wortcase and averagecase
+        -:   33:        //Find the smallest energy-value-path of all the adjacent nodes
+        -:   34:        //Init the minimal pathvalue
+    #####:   35:        double min = DBL_MAX;
+        -:   36:
+        -:   37:        //Iterate over the adjacent nodes
+    #####:   38:        for(auto N : adjsNodes){
+    %%%%%:   38-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   38-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   38-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:   38-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:   39:            //Calculate the sum of the node
+    #####:   40:            double locsum = N->getEnergy(handler);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   41:
+        -:   42:            //Set the minimal energy value if the calculated energy is smaller than the current minimum
+    #####:   43:            if (locsum < min){
+    %%%%%:   43-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:   44:                min = locsum;
+    %%%%%:   44-block  0
+        -:   45:            }
+        -:   46:        }
+        -:   47:
+        -:   48:        //Add the minimal energy value to the energy-value of this node
+    #####:   49:        sum += min;
+    %%%%%:   49-block  0
+        -:   50:    }
+        -:   51:
+        -:   52:    //Calculate the energy-cost of this node's basic blocks and add it to the sum
+    #####:   53:    for(auto &block : this->blocks){
+    %%%%%:   53-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   53-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   53-block  2
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   54:        sum = sum + handler->getBasicBlockSum(*block);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   54-block  0
+Aufruf  3 niemals ausgeführt
+        -:   55:    }
+        -:   56:
+        -:   57:    //Return the calculated energy
+    #####:   58:    return sum;
+    %%%%%:   58-block  0
+    #####:   59:}
+    %%%%%:   59-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:   59-block  1
+Aufruf  1 niemals ausgeführt
+        -:   60:
+        -:   61://Calculate the adjacent Nodes
+function _ZN4Node16getAdjacentNodesEv called 0 returned 0% blocks executed 0%
+    #####:   62:std::vector<Node *> Node::getAdjacentNodes() {
+        -:   63:    //Init the vector
+    #####:   64:    std::vector<Node *> adjacent;
+    %%%%%:   64-block  0
+Aufruf  0 niemals ausgeführt
+        -:   65:
+        -:   66:    //Get the edgdes starting at this node from the parent ProgramTree
+    #####:   67:    for(auto E : this->parent->findEdgesStartingAtNode(this)){
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   67-block  0
+Aufruf  3 niemals ausgeführt
+Aufruf  4 niemals ausgeführt
+    %%%%%:   67-block  1
+Aufruf  5 niemals ausgeführt
+    %%%%%:   67-block  2
+Aufruf  6 niemals ausgeführt
+    %%%%%:   67-block  3
+Aufruf  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+Zweig  9 niemals ausgeführt
+        -:   68:        //Add the end of the edge to the adjacent vector
+    #####:   69:        adjacent.push_back(E->end);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   70:    }
+    %%%%%:   70-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:   70-block  1
+Aufruf  1 niemals ausgeführt
+        -:   71:
+        -:   72:    //Return the adjacent nodes vector
+    #####:   73:    return adjacent;
+    %%%%%:   73-block  0
+    =====:   74:}
+    $$$$$:   74-block  0
+Aufruf  0 niemals ausgeführt
