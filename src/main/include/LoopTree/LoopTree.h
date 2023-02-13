@@ -49,7 +49,17 @@ public:
      */
     void printPreOrder();
 
+    /**
+     * Gets the Latches of the LoopTree
+     * @return Vector of BasicBlock references
+     */
     std::vector<llvm::BasicBlock *> getLatches();
+
+
+    /**
+     * LoopTree destructor
+     */
+    ~LoopTree();
 
 /**
  * The over approximated iterations of the loop contained in this node

@@ -148,6 +148,11 @@ public:
      * @return Returns a string representing the LoopNode
      */
     std::string toString() override;
+
+    /**
+     * LoopNodes Destructor
+     */
+    ~LoopNode();
 };
 
 
@@ -173,6 +178,11 @@ class ProgramTree {
          * @return Returns the constructed ProgramTree
          */
         static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset);
+
+        /**
+         * ProgramTree destructor
+         */
+        ~ProgramTree();
 
         /**
          * Method for printing the string representations of the contained nodes with their calculated energy

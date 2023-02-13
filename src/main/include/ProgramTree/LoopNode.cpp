@@ -143,3 +143,9 @@ void LoopNode::removeLoopEdgesFromSubtrees(){
         }
     }
 }
+
+LoopNode::~LoopNode() {
+    for (auto sbt : this->subtrees) {
+        delete sbt;
+    }
+}

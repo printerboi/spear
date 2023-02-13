@@ -53,7 +53,7 @@ private:
     /**
      * Fallback value of the loop bound calculation representing an upper bound
      */
-        long valueIfIndeterminate;
+    long valueIfIndeterminate;
 
 };
 

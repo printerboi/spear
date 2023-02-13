@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC --coverage -g  -Wl,-rpath-link,  -Wl,--gc-sections -shared  -o Energy.so CMakeFiles/Energy.dir/energy.cpp.o  -Wl,-rpath,"\$ORIGIN/../lib:/usr/lib" /usr/lib/libLLVM-15.so 

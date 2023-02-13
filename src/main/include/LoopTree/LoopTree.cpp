@@ -130,3 +130,11 @@ std::vector<llvm::BasicBlock *> LoopTree::getLatches() {
         return latches;
     }
 }
+
+LoopTree::~LoopTree(){
+    for(auto LT : this->subTrees){
+        delete LT;
+    }
+
+
+}

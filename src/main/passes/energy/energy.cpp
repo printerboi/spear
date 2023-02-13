@@ -35,12 +35,19 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
     }
 
-    void visitor(const llvm::Region &region){
-        llvm::outs() << region.getNameStr() << "\n";
-        for (auto &it : region) {
-            auto subregion = it.get();
-            visitor(*subregion);
-        }
+    static void outputMetrics(llvm::Function *F, ProgramTree *PT, LLVMHandler *handler){
+        double energyUsed = PT->getEnergy(handler);
+
+        llvm::outs() << "\n";
+        llvm::outs() << "Function " << F->getName() << "\n";
+        llvm::outs() << "======================================================================" << "\n";
+        llvm::outs() << "Estimated energy consumption: " << energyUsed << " µJ\n";
+        llvm::outs() << "Number of basic blocks: " << F->getBasicBlockList().size() << "\n";
+        llvm::outs() << "Number of instruction: " << F->getInstructionCount() << "\n";
+        llvm::outs() << "Ø energy per block: " << energyUsed / (double) F->getBasicBlockList().size() << " µJ\n";
+        llvm::outs() << "Ø energy per instruction: " << energyUsed / F->getInstructionCount() << " µJ\n";
+        llvm::outs() << "======================================================================" << "\n";
+        llvm::outs() << "\n";
     }
 
 
@@ -106,14 +113,18 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 //PT->printEdges();
 
                 //Get the Energy from the ProgramTree and print it
-                llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
+                //llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
+                outputMetrics(&F, PT, &handler);
+
             }else{
                 //If we don't have any loops, the ProgramTree needs no further handling, and we can calculate the energy
                 //directly
 
                 //Get the Energy from the ProgramTree and print it
-                llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
+                //llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
+                outputMetrics(&F, PT, &handler);
             }
+
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";
         }
@@ -123,6 +134,8 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
     static bool isRequired() { return true; }
 };
+
+
 
 /**
  * Method for providing some basic information about the pass

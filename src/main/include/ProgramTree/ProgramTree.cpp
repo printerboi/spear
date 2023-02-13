@@ -39,6 +39,16 @@ ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset) {
     return PT;
 }
 
+ProgramTree::~ProgramTree() {
+    for (auto N : this->nodes) {
+        delete N;
+    }
+
+    for (auto E : this->edges) {
+        delete E;
+    }
+}
+
 //Print the Graph in preorder
 void ProgramTree::printNodes(LLVMHandler *handler) {
     //Iterate over the nodes in the graph
