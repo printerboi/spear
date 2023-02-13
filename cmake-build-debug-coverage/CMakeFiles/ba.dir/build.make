@@ -69,66 +69,10 @@ include CMakeFiles/ba.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ba.dir/flags.make
 
-CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o: CMakeFiles/ba.dir/flags.make
-CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o: ../src/main/include/ProgramTree/ProgramTree.cpp
-CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.i
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.s
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o: CMakeFiles/ba.dir/flags.make
-CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o: ../src/main/include/ProgramTree/Node.cpp
-CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.i
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.s
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o: CMakeFiles/ba.dir/flags.make
-CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o: ../src/main/include/ProgramTree/LoopNode.cpp
-CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.i
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.s
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o: CMakeFiles/ba.dir/flags.make
-CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o: ../src/main/include/ProgramTree/IfNode.cpp
-CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/IfNode.cpp
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/IfNode.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.i
-
-CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/IfNode.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.s
-
 CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o: ../src/main/include/JSON-Handler/JSONHandler.cpp
 CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o -MF CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/JSON-Handler/JSONHandler.cpp
 
 CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.i: cmake_force
@@ -142,7 +86,7 @@ CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.s: cmake_force
 CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o: ../src/main/include/Rapl-reader/PowercapReader.cpp
 CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o -MF CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/Rapl-reader/PowercapReader.cpp
 
 CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.i: cmake_force
@@ -156,7 +100,7 @@ CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.s: cmake_force
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o: ../src/main/include/LLVM-Handler/InstructionCategory.cpp
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o -MF CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/LLVM-Handler/InstructionCategory.cpp
 
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.i: cmake_force
@@ -170,7 +114,7 @@ CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.s: cmake
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o: ../src/main/include/LLVM-Handler/LLVMHandler.cpp
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o -MF CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/LLVM-Handler/LLVMHandler.cpp
 
 CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.i: cmake_force
@@ -184,7 +128,7 @@ CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.s: cmake_force
 CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o: ../external/json/jsoncpp.cpp
 CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o -MF CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o.d -o CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/external/json/jsoncpp.cpp
 
 CMakeFiles/ba.dir/external/json/jsoncpp.cpp.i: cmake_force
@@ -198,7 +142,7 @@ CMakeFiles/ba.dir/external/json/jsoncpp.cpp.s: cmake_force
 CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o: ../src/main/include/Profiler/Profiler.cpp
 CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o -MF CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/Profiler/Profiler.cpp
 
 CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.i: cmake_force
@@ -209,10 +153,24 @@ CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/Profiler/Profiler.cpp -o CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.s
 
+CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o: CMakeFiles/ba.dir/flags.make
+CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o: ../src/main/include/ProgramTree/ProgramTree.cpp
+CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.i
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.s
+
 CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o: ../src/main/include/LoopTree/LoopTree.cpp
 CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o -MF CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/LoopTree/LoopTree.cpp
 
 CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.i: cmake_force
@@ -223,10 +181,38 @@ CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/LoopTree/LoopTree.cpp -o CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.s
 
+CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o: CMakeFiles/ba.dir/flags.make
+CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o: ../src/main/include/ProgramTree/LoopNode.cpp
+CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.i
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.s
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o: CMakeFiles/ba.dir/flags.make
+CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o: ../src/main/include/ProgramTree/Node.cpp
+CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp > CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.i
+
+CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp -o CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.s
+
 CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o: ../src/main/include/ProgramTree/Edge.cpp
 CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o -MF CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o.d -o CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Edge.cpp
 
 CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.i: cmake_force
@@ -240,7 +226,7 @@ CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.s: cmake_force
 CMakeFiles/ba.dir/main.cpp.o: CMakeFiles/ba.dir/flags.make
 CMakeFiles/ba.dir/main.cpp.o: ../main.cpp
 CMakeFiles/ba.dir/main.cpp.o: CMakeFiles/ba.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/ba.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/ba.dir/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ba.dir/main.cpp.o -MF CMakeFiles/ba.dir/main.cpp.o.d -o CMakeFiles/ba.dir/main.cpp.o -c /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/main.cpp
 
 CMakeFiles/ba.dir/main.cpp.i: cmake_force
@@ -253,34 +239,32 @@ CMakeFiles/ba.dir/main.cpp.s: cmake_force
 
 # Object files for target ba
 ba_OBJECTS = \
-"CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o" \
-"CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o" \
-"CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o" \
-"CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o" \
 "CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o" \
+"CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o" \
+"CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o" \
+"CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o" \
 "CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o" \
 "CMakeFiles/ba.dir/main.cpp.o"
 
 # External object files for target ba
 ba_EXTERNAL_OBJECTS =
 
-ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o
-ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o
-ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o
-ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/Rapl-reader/PowercapReader.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/LLVM-Handler/LLVMHandler.cpp.o
 ba: CMakeFiles/ba.dir/external/json/jsoncpp.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.o
+ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.o
+ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.o
+ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/Node.cpp.o
 ba: CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.o
 ba: CMakeFiles/ba.dir/main.cpp.o
 ba: CMakeFiles/ba.dir/build.make
@@ -325,7 +309,7 @@ ba: /usr/lib/libzstd.so
 ba: /usr/lib/libtinfo.so
 ba: /usr/lib/libLLVMDemangle.a
 ba: CMakeFiles/ba.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable ba"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable ba"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ba.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -17,7 +17,6 @@ class ProgramTree;
  */
 class Node {
     public:
-<<<<<<< HEAD
         /**
          * Reference to the Tree this node is contained in
          */

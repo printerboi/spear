@@ -369,25 +369,13 @@
 			<Option target="ba"/>
 			<Option target="spear"/>
 		</Unit>
-		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/IfNode.cpp">
-			<Option target="ba"/>
-		</Unit>
-		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/IfNode.h">
-			<Option target="ba"/>
-		</Unit>
 		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp">
 			<Option target="ba"/>
 			<Option target="spear"/>
 		</Unit>
-		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.h">
-			<Option target="ba"/>
-		</Unit>
 		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.cpp">
 			<Option target="ba"/>
 			<Option target="spear"/>
-		</Unit>
-		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/Node.h">
-			<Option target="ba"/>
 		</Unit>
 		<Unit filename="/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp">
 			<Option target="ba"/>

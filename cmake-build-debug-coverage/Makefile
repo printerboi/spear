@@ -480,30 +480,6 @@ src/main/include/ProgramTree/Edge.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ba.dir/build.make CMakeFiles/ba.dir/src/main/include/ProgramTree/Edge.cpp.s
 .PHONY : src/main/include/ProgramTree/Edge.cpp.s
 
-src/main/include/ProgramTree/IfNode.o: src/main/include/ProgramTree/IfNode.cpp.o
-.PHONY : src/main/include/ProgramTree/IfNode.o
-
-# target to build an object file
-src/main/include/ProgramTree/IfNode.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ba.dir/build.make CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.o
-.PHONY : src/main/include/ProgramTree/IfNode.cpp.o
-
-src/main/include/ProgramTree/IfNode.i: src/main/include/ProgramTree/IfNode.cpp.i
-.PHONY : src/main/include/ProgramTree/IfNode.i
-
-# target to preprocess a source file
-src/main/include/ProgramTree/IfNode.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ba.dir/build.make CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.i
-.PHONY : src/main/include/ProgramTree/IfNode.cpp.i
-
-src/main/include/ProgramTree/IfNode.s: src/main/include/ProgramTree/IfNode.cpp.s
-.PHONY : src/main/include/ProgramTree/IfNode.s
-
-# target to generate assembly for a file
-src/main/include/ProgramTree/IfNode.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ba.dir/build.make CMakeFiles/ba.dir/src/main/include/ProgramTree/IfNode.cpp.s
-.PHONY : src/main/include/ProgramTree/IfNode.cpp.s
-
 src/main/include/ProgramTree/LoopNode.o: src/main/include/ProgramTree/LoopNode.cpp.o
 .PHONY : src/main/include/ProgramTree/LoopNode.o
 
@@ -646,9 +622,6 @@ help:
 	@echo "... src/main/include/ProgramTree/Edge.o"
 	@echo "... src/main/include/ProgramTree/Edge.i"
 	@echo "... src/main/include/ProgramTree/Edge.s"
-	@echo "... src/main/include/ProgramTree/IfNode.o"
-	@echo "... src/main/include/ProgramTree/IfNode.i"
-	@echo "... src/main/include/ProgramTree/IfNode.s"
 	@echo "... src/main/include/ProgramTree/LoopNode.o"
 	@echo "... src/main/include/ProgramTree/LoopNode.i"
 	@echo "... src/main/include/ProgramTree/LoopNode.s"
