@@ -1,0 +1,196 @@
+        -:    0:Source:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/Profiler/Profiler.cpp
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/Profiler/Profiler.cpp.gcda
+        -:    0:Runs:1
+        -:    1://
+        -:    2:// Created by max on 26.12.22.
+        -:    3://
+        -:    4:
+        -:    5:#include "Profiler.h"
+        -:    6:
+function _ZN8ProfilerC2Eii called 0 returned 0% blocks executed 0%
+    #####:    7:Profiler::Profiler(int it, int rep){
+    #####:    8:    this->iterations = it;
+    #####:    9:    this->repetitions = rep;
+    #####:   10:}
+        -:   11:
+function _ZN8Profiler7profileEv called 0 returned 0% blocks executed 0%
+    #####:   12:std::vector<double> Profiler::profile() {
+    #####:   13:    double baseValue = benchmarkFile("profile/compiled/base");
+    %%%%%:   13-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   13-block  1
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   13-block  2
+Aufruf  7 niemals ausgeführt
+Aufruf  8 niemals ausgeführt
+    $$$$$:   13-block  3
+Aufruf  9 niemals ausgeführt
+    $$$$$:   13-block  4
+Aufruf 10 niemals ausgeführt
+    $$$$$:   13-block  5
+    $$$$$:   13-block  6
+Aufruf 11 niemals ausgeführt
+    #####:   14:    double groupM = benchmarkFile("profile/compiled/groupM");
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   14-block  0
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   14-block  1
+Aufruf  7 niemals ausgeführt
+Aufruf  8 niemals ausgeführt
+    $$$$$:   14-block  2
+Aufruf  9 niemals ausgeführt
+    $$$$$:   14-block  3
+Aufruf 10 niemals ausgeführt
+    $$$$$:   14-block  4
+    $$$$$:   14-block  5
+Aufruf 11 niemals ausgeführt
+    #####:   15:    double groupB = benchmarkFile("profile/compiled/groupB");
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   15-block  0
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   15-block  1
+Aufruf  7 niemals ausgeführt
+Aufruf  8 niemals ausgeführt
+    $$$$$:   15-block  2
+Aufruf  9 niemals ausgeführt
+    $$$$$:   15-block  3
+Aufruf 10 niemals ausgeführt
+    $$$$$:   15-block  4
+    $$$$$:   15-block  5
+Aufruf 11 niemals ausgeführt
+    #####:   16:    double groupD = benchmarkFile("profile/compiled/groupD");
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   16-block  0
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   16-block  1
+Aufruf  7 niemals ausgeführt
+Aufruf  8 niemals ausgeführt
+    $$$$$:   16-block  2
+Aufruf  9 niemals ausgeführt
+    $$$$$:   16-block  3
+Aufruf 10 niemals ausgeführt
+    $$$$$:   16-block  4
+    $$$$$:   16-block  5
+Aufruf 11 niemals ausgeführt
+    #####:   17:    double groupG = benchmarkFile("profile/compiled/groupG");
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   17-block  0
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   17-block  1
+Aufruf  7 niemals ausgeführt
+Aufruf  8 niemals ausgeführt
+    $$$$$:   17-block  2
+Aufruf  9 niemals ausgeführt
+    $$$$$:   17-block  3
+Aufruf 10 niemals ausgeführt
+    $$$$$:   17-block  4
+    $$$$$:   17-block  5
+Aufruf 11 niemals ausgeführt
+        -:   18:
+        -:   19:    return {
+        -:   20:            groupM,
+        -:   21:            groupB,
+        -:   22:            groupD,
+        -:   23:            groupG,
+        -:   24:            baseValue
+    #####:   25:    };
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   25-block  0
+Aufruf  4 niemals ausgeführt
+    %%%%%:   25-block  1
+    $$$$$:   25-block  2
+Aufruf  5 niemals ausgeführt
+    $$$$$:   25-block  3
+        -:   26:}
+        -:   27:
+function _ZN8Profiler13benchmarkFileENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE called 0 returned 0% blocks executed 0%
+    #####:   28:double Profiler::benchmarkFile(std::string file) {
+    #####:   29:    PowercapReader powReader = PowercapReader();
+    %%%%%:   29-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   30:    char* relPath = getenv("BA_REL_PATH");
+    %%%%%:   30-block  0
+Aufruf  0 niemals ausgeführt
+        -:   31:
+    #####:   32:    char *command = new char[255];
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   33:    sprintf(command, "%s/%s", relPath, file.c_str());
+    %%%%%:   33-block  0
+Aufruf  0 niemals ausgeführt
+    #####:   34:    double engAverage = 0;
+        -:   35:
+    #####:   36:    for (int i = 0; i < this->iterations; ++i) {
+    %%%%%:   36-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:   37:        auto preEng = (double) powReader.getEnergy();
+    %%%%%:   37-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   38:
+    #####:   39:        for (int j = 0; j < this->repetitions; ++j) {
+    %%%%%:   39-block  0
+    %%%%%:   39-block  1
+    %%%%%:   39-block  2
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:   40:            system(command);
+    %%%%%:   40-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   41:        }
+    #####:   42:        auto postEng = (double) powReader.getEnergy();
+    %%%%%:   42-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   43:        auto absEng = postEng - preEng;
+        -:   44:
+    #####:   45:        absEng = absEng / this->repetitions;
+        -:   46:
+    #####:   47:        engAverage = engAverage + absEng;
+    %%%%%:   47-block  0
+        -:   48:    }
+        -:   49:
+    #####:   50:    return engAverage/this->iterations;
+    %%%%%:   50-block  0
+    #####:   51:}
+    %%%%%:   51-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:   51-block  1
+Aufruf  1 niemals ausgeführt

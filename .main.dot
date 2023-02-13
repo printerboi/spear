@@ -1,0 +1,12 @@
+digraph "CFG for 'main' function" {
+	label="CFG for 'main' function";
+
+	Node0x5586d8d80030 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{entry:\l  %cmp = icmp slt i32 10, 100\l  br i1 %cmp, label %if.then, label %if.else\l|{<s0>T|<s1>F}}"];
+	Node0x5586d8d80030:s0 -> Node0x5586d8d81040;
+	Node0x5586d8d80030:s1 -> Node0x5586d8d810b0;
+	Node0x5586d8d81040 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f59c7d70",label="{if.then:                                          \l  %inc = add nsw i32 10, 1\l  br label %if.end\l}"];
+	Node0x5586d8d81040 -> Node0x5586d8d812c0;
+	Node0x5586d8d810b0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#f59c7d70",label="{if.else:                                          \l  %dec = add nsw i32 10, -1\l  br label %if.end\l}"];
+	Node0x5586d8d810b0 -> Node0x5586d8d812c0;
+	Node0x5586d8d812c0 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{if.end:                                           \l  ret i32 0\l}"];
+}

@@ -1,0 +1,423 @@
+        -:    0:Source:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/LoopNode.cpp
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/LoopNode.cpp.gcda
+        -:    0:Runs:1
+        -:    1:#include "ProgramTree.h"
+        -:    2:
+        -:    3://Creates a LoopNode with the given LoopTree and ProgramTree
+function _ZN8LoopNodeC2EP8LoopTreeP11ProgramTree called 0 returned 0% blocks executed 0%
+    #####:    4:LoopNode::LoopNode(LoopTree *LT, ProgramTree *parent) : Node(parent) {
+    %%%%%:    4-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    #####:    5:    this->loopTree = LT;
+    #####:    6:}
+        -:    7:
+        -:    8://Get the string representation of this LoopNode
+function _ZN8LoopNode8toStringB5cxx11Ev called 0 returned 0% blocks executed 0%
+    #####:    9:std::string LoopNode::toString() {
+        -:   10:    //Init the output string
+    #####:   11:    std::string output;
+    %%%%%:   11-block  0
+Aufruf  0 niemals ausgeführt
+        -:   12:
+        -:   13:    //Get the Address of this LoopNode
+    #####:   14:    const void* addr = static_cast<const void*>(this);
+    #####:   15:    std::stringstream ss;
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   16:    ss << addr;
+    %%%%%:   16-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   17:
+        -:   18:    //Add the address to the output
+    #####:   19:    output.append("LOOPNODE ");
+    %%%%%:   19-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   20:    output.append(ss.str());
+    %%%%%:   20-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   20-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   20-block  2
+Aufruf  6 niemals ausgeführt
+    $$$$$:   20-block  3
+Aufruf  7 niemals ausgeführt
+    $$$$$:   20-block  4
+        -:   21:
+        -:   22:    //Return output string
+    #####:   23:    return output;
+    %%%%%:   23-block  0
+    #####:   24:}
+    %%%%%:   24-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:   24-block  1
+Aufruf  1 niemals ausgeführt
+    $$$$$:   24-block  2
+Aufruf  2 niemals ausgeführt
+        -:   25:
+        -:   26://Test if this LoopNde has subtrees
+function _ZNK8LoopNode10isLeafNodeEv called 0 returned 0% blocks executed 0%
+    #####:   27:bool LoopNode::isLeafNode() const {
+    #####:   28:    return this->loopTree->subTrees.empty();
+    %%%%%:   28-block  0
+Aufruf  0 niemals ausgeführt
+        -:   29:}
+        -:   30:
+        -:   31://Construct a LoopTree by recursively calling this method until we reach a leaf
+function _ZN8LoopNode9constructEP8LoopTreeP11ProgramTree called 0 returned 0% blocks executed 0%
+    #####:   32:LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent) {
+        -:   33:    //Create a Toplevel LoopNode
+    #####:   34:    LoopNode *LN = new LoopNode(lptr, parent);
+    %%%%%:   34-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    $$$$$:   34-block  1
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    $$$$$:   34-block  2
+Aufruf  6 niemals ausgeführt
+        -:   35:
+        -:   36:    //End-condition
+    #####:   37:    if(LN->isLeafNode()){
+    %%%%%:   37-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   38:        //Create a ProgramTree from this LoopTrees mainloop
+    #####:   39:        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
+    %%%%%:   39-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   39-block  1
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   39-block  2
+Aufruf  7 niemals ausgeführt
+    $$$$$:   39-block  3
+Aufruf  8 niemals ausgeführt
+    $$$$$:   39-block  4
+        -:   40:
+        -:   41:        //Add the ProgramTree to the list of subtrees
+    #####:   42:        LN->subtrees.push_back(PT);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   43:    }else{
+        -:   44:        //Further recursion
+        -:   45:
+        -:   46:        //Create a ProgramTree from this LoopTrees mainloop
+    #####:   47:        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
+    %%%%%:   47-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   47-block  1
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   47-block  2
+Aufruf  7 niemals ausgeführt
+    $$$$$:   47-block  3
+Aufruf  8 niemals ausgeführt
+    $$$$$:   47-block  4
+        -:   48:        //Add the ProgramTree to the list of subtrees
+    #####:   49:        LN->subtrees.push_back(PT);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   50:
+        -:   51:        //Iterate over the subloops of this LoopNodes LoopTree
+    #####:   52:        for(auto *subTree : LN->loopTree->subTrees){
+    %%%%%:   52-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   52-block  1
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+    %%%%%:   52-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:   53:            //Construct a LoopNode for the current Sub-LoopTree
+    #####:   54:            LoopNode *SLN = LoopNode::construct(subTree, PT);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   55:
+        -:   56:            //ProgramTree *SPT = ProgramTree::construct(subTree->mainloop->getBlocksVector());
+        -:   57:            //SLN->subtrees.push_back(SPT);
+        -:   58:
+        -:   59:            //Init the list of blocks contained in the subloop
+    #####:   60:            std::vector<std::string> allblocks;
+    %%%%%:   60-block  0
+Aufruf  0 niemals ausgeführt
+        -:   61:
+        -:   62:            //Add the subloops blocks to the list of contained blocks
+    #####:   63:            for(auto nb : subTree->mainloop->getBlocksVector()){
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+    %%%%%:   63-block  0
+Aufruf  3 niemals ausgeführt
+    %%%%%:   63-block  1
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    #####:   64:                allblocks.push_back(nb->getName().str());
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   64-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   64-block  1
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    %%%%%:   64-block  2
+Aufruf  9 niemals ausgeführt
+Aufruf 10 niemals ausgeführt
+    $$$$$:   64-block  3
+Aufruf 11 niemals ausgeführt
+    $$$$$:   64-block  4
+    $$$$$:   64-block  5
+        -:   65:            }
+        -:   66:
+        -:   67:            //LoopNode *subLN = LoopNode::construct(&subTree);
+        -:   68:
+        -:   69:            //Replace the nodes in the sub-ProgramTree
+    #####:   70:            PT->replaceNodesWithLoopNode(subTree->mainloop->getBlocksVector(), SLN);
+    %%%%%:   70-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   70-block  1
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    %%%%%:   70-block  2
+Aufruf  7 niemals ausgeführt
+    $$$$$:   70-block  3
+Aufruf  8 niemals ausgeführt
+    $$$$$:   70-block  4
+    #####:   71:        }
+Aufruf  0 niemals ausgeführt
+    $$$$$:   71-block  0
+Aufruf  1 niemals ausgeführt
+        -:   72:    }
+        -:   73:
+        -:   74:    //Remove the loop-edges in this LoopNode, so we won't create infinite recursions
+    #####:   75:    LN->removeLoopEdgesFromSubtrees();
+    %%%%%:   75-block  0
+Aufruf  0 niemals ausgeführt
+        -:   76:
+        -:   77:    //Return the LoopNode
+    #####:   78:    return LN;
+    %%%%%:   78-block  0
+        -:   79:}
+        -:   80:
+        -:   81://Get the LoopNodes energy
+function _ZN8LoopNode9getEnergyEP11LLVMHandler called 0 returned 0% blocks executed 0%
+    #####:   82:double LoopNode::getEnergy(LLVMHandler *handler) {
+        -:   83:    //Init the calculation result
+    #####:   84:    double sum = 0.0;
+        -:   85:    //Calculate the adjacent nodes
+    #####:   86:    auto adjsNodes = this->getAdjacentNodes();
+    %%%%%:   86-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   87:
+        -:   88:    //Get the energy from all contained subtrees
+    #####:   89:    for(auto subTrees : this->subtrees){
+    %%%%%:   89-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   89-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   89-block  2
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   90:        sum += subTrees->getEnergy(handler);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   90-block  0
+Aufruf  3 niemals ausgeführt
+        -:   91:    }
+        -:   92:
+        -:   93:    //Multiply the calculated energy from the subtrees by the iterations of this LoopNode's loop
+    #####:   94:    sum = (double) this->loopTree->iterations * sum;
+        -:   95:
+        -:   96:    //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
+    #####:   97:    if(!adjsNodes.empty()){
+    %%%%%:   97-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   98:        double min = DBL_MAX;
+    #####:   99:        for(auto N : adjsNodes){
+    %%%%%:   99-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   99-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   99-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:   99-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    #####:  100:            double locsum = N->getEnergy(handler);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  101:            if (locsum < min){
+    %%%%%:  101-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:  102:                min = locsum;
+    %%%%%:  102-block  0
+        -:  103:
+        -:  104:            }
+        -:  105:        }
+        -:  106:
+    #####:  107:        sum += min;
+    %%%%%:  107-block  0
+        -:  108:    }
+        -:  109:
+        -:  110:    //Return the calculation result
+    #####:  111:    return sum;
+    %%%%%:  111-block  0
+    #####:  112:}
+    %%%%%:  112-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:  112-block  1
+Aufruf  1 niemals ausgeführt
+        -:  113:
+        -:  114:
+        -:  115://Remove the loop-edges from the LoopNode
+function _ZN8LoopNode27removeLoopEdgesFromSubtreesEv called 0 returned 0% blocks executed 0%
+    #####:  116:void LoopNode::removeLoopEdgesFromSubtrees(){
+        -:  117:    //Iterate over the ProgramTrees contained in this LoopNode
+    #####:  118:    for(auto sT : this->subtrees){
+    %%%%%:  118-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  118-block  1
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+    %%%%%:  118-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  119:        //Get the BasicBlock used as latch in this ProgramTrees LoopTree
+    #####:  120:        auto *latchblock = this->loopTree->mainloop->getLoopLatch();
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  121:        //Get the Node the latchblock is contained in
+    #####:  122:        auto *latchnode = sT->findBlock(latchblock);
+    %%%%%:  122-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  123:        //Init the list of edges we want to keep
+    #####:  124:        std::vector<Edge *> tempedges;
+    %%%%%:  124-block  0
+Aufruf  0 niemals ausgeführt
+        -:  125:
+        -:  126:        //Iterate over the edges contained in the Sub-ProgramTree
+    #####:  127:        for(auto e : sT->edges){
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  127-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:  127-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  127-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  128:            //If the start node is not the latch of the loop, add it to the list of edges we want to keep
+    #####:  129:            if(e->start != latchnode){
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:  130:                tempedges.push_back(e);
+    %%%%%:  130-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  131:            }
+        -:  132:        }
+        -:  133:
+        -:  134:        //Set the edges-list of the Sub-ProgramTree to the calculated list
+    #####:  135:        sT->edges = tempedges;
+    %%%%%:  135-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  136:
+        -:  137:        //If we have further LoopNodes contained in this LoopNode, remove their loopedges too
+    #####:  138:        if(sT->containsLoopNodes()){
+    %%%%%:  138-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  138-block  1
+Zweig  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+    #####:  139:            auto subLoopNodes = sT->getLoopNodes();
+    %%%%%:  139-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  140:            for(auto sln : subLoopNodes){
+    %%%%%:  140-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  140-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:  140-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:  140-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    #####:  141:                sln->removeLoopEdgesFromSubtrees();
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  142:            }
+    #####:  143:        }
+    %%%%%:  143-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:  143-block  1
+Aufruf  1 niemals ausgeführt
+    #####:  144:    }
+    %%%%%:  144-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:  144-block  1
+Aufruf  1 niemals ausgeführt
+    #####:  145:}
+    %%%%%:  145-block  0
+        -:  146:

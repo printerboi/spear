@@ -1,0 +1,390 @@
+        -:    0:Source:/usr/include/json/writer.h
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/JSON-Handler/JSONHandler.cpp.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2007-2010 Baptiste Lepilleur and The JsonCpp Authors
+        -:    2:// Distributed under MIT license, or public domain if desired and
+        -:    3:// recognized in your jurisdiction.
+        -:    4:// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
+        -:    5:
+        -:    6:#ifndef JSON_WRITER_H_INCLUDED
+        -:    7:#define JSON_WRITER_H_INCLUDED
+        -:    8:
+        -:    9:#if !defined(JSON_IS_AMALGAMATION)
+        -:   10:#include "value.h"
+        -:   11:#endif // if !defined(JSON_IS_AMALGAMATION)
+        -:   12:#include <ostream>
+        -:   13:#include <string>
+        -:   14:#include <vector>
+        -:   15:
+        -:   16:// Disable warning C4251: <data member>: <type> needs to have dll-interface to
+        -:   17:// be used by...
+        -:   18:#if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING) && defined(_MSC_VER)
+        -:   19:#pragma warning(push)
+        -:   20:#pragma warning(disable : 4251)
+        -:   21:#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+        -:   22:
+        -:   23:#pragma pack(push, 8)
+        -:   24:
+        -:   25:namespace Json {
+        -:   26:
+        -:   27:class Value;
+        -:   28:
+        -:   29:/**
+        -:   30: *
+        -:   31: * Usage:
+        -:   32: *  \code
+        -:   33: *  using namespace Json;
+        -:   34: *  void writeToStdout(StreamWriter::Factory const& factory, Value const& value)
+        -:   35: * { std::unique_ptr<StreamWriter> const writer( factory.newStreamWriter());
+        -:   36: *    writer->write(value, &std::cout);
+        -:   37: *    std::cout << std::endl;  // add lf and flush
+        -:   38: *  }
+        -:   39: *  \endcode
+        -:   40: */
+        -:   41:class JSON_API StreamWriter {
+        -:   42:protected:
+        -:   43:  OStream* sout_; // not owned; will not delete
+        -:   44:public:
+        -:   45:  StreamWriter();
+        -:   46:  virtual ~StreamWriter();
+        -:   47:  /** Write Value into document as configured in sub-class.
+        -:   48:   *   Do not take ownership of sout, but maintain a reference during function.
+        -:   49:   *   \pre sout != NULL
+        -:   50:   *   \return zero on success (For now, we always return zero, so check the
+        -:   51:   *   stream instead.) \throw std::exception possibly, depending on
+        -:   52:   * configuration
+        -:   53:   */
+        -:   54:  virtual int write(Value const& root, OStream* sout) = 0;
+        -:   55:
+        -:   56:  /** \brief A simple abstract factory.
+        -:   57:   */
+        -:   58:  class JSON_API Factory {
+        -:   59:  public:
+        -:   60:    virtual ~Factory();
+        -:   61:    /** \brief Allocate a CharReader via operator new().
+        -:   62:     * \throw std::exception if something goes wrong (e.g. invalid settings)
+        -:   63:     */
+        -:   64:    virtual StreamWriter* newStreamWriter() const = 0;
+        -:   65:  }; // Factory
+        -:   66:};   // StreamWriter
+        -:   67:
+        -:   68:/** \brief Write into stringstream, then return string, for convenience.
+        -:   69: * A StreamWriter will be created from the factory, used, and then deleted.
+        -:   70: */
+        -:   71:String JSON_API writeString(StreamWriter::Factory const& factory,
+        -:   72:                            Value const& root);
+        -:   73:
+        -:   74:/** \brief Build a StreamWriter implementation.
+        -:   75:
+        -:   76:* Usage:
+        -:   77:*   \code
+        -:   78:*   using namespace Json;
+        -:   79:*   Value value = ...;
+        -:   80:*   StreamWriterBuilder builder;
+        -:   81:*   builder["commentStyle"] = "None";
+        -:   82:*   builder["indentation"] = "   ";  // or whatever you like
+        -:   83:*   std::unique_ptr<Json::StreamWriter> writer(
+        -:   84:*      builder.newStreamWriter());
+        -:   85:*   writer->write(value, &std::cout);
+        -:   86:*   std::cout << std::endl;  // add lf and flush
+        -:   87:*   \endcode
+        -:   88:*/
+        -:   89:class JSON_API StreamWriterBuilder : public StreamWriter::Factory {
+        -:   90:public:
+        -:   91:  // Note: We use a Json::Value so that we can add data-members to this class
+        -:   92:  // without a major version bump.
+        -:   93:  /** Configuration of this builder.
+        -:   94:   *  Available settings (case-sensitive):
+        -:   95:   *  - "commentStyle": "None" or "All"
+        -:   96:   *  - "indentation":  "<anything>".
+        -:   97:   *  - Setting this to an empty string also omits newline characters.
+        -:   98:   *  - "enableYAMLCompatibility": false or true
+        -:   99:   *  - slightly change the whitespace around colons
+        -:  100:   *  - "dropNullPlaceholders": false or true
+        -:  101:   *  - Drop the "null" string from the writer's output for nullValues.
+        -:  102:   *    Strictly speaking, this is not valid JSON. But when the output is being
+        -:  103:   *    fed to a browser's JavaScript, it makes for smaller output and the
+        -:  104:   *    browser can handle the output just fine.
+        -:  105:   *  - "useSpecialFloats": false or true
+        -:  106:   *  - If true, outputs non-finite floating point values in the following way:
+        -:  107:   *    NaN values as "NaN", positive infinity as "Infinity", and negative
+        -:  108:   *  infinity as "-Infinity".
+        -:  109:   *  - "precision": int
+        -:  110:   *  - Number of precision digits for formatting of real values.
+        -:  111:   *  - "precisionType": "significant"(default) or "decimal"
+        -:  112:   *  - Type of precision for formatting of real values.
+        -:  113:   *  - "emitUTF8": false or true
+        -:  114:   *  - If true, outputs raw UTF8 strings instead of escaping them.
+        -:  115:
+        -:  116:   *  You can examine 'settings_` yourself
+        -:  117:   *  to see the defaults. You can also write and read them just like any
+        -:  118:   *  JSON Value.
+        -:  119:   *  \sa setDefaults()
+        -:  120:   */
+        -:  121:  Json::Value settings_;
+        -:  122:
+        -:  123:  StreamWriterBuilder();
+        -:  124:  ~StreamWriterBuilder() override;
+        -:  125:
+        -:  126:  /**
+        -:  127:   * \throw std::exception if something goes wrong (e.g. invalid settings)
+        -:  128:   */
+        -:  129:  StreamWriter* newStreamWriter() const override;
+        -:  130:
+        -:  131:  /** \return true if 'settings' are legal and consistent;
+        -:  132:   *   otherwise, indicate bad settings via 'invalid'.
+        -:  133:   */
+        -:  134:  bool validate(Json::Value* invalid) const;
+        -:  135:  /** A simple way to update a specific setting.
+        -:  136:   */
+        -:  137:  Value& operator[](const String& key);
+        -:  138:
+        -:  139:  /** Called by ctor, but you can use this to reset settings_.
+        -:  140:   * \pre 'settings' != NULL (but Json::null is fine)
+        -:  141:   * \remark Defaults:
+        -:  142:   * \snippet src/lib_json/json_writer.cpp StreamWriterBuilderDefaults
+        -:  143:   */
+        -:  144:  static void setDefaults(Json::Value* settings);
+        -:  145:};
+        -:  146:
+        -:  147:/** \brief Abstract class for writers.
+        -:  148: * \deprecated Use StreamWriter. (And really, this is an implementation detail.)
+        -:  149: */
+        -:  150:class JSON_API Writer {
+        -:  151:public:
+        -:  152:  virtual ~Writer();
+        -:  153:
+        -:  154:  virtual String write(const Value& root) = 0;
+        -:  155:};
+        -:  156:
+        -:  157:/** \brief Outputs a Value in <a HREF="http://www.json.org">JSON</a> format
+        -:  158: *without formatting (not human friendly).
+        -:  159: *
+        -:  160: * The JSON document is written in a single line. It is not intended for 'human'
+        -:  161: *consumption,
+        -:  162: * but may be useful to support feature such as RPC where bandwidth is limited.
+        -:  163: * \sa Reader, Value
+        -:  164: * \deprecated Use StreamWriterBuilder.
+        -:  165: */
+        -:  166:#if defined(_MSC_VER)
+        -:  167:#pragma warning(push)
+        -:  168:#pragma warning(disable : 4996) // Deriving from deprecated class
+        -:  169:#endif
+        -:  170:class JSON_API FastWriter
+        -:  171:    : public Writer {
+        -:  172:public:
+        -:  173:  FastWriter();
+        -:  174:  ~FastWriter() override = default;
+        -:  175:
+        -:  176:  void enableYAMLCompatibility();
+        -:  177:
+        -:  178:  /** \brief Drop the "null" string from the writer's output for nullValues.
+        -:  179:   * Strictly speaking, this is not valid JSON. But when the output is being
+        -:  180:   * fed to a browser's JavaScript, it makes for smaller output and the
+        -:  181:   * browser can handle the output just fine.
+        -:  182:   */
+        -:  183:  void dropNullPlaceholders();
+        -:  184:
+        -:  185:  void omitEndingLineFeed();
+        -:  186:
+        -:  187:public: // overridden from Writer
+        -:  188:  String write(const Value& root) override;
+        -:  189:
+        -:  190:private:
+        -:  191:  void writeValue(const Value& value);
+        -:  192:
+        -:  193:  String document_;
+        -:  194:  bool yamlCompatibilityEnabled_{false};
+        -:  195:  bool dropNullPlaceholders_{false};
+        -:  196:  bool omitEndingLineFeed_{false};
+        -:  197:};
+        -:  198:#if defined(_MSC_VER)
+        -:  199:#pragma warning(pop)
+        -:  200:#endif
+        -:  201:
+        -:  202:/** \brief Writes a Value in <a HREF="http://www.json.org">JSON</a> format in a
+        -:  203: *human friendly way.
+        -:  204: *
+        -:  205: * The rules for line break and indent are as follow:
+        -:  206: * - Object value:
+        -:  207: *     - if empty then print {} without indent and line break
+        -:  208: *     - if not empty the print '{', line break & indent, print one value per
+        -:  209: *line
+        -:  210: *       and then unindent and line break and print '}'.
+        -:  211: * - Array value:
+        -:  212: *     - if empty then print [] without indent and line break
+        -:  213: *     - if the array contains no object value, empty array or some other value
+        -:  214: *types,
+        -:  215: *       and all the values fit on one lines, then print the array on a single
+        -:  216: *line.
+        -:  217: *     - otherwise, it the values do not fit on one line, or the array contains
+        -:  218: *       object or non empty array, then print one value per line.
+        -:  219: *
+        -:  220: * If the Value have comments then they are outputed according to their
+        -:  221: *#CommentPlacement.
+        -:  222: *
+        -:  223: * \sa Reader, Value, Value::setComment()
+        -:  224: * \deprecated Use StreamWriterBuilder.
+        -:  225: */
+        -:  226:#if defined(_MSC_VER)
+        -:  227:#pragma warning(push)
+        -:  228:#pragma warning(disable : 4996) // Deriving from deprecated class
+        -:  229:#endif
+        -:  230:class JSON_API
+        -:  231:    StyledWriter : public Writer {
+        -:  232:public:
+        -:  233:  StyledWriter();
+    #####:  234:  ~StyledWriter() override = default;
+------------------
+_ZN4Json12StyledWriterD0Ev:
+function _ZN4Json12StyledWriterD0Ev called 0 returned 0% blocks executed 0%
+    #####:  234:  ~StyledWriter() override = default;
+    %%%%%:  234-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+------------------
+_ZN4Json12StyledWriterD2Ev:
+function _ZN4Json12StyledWriterD2Ev called 0 returned 0% blocks executed 0%
+    #####:  234:  ~StyledWriter() override = default;
+    %%%%%:  234-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+------------------
+        -:  235:
+        -:  236:public: // overridden from Writer
+        -:  237:  /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
+        -:  238:   * \param root Value to serialize.
+        -:  239:   * \return String containing the JSON document that represents the root value.
+        -:  240:   */
+        -:  241:  String write(const Value& root) override;
+        -:  242:
+        -:  243:private:
+        -:  244:  void writeValue(const Value& value);
+        -:  245:  void writeArrayValue(const Value& value);
+        -:  246:  bool isMultilineArray(const Value& value);
+        -:  247:  void pushValue(const String& value);
+        -:  248:  void writeIndent();
+        -:  249:  void writeWithIndent(const String& value);
+        -:  250:  void indent();
+        -:  251:  void unindent();
+        -:  252:  void writeCommentBeforeValue(const Value& root);
+        -:  253:  void writeCommentAfterValueOnSameLine(const Value& root);
+        -:  254:  static bool hasCommentForValue(const Value& value);
+        -:  255:  static String normalizeEOL(const String& text);
+        -:  256:
+        -:  257:  using ChildValues = std::vector<String>;
+        -:  258:
+        -:  259:  ChildValues childValues_;
+        -:  260:  String document_;
+        -:  261:  String indentString_;
+        -:  262:  unsigned int rightMargin_{74};
+        -:  263:  unsigned int indentSize_{3};
+        -:  264:  bool addChildValues_{false};
+        -:  265:};
+        -:  266:#if defined(_MSC_VER)
+        -:  267:#pragma warning(pop)
+        -:  268:#endif
+        -:  269:
+        -:  270:/** \brief Writes a Value in <a HREF="http://www.json.org">JSON</a> format in a
+        -:  271: human friendly way,
+        -:  272:     to a stream rather than to a string.
+        -:  273: *
+        -:  274: * The rules for line break and indent are as follow:
+        -:  275: * - Object value:
+        -:  276: *     - if empty then print {} without indent and line break
+        -:  277: *     - if not empty the print '{', line break & indent, print one value per
+        -:  278: line
+        -:  279: *       and then unindent and line break and print '}'.
+        -:  280: * - Array value:
+        -:  281: *     - if empty then print [] without indent and line break
+        -:  282: *     - if the array contains no object value, empty array or some other value
+        -:  283: types,
+        -:  284: *       and all the values fit on one lines, then print the array on a single
+        -:  285: line.
+        -:  286: *     - otherwise, it the values do not fit on one line, or the array contains
+        -:  287: *       object or non empty array, then print one value per line.
+        -:  288: *
+        -:  289: * If the Value have comments then they are outputed according to their
+        -:  290: #CommentPlacement.
+        -:  291: *
+        -:  292: * \sa Reader, Value, Value::setComment()
+        -:  293: * \deprecated Use StreamWriterBuilder.
+        -:  294: */
+        -:  295:#if defined(_MSC_VER)
+        -:  296:#pragma warning(push)
+        -:  297:#pragma warning(disable : 4996) // Deriving from deprecated class
+        -:  298:#endif
+        -:  299:class JSON_API
+        -:  300:    StyledStreamWriter {
+        -:  301:public:
+        -:  302:  /**
+        -:  303:   * \param indentation Each level will be indented by this amount extra.
+        -:  304:   */
+        -:  305:  StyledStreamWriter(String indentation = "\t");
+        -:  306:  ~StyledStreamWriter() = default;
+        -:  307:
+        -:  308:public:
+        -:  309:  /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
+        -:  310:   * \param out Stream to write to. (Can be ostringstream, e.g.)
+        -:  311:   * \param root Value to serialize.
+        -:  312:   * \note There is no point in deriving from Writer, since write() should not
+        -:  313:   * return a value.
+        -:  314:   */
+        -:  315:  void write(OStream& out, const Value& root);
+        -:  316:
+        -:  317:private:
+        -:  318:  void writeValue(const Value& value);
+        -:  319:  void writeArrayValue(const Value& value);
+        -:  320:  bool isMultilineArray(const Value& value);
+        -:  321:  void pushValue(const String& value);
+        -:  322:  void writeIndent();
+        -:  323:  void writeWithIndent(const String& value);
+        -:  324:  void indent();
+        -:  325:  void unindent();
+        -:  326:  void writeCommentBeforeValue(const Value& root);
+        -:  327:  void writeCommentAfterValueOnSameLine(const Value& root);
+        -:  328:  static bool hasCommentForValue(const Value& value);
+        -:  329:  static String normalizeEOL(const String& text);
+        -:  330:
+        -:  331:  using ChildValues = std::vector<String>;
+        -:  332:
+        -:  333:  ChildValues childValues_;
+        -:  334:  OStream* document_;
+        -:  335:  String indentString_;
+        -:  336:  unsigned int rightMargin_{74};
+        -:  337:  String indentation_;
+        -:  338:  bool addChildValues_ : 1;
+        -:  339:  bool indented_ : 1;
+        -:  340:};
+        -:  341:#if defined(_MSC_VER)
+        -:  342:#pragma warning(pop)
+        -:  343:#endif
+        -:  344:
+        -:  345:#if defined(JSON_HAS_INT64)
+        -:  346:String JSON_API valueToString(Int value);
+        -:  347:String JSON_API valueToString(UInt value);
+        -:  348:#endif // if defined(JSON_HAS_INT64)
+        -:  349:String JSON_API valueToString(LargestInt value);
+        -:  350:String JSON_API valueToString(LargestUInt value);
+        -:  351:String JSON_API valueToString(
+        -:  352:    double value, unsigned int precision = Value::defaultRealPrecision,
+        -:  353:    PrecisionType precisionType = PrecisionType::significantDigits);
+        -:  354:String JSON_API valueToString(bool value);
+        -:  355:String JSON_API valueToQuotedString(const char* value);
+        -:  356:
+        -:  357:/// \brief Output using the StyledStreamWriter.
+        -:  358:/// \see Json::operator>>()
+        -:  359:JSON_API OStream& operator<<(OStream&, const Value& root);
+        -:  360:
+        -:  361:} // namespace Json
+        -:  362:
+        -:  363:#pragma pack(pop)
+        -:  364:
+        -:  365:#if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+        -:  366:#pragma warning(pop)
+        -:  367:#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+        -:  368:
+        -:  369:#endif // JSON_WRITER_H_INCLUDED

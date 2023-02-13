@@ -1,0 +1,1413 @@
+        -:    0:Source:/usr/include/llvm/Analysis/LoopInfo.h
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/LoopTree/LoopTree.cpp.gcda
+        -:    0:Runs:1
+        -:    1://===- llvm/Analysis/LoopInfo.h - Natural Loop Calculator -------*- C++ -*-===//
+        -:    2://
+        -:    3:// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+        -:    4:// See https://llvm.org/LICENSE.txt for license information.
+        -:    5:// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+        -:    6://
+        -:    7://===----------------------------------------------------------------------===//
+        -:    8://
+        -:    9:// This file defines the LoopInfo class that is used to identify natural loops
+        -:   10:// and determine the loop depth of various nodes of the CFG.  A natural loop
+        -:   11:// has exactly one entry-point, which is called the header. Note that natural
+        -:   12:// loops may actually be several loops that share the same header node.
+        -:   13://
+        -:   14:// This analysis calculates the nesting structure of loops in a function.  For
+        -:   15:// each natural loop identified, this analysis identifies natural loops
+        -:   16:// contained entirely within the loop and the basic blocks the make up the loop.
+        -:   17://
+        -:   18:// It can calculate on the fly various bits of information, for example:
+        -:   19://
+        -:   20://  * whether there is a preheader for the loop
+        -:   21://  * the number of back edges to the header
+        -:   22://  * whether or not a particular block branches out of the loop
+        -:   23://  * the successor blocks of the loop
+        -:   24://  * the loop depth
+        -:   25://  * etc...
+        -:   26://
+        -:   27:// Note that this analysis specifically identifies *Loops* not cycles or SCCs
+        -:   28:// in the CFG.  There can be strongly connected components in the CFG which
+        -:   29:// this analysis will not recognize and that will not be represented by a Loop
+        -:   30:// instance.  In particular, a Loop might be inside such a non-loop SCC, or a
+        -:   31:// non-loop SCC might contain a sub-SCC which is a Loop.
+        -:   32://
+        -:   33:// For an overview of terminology used in this API (and thus all of our loop
+        -:   34:// analyses or transforms), see docs/LoopTerminology.rst.
+        -:   35://
+        -:   36://===----------------------------------------------------------------------===//
+        -:   37:
+        -:   38:#ifndef LLVM_ANALYSIS_LOOPINFO_H
+        -:   39:#define LLVM_ANALYSIS_LOOPINFO_H
+        -:   40:
+        -:   41:#include "llvm/ADT/DenseMap.h"
+        -:   42:#include "llvm/ADT/DenseSet.h"
+        -:   43:#include "llvm/ADT/GraphTraits.h"
+        -:   44:#include "llvm/ADT/SmallPtrSet.h"
+        -:   45:#include "llvm/ADT/SmallVector.h"
+        -:   46:#include "llvm/IR/CFG.h"
+        -:   47:#include "llvm/IR/Instructions.h"
+        -:   48:#include "llvm/IR/PassManager.h"
+        -:   49:#include "llvm/Pass.h"
+        -:   50:#include "llvm/Support/Allocator.h"
+        -:   51:#include <algorithm>
+        -:   52:#include <utility>
+        -:   53:
+        -:   54:namespace llvm {
+        -:   55:
+        -:   56:class DominatorTree;
+        -:   57:class InductionDescriptor;
+        -:   58:class Instruction;
+        -:   59:class LoopInfo;
+        -:   60:class Loop;
+        -:   61:class MDNode;
+        -:   62:class MemorySSAUpdater;
+        -:   63:class ScalarEvolution;
+        -:   64:class raw_ostream;
+        -:   65:template <class N, bool IsPostDom> class DominatorTreeBase;
+        -:   66:template <class N, class M> class LoopInfoBase;
+        -:   67:template <class N, class M> class LoopBase;
+        -:   68:
+        -:   69://===----------------------------------------------------------------------===//
+        -:   70:/// Instances of this class are used to represent loops that are detected in the
+        -:   71:/// flow graph.
+        -:   72:///
+        -:   73:template <class BlockT, class LoopT> class LoopBase {
+        -:   74:  LoopT *ParentLoop;
+        -:   75:  // Loops contained entirely within this one.
+        -:   76:  std::vector<LoopT *> SubLoops;
+        -:   77:
+        -:   78:  // The list of blocks in this loop. First entry is the header node.
+        -:   79:  std::vector<BlockT *> Blocks;
+        -:   80:
+        -:   81:  SmallPtrSet<const BlockT *, 8> DenseBlockSet;
+        -:   82:
+        -:   83:#if LLVM_ENABLE_ABI_BREAKING_CHECKS
+        -:   84:  /// Indicator that this loop is no longer a valid loop.
+        -:   85:  bool IsInvalid = false;
+        -:   86:#endif
+        -:   87:
+        -:   88:  LoopBase(const LoopBase<BlockT, LoopT> &) = delete;
+        -:   89:  const LoopBase<BlockT, LoopT> &
+        -:   90:  operator=(const LoopBase<BlockT, LoopT> &) = delete;
+        -:   91:
+        -:   92:public:
+        -:   93:  /// Return the nesting level of this loop.  An outer-most loop has depth 1,
+        -:   94:  /// for consistency with loop depth values used for basic blocks, where depth
+        -:   95:  /// 0 is used for blocks not inside any loops.
+        -:   96:  unsigned getLoopDepth() const {
+        -:   97:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:   98:    unsigned D = 1;
+        -:   99:    for (const LoopT *CurLoop = ParentLoop; CurLoop;
+        -:  100:         CurLoop = CurLoop->ParentLoop)
+        -:  101:      ++D;
+        -:  102:    return D;
+        -:  103:  }
+        -:  104:  BlockT *getHeader() const { return getBlocks().front(); }
+        -:  105:  /// Return the parent loop if it exists or nullptr for top
+        -:  106:  /// level loops.
+        -:  107:
+        -:  108:  /// A loop is either top-level in a function (that is, it is not
+        -:  109:  /// contained in any other loop) or it is entirely enclosed in
+        -:  110:  /// some other loop.
+        -:  111:  /// If a loop is top-level, it has no parent, otherwise its
+        -:  112:  /// parent is the innermost loop in which it is enclosed.
+        -:  113:  LoopT *getParentLoop() const { return ParentLoop; }
+        -:  114:
+        -:  115:  /// Get the outermost loop in which this loop is contained.
+        -:  116:  /// This may be the loop itself, if it already is the outermost loop.
+        -:  117:  const LoopT *getOutermostLoop() const {
+        -:  118:    const LoopT *L = static_cast<const LoopT *>(this);
+        -:  119:    while (L->ParentLoop)
+        -:  120:      L = L->ParentLoop;
+        -:  121:    return L;
+        -:  122:  }
+        -:  123:
+        -:  124:  LoopT *getOutermostLoop() {
+        -:  125:    LoopT *L = static_cast<LoopT *>(this);
+        -:  126:    while (L->ParentLoop)
+        -:  127:      L = L->ParentLoop;
+        -:  128:    return L;
+        -:  129:  }
+        -:  130:
+        -:  131:  /// This is a raw interface for bypassing addChildLoop.
+        -:  132:  void setParentLoop(LoopT *L) {
+        -:  133:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  134:    ParentLoop = L;
+        -:  135:  }
+        -:  136:
+        -:  137:  /// Return true if the specified loop is contained within in this loop.
+        -:  138:  bool contains(const LoopT *L) const {
+        -:  139:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  140:    if (L == this)
+        -:  141:      return true;
+        -:  142:    if (!L)
+        -:  143:      return false;
+        -:  144:    return contains(L->getParentLoop());
+        -:  145:  }
+        -:  146:
+        -:  147:  /// Return true if the specified basic block is in this loop.
+        -:  148:  bool contains(const BlockT *BB) const {
+        -:  149:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  150:    return DenseBlockSet.count(BB);
+        -:  151:  }
+        -:  152:
+        -:  153:  /// Return true if the specified instruction is in this loop.
+        -:  154:  template <class InstT> bool contains(const InstT *Inst) const {
+        -:  155:    return contains(Inst->getParent());
+        -:  156:  }
+        -:  157:
+        -:  158:  /// Return the loops contained entirely within this loop.
+        -:  159:  const std::vector<LoopT *> &getSubLoops() const {
+        -:  160:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  161:    return SubLoops;
+        -:  162:  }
+        -:  163:  std::vector<LoopT *> &getSubLoopsVector() {
+        -:  164:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  165:    return SubLoops;
+        -:  166:  }
+        -:  167:  typedef typename std::vector<LoopT *>::const_iterator iterator;
+        -:  168:  typedef
+        -:  169:      typename std::vector<LoopT *>::const_reverse_iterator reverse_iterator;
+        -:  170:  iterator begin() const { return getSubLoops().begin(); }
+        -:  171:  iterator end() const { return getSubLoops().end(); }
+        -:  172:  reverse_iterator rbegin() const { return getSubLoops().rbegin(); }
+        -:  173:  reverse_iterator rend() const { return getSubLoops().rend(); }
+        -:  174:
+        -:  175:  // LoopInfo does not detect irreducible control flow, just natural
+        -:  176:  // loops. That is, it is possible that there is cyclic control
+        -:  177:  // flow within the "innermost loop" or around the "outermost
+        -:  178:  // loop".
+        -:  179:
+        -:  180:  /// Return true if the loop does not contain any (natural) loops.
+        -:  181:  bool isInnermost() const { return getSubLoops().empty(); }
+        -:  182:  /// Return true if the loop does not have a parent (natural) loop
+        -:  183:  // (i.e. it is outermost, which is the same as top-level).
+        -:  184:  bool isOutermost() const { return getParentLoop() == nullptr; }
+        -:  185:
+        -:  186:  /// Get a list of the basic blocks which make up this loop.
+        -:  187:  ArrayRef<BlockT *> getBlocks() const {
+        -:  188:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  189:    return Blocks;
+        -:  190:  }
+        -:  191:  typedef typename ArrayRef<BlockT *>::const_iterator block_iterator;
+        -:  192:  block_iterator block_begin() const { return getBlocks().begin(); }
+        -:  193:  block_iterator block_end() const { return getBlocks().end(); }
+        -:  194:  inline iterator_range<block_iterator> blocks() const {
+        -:  195:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  196:    return make_range(block_begin(), block_end());
+        -:  197:  }
+        -:  198:
+        -:  199:  /// Get the number of blocks in this loop in constant time.
+        -:  200:  /// Invalidate the loop, indicating that it is no longer a loop.
+        -:  201:  unsigned getNumBlocks() const {
+        -:  202:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  203:    return Blocks.size();
+        -:  204:  }
+        -:  205:
+        -:  206:  /// Return a direct, mutable handle to the blocks vector so that we can
+        -:  207:  /// mutate it efficiently with techniques like `std::remove`.
+        -:  208:  std::vector<BlockT *> &getBlocksVector() {
+        -:  209:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  210:    return Blocks;
+        -:  211:  }
+        -:  212:  /// Return a direct, mutable handle to the blocks set so that we can
+        -:  213:  /// mutate it efficiently.
+        -:  214:  SmallPtrSetImpl<const BlockT *> &getBlocksSet() {
+        -:  215:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  216:    return DenseBlockSet;
+        -:  217:  }
+        -:  218:
+        -:  219:  /// Return a direct, immutable handle to the blocks set.
+        -:  220:  const SmallPtrSetImpl<const BlockT *> &getBlocksSet() const {
+        -:  221:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  222:    return DenseBlockSet;
+        -:  223:  }
+        -:  224:
+        -:  225:  /// Return true if this loop is no longer valid.  The only valid use of this
+        -:  226:  /// helper is "assert(L.isInvalid())" or equivalent, since IsInvalid is set to
+        -:  227:  /// true by the destructor.  In other words, if this accessor returns true,
+        -:  228:  /// the caller has already triggered UB by calling this accessor; and so it
+        -:  229:  /// can only be called in a context where a return value of true indicates a
+        -:  230:  /// programmer error.
+        -:  231:  bool isInvalid() const {
+        -:  232:#if LLVM_ENABLE_ABI_BREAKING_CHECKS
+        -:  233:    return IsInvalid;
+        -:  234:#else
+        -:  235:    return false;
+        -:  236:#endif
+        -:  237:  }
+        -:  238:
+        -:  239:  /// True if terminator in the block can branch to another block that is
+        -:  240:  /// outside of the current loop. \p BB must be inside the loop.
+        -:  241:  bool isLoopExiting(const BlockT *BB) const {
+        -:  242:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  243:    assert(contains(BB) && "Exiting block must be part of the loop");
+        -:  244:    for (const auto *Succ : children<const BlockT *>(BB)) {
+        -:  245:      if (!contains(Succ))
+        -:  246:        return true;
+        -:  247:    }
+        -:  248:    return false;
+        -:  249:  }
+        -:  250:
+        -:  251:  /// Returns true if \p BB is a loop-latch.
+        -:  252:  /// A latch block is a block that contains a branch back to the header.
+        -:  253:  /// This function is useful when there are multiple latches in a loop
+        -:  254:  /// because \fn getLoopLatch will return nullptr in that case.
+        -:  255:  bool isLoopLatch(const BlockT *BB) const {
+        -:  256:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  257:    assert(contains(BB) && "block does not belong to the loop");
+        -:  258:
+        -:  259:    BlockT *Header = getHeader();
+        -:  260:    auto PredBegin = GraphTraits<Inverse<BlockT *>>::child_begin(Header);
+        -:  261:    auto PredEnd = GraphTraits<Inverse<BlockT *>>::child_end(Header);
+        -:  262:    return std::find(PredBegin, PredEnd, BB) != PredEnd;
+        -:  263:  }
+        -:  264:
+        -:  265:  /// Calculate the number of back edges to the loop header.
+        -:  266:  unsigned getNumBackEdges() const {
+        -:  267:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  268:    unsigned NumBackEdges = 0;
+        -:  269:    BlockT *H = getHeader();
+        -:  270:
+        -:  271:    for (const auto Pred : children<Inverse<BlockT *>>(H))
+        -:  272:      if (contains(Pred))
+        -:  273:        ++NumBackEdges;
+        -:  274:
+        -:  275:    return NumBackEdges;
+        -:  276:  }
+        -:  277:
+        -:  278:  //===--------------------------------------------------------------------===//
+        -:  279:  // APIs for simple analysis of the loop.
+        -:  280:  //
+        -:  281:  // Note that all of these methods can fail on general loops (ie, there may not
+        -:  282:  // be a preheader, etc).  For best success, the loop simplification and
+        -:  283:  // induction variable canonicalization pass should be used to normalize loops
+        -:  284:  // for easy analysis.  These methods assume canonical loops.
+        -:  285:
+        -:  286:  /// Return all blocks inside the loop that have successors outside of the
+        -:  287:  /// loop. These are the blocks _inside of the current loop_ which branch out.
+        -:  288:  /// The returned list is always unique.
+        -:  289:  void getExitingBlocks(SmallVectorImpl<BlockT *> &ExitingBlocks) const;
+        -:  290:
+        -:  291:  /// If getExitingBlocks would return exactly one block, return that block.
+        -:  292:  /// Otherwise return null.
+        -:  293:  BlockT *getExitingBlock() const;
+        -:  294:
+        -:  295:  /// Return all of the successor blocks of this loop. These are the blocks
+        -:  296:  /// _outside of the current loop_ which are branched to.
+        -:  297:  void getExitBlocks(SmallVectorImpl<BlockT *> &ExitBlocks) const;
+        -:  298:
+        -:  299:  /// If getExitBlocks would return exactly one block, return that block.
+        -:  300:  /// Otherwise return null.
+        -:  301:  BlockT *getExitBlock() const;
+        -:  302:
+        -:  303:  /// Return true if no exit block for the loop has a predecessor that is
+        -:  304:  /// outside the loop.
+        -:  305:  bool hasDedicatedExits() const;
+        -:  306:
+        -:  307:  /// Return all unique successor blocks of this loop.
+        -:  308:  /// These are the blocks _outside of the current loop_ which are branched to.
+        -:  309:  void getUniqueExitBlocks(SmallVectorImpl<BlockT *> &ExitBlocks) const;
+        -:  310:
+        -:  311:  /// Return all unique successor blocks of this loop except successors from
+        -:  312:  /// Latch block are not considered. If the exit comes from Latch has also
+        -:  313:  /// non Latch predecessor in a loop it will be added to ExitBlocks.
+        -:  314:  /// These are the blocks _outside of the current loop_ which are branched to.
+        -:  315:  void getUniqueNonLatchExitBlocks(SmallVectorImpl<BlockT *> &ExitBlocks) const;
+        -:  316:
+        -:  317:  /// If getUniqueExitBlocks would return exactly one block, return that block.
+        -:  318:  /// Otherwise return null.
+        -:  319:  BlockT *getUniqueExitBlock() const;
+        -:  320:
+        -:  321:  /// Return true if this loop does not have any exit blocks.
+        -:  322:  bool hasNoExitBlocks() const;
+        -:  323:
+        -:  324:  /// Edge type.
+        -:  325:  typedef std::pair<BlockT *, BlockT *> Edge;
+        -:  326:
+        -:  327:  /// Return all pairs of (_inside_block_,_outside_block_).
+        -:  328:  void getExitEdges(SmallVectorImpl<Edge> &ExitEdges) const;
+        -:  329:
+        -:  330:  /// If there is a preheader for this loop, return it. A loop has a preheader
+        -:  331:  /// if there is only one edge to the header of the loop from outside of the
+        -:  332:  /// loop. If this is the case, the block branching to the header of the loop
+        -:  333:  /// is the preheader node.
+        -:  334:  ///
+        -:  335:  /// This method returns null if there is no preheader for the loop.
+        -:  336:  BlockT *getLoopPreheader() const;
+        -:  337:
+        -:  338:  /// If the given loop's header has exactly one unique predecessor outside the
+        -:  339:  /// loop, return it. Otherwise return null.
+        -:  340:  ///  This is less strict that the loop "preheader" concept, which requires
+        -:  341:  /// the predecessor to have exactly one successor.
+        -:  342:  BlockT *getLoopPredecessor() const;
+        -:  343:
+        -:  344:  /// If there is a single latch block for this loop, return it.
+        -:  345:  /// A latch block is a block that contains a branch back to the header.
+        -:  346:  BlockT *getLoopLatch() const;
+        -:  347:
+        -:  348:  /// Return all loop latch blocks of this loop. A latch block is a block that
+        -:  349:  /// contains a branch back to the header.
+        -:  350:  void getLoopLatches(SmallVectorImpl<BlockT *> &LoopLatches) const {
+        -:  351:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  352:    BlockT *H = getHeader();
+        -:  353:    for (const auto Pred : children<Inverse<BlockT *>>(H))
+        -:  354:      if (contains(Pred))
+        -:  355:        LoopLatches.push_back(Pred);
+        -:  356:  }
+        -:  357:
+        -:  358:  /// Return all inner loops in the loop nest rooted by the loop in preorder,
+        -:  359:  /// with siblings in forward program order.
+        -:  360:  template <class Type>
+        -:  361:  static void getInnerLoopsInPreorder(const LoopT &L,
+        -:  362:                                      SmallVectorImpl<Type> &PreOrderLoops) {
+        -:  363:    SmallVector<LoopT *, 4> PreOrderWorklist;
+        -:  364:    PreOrderWorklist.append(L.rbegin(), L.rend());
+        -:  365:
+        -:  366:    while (!PreOrderWorklist.empty()) {
+        -:  367:      LoopT *L = PreOrderWorklist.pop_back_val();
+        -:  368:      // Sub-loops are stored in forward program order, but will process the
+        -:  369:      // worklist backwards so append them in reverse order.
+        -:  370:      PreOrderWorklist.append(L->rbegin(), L->rend());
+        -:  371:      PreOrderLoops.push_back(L);
+        -:  372:    }
+        -:  373:  }
+        -:  374:
+        -:  375:  /// Return all loops in the loop nest rooted by the loop in preorder, with
+        -:  376:  /// siblings in forward program order.
+        -:  377:  SmallVector<const LoopT *, 4> getLoopsInPreorder() const {
+        -:  378:    SmallVector<const LoopT *, 4> PreOrderLoops;
+        -:  379:    const LoopT *CurLoop = static_cast<const LoopT *>(this);
+        -:  380:    PreOrderLoops.push_back(CurLoop);
+        -:  381:    getInnerLoopsInPreorder(*CurLoop, PreOrderLoops);
+        -:  382:    return PreOrderLoops;
+        -:  383:  }
+        -:  384:  SmallVector<LoopT *, 4> getLoopsInPreorder() {
+        -:  385:    SmallVector<LoopT *, 4> PreOrderLoops;
+        -:  386:    LoopT *CurLoop = static_cast<LoopT *>(this);
+        -:  387:    PreOrderLoops.push_back(CurLoop);
+        -:  388:    getInnerLoopsInPreorder(*CurLoop, PreOrderLoops);
+        -:  389:    return PreOrderLoops;
+        -:  390:  }
+        -:  391:
+        -:  392:  //===--------------------------------------------------------------------===//
+        -:  393:  // APIs for updating loop information after changing the CFG
+        -:  394:  //
+        -:  395:
+        -:  396:  /// This method is used by other analyses to update loop information.
+        -:  397:  /// NewBB is set to be a new member of the current loop.
+        -:  398:  /// Because of this, it is added as a member of all parent loops, and is added
+        -:  399:  /// to the specified LoopInfo object as being in the current basic block.  It
+        -:  400:  /// is not valid to replace the loop header with this method.
+        -:  401:  void addBasicBlockToLoop(BlockT *NewBB, LoopInfoBase<BlockT, LoopT> &LI);
+        -:  402:
+        -:  403:  /// This is used when splitting loops up. It replaces the OldChild entry in
+        -:  404:  /// our children list with NewChild, and updates the parent pointer of
+        -:  405:  /// OldChild to be null and the NewChild to be this loop.
+        -:  406:  /// This updates the loop depth of the new child.
+        -:  407:  void replaceChildLoopWith(LoopT *OldChild, LoopT *NewChild);
+        -:  408:
+        -:  409:  /// Add the specified loop to be a child of this loop.
+        -:  410:  /// This updates the loop depth of the new child.
+        -:  411:  void addChildLoop(LoopT *NewChild) {
+        -:  412:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  413:    assert(!NewChild->ParentLoop && "NewChild already has a parent!");
+        -:  414:    NewChild->ParentLoop = static_cast<LoopT *>(this);
+        -:  415:    SubLoops.push_back(NewChild);
+        -:  416:  }
+        -:  417:
+        -:  418:  /// This removes the specified child from being a subloop of this loop. The
+        -:  419:  /// loop is not deleted, as it will presumably be inserted into another loop.
+        -:  420:  LoopT *removeChildLoop(iterator I) {
+        -:  421:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  422:    assert(I != SubLoops.end() && "Cannot remove end iterator!");
+        -:  423:    LoopT *Child = *I;
+        -:  424:    assert(Child->ParentLoop == this && "Child is not a child of this loop!");
+        -:  425:    SubLoops.erase(SubLoops.begin() + (I - begin()));
+        -:  426:    Child->ParentLoop = nullptr;
+        -:  427:    return Child;
+        -:  428:  }
+        -:  429:
+        -:  430:  /// This removes the specified child from being a subloop of this loop. The
+        -:  431:  /// loop is not deleted, as it will presumably be inserted into another loop.
+        -:  432:  LoopT *removeChildLoop(LoopT *Child) {
+        -:  433:    return removeChildLoop(llvm::find(*this, Child));
+        -:  434:  }
+        -:  435:
+        -:  436:  /// This adds a basic block directly to the basic block list.
+        -:  437:  /// This should only be used by transformations that create new loops.  Other
+        -:  438:  /// transformations should use addBasicBlockToLoop.
+        -:  439:  void addBlockEntry(BlockT *BB) {
+        -:  440:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  441:    Blocks.push_back(BB);
+        -:  442:    DenseBlockSet.insert(BB);
+        -:  443:  }
+        -:  444:
+        -:  445:  /// interface to reverse Blocks[from, end of loop] in this loop
+        -:  446:  void reverseBlock(unsigned from) {
+        -:  447:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  448:    std::reverse(Blocks.begin() + from, Blocks.end());
+        -:  449:  }
+        -:  450:
+        -:  451:  /// interface to do reserve() for Blocks
+        -:  452:  void reserveBlocks(unsigned size) {
+        -:  453:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  454:    Blocks.reserve(size);
+        -:  455:  }
+        -:  456:
+        -:  457:  /// This method is used to move BB (which must be part of this loop) to be the
+        -:  458:  /// loop header of the loop (the block that dominates all others).
+        -:  459:  void moveToHeader(BlockT *BB) {
+        -:  460:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  461:    if (Blocks[0] == BB)
+        -:  462:      return;
+        -:  463:    for (unsigned i = 0;; ++i) {
+        -:  464:      assert(i != Blocks.size() && "Loop does not contain BB!");
+        -:  465:      if (Blocks[i] == BB) {
+        -:  466:        Blocks[i] = Blocks[0];
+        -:  467:        Blocks[0] = BB;
+        -:  468:        return;
+        -:  469:      }
+        -:  470:    }
+        -:  471:  }
+        -:  472:
+        -:  473:  /// This removes the specified basic block from the current loop, updating the
+        -:  474:  /// Blocks as appropriate. This does not update the mapping in the LoopInfo
+        -:  475:  /// class.
+        -:  476:  void removeBlockFromLoop(BlockT *BB) {
+        -:  477:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  478:    auto I = find(Blocks, BB);
+        -:  479:    assert(I != Blocks.end() && "N is not in this list!");
+        -:  480:    Blocks.erase(I);
+        -:  481:
+        -:  482:    DenseBlockSet.erase(BB);
+        -:  483:  }
+        -:  484:
+        -:  485:  /// Verify loop structure
+        -:  486:  void verifyLoop() const;
+        -:  487:
+        -:  488:  /// Verify loop structure of this loop and all nested loops.
+        -:  489:  void verifyLoopNest(DenseSet<const LoopT *> *Loops) const;
+        -:  490:
+        -:  491:  /// Returns true if the loop is annotated parallel.
+        -:  492:  ///
+        -:  493:  /// Derived classes can override this method using static template
+        -:  494:  /// polymorphism.
+        -:  495:  bool isAnnotatedParallel() const { return false; }
+        -:  496:
+        -:  497:  /// Print loop with all the BBs inside it.
+        -:  498:  void print(raw_ostream &OS, bool Verbose = false, bool PrintNested = true,
+        -:  499:             unsigned Depth = 0) const;
+        -:  500:
+        -:  501:protected:
+        -:  502:  friend class LoopInfoBase<BlockT, LoopT>;
+        -:  503:
+        -:  504:  /// This creates an empty loop.
+        -:  505:  LoopBase() : ParentLoop(nullptr) {}
+        -:  506:
+        -:  507:  explicit LoopBase(BlockT *BB) : ParentLoop(nullptr) {
+        -:  508:    Blocks.push_back(BB);
+        -:  509:    DenseBlockSet.insert(BB);
+        -:  510:  }
+        -:  511:
+        -:  512:  // Since loop passes like SCEV are allowed to key analysis results off of
+        -:  513:  // `Loop` pointers, we cannot re-use pointers within a loop pass manager.
+        -:  514:  // This means loop passes should not be `delete` ing `Loop` objects directly
+        -:  515:  // (and risk a later `Loop` allocation re-using the address of a previous one)
+        -:  516:  // but should be using LoopInfo::markAsRemoved, which keeps around the `Loop`
+        -:  517:  // pointer till the end of the lifetime of the `LoopInfo` object.
+        -:  518:  //
+        -:  519:  // To make it easier to follow this rule, we mark the destructor as
+        -:  520:  // non-public.
+        -:  521:  ~LoopBase() {
+        -:  522:    for (auto *SubLoop : SubLoops)
+        -:  523:      SubLoop->~LoopT();
+        -:  524:
+        -:  525:#if LLVM_ENABLE_ABI_BREAKING_CHECKS
+        -:  526:    IsInvalid = true;
+        -:  527:#endif
+        -:  528:    SubLoops.clear();
+        -:  529:    Blocks.clear();
+        -:  530:    DenseBlockSet.clear();
+        -:  531:    ParentLoop = nullptr;
+        -:  532:  }
+        -:  533:};
+        -:  534:
+        -:  535:template <class BlockT, class LoopT>
+        -:  536:raw_ostream &operator<<(raw_ostream &OS, const LoopBase<BlockT, LoopT> &Loop) {
+        -:  537:  Loop.print(OS);
+        -:  538:  return OS;
+        -:  539:}
+        -:  540:
+        -:  541:// Implementation in LoopInfoImpl.h
+        -:  542:extern template class LoopBase<BasicBlock, Loop>;
+        -:  543:
+        -:  544:/// Represents a single loop in the control flow graph.  Note that not all SCCs
+        -:  545:/// in the CFG are necessarily loops.
+        -:  546:class LLVM_EXTERNAL_VISIBILITY Loop : public LoopBase<BasicBlock, Loop> {
+        -:  547:public:
+        -:  548:  /// A range representing the start and end location of a loop.
+        -:  549:  class LocRange {
+        -:  550:    DebugLoc Start;
+        -:  551:    DebugLoc End;
+        -:  552:
+        -:  553:  public:
+        -:  554:    LocRange() = default;
+        -:  555:    LocRange(DebugLoc Start) : Start(Start), End(Start) {}
+        -:  556:    LocRange(DebugLoc Start, DebugLoc End)
+        -:  557:        : Start(std::move(Start)), End(std::move(End)) {}
+        -:  558:
+        -:  559:    const DebugLoc &getStart() const { return Start; }
+        -:  560:    const DebugLoc &getEnd() const { return End; }
+        -:  561:
+        -:  562:    /// Check for null.
+        -:  563:    ///
+        -:  564:    explicit operator bool() const { return Start && End; }
+        -:  565:  };
+        -:  566:
+        -:  567:  /// Return true if the specified value is loop invariant.
+        -:  568:  bool isLoopInvariant(const Value *V) const;
+        -:  569:
+        -:  570:  /// Return true if all the operands of the specified instruction are loop
+        -:  571:  /// invariant.
+        -:  572:  bool hasLoopInvariantOperands(const Instruction *I) const;
+        -:  573:
+        -:  574:  /// If the given value is an instruction inside of the loop and it can be
+        -:  575:  /// hoisted, do so to make it trivially loop-invariant.
+        -:  576:  /// Return true if \c V is already loop-invariant, and false if \c V can't
+        -:  577:  /// be made loop-invariant. If \c V is made loop-invariant, \c Changed is
+        -:  578:  /// set to true. This function can be used as a slightly more aggressive
+        -:  579:  /// replacement for isLoopInvariant.
+        -:  580:  ///
+        -:  581:  /// If InsertPt is specified, it is the point to hoist instructions to.
+        -:  582:  /// If null, the terminator of the loop preheader is used.
+        -:  583:  ///
+        -:  584:  bool makeLoopInvariant(Value *V, bool &Changed,
+        -:  585:                         Instruction *InsertPt = nullptr,
+        -:  586:                         MemorySSAUpdater *MSSAU = nullptr) const;
+        -:  587:
+        -:  588:  /// If the given instruction is inside of the loop and it can be hoisted, do
+        -:  589:  /// so to make it trivially loop-invariant.
+        -:  590:  /// Return true if \c I is already loop-invariant, and false if \c I can't
+        -:  591:  /// be made loop-invariant. If \c I is made loop-invariant, \c Changed is
+        -:  592:  /// set to true. This function can be used as a slightly more aggressive
+        -:  593:  /// replacement for isLoopInvariant.
+        -:  594:  ///
+        -:  595:  /// If InsertPt is specified, it is the point to hoist instructions to.
+        -:  596:  /// If null, the terminator of the loop preheader is used.
+        -:  597:  ///
+        -:  598:  bool makeLoopInvariant(Instruction *I, bool &Changed,
+        -:  599:                         Instruction *InsertPt = nullptr,
+        -:  600:                         MemorySSAUpdater *MSSAU = nullptr) const;
+        -:  601:
+        -:  602:  /// Check to see if the loop has a canonical induction variable: an integer
+        -:  603:  /// recurrence that starts at 0 and increments by one each time through the
+        -:  604:  /// loop. If so, return the phi node that corresponds to it.
+        -:  605:  ///
+        -:  606:  /// The IndVarSimplify pass transforms loops to have a canonical induction
+        -:  607:  /// variable.
+        -:  608:  ///
+        -:  609:  PHINode *getCanonicalInductionVariable() const;
+        -:  610:
+        -:  611:  /// Get the latch condition instruction.
+        -:  612:  ICmpInst *getLatchCmpInst() const;
+        -:  613:
+        -:  614:  /// Obtain the unique incoming and back edge. Return false if they are
+        -:  615:  /// non-unique or the loop is dead; otherwise, return true.
+        -:  616:  bool getIncomingAndBackEdge(BasicBlock *&Incoming,
+        -:  617:                              BasicBlock *&Backedge) const;
+        -:  618:
+        -:  619:  /// Below are some utilities to get the loop guard, loop bounds and induction
+        -:  620:  /// variable, and to check if a given phinode is an auxiliary induction
+        -:  621:  /// variable, if the loop is guarded, and if the loop is canonical.
+        -:  622:  ///
+        -:  623:  /// Here is an example:
+        -:  624:  /// \code
+        -:  625:  /// for (int i = lb; i < ub; i+=step)
+        -:  626:  ///   <loop body>
+        -:  627:  /// --- pseudo LLVMIR ---
+        -:  628:  /// beforeloop:
+        -:  629:  ///   guardcmp = (lb < ub)
+        -:  630:  ///   if (guardcmp) goto preheader; else goto afterloop
+        -:  631:  /// preheader:
+        -:  632:  /// loop:
+        -:  633:  ///   i_1 = phi[{lb, preheader}, {i_2, latch}]
+        -:  634:  ///   <loop body>
+        -:  635:  ///   i_2 = i_1 + step
+        -:  636:  /// latch:
+        -:  637:  ///   cmp = (i_2 < ub)
+        -:  638:  ///   if (cmp) goto loop
+        -:  639:  /// exit:
+        -:  640:  /// afterloop:
+        -:  641:  /// \endcode
+        -:  642:  ///
+        -:  643:  /// - getBounds
+        -:  644:  ///   - getInitialIVValue      --> lb
+        -:  645:  ///   - getStepInst            --> i_2 = i_1 + step
+        -:  646:  ///   - getStepValue           --> step
+        -:  647:  ///   - getFinalIVValue        --> ub
+        -:  648:  ///   - getCanonicalPredicate  --> '<'
+        -:  649:  ///   - getDirection           --> Increasing
+        -:  650:  ///
+        -:  651:  /// - getInductionVariable            --> i_1
+        -:  652:  /// - isAuxiliaryInductionVariable(x) --> true if x == i_1
+        -:  653:  /// - getLoopGuardBranch()
+        -:  654:  ///                 --> `if (guardcmp) goto preheader; else goto afterloop`
+        -:  655:  /// - isGuarded()                     --> true
+        -:  656:  /// - isCanonical                     --> false
+        -:  657:  struct LoopBounds {
+        -:  658:    /// Return the LoopBounds object if
+        -:  659:    /// - the given \p IndVar is an induction variable
+        -:  660:    /// - the initial value of the induction variable can be found
+        -:  661:    /// - the step instruction of the induction variable can be found
+        -:  662:    /// - the final value of the induction variable can be found
+        -:  663:    ///
+        -:  664:    /// Else None.
+        -:  665:    static Optional<Loop::LoopBounds> getBounds(const Loop &L, PHINode &IndVar,
+        -:  666:                                                ScalarEvolution &SE);
+        -:  667:
+        -:  668:    /// Get the initial value of the loop induction variable.
+        -:  669:    Value &getInitialIVValue() const { return InitialIVValue; }
+        -:  670:
+        -:  671:    /// Get the instruction that updates the loop induction variable.
+        -:  672:    Instruction &getStepInst() const { return StepInst; }
+        -:  673:
+        -:  674:    /// Get the step that the loop induction variable gets updated by in each
+        -:  675:    /// loop iteration. Return nullptr if not found.
+        -:  676:    Value *getStepValue() const { return StepValue; }
+        -:  677:
+        -:  678:    /// Get the final value of the loop induction variable.
+        -:  679:    Value &getFinalIVValue() const { return FinalIVValue; }
+        -:  680:
+        -:  681:    /// Return the canonical predicate for the latch compare instruction, if
+        -:  682:    /// able to be calcuated. Else BAD_ICMP_PREDICATE.
+        -:  683:    ///
+        -:  684:    /// A predicate is considered as canonical if requirements below are all
+        -:  685:    /// satisfied:
+        -:  686:    /// 1. The first successor of the latch branch is the loop header
+        -:  687:    ///    If not, inverse the predicate.
+        -:  688:    /// 2. One of the operands of the latch comparison is StepInst
+        -:  689:    ///    If not, and
+        -:  690:    ///    - if the current calcuated predicate is not ne or eq, flip the
+        -:  691:    ///      predicate.
+        -:  692:    ///    - else if the loop is increasing, return slt
+        -:  693:    ///      (notice that it is safe to change from ne or eq to sign compare)
+        -:  694:    ///    - else if the loop is decreasing, return sgt
+        -:  695:    ///      (notice that it is safe to change from ne or eq to sign compare)
+        -:  696:    ///
+        -:  697:    /// Here is an example when both (1) and (2) are not satisfied:
+        -:  698:    /// \code
+        -:  699:    /// loop.header:
+        -:  700:    ///  %iv = phi [%initialiv, %loop.preheader], [%inc, %loop.header]
+        -:  701:    ///  %inc = add %iv, %step
+        -:  702:    ///  %cmp = slt %iv, %finaliv
+        -:  703:    ///  br %cmp, %loop.exit, %loop.header
+        -:  704:    /// loop.exit:
+        -:  705:    /// \endcode
+        -:  706:    /// - The second successor of the latch branch is the loop header instead
+        -:  707:    ///   of the first successor (slt -> sge)
+        -:  708:    /// - The first operand of the latch comparison (%cmp) is the IndVar (%iv)
+        -:  709:    ///   instead of the StepInst (%inc) (sge -> sgt)
+        -:  710:    ///
+        -:  711:    /// The predicate would be sgt if both (1) and (2) are satisfied.
+        -:  712:    /// getCanonicalPredicate() returns sgt for this example.
+        -:  713:    /// Note: The IR is not changed.
+        -:  714:    ICmpInst::Predicate getCanonicalPredicate() const;
+        -:  715:
+        -:  716:    /// An enum for the direction of the loop
+        -:  717:    /// - for (int i = 0; i < ub; ++i)  --> Increasing
+        -:  718:    /// - for (int i = ub; i > 0; --i)  --> Descresing
+        -:  719:    /// - for (int i = x; i != y; i+=z) --> Unknown
+        -:  720:    enum class Direction { Increasing, Decreasing, Unknown };
+        -:  721:
+        -:  722:    /// Get the direction of the loop.
+        -:  723:    Direction getDirection() const;
+        -:  724:
+        -:  725:  private:
+        -:  726:    LoopBounds(const Loop &Loop, Value &I, Instruction &SI, Value *SV, Value &F,
+        -:  727:               ScalarEvolution &SE)
+        -:  728:        : L(Loop), InitialIVValue(I), StepInst(SI), StepValue(SV),
+        -:  729:          FinalIVValue(F), SE(SE) {}
+        -:  730:
+        -:  731:    const Loop &L;
+        -:  732:
+        -:  733:    // The initial value of the loop induction variable
+        -:  734:    Value &InitialIVValue;
+        -:  735:
+        -:  736:    // The instruction that updates the loop induction variable
+        -:  737:    Instruction &StepInst;
+        -:  738:
+        -:  739:    // The value that the loop induction variable gets updated by in each loop
+        -:  740:    // iteration
+        -:  741:    Value *StepValue;
+        -:  742:
+        -:  743:    // The final value of the loop induction variable
+        -:  744:    Value &FinalIVValue;
+        -:  745:
+        -:  746:    ScalarEvolution &SE;
+        -:  747:  };
+        -:  748:
+        -:  749:  /// Return the struct LoopBounds collected if all struct members are found,
+        -:  750:  /// else None.
+        -:  751:  Optional<LoopBounds> getBounds(ScalarEvolution &SE) const;
+        -:  752:
+        -:  753:  /// Return the loop induction variable if found, else return nullptr.
+        -:  754:  /// An instruction is considered as the loop induction variable if
+        -:  755:  /// - it is an induction variable of the loop; and
+        -:  756:  /// - it is used to determine the condition of the branch in the loop latch
+        -:  757:  ///
+        -:  758:  /// Note: the induction variable doesn't need to be canonical, i.e. starts at
+        -:  759:  /// zero and increments by one each time through the loop (but it can be).
+        -:  760:  PHINode *getInductionVariable(ScalarEvolution &SE) const;
+        -:  761:
+        -:  762:  /// Get the loop induction descriptor for the loop induction variable. Return
+        -:  763:  /// true if the loop induction variable is found.
+        -:  764:  bool getInductionDescriptor(ScalarEvolution &SE,
+        -:  765:                              InductionDescriptor &IndDesc) const;
+        -:  766:
+        -:  767:  /// Return true if the given PHINode \p AuxIndVar is
+        -:  768:  /// - in the loop header
+        -:  769:  /// - not used outside of the loop
+        -:  770:  /// - incremented by a loop invariant step for each loop iteration
+        -:  771:  /// - step instruction opcode should be add or sub
+        -:  772:  /// Note: auxiliary induction variable is not required to be used in the
+        -:  773:  ///       conditional branch in the loop latch. (but it can be)
+        -:  774:  bool isAuxiliaryInductionVariable(PHINode &AuxIndVar,
+        -:  775:                                    ScalarEvolution &SE) const;
+        -:  776:
+        -:  777:  /// Return the loop guard branch, if it exists.
+        -:  778:  ///
+        -:  779:  /// This currently only works on simplified loop, as it requires a preheader
+        -:  780:  /// and a latch to identify the guard. It will work on loops of the form:
+        -:  781:  /// \code
+        -:  782:  /// GuardBB:
+        -:  783:  ///   br cond1, Preheader, ExitSucc <== GuardBranch
+        -:  784:  /// Preheader:
+        -:  785:  ///   br Header
+        -:  786:  /// Header:
+        -:  787:  ///  ...
+        -:  788:  ///   br Latch
+        -:  789:  /// Latch:
+        -:  790:  ///   br cond2, Header, ExitBlock
+        -:  791:  /// ExitBlock:
+        -:  792:  ///   br ExitSucc
+        -:  793:  /// ExitSucc:
+        -:  794:  /// \endcode
+        -:  795:  BranchInst *getLoopGuardBranch() const;
+        -:  796:
+        -:  797:  /// Return true iff the loop is
+        -:  798:  /// - in simplify rotated form, and
+        -:  799:  /// - guarded by a loop guard branch.
+        -:  800:  bool isGuarded() const { return (getLoopGuardBranch() != nullptr); }
+        -:  801:
+        -:  802:  /// Return true if the loop is in rotated form.
+        -:  803:  ///
+        -:  804:  /// This does not check if the loop was rotated by loop rotation, instead it
+        -:  805:  /// only checks if the loop is in rotated form (has a valid latch that exists
+        -:  806:  /// the loop).
+        -:  807:  bool isRotatedForm() const {
+        -:  808:    assert(!isInvalid() && "Loop not in a valid state!");
+        -:  809:    BasicBlock *Latch = getLoopLatch();
+        -:  810:    return Latch && isLoopExiting(Latch);
+        -:  811:  }
+        -:  812:
+        -:  813:  /// Return true if the loop induction variable starts at zero and increments
+        -:  814:  /// by one each time through the loop.
+        -:  815:  bool isCanonical(ScalarEvolution &SE) const;
+        -:  816:
+        -:  817:  /// Return true if the Loop is in LCSSA form. If \p IgnoreTokens is set to
+        -:  818:  /// true, token values defined inside loop are allowed to violate LCSSA form.
+        -:  819:  bool isLCSSAForm(const DominatorTree &DT, bool IgnoreTokens = true) const;
+        -:  820:
+        -:  821:  /// Return true if this Loop and all inner subloops are in LCSSA form. If \p
+        -:  822:  /// IgnoreTokens is set to true, token values defined inside loop are allowed
+        -:  823:  /// to violate LCSSA form.
+        -:  824:  bool isRecursivelyLCSSAForm(const DominatorTree &DT, const LoopInfo &LI,
+        -:  825:                              bool IgnoreTokens = true) const;
+        -:  826:
+        -:  827:  /// Return true if the Loop is in the form that the LoopSimplify form
+        -:  828:  /// transforms loops to, which is sometimes called normal form.
+        -:  829:  bool isLoopSimplifyForm() const;
+        -:  830:
+        -:  831:  /// Return true if the loop body is safe to clone in practice.
+        -:  832:  bool isSafeToClone() const;
+        -:  833:
+        -:  834:  /// Returns true if the loop is annotated parallel.
+        -:  835:  ///
+        -:  836:  /// A parallel loop can be assumed to not contain any dependencies between
+        -:  837:  /// iterations by the compiler. That is, any loop-carried dependency checking
+        -:  838:  /// can be skipped completely when parallelizing the loop on the target
+        -:  839:  /// machine. Thus, if the parallel loop information originates from the
+        -:  840:  /// programmer, e.g. via the OpenMP parallel for pragma, it is the
+        -:  841:  /// programmer's responsibility to ensure there are no loop-carried
+        -:  842:  /// dependencies. The final execution order of the instructions across
+        -:  843:  /// iterations is not guaranteed, thus, the end result might or might not
+        -:  844:  /// implement actual concurrent execution of instructions across multiple
+        -:  845:  /// iterations.
+        -:  846:  bool isAnnotatedParallel() const;
+        -:  847:
+        -:  848:  /// Return the llvm.loop loop id metadata node for this loop if it is present.
+        -:  849:  ///
+        -:  850:  /// If this loop contains the same llvm.loop metadata on each branch to the
+        -:  851:  /// header then the node is returned. If any latch instruction does not
+        -:  852:  /// contain llvm.loop or if multiple latches contain different nodes then
+        -:  853:  /// 0 is returned.
+        -:  854:  MDNode *getLoopID() const;
+        -:  855:  /// Set the llvm.loop loop id metadata for this loop.
+        -:  856:  ///
+        -:  857:  /// The LoopID metadata node will be added to each terminator instruction in
+        -:  858:  /// the loop that branches to the loop header.
+        -:  859:  ///
+        -:  860:  /// The LoopID metadata node should have one or more operands and the first
+        -:  861:  /// operand should be the node itself.
+        -:  862:  void setLoopID(MDNode *LoopID) const;
+        -:  863:
+        -:  864:  /// Add llvm.loop.unroll.disable to this loop's loop id metadata.
+        -:  865:  ///
+        -:  866:  /// Remove existing unroll metadata and add unroll disable metadata to
+        -:  867:  /// indicate the loop has already been unrolled.  This prevents a loop
+        -:  868:  /// from being unrolled more than is directed by a pragma if the loop
+        -:  869:  /// unrolling pass is run more than once (which it generally is).
+        -:  870:  void setLoopAlreadyUnrolled();
+        -:  871:
+        -:  872:  /// Add llvm.loop.mustprogress to this loop's loop id metadata.
+        -:  873:  void setLoopMustProgress();
+        -:  874:
+        -:  875:  void dump() const;
+        -:  876:  void dumpVerbose() const;
+        -:  877:
+        -:  878:  /// Return the debug location of the start of this loop.
+        -:  879:  /// This looks for a BB terminating instruction with a known debug
+        -:  880:  /// location by looking at the preheader and header blocks. If it
+        -:  881:  /// cannot find a terminating instruction with location information,
+        -:  882:  /// it returns an unknown location.
+        -:  883:  DebugLoc getStartLoc() const;
+        -:  884:
+        -:  885:  /// Return the source code span of the loop.
+        -:  886:  LocRange getLocRange() const;
+        -:  887:
+function _ZNK4llvm4Loop7getNameEv called 0 returned 0% blocks executed 0%
+    #####:  888:  StringRef getName() const {
+    #####:  889:    if (BasicBlock *Header = getHeader())
+    %%%%%:  889-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  890:      if (Header->hasName())
+    %%%%%:  890-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  891:        return Header->getName();
+    %%%%%:  891-block  0
+Aufruf  0 niemals ausgeführt
+    #####:  892:    return "<unnamed loop>";
+    %%%%%:  892-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  892-block  1
+        -:  893:  }
+        -:  894:
+        -:  895:private:
+        -:  896:  Loop() = default;
+        -:  897:
+        -:  898:  friend class LoopInfoBase<BasicBlock, Loop>;
+        -:  899:  friend class LoopBase<BasicBlock, Loop>;
+        -:  900:  explicit Loop(BasicBlock *BB) : LoopBase<BasicBlock, Loop>(BB) {}
+        -:  901:  ~Loop() = default;
+        -:  902:};
+        -:  903:
+        -:  904://===----------------------------------------------------------------------===//
+        -:  905:/// This class builds and contains all of the top-level loop
+        -:  906:/// structures in the specified function.
+        -:  907:///
+        -:  908:
+        -:  909:template <class BlockT, class LoopT> class LoopInfoBase {
+        -:  910:  // BBMap - Mapping of basic blocks to the inner most loop they occur in
+        -:  911:  DenseMap<const BlockT *, LoopT *> BBMap;
+        -:  912:  std::vector<LoopT *> TopLevelLoops;
+        -:  913:  BumpPtrAllocator LoopAllocator;
+        -:  914:
+        -:  915:  friend class LoopBase<BlockT, LoopT>;
+        -:  916:  friend class LoopInfo;
+        -:  917:
+        -:  918:  void operator=(const LoopInfoBase &) = delete;
+        -:  919:  LoopInfoBase(const LoopInfoBase &) = delete;
+        -:  920:
+        -:  921:public:
+        -:  922:  LoopInfoBase() = default;
+        -:  923:  ~LoopInfoBase() { releaseMemory(); }
+        -:  924:
+        -:  925:  LoopInfoBase(LoopInfoBase &&Arg)
+        -:  926:      : BBMap(std::move(Arg.BBMap)),
+        -:  927:        TopLevelLoops(std::move(Arg.TopLevelLoops)),
+        -:  928:        LoopAllocator(std::move(Arg.LoopAllocator)) {
+        -:  929:    // We have to clear the arguments top level loops as we've taken ownership.
+        -:  930:    Arg.TopLevelLoops.clear();
+        -:  931:  }
+        -:  932:  LoopInfoBase &operator=(LoopInfoBase &&RHS) {
+        -:  933:    BBMap = std::move(RHS.BBMap);
+        -:  934:
+        -:  935:    for (auto *L : TopLevelLoops)
+        -:  936:      L->~LoopT();
+        -:  937:
+        -:  938:    TopLevelLoops = std::move(RHS.TopLevelLoops);
+        -:  939:    LoopAllocator = std::move(RHS.LoopAllocator);
+        -:  940:    RHS.TopLevelLoops.clear();
+        -:  941:    return *this;
+        -:  942:  }
+        -:  943:
+        -:  944:  void releaseMemory() {
+        -:  945:    BBMap.clear();
+        -:  946:
+        -:  947:    for (auto *L : TopLevelLoops)
+        -:  948:      L->~LoopT();
+        -:  949:    TopLevelLoops.clear();
+        -:  950:    LoopAllocator.Reset();
+        -:  951:  }
+        -:  952:
+        -:  953:  template <typename... ArgsTy> LoopT *AllocateLoop(ArgsTy &&... Args) {
+        -:  954:    LoopT *Storage = LoopAllocator.Allocate<LoopT>();
+        -:  955:    return new (Storage) LoopT(std::forward<ArgsTy>(Args)...);
+        -:  956:  }
+        -:  957:
+        -:  958:  /// iterator/begin/end - The interface to the top-level loops in the current
+        -:  959:  /// function.
+        -:  960:  ///
+        -:  961:  typedef typename std::vector<LoopT *>::const_iterator iterator;
+        -:  962:  typedef
+        -:  963:      typename std::vector<LoopT *>::const_reverse_iterator reverse_iterator;
+        -:  964:  iterator begin() const { return TopLevelLoops.begin(); }
+        -:  965:  iterator end() const { return TopLevelLoops.end(); }
+        -:  966:  reverse_iterator rbegin() const { return TopLevelLoops.rbegin(); }
+        -:  967:  reverse_iterator rend() const { return TopLevelLoops.rend(); }
+        -:  968:  bool empty() const { return TopLevelLoops.empty(); }
+        -:  969:
+        -:  970:  /// Return all of the loops in the function in preorder across the loop
+        -:  971:  /// nests, with siblings in forward program order.
+        -:  972:  ///
+        -:  973:  /// Note that because loops form a forest of trees, preorder is equivalent to
+        -:  974:  /// reverse postorder.
+        -:  975:  SmallVector<LoopT *, 4> getLoopsInPreorder() const;
+        -:  976:
+        -:  977:  /// Return all of the loops in the function in preorder across the loop
+        -:  978:  /// nests, with siblings in *reverse* program order.
+        -:  979:  ///
+        -:  980:  /// Note that because loops form a forest of trees, preorder is equivalent to
+        -:  981:  /// reverse postorder.
+        -:  982:  ///
+        -:  983:  /// Also note that this is *not* a reverse preorder. Only the siblings are in
+        -:  984:  /// reverse program order.
+        -:  985:  SmallVector<LoopT *, 4> getLoopsInReverseSiblingPreorder() const;
+        -:  986:
+        -:  987:  /// Return the inner most loop that BB lives in. If a basic block is in no
+        -:  988:  /// loop (for example the entry node), null is returned.
+        -:  989:  LoopT *getLoopFor(const BlockT *BB) const { return BBMap.lookup(BB); }
+        -:  990:
+        -:  991:  /// Same as getLoopFor.
+        -:  992:  const LoopT *operator[](const BlockT *BB) const { return getLoopFor(BB); }
+        -:  993:
+        -:  994:  /// Return the loop nesting level of the specified block. A depth of 0 means
+        -:  995:  /// the block is not inside any loop.
+        -:  996:  unsigned getLoopDepth(const BlockT *BB) const {
+        -:  997:    const LoopT *L = getLoopFor(BB);
+        -:  998:    return L ? L->getLoopDepth() : 0;
+        -:  999:  }
+        -: 1000:
+        -: 1001:  // True if the block is a loop header node
+        -: 1002:  bool isLoopHeader(const BlockT *BB) const {
+        -: 1003:    const LoopT *L = getLoopFor(BB);
+        -: 1004:    return L && L->getHeader() == BB;
+        -: 1005:  }
+        -: 1006:
+        -: 1007:  /// Return the top-level loops.
+        -: 1008:  const std::vector<LoopT *> &getTopLevelLoops() const { return TopLevelLoops; }
+        -: 1009:
+        -: 1010:  /// Return the top-level loops.
+        -: 1011:  std::vector<LoopT *> &getTopLevelLoopsVector() { return TopLevelLoops; }
+        -: 1012:
+        -: 1013:  /// This removes the specified top-level loop from this loop info object.
+        -: 1014:  /// The loop is not deleted, as it will presumably be inserted into
+        -: 1015:  /// another loop.
+        -: 1016:  LoopT *removeLoop(iterator I) {
+        -: 1017:    assert(I != end() && "Cannot remove end iterator!");
+        -: 1018:    LoopT *L = *I;
+        -: 1019:    assert(L->isOutermost() && "Not a top-level loop!");
+        -: 1020:    TopLevelLoops.erase(TopLevelLoops.begin() + (I - begin()));
+        -: 1021:    return L;
+        -: 1022:  }
+        -: 1023:
+        -: 1024:  /// Change the top-level loop that contains BB to the specified loop.
+        -: 1025:  /// This should be used by transformations that restructure the loop hierarchy
+        -: 1026:  /// tree.
+        -: 1027:  void changeLoopFor(BlockT *BB, LoopT *L) {
+        -: 1028:    if (!L) {
+        -: 1029:      BBMap.erase(BB);
+        -: 1030:      return;
+        -: 1031:    }
+        -: 1032:    BBMap[BB] = L;
+        -: 1033:  }
+        -: 1034:
+        -: 1035:  /// Replace the specified loop in the top-level loops list with the indicated
+        -: 1036:  /// loop.
+        -: 1037:  void changeTopLevelLoop(LoopT *OldLoop, LoopT *NewLoop) {
+        -: 1038:    auto I = find(TopLevelLoops, OldLoop);
+        -: 1039:    assert(I != TopLevelLoops.end() && "Old loop not at top level!");
+        -: 1040:    *I = NewLoop;
+        -: 1041:    assert(!NewLoop->ParentLoop && !OldLoop->ParentLoop &&
+        -: 1042:           "Loops already embedded into a subloop!");
+        -: 1043:  }
+        -: 1044:
+        -: 1045:  /// This adds the specified loop to the collection of top-level loops.
+        -: 1046:  void addTopLevelLoop(LoopT *New) {
+        -: 1047:    assert(New->isOutermost() && "Loop already in subloop!");
+        -: 1048:    TopLevelLoops.push_back(New);
+        -: 1049:  }
+        -: 1050:
+        -: 1051:  /// This method completely removes BB from all data structures,
+        -: 1052:  /// including all of the Loop objects it is nested in and our mapping from
+        -: 1053:  /// BasicBlocks to loops.
+        -: 1054:  void removeBlock(BlockT *BB) {
+        -: 1055:    auto I = BBMap.find(BB);
+        -: 1056:    if (I != BBMap.end()) {
+        -: 1057:      for (LoopT *L = I->second; L; L = L->getParentLoop())
+        -: 1058:        L->removeBlockFromLoop(BB);
+        -: 1059:
+        -: 1060:      BBMap.erase(I);
+        -: 1061:    }
+        -: 1062:  }
+        -: 1063:
+        -: 1064:  // Internals
+        -: 1065:
+        -: 1066:  static bool isNotAlreadyContainedIn(const LoopT *SubLoop,
+        -: 1067:                                      const LoopT *ParentLoop) {
+        -: 1068:    if (!SubLoop)
+        -: 1069:      return true;
+        -: 1070:    if (SubLoop == ParentLoop)
+        -: 1071:      return false;
+        -: 1072:    return isNotAlreadyContainedIn(SubLoop->getParentLoop(), ParentLoop);
+        -: 1073:  }
+        -: 1074:
+        -: 1075:  /// Create the loop forest using a stable algorithm.
+        -: 1076:  void analyze(const DominatorTreeBase<BlockT, false> &DomTree);
+        -: 1077:
+        -: 1078:  // Debugging
+        -: 1079:  void print(raw_ostream &OS) const;
+        -: 1080:
+        -: 1081:  void verify(const DominatorTreeBase<BlockT, false> &DomTree) const;
+        -: 1082:
+        -: 1083:  /// Destroy a loop that has been removed from the `LoopInfo` nest.
+        -: 1084:  ///
+        -: 1085:  /// This runs the destructor of the loop object making it invalid to
+        -: 1086:  /// reference afterward. The memory is retained so that the *pointer* to the
+        -: 1087:  /// loop remains valid.
+        -: 1088:  ///
+        -: 1089:  /// The caller is responsible for removing this loop from the loop nest and
+        -: 1090:  /// otherwise disconnecting it from the broader `LoopInfo` data structures.
+        -: 1091:  /// Callers that don't naturally handle this themselves should probably call
+        -: 1092:  /// `erase' instead.
+        -: 1093:  void destroy(LoopT *L) {
+        -: 1094:    L->~LoopT();
+        -: 1095:
+        -: 1096:    // Since LoopAllocator is a BumpPtrAllocator, this Deallocate only poisons
+        -: 1097:    // \c L, but the pointer remains valid for non-dereferencing uses.
+        -: 1098:    LoopAllocator.Deallocate(L);
+        -: 1099:  }
+        -: 1100:};
+        -: 1101:
+        -: 1102:// Implementation in LoopInfoImpl.h
+        -: 1103:extern template class LoopInfoBase<BasicBlock, Loop>;
+        -: 1104:
+        -: 1105:class LoopInfo : public LoopInfoBase<BasicBlock, Loop> {
+        -: 1106:  typedef LoopInfoBase<BasicBlock, Loop> BaseT;
+        -: 1107:
+        -: 1108:  friend class LoopBase<BasicBlock, Loop>;
+        -: 1109:
+        -: 1110:  void operator=(const LoopInfo &) = delete;
+        -: 1111:  LoopInfo(const LoopInfo &) = delete;
+        -: 1112:
+        -: 1113:public:
+        -: 1114:  LoopInfo() = default;
+        -: 1115:  explicit LoopInfo(const DominatorTreeBase<BasicBlock, false> &DomTree);
+        -: 1116:
+        -: 1117:  LoopInfo(LoopInfo &&Arg) : BaseT(std::move(static_cast<BaseT &>(Arg))) {}
+        -: 1118:  LoopInfo &operator=(LoopInfo &&RHS) {
+        -: 1119:    BaseT::operator=(std::move(static_cast<BaseT &>(RHS)));
+        -: 1120:    return *this;
+        -: 1121:  }
+        -: 1122:
+        -: 1123:  /// Handle invalidation explicitly.
+        -: 1124:  bool invalidate(Function &F, const PreservedAnalyses &PA,
+        -: 1125:                  FunctionAnalysisManager::Invalidator &);
+        -: 1126:
+        -: 1127:  // Most of the public interface is provided via LoopInfoBase.
+        -: 1128:
+        -: 1129:  /// Update LoopInfo after removing the last backedge from a loop. This updates
+        -: 1130:  /// the loop forest and parent loops for each block so that \c L is no longer
+        -: 1131:  /// referenced, but does not actually delete \c L immediately. The pointer
+        -: 1132:  /// will remain valid until this LoopInfo's memory is released.
+        -: 1133:  void erase(Loop *L);
+        -: 1134:
+        -: 1135:  /// Returns true if replacing From with To everywhere is guaranteed to
+        -: 1136:  /// preserve LCSSA form.
+        -: 1137:  bool replacementPreservesLCSSAForm(Instruction *From, Value *To) {
+        -: 1138:    // Preserving LCSSA form is only problematic if the replacing value is an
+        -: 1139:    // instruction.
+        -: 1140:    Instruction *I = dyn_cast<Instruction>(To);
+        -: 1141:    if (!I)
+        -: 1142:      return true;
+        -: 1143:    // If both instructions are defined in the same basic block then replacement
+        -: 1144:    // cannot break LCSSA form.
+        -: 1145:    if (I->getParent() == From->getParent())
+        -: 1146:      return true;
+        -: 1147:    // If the instruction is not defined in a loop then it can safely replace
+        -: 1148:    // anything.
+        -: 1149:    Loop *ToLoop = getLoopFor(I->getParent());
+        -: 1150:    if (!ToLoop)
+        -: 1151:      return true;
+        -: 1152:    // If the replacing instruction is defined in the same loop as the original
+        -: 1153:    // instruction, or in a loop that contains it as an inner loop, then using
+        -: 1154:    // it as a replacement will not break LCSSA form.
+        -: 1155:    return ToLoop->contains(getLoopFor(From->getParent()));
+        -: 1156:  }
+        -: 1157:
+        -: 1158:  /// Checks if moving a specific instruction can break LCSSA in any loop.
+        -: 1159:  ///
+        -: 1160:  /// Return true if moving \p Inst to before \p NewLoc will break LCSSA,
+        -: 1161:  /// assuming that the function containing \p Inst and \p NewLoc is currently
+        -: 1162:  /// in LCSSA form.
+        -: 1163:  bool movementPreservesLCSSAForm(Instruction *Inst, Instruction *NewLoc) {
+        -: 1164:    assert(Inst->getFunction() == NewLoc->getFunction() &&
+        -: 1165:           "Can't reason about IPO!");
+        -: 1166:
+        -: 1167:    auto *OldBB = Inst->getParent();
+        -: 1168:    auto *NewBB = NewLoc->getParent();
+        -: 1169:
+        -: 1170:    // Movement within the same loop does not break LCSSA (the equality check is
+        -: 1171:    // to avoid doing a hashtable lookup in case of intra-block movement).
+        -: 1172:    if (OldBB == NewBB)
+        -: 1173:      return true;
+        -: 1174:
+        -: 1175:    auto *OldLoop = getLoopFor(OldBB);
+        -: 1176:    auto *NewLoop = getLoopFor(NewBB);
+        -: 1177:
+        -: 1178:    if (OldLoop == NewLoop)
+        -: 1179:      return true;
+        -: 1180:
+        -: 1181:    // Check if Outer contains Inner; with the null loop counting as the
+        -: 1182:    // "outermost" loop.
+        -: 1183:    auto Contains = [](const Loop *Outer, const Loop *Inner) {
+        -: 1184:      return !Outer || Outer->contains(Inner);
+        -: 1185:    };
+        -: 1186:
+        -: 1187:    // To check that the movement of Inst to before NewLoc does not break LCSSA,
+        -: 1188:    // we need to check two sets of uses for possible LCSSA violations at
+        -: 1189:    // NewLoc: the users of NewInst, and the operands of NewInst.
+        -: 1190:
+        -: 1191:    // If we know we're hoisting Inst out of an inner loop to an outer loop,
+        -: 1192:    // then the uses *of* Inst don't need to be checked.
+        -: 1193:
+        -: 1194:    if (!Contains(NewLoop, OldLoop)) {
+        -: 1195:      for (Use &U : Inst->uses()) {
+        -: 1196:        auto *UI = cast<Instruction>(U.getUser());
+        -: 1197:        auto *UBB = isa<PHINode>(UI) ? cast<PHINode>(UI)->getIncomingBlock(U)
+        -: 1198:                                     : UI->getParent();
+        -: 1199:        if (UBB != NewBB && getLoopFor(UBB) != NewLoop)
+        -: 1200:          return false;
+        -: 1201:      }
+        -: 1202:    }
+        -: 1203:
+        -: 1204:    // If we know we're sinking Inst from an outer loop into an inner loop, then
+        -: 1205:    // the *operands* of Inst don't need to be checked.
+        -: 1206:
+        -: 1207:    if (!Contains(OldLoop, NewLoop)) {
+        -: 1208:      // See below on why we can't handle phi nodes here.
+        -: 1209:      if (isa<PHINode>(Inst))
+        -: 1210:        return false;
+        -: 1211:
+        -: 1212:      for (Use &U : Inst->operands()) {
+        -: 1213:        auto *DefI = dyn_cast<Instruction>(U.get());
+        -: 1214:        if (!DefI)
+        -: 1215:          return false;
+        -: 1216:
+        -: 1217:        // This would need adjustment if we allow Inst to be a phi node -- the
+        -: 1218:        // new use block won't simply be NewBB.
+        -: 1219:
+        -: 1220:        auto *DefBlock = DefI->getParent();
+        -: 1221:        if (DefBlock != NewBB && getLoopFor(DefBlock) != NewLoop)
+        -: 1222:          return false;
+        -: 1223:      }
+        -: 1224:    }
+        -: 1225:
+        -: 1226:    return true;
+        -: 1227:  }
+        -: 1228:
+        -: 1229:  // Return true if a new use of V added in ExitBB would require an LCSSA PHI
+        -: 1230:  // to be inserted at the begining of the block.  Note that V is assumed to
+        -: 1231:  // dominate ExitBB, and ExitBB must be the exit block of some loop.  The
+        -: 1232:  // IR is assumed to be in LCSSA form before the planned insertion.
+        -: 1233:  bool wouldBeOutOfLoopUseRequiringLCSSA(const Value *V,
+        -: 1234:                                         const BasicBlock *ExitBB) const;
+        -: 1235:
+        -: 1236:};
+        -: 1237:
+        -: 1238:/// Enable verification of loop info.
+        -: 1239:///
+        -: 1240:/// The flag enables checks which are expensive and are disabled by default
+        -: 1241:/// unless the `EXPENSIVE_CHECKS` macro is defined.  The `-verify-loop-info`
+        -: 1242:/// flag allows the checks to be enabled selectively without re-compilation.
+        -: 1243:extern bool VerifyLoopInfo;
+        -: 1244:
+        -: 1245:// Allow clients to walk the list of nested loops...
+        -: 1246:template <> struct GraphTraits<const Loop *> {
+        -: 1247:  typedef const Loop *NodeRef;
+        -: 1248:  typedef LoopInfo::iterator ChildIteratorType;
+        -: 1249:
+        -: 1250:  static NodeRef getEntryNode(const Loop *L) { return L; }
+        -: 1251:  static ChildIteratorType child_begin(NodeRef N) { return N->begin(); }
+        -: 1252:  static ChildIteratorType child_end(NodeRef N) { return N->end(); }
+        -: 1253:};
+        -: 1254:
+        -: 1255:template <> struct GraphTraits<Loop *> {
+        -: 1256:  typedef Loop *NodeRef;
+        -: 1257:  typedef LoopInfo::iterator ChildIteratorType;
+        -: 1258:
+        -: 1259:  static NodeRef getEntryNode(Loop *L) { return L; }
+        -: 1260:  static ChildIteratorType child_begin(NodeRef N) { return N->begin(); }
+        -: 1261:  static ChildIteratorType child_end(NodeRef N) { return N->end(); }
+        -: 1262:};
+        -: 1263:
+        -: 1264:/// Analysis pass that exposes the \c LoopInfo for a function.
+        -: 1265:class LoopAnalysis : public AnalysisInfoMixin<LoopAnalysis> {
+        -: 1266:  friend AnalysisInfoMixin<LoopAnalysis>;
+        -: 1267:  static AnalysisKey Key;
+        -: 1268:
+        -: 1269:public:
+        -: 1270:  typedef LoopInfo Result;
+        -: 1271:
+        -: 1272:  LoopInfo run(Function &F, FunctionAnalysisManager &AM);
+        -: 1273:};
+        -: 1274:
+        -: 1275:/// Printer pass for the \c LoopAnalysis results.
+        -: 1276:class LoopPrinterPass : public PassInfoMixin<LoopPrinterPass> {
+        -: 1277:  raw_ostream &OS;
+        -: 1278:
+        -: 1279:public:
+        -: 1280:  explicit LoopPrinterPass(raw_ostream &OS) : OS(OS) {}
+        -: 1281:  PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
+        -: 1282:};
+        -: 1283:
+        -: 1284:/// Verifier pass for the \c LoopAnalysis results.
+        -: 1285:struct LoopVerifierPass : public PassInfoMixin<LoopVerifierPass> {
+        -: 1286:  PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
+        -: 1287:};
+        -: 1288:
+        -: 1289:/// The legacy pass manager's analysis pass to compute loop information.
+        -: 1290:class LoopInfoWrapperPass : public FunctionPass {
+        -: 1291:  LoopInfo LI;
+        -: 1292:
+        -: 1293:public:
+        -: 1294:  static char ID; // Pass identification, replacement for typeid
+        -: 1295:
+        -: 1296:  LoopInfoWrapperPass();
+        -: 1297:
+        -: 1298:  LoopInfo &getLoopInfo() { return LI; }
+        -: 1299:  const LoopInfo &getLoopInfo() const { return LI; }
+        -: 1300:
+        -: 1301:  /// Calculate the natural loop information for a given function.
+        -: 1302:  bool runOnFunction(Function &F) override;
+        -: 1303:
+        -: 1304:  void verifyAnalysis() const override;
+        -: 1305:
+        -: 1306:  void releaseMemory() override { LI.releaseMemory(); }
+        -: 1307:
+        -: 1308:  void print(raw_ostream &O, const Module *M = nullptr) const override;
+        -: 1309:
+        -: 1310:  void getAnalysisUsage(AnalysisUsage &AU) const override;
+        -: 1311:};
+        -: 1312:
+        -: 1313:/// Function to print a loop's contents as LLVM's text IR assembly.
+        -: 1314:void printLoop(Loop &L, raw_ostream &OS, const std::string &Banner = "");
+        -: 1315:
+        -: 1316:/// Find and return the loop attribute node for the attribute @p Name in
+        -: 1317:/// @p LoopID. Return nullptr if there is no such attribute.
+        -: 1318:MDNode *findOptionMDForLoopID(MDNode *LoopID, StringRef Name);
+        -: 1319:
+        -: 1320:/// Find string metadata for a loop.
+        -: 1321:///
+        -: 1322:/// Returns the MDNode where the first operand is the metadata's name. The
+        -: 1323:/// following operands are the metadata's values. If no metadata with @p Name is
+        -: 1324:/// found, return nullptr.
+        -: 1325:MDNode *findOptionMDForLoop(const Loop *TheLoop, StringRef Name);
+        -: 1326:
+        -: 1327:Optional<bool> getOptionalBoolLoopAttribute(const Loop *TheLoop,
+        -: 1328:                                            StringRef Name);
+        -: 1329:  
+        -: 1330:/// Returns true if Name is applied to TheLoop and enabled.
+        -: 1331:bool getBooleanLoopAttribute(const Loop *TheLoop, StringRef Name);
+        -: 1332:
+        -: 1333:/// Find named metadata for a loop with an integer value.
+        -: 1334:llvm::Optional<int>
+        -: 1335:getOptionalIntLoopAttribute(const Loop *TheLoop, StringRef Name);
+        -: 1336:
+        -: 1337:/// Find named metadata for a loop with an integer value. Return \p Default if
+        -: 1338:/// not set.
+        -: 1339:int getIntLoopAttribute(const Loop *TheLoop, StringRef Name, int Default = 0);
+        -: 1340:
+        -: 1341:/// Find string metadata for loop
+        -: 1342:///
+        -: 1343:/// If it has a value (e.g. {"llvm.distribute", 1} return the value as an
+        -: 1344:/// operand or null otherwise.  If the string metadata is not found return
+        -: 1345:/// Optional's not-a-value.
+        -: 1346:Optional<const MDOperand *> findStringMetadataForLoop(const Loop *TheLoop,
+        -: 1347:                                                      StringRef Name);
+        -: 1348:
+        -: 1349:/// Look for the loop attribute that requires progress within the loop.
+        -: 1350:/// Note: Most consumers probably want "isMustProgress" which checks
+        -: 1351:/// the containing function attribute too.
+        -: 1352:bool hasMustProgress(const Loop *L);
+        -: 1353:
+        -: 1354:/// Return true if this loop can be assumed to make progress.  (i.e. can't
+        -: 1355:/// be infinite without side effects without also being undefined)
+        -: 1356:bool isMustProgress(const Loop *L);
+        -: 1357:
+        -: 1358:/// Return true if this loop can be assumed to run for a finite number of
+        -: 1359:/// iterations.
+        -: 1360:bool isFinite(const Loop *L);
+        -: 1361:
+        -: 1362:/// Return whether an MDNode might represent an access group.
+        -: 1363:///
+        -: 1364:/// Access group metadata nodes have to be distinct and empty. Being
+        -: 1365:/// always-empty ensures that it never needs to be changed (which -- because
+        -: 1366:/// MDNodes are designed immutable -- would require creating a new MDNode). Note
+        -: 1367:/// that this is not a sufficient condition: not every distinct and empty NDNode
+        -: 1368:/// is representing an access group.
+        -: 1369:bool isValidAsAccessGroup(MDNode *AccGroup);
+        -: 1370:
+        -: 1371:/// Create a new LoopID after the loop has been transformed.
+        -: 1372:///
+        -: 1373:/// This can be used when no follow-up loop attributes are defined
+        -: 1374:/// (llvm::makeFollowupLoopID returning None) to stop transformations to be
+        -: 1375:/// applied again.
+        -: 1376:///
+        -: 1377:/// @param Context        The LLVMContext in which to create the new LoopID.
+        -: 1378:/// @param OrigLoopID     The original LoopID; can be nullptr if the original
+        -: 1379:///                       loop has no LoopID.
+        -: 1380:/// @param RemovePrefixes Remove all loop attributes that have these prefixes.
+        -: 1381:///                       Use to remove metadata of the transformation that has
+        -: 1382:///                       been applied.
+        -: 1383:/// @param AddAttrs       Add these loop attributes to the new LoopID.
+        -: 1384:///
+        -: 1385:/// @return A new LoopID that can be applied using Loop::setLoopID().
+        -: 1386:llvm::MDNode *
+        -: 1387:makePostTransformationMetadata(llvm::LLVMContext &Context, MDNode *OrigLoopID,
+        -: 1388:                               llvm::ArrayRef<llvm::StringRef> RemovePrefixes,
+        -: 1389:                               llvm::ArrayRef<llvm::MDNode *> AddAttrs);
+        -: 1390:
+        -: 1391:} // End llvm namespace
+        -: 1392:
+        -: 1393:#endif

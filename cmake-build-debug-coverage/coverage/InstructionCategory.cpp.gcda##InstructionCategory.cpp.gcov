@@ -1,0 +1,191 @@
+        -:    0:Source:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/LLVM-Handler/InstructionCategory.cpp
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/LLVM-Handler/InstructionCategory.cpp.gcda
+        -:    0:Runs:1
+        -:    1:
+        -:    2:
+        -:    3:#include <llvm/IR/Instructions.h>
+        -:    4:#include "InstructionCategory.h"
+        -:    5:
+        -:    6:
+function _ZN19InstructionCategory20isMemloadInstructionERN4llvm11InstructionE called 0 returned 0% blocks executed 0%
+    #####:    7:bool InstructionCategory::isMemloadInstruction(llvm::Instruction &Instruction) {
+    #####:    8:    return Instruction.mayReadFromMemory();
+    %%%%%:    8-block  0
+Aufruf  0 niemals ausgeführt
+        -:    9:}
+        -:   10:
+function _ZN19InstructionCategory17isCallInstructionERN4llvm11InstructionE called 0 returned 0% blocks executed 0%
+    #####:   11:bool InstructionCategory::isCallInstruction(llvm::Instruction &Instruction) {
+    #####:   12:    return llvm::isa<llvm::CallInst>( Instruction );
+    %%%%%:   12-block  0
+Aufruf  0 niemals ausgeführt
+        -:   13:}
+        -:   14:
+function _ZN19InstructionCategory21isMemstoreInstructionERN4llvm11InstructionE called 0 returned 0% blocks executed 0%
+    #####:   15:bool InstructionCategory::isMemstoreInstruction(llvm::Instruction &Instruction) {
+    #####:   16:    return Instruction.mayWriteToMemory();
+    %%%%%:   16-block  0
+Aufruf  0 niemals ausgeführt
+        -:   17:}
+        -:   18:
+function _ZN19InstructionCategory24isProgramFlowInstructionERN4llvm11InstructionE called 0 returned 0% blocks executed 0%
+    #####:   19:bool InstructionCategory::isProgramFlowInstruction( llvm::Instruction &Instruction ){
+    #####:   20:    return llvm::isa<llvm::BranchInst>(Instruction) ||
+    %%%%%:   20-block  0
+Aufruf  0 niemals ausgeführt
+    #####:   21:            llvm::isa<llvm::CallInst>(Instruction) ||
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:   21-block  0
+Aufruf  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+    %%%%%:   21-block  1
+    %%%%%:   21-block  2
+    #####:   22:            llvm::isa<llvm::ReturnInst>(Instruction);
+    %%%%%:   22-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   22-block  1
+        -:   23:}
+        -:   24:
+function _ZN19InstructionCategory21isDivisionInstructionERN4llvm11InstructionE called 0 returned 0% blocks executed 0%
+    #####:   25:bool InstructionCategory::isDivisionInstruction( llvm::Instruction &Instruction ){
+    #####:   26:    return llvm::isa<llvm::BinaryOperator>(Instruction) && (
+    %%%%%:   26-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   26-block  1
+    %%%%%:   26-block  2
+    #####:   27:            std::strcmp(Instruction.getOpcodeName(), "sdiv") == 0 ||
+    %%%%%:   27-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   28:            std::strcmp(Instruction.getOpcodeName(), "udiv") == 0
+    %%%%%:   28-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   29:    );
+    %%%%%:   29-block  0
+        -:   30:}
+        -:   31:
+function _ZN19InstructionCategory11getCategoryERN4llvm11InstructionE called 0 returned 0% blocks executed 0%
+    #####:   32:InstructionCategory::Category InstructionCategory::getCategory( llvm::Instruction &Instruction ){
+    #####:   33:    if( isMemloadInstruction( Instruction ) ){
+    %%%%%:   33-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   34:        return InstructionCategory::Category::MEMLOAD;
+    %%%%%:   34-block  0
+    #####:   35:    }else if( isMemstoreInstruction( Instruction ) ){
+    %%%%%:   35-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   36:        return InstructionCategory::Category::MEMSTORE;
+    %%%%%:   36-block  0
+    #####:   37:    }else if( isProgramFlowInstruction( Instruction ) || isCallInstruction( Instruction ) ){
+    %%%%%:   37-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   37-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   37-block  2
+    %%%%%:   37-block  3
+    %%%%%:   37-block  4
+Zweig  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+    #####:   38:        return InstructionCategory::Category::PROGRAMFLOW;
+    %%%%%:   38-block  0
+    #####:   39:    }else if( isDivisionInstruction( Instruction ) ){
+    %%%%%:   39-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   40:        return InstructionCategory::Category::DIVISION;
+    %%%%%:   40-block  0
+        -:   41:    }else{
+    #####:   42:        return InstructionCategory::Category::OTHER;
+    %%%%%:   42-block  0
+        -:   43:    }
+        -:   44:}
+        -:   45:
+function _ZN19InstructionCategory8toStringB5cxx11ENS_8CategoryE called 0 returned 0% blocks executed 0%
+    #####:   46:std::string InstructionCategory::toString(InstructionCategory::Category category) {
+    #####:   47:    std::string catString = "undefined";
+    %%%%%:   47-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+    %%%%%:   47-block  1
+Aufruf  4 niemals ausgeführt
+    $$$$$:   47-block  2
+Aufruf  5 niemals ausgeführt
+    $$$$$:   47-block  3
+Aufruf  6 niemals ausgeführt
+        -:   48:
+    #####:   49:    switch (category) {
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   50:        case Category::MEMLOAD:
+    #####:   51:            catString = "Memload";
+    %%%%%:   51-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   52:            break;
+    %%%%%:   52-block  0
+    #####:   53:        case Category::MEMSTORE:
+    #####:   54:            catString = "Memstore";
+    %%%%%:   54-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   55:            break;
+    %%%%%:   55-block  0
+    #####:   56:        case Category::PROGRAMFLOW:
+    #####:   57:            catString = "Programflow";
+    %%%%%:   57-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   58:            break;
+    %%%%%:   58-block  0
+    #####:   59:        case Category::DIVISION:
+    #####:   60:            catString = "Division";
+    %%%%%:   60-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   61:            break;
+    %%%%%:   61-block  0
+    #####:   62:        case Category::OTHER:
+    #####:   63:            catString = "Other";
+    %%%%%:   63-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   64:            break;
+    %%%%%:   64-block  0
+        -:   65:    }
+        -:   66:
+    #####:   67:    return catString;
+    %%%%%:   67-block  0
+    %%%%%:   67-block  1
+    =====:   68:}
+    $$$$$:   68-block  0
+Aufruf  0 niemals ausgeführt

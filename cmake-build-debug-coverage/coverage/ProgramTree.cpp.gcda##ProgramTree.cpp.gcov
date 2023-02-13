@@ -1,0 +1,931 @@
+        -:    0:Source:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/src/main/include/ProgramTree/ProgramTree.cpp
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/src/main/include/ProgramTree/ProgramTree.cpp.gcda
+        -:    0:Runs:1
+        -:    1:#include "ProgramTree.h"
+        -:    2:
+        -:    3://Static method for ProgramTree-Graph construction
+function _ZN11ProgramTree9constructESt6vectorIPN4llvm10BasicBlockESaIS3_EE called 0 returned 0% blocks executed 0%
+    #####:    4:ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset) {
+        -:    5:    //Create a dummy-Object
+    #####:    6:    auto *PT = new ProgramTree();
+    %%%%%:    6-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:    6-block  1
+Aufruf  3 niemals ausgeführt
+        -:    7:    //Create an empty list for the BasicBlocks
+    #####:    8:    std::vector<llvm::BasicBlock *> bbs;
+Aufruf  0 niemals ausgeführt
+        -:    9:
+        -:   10:    //Iterate over the given list of BasicBlock-References
+    #####:   11:    for(auto BB : blockset){
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   11-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:   11-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:   11-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:   12:        //For each block create a new Node
+    #####:   13:        auto *NN = new Node(PT);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   13-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    $$$$$:   13-block  1
+Zweig  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+    $$$$$:   13-block  2
+Aufruf  8 niemals ausgeführt
+        -:   14:        //Add the block to the Node
+    #####:   15:        NN->blocks.push_back(BB);
+    %%%%%:   15-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   16:        //Add the node to the graph
+    #####:   17:        PT->nodes.push_back(NN);
+    %%%%%:   17-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   18:    }
+        -:   19:
+        -:   20:    //Iterate over the blocks to create the edges of the graph
+    #####:   21:    for (auto BB : blockset) {
+    %%%%%:   21-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   21-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   21-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:   21-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:   22:        //Determine the successors to the current block in the cfg
+    #####:   23:        for (auto succ : llvm::successors(BB)) {
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   23-block  0
+Aufruf  3 niemals ausgeführt
+Aufruf  4 niemals ausgeführt
+    %%%%%:   23-block  1
+Aufruf  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+    %%%%%:   23-block  2
+Aufruf  8 niemals ausgeführt
+Zweig  9 niemals ausgeführt
+Zweig 10 niemals ausgeführt
+    %%%%%:   23-block  3
+Aufruf 11 niemals ausgeführt
+Zweig 12 niemals ausgeführt
+Zweig 13 niemals ausgeführt
+    %%%%%:   23-block  4
+Zweig 14 niemals ausgeführt
+Zweig 15 niemals ausgeführt
+        -:   24:            //Get the nodes defining the edge
+    #####:   25:            Node *start = PT->findBlock(BB);
+    %%%%%:   25-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   26:            Node *end = PT->findBlock(succ);
+    %%%%%:   26-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   27:
+        -:   28:            //If both of the defining nodes were found
+    #####:   29:            if(start != nullptr && end != nullptr){
+    %%%%%:   29-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:   29-block  1
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+        -:   30:                //Create the edge
+    #####:   31:                auto *E = new Edge(start, end);
+    %%%%%:   31-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   31-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    $$$$$:   31-block  2
+Zweig  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+    $$$$$:   31-block  3
+Aufruf  8 niemals ausgeführt
+        -:   32:                //Add the edge to the edge-list of the graph
+    #####:   33:                PT->edges.push_back(E);
+    %%%%%:   33-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:   34:            }
+        -:   35:        }
+        -:   36:    }
+        -:   37:
+        -:   38:    //Return the graph
+    #####:   39:    return PT;
+    %%%%%:   39-block  0
+    #####:   40:}
+    %%%%%:   40-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:   40-block  1
+Aufruf  1 niemals ausgeführt
+        -:   41:
+        -:   42://Print the Graph in preorder
+function _ZN11ProgramTree10printNodesEP11LLVMHandler called 0 returned 0% blocks executed 0%
+    #####:   43:void ProgramTree::printNodes(LLVMHandler *handler) {
+        -:   44:    //Iterate over the nodes in the graph
+    #####:   45:    for (auto N : this->nodes) {
+    %%%%%:   45-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   45-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   45-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:   45-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    #####:   46:        llvm::outs() << "\n----------------------------------------------------------------------\n";
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   46-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   47:        llvm::outs() << N->toString() <<  "\n";
+    %%%%%:   47-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   47-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   47-block  2
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    %%%%%:   47-block  3
+Aufruf  9 niemals ausgeführt
+Zweig 10 niemals ausgeführt
+Zweig 11 niemals ausgeführt
+    %%%%%:   47-block  4
+Aufruf 12 niemals ausgeführt
+    $$$$$:   47-block  5
+Aufruf 13 niemals ausgeführt
+    $$$$$:   47-block  6
+        -:   48:        //If the current Node is a LoopNode...
+    #####:   49:        if(dynamic_cast<LoopNode*>(N) != nullptr){
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:   49-block  0
+    %%%%%:   49-block  1
+    %%%%%:   49-block  2
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+        -:   50:            //Print a special representation if we are dealing with a LoopNode
+    #####:   51:            llvm::outs() << "(" << dynamic_cast<LoopNode*>(N)->loopTree->iterations << ") " << this->getEnergy(handler) << " µJ" << ")";
+    %%%%%:   51-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   51-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   51-block  2
+Zweig  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+    %%%%%:   51-block  3
+    %%%%%:   51-block  4
+    %%%%%:   51-block  5
+Aufruf  8 niemals ausgeführt
+Zweig  9 niemals ausgeführt
+Zweig 10 niemals ausgeführt
+    %%%%%:   51-block  6
+Aufruf 11 niemals ausgeführt
+Zweig 12 niemals ausgeführt
+Zweig 13 niemals ausgeführt
+    %%%%%:   51-block  7
+Aufruf 14 niemals ausgeführt
+Zweig 15 niemals ausgeführt
+Zweig 16 niemals ausgeführt
+    %%%%%:   51-block  8
+Aufruf 17 niemals ausgeführt
+Zweig 18 niemals ausgeführt
+Zweig 19 niemals ausgeführt
+    %%%%%:   51-block  9
+Aufruf 20 niemals ausgeführt
+Zweig 21 niemals ausgeführt
+Zweig 22 niemals ausgeführt
+    %%%%%:   51-block 10
+Aufruf 23 niemals ausgeführt
+Zweig 24 niemals ausgeführt
+Zweig 25 niemals ausgeführt
+    #####:   52:            for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
+    %%%%%:   52-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:   52-block  1
+    %%%%%:   52-block  2
+    %%%%%:   52-block  3
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+    %%%%%:   52-block  4
+Aufruf  4 niemals ausgeführt
+    %%%%%:   52-block  5
+Aufruf  5 niemals ausgeführt
+    %%%%%:   52-block  6
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    #####:   53:                llvm::outs() << "\n|\t\t\t\t\tBEGIN Subnodes\t\t\t\t\t|\n";
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   53-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   54:                sPT->printNodes(handler);
+    %%%%%:   54-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   55:                llvm::outs() << "\n|\t\t\t\t\tEND Subnodes\t\t\t\t\t|\n";
+    %%%%%:   55-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   55-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+        -:   56:            }
+        -:   57:        }
+    #####:   58:        llvm::outs() << "----------------------------------------------------------------------\n";
+    %%%%%:   58-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   58-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+        -:   59:    }
+        -:   60:
+    #####:   61:}
+    %%%%%:   61-block  0
+        -:   62:
+        -:   63://Search for the given block in the graph
+function _ZN11ProgramTree9findBlockEPN4llvm10BasicBlockE called 0 returned 0% blocks executed 0%
+    #####:   64:Node *ProgramTree::findBlock(llvm::BasicBlock *BB) {
+        -:   65:    //Iterate over the nodes
+    #####:   66:    for(auto Node : this->nodes){
+    %%%%%:   66-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   66-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   66-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:   66-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:   67:
+        -:   68:        //Use the standard find method to search the vector
+    #####:   69:        if(std::find(Node->blocks.begin(), Node->blocks.end(), BB) != Node->blocks.end()){
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   69-block  0
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    $$$$$:   69-block  1
+    $$$$$:   69-block  2
+        -:   70:            //If found return the node
+    #####:   71:            return Node;
+    %%%%%:   71-block  0
+        -:   72:        }
+        -:   73:    }
+        -:   74:
+        -:   75:    //If nothing was found, return a null pointer
+    #####:   76:    return nullptr;
+    %%%%%:   76-block  0
+        -:   77:}
+        -:   78:
+        -:   79://Print te edges of the graph
+function _ZN11ProgramTree10printEdgesEv called 0 returned 0% blocks executed 0%
+    #####:   80:void ProgramTree::printEdges() {
+        -:   81:    //Iterate over the edges and use the toString() method of the edges
+    #####:   82:    for (auto E : edges) {
+    %%%%%:   82-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   82-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   82-block  2
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   83:        llvm::outs() << "\n";
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   83-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   84:        llvm::outs() << E->toString() << "\n";
+    %%%%%:   84-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   84-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:   84-block  2
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    %%%%%:   84-block  3
+Aufruf  9 niemals ausgeführt
+Zweig 10 niemals ausgeführt
+Zweig 11 niemals ausgeführt
+    %%%%%:   84-block  4
+Aufruf 12 niemals ausgeführt
+Aufruf 13 niemals ausgeführt
+    $$$$$:   84-block  5
+Aufruf 14 niemals ausgeführt
+    $$$$$:   84-block  6
+        -:   85:    }
+        -:   86:
+        -:   87:    //Iterate over the nodes of the graph
+    #####:   88:    for (auto N : this->nodes) {
+    %%%%%:   88-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:   88-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:   88-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:   88-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:   89:        //If we are dealing with a LoopNode
+    #####:   90:        if(dynamic_cast<LoopNode*>(N) != nullptr){
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:   90-block  0
+    %%%%%:   90-block  1
+    %%%%%:   90-block  2
+Zweig  2 niemals ausgeführt
+Zweig  3 niemals ausgeführt
+        -:   91:            //Print the edges contained in the LoopNode
+    #####:   92:            for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
+    %%%%%:   92-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:   92-block  1
+    %%%%%:   92-block  2
+    %%%%%:   92-block  3
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+    %%%%%:   92-block  4
+Aufruf  4 niemals ausgeführt
+    %%%%%:   92-block  5
+Aufruf  5 niemals ausgeführt
+    %%%%%:   92-block  6
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    #####:   93:                llvm::outs() << "\n|\t\t\t\t\tBEGIN Subedges\t\t\t\t\t|\n";
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   93-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:   94:                sPT->printEdges();
+    %%%%%:   94-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:   95:                llvm::outs() << "\n|\t\t\t\t\tEND Subedges\t\t\t\t\t|\n";
+    %%%%%:   95-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:   95-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+        -:   96:            }
+        -:   97:        }
+        -:   98:    }
+    #####:   99:}
+    %%%%%:   99-block  0
+        -:  100:
+        -:  101://Replaces the given blocks with the given loopnode
+function _ZN11ProgramTree24replaceNodesWithLoopNodeESt6vectorIPN4llvm10BasicBlockESaIS3_EEP8LoopNode called 0 returned 0% blocks executed 0%
+    #####:  102:void ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
+        -:  103:    //Init the list of nodes, that need replacement
+    #####:  104:    std::vector<Node *> nodesToReplace;
+    %%%%%:  104-block  0
+Aufruf  0 niemals ausgeführt
+    #####:  105:    std::vector<std::string> allblocks;
+Aufruf  0 niemals ausgeführt
+    #####:  106:    std::vector<std::string> toRemoveBlocks;
+Aufruf  0 niemals ausgeführt
+        -:  107:
+        -:  108:    //Iterate over the given blocks
+    #####:  109:    for (auto bb : blocks) {
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  109-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:  109-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  109-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  110:        //Find the corresponding nodes to the blocks
+    #####:  111:        Node *toReplace = this->findBlock(bb);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  112:
+        -:  113:        //If a Node for the block was found...
+    #####:  114:        if(toReplace != nullptr){
+    %%%%%:  114-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+        -:  115:            //Add the node to the list
+    #####:  116:            nodesToReplace.push_back(toReplace);
+    %%%%%:  116-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  117:            for(auto nb : toReplace->blocks){
+    %%%%%:  117-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  117-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:  117-block  2
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:  118:                toRemoveBlocks.push_back(nb->getName().str());
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  118-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:  118-block  1
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    %%%%%:  118-block  2
+Aufruf  9 niemals ausgeführt
+Aufruf 10 niemals ausgeführt
+    $$$$$:  118-block  3
+Aufruf 11 niemals ausgeführt
+    $$$$$:  118-block  4
+    $$$$$:  118-block  5
+        -:  119:            }
+        -:  120:        }
+        -:  121:
+    #####:  122:        for(auto nb : toReplace->blocks){
+    %%%%%:  122-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  122-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:  122-block  2
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:  123:            allblocks.push_back(nb->getName().str());
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  123-block  0
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:  123-block  1
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    %%%%%:  123-block  2
+Aufruf  9 niemals ausgeführt
+Aufruf 10 niemals ausgeführt
+    $$$$$:  123-block  3
+Aufruf 11 niemals ausgeführt
+    $$$$$:  123-block  4
+    $$$$$:  123-block  5
+        -:  124:        }
+        -:  125:    }
+        -:  126:
+        -:  127:    //Add the given LoopNode to the list of nodes for this graph
+    #####:  128:    this->nodes.push_back(LPN);
+    %%%%%:  128-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  128-block  1
+        -:  129:
+        -:  130:    //If we need to replace some nodes...
+    #####:  131:    if(!nodesToReplace.empty()){
+    %%%%%:  131-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  132:        //Get the entry-block of the LoopNode
+    #####:  133:        auto entrycandidate = LPN->loopTree->mainloop->getBlocksVector()[0];
+    %%%%%:  133-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+        -:  134:        //Find the node corresponding to this block
+    #####:  135:        Node *entry = this->findBlock(entrycandidate);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  136:        auto entryname = entry->toString();
+    %%%%%:  136-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  137:
+        -:  138:        //Get the exit-node of the LoopNode
+    #####:  139:        Node *exit = this->findBlock(LPN->loopTree->mainloop->getLoopLatch());
+    %%%%%:  139-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  139-block  1
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    #####:  140:        auto exiname = exit->toString();
+    %%%%%:  140-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  141:
+        -:  142:        //Iterate over the edges of this graph
+    #####:  143:        for (auto edge : this->edges) {
+    %%%%%:  143-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  143-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:  143-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:  143-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  144:            //If we find an edge, which end-node is the entry-node of the loop
+    #####:  145:            if(edge->end == entry){
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+        -:  146:                //Change the edges endpoint to the LoopNode
+    #####:  147:                edge->end = LPN;
+    %%%%%:  147-block  0
+        -:  148:            }
+        -:  149:
+        -:  150:            //If we find an edge, which start-node is the exit-node of the loop
+    #####:  151:            if(edge->start == exit){
+    %%%%%:  151-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+        -:  152:                //Change the edges startpoint to the LoopNode
+    #####:  153:                edge->start = LPN;
+    %%%%%:  153-block  0
+        -:  154:            }
+        -:  155:        }
+        -:  156:
+        -:  157:        //Remove the nodes encapsulated by the loop
+    #####:  158:        for(auto ntrpl : nodesToReplace){
+    %%%%%:  158-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  158-block  1
+Aufruf  2 niemals ausgeführt
+    %%%%%:  158-block  2
+Aufruf  3 niemals ausgeführt
+    %%%%%:  158-block  3
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+    #####:  159:            this->removeNode(ntrpl);
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  160:        }
+        -:  161:
+        -:  162:        //Take care of all edges, that may be orphaned after the editing of the graph
+    #####:  163:        this->removeOrphanedEdges();
+    %%%%%:  163-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  164:    }
+    %%%%%:  164-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    $$$$$:  164-block  1
+Aufruf  2 niemals ausgeführt
+    $$$$$:  164-block  2
+Aufruf  3 niemals ausgeführt
+    #####:  165:}
+    %%%%%:  165-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+    $$$$$:  165-block  1
+Aufruf  3 niemals ausgeführt
+    $$$$$:  165-block  2
+Aufruf  4 niemals ausgeführt
+    $$$$$:  165-block  3
+Aufruf  5 niemals ausgeführt
+        -:  166:
+        -:  167://Remove a given Node from the graph
+function _ZN11ProgramTree10removeNodeEP4Node called 0 returned 0% blocks executed 0%
+    #####:  168:void ProgramTree::removeNode(Node *N) {
+        -:  169:    //Init the list of Nodes we want to keep
+    #####:  170:    std::vector<Node *> newNodes;
+    %%%%%:  170-block  0
+Aufruf  0 niemals ausgeführt
+        -:  171:
+        -:  172:    //Iterate over the nodes of the graph
+    #####:  173:    for (auto node : this->nodes) {
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  173-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:  173-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  173-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  174:        //Add the nodes to the keep-list if it is unequal to the given Node
+    #####:  175:        if(node != N){
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:  176:            newNodes.push_back(node);
+    %%%%%:  176-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  177:        }
+        -:  178:    }
+        -:  179:
+        -:  180:    //Set the nodes of the graph to the keep-list
+    #####:  181:    this->nodes = newNodes;
+    %%%%%:  181-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  182:}
+    %%%%%:  182-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:  182-block  1
+Aufruf  1 niemals ausgeführt
+        -:  183:
+        -:  184://Removes all edges from the graph, that refere to nodes no longer present in the graph
+function _ZN11ProgramTree19removeOrphanedEdgesEv called 0 returned 0% blocks executed 0%
+    #####:  185:void ProgramTree::removeOrphanedEdges() {
+        -:  186:    //Init the list of edges, we want to keep
+    #####:  187:    std::vector<Edge *> cleanedEdges;
+    %%%%%:  187-block  0
+Aufruf  0 niemals ausgeführt
+        -:  188:
+        -:  189:    //Iterate over the edges
+    #####:  190:    for (auto edge : this->edges) {
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  190-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:  190-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  190-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  191:        //Test if the end node and the start node both can be found in the graph
+    #####:  192:        if(std::find(this->nodes.begin(), this->nodes.end(), edge->start) != this->nodes.end() &&
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:  192-block  0
+Aufruf  6 niemals ausgeführt
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+Zweig  9 niemals ausgeführt
+Zweig 10 niemals ausgeführt
+    %%%%%:  192-block  1
+    %%%%%:  192-block  2
+    $$$$$:  192-block  3
+    $$$$$:  192-block  4
+    #####:  193:        std::find(this->nodes.begin(), this->nodes.end(), edge->end) != this->nodes.end() ){
+    %%%%%:  193-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+Aufruf  2 niemals ausgeführt
+Aufruf  3 niemals ausgeführt
+Zweig  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+    %%%%%:  193-block  1
+Aufruf  6 niemals ausgeführt
+    %%%%%:  193-block  2
+Zweig  7 niemals ausgeführt
+Zweig  8 niemals ausgeführt
+    $$$$$:  193-block  3
+    $$$$$:  193-block  4
+        -:  194:            //If we have and edge without orphaned nodes. Test for self references
+    #####:  195:            if(edge->start != edge->end){
+    %%%%%:  195-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+        -:  196:                //If we aren't having a self reference, add the node to the keep-list
+    #####:  197:                cleanedEdges.push_back(edge);
+    %%%%%:  197-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  198:            }
+        -:  199:        }
+        -:  200:    }
+        -:  201:
+        -:  202:    //Set the edges of the graph to the keeping edges
+    #####:  203:    this->edges = cleanedEdges;
+    %%%%%:  203-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    #####:  204:}
+    %%%%%:  204-block  0
+Aufruf  0 niemals ausgeführt
+    $$$$$:  204-block  1
+Aufruf  1 niemals ausgeführt
+        -:  205:
+        -:  206://Calculate the energy of the graph
+function _ZN11ProgramTree9getEnergyEP11LLVMHandler called 0 returned 0% blocks executed 0%
+    #####:  207:double ProgramTree::getEnergy(LLVMHandler *handler) {
+        -:  208:    //Init the calculation result
+    #####:  209:    double sum = 0.0;
+        -:  210:    //Get the first node of the graph
+    #####:  211:    auto currnode = this->nodes[0];
+    %%%%%:  211-block  0
+Aufruf  0 niemals ausgeführt
+        -:  212:
+        -:  213:    //Start the energy-calculation from the start node
+        -:  214:    //Uses the recursvice calculation of the nodes by itself
+    #####:  215:    sum = currnode->getEnergy(handler);
+Aufruf  0 niemals ausgeführt
+        -:  216:
+        -:  217:    //Return the result
+    #####:  218:    return sum;
+        -:  219:}
+        -:  220:
+        -:  221://Find all the edges starting at the given Node
+function _ZN11ProgramTree23findEdgesStartingAtNodeEP4Node called 0 returned 0% blocks executed 0%
+    #####:  222:std::vector<Edge *> ProgramTree::findEdgesStartingAtNode(Node *N) {
+        -:  223:    //Init the list
+    #####:  224:    std::vector<Edge *> selection;
+    %%%%%:  224-block  0
+Aufruf  0 niemals ausgeführt
+        -:  225:
+        -:  226:    //Iterate over the edges
+    #####:  227:    for(auto E : this->edges){
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  227-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:  227-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  227-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  228:        //If the start of the edge is the given Node
+    #####:  229:        if(E->start == N){
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+        -:  230:            //Add the edge to the list
+    #####:  231:            selection.push_back(E);
+    %%%%%:  231-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  232:        }
+        -:  233:    }
+        -:  234:
+        -:  235:    //Return the list of edges
+    #####:  236:    return selection;
+    %%%%%:  236-block  0
+    %%%%%:  236-block  1
+    =====:  237:}
+    $$$$$:  237-block  0
+Aufruf  0 niemals ausgeführt
+        -:  238:
+        -:  239://Test if thie graph contains a LoopNode
+function _ZN11ProgramTree17containsLoopNodesEv called 0 returned 0% blocks executed 0%
+    #####:  240:bool ProgramTree::containsLoopNodes() {
+    #####:  241:    return !this->getLoopNodes().empty();
+    %%%%%:  241-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    %%%%%:  241-block  1
+Aufruf  3 niemals ausgeführt
+Aufruf  4 niemals ausgeführt
+    %%%%%:  241-block  2
+        -:  242:}
+        -:  243:
+        -:  244://Get all the LoopNodes contained in the Graph
+function _ZN11ProgramTree12getLoopNodesEv called 0 returned 0% blocks executed 0%
+    #####:  245:std::vector<LoopNode *> ProgramTree::getLoopNodes() {
+        -:  246:    //Init the list
+    #####:  247:    std::vector<LoopNode *> loopnodes;
+    %%%%%:  247-block  0
+Aufruf  0 niemals ausgeführt
+        -:  248:
+        -:  249:    //Iterate over the nodes
+    #####:  250:    for(auto n : this->nodes){
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  250-block  0
+Aufruf  2 niemals ausgeführt
+    %%%%%:  250-block  1
+Aufruf  3 niemals ausgeführt
+    %%%%%:  250-block  2
+Aufruf  4 niemals ausgeführt
+Zweig  5 niemals ausgeführt
+Zweig  6 niemals ausgeführt
+        -:  251:        //Test if the current node is a LoopNode
+    #####:  252:        auto *LPNCandicate = dynamic_cast<LoopNode *>(n);
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    %%%%%:  252-block  0
+    %%%%%:  252-block  1
+    #####:  253:        if(LPNCandicate != nullptr){
+    %%%%%:  253-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+        -:  254:            //If we're dealing with a LoopNode, add it to the list
+    #####:  255:            loopnodes.push_back(LPNCandicate);
+    %%%%%:  255-block  0
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+        -:  256:        }
+        -:  257:    }
+        -:  258:
+        -:  259:    //Return the list of LoopNodes
+    #####:  260:    return loopnodes;
+    %%%%%:  260-block  0
+    %%%%%:  260-block  1
+    =====:  261:}
+    $$$$$:  261-block  0
+Aufruf  0 niemals ausgeführt
+        -:  262:

@@ -1,0 +1,6 @@
+/opt/clion/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=--coverage -DCMAKE_C_FLAGS=--coverage -G "CodeBlocks - Unix Makefiles" -S /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit -B /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage
+-- Found LLVM 15.0.7
+-- Using LLVMConfig.cmake in: /usr/lib64/cmake/llvm
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage

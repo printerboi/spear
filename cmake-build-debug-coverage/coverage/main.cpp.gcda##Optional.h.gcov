@@ -1,0 +1,560 @@
+        -:    0:Source:/usr/include/llvm/ADT/Optional.h
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/main.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/main.cpp.gcda
+        -:    0:Runs:1
+        -:    1://===- Optional.h - Simple variant for passing optional values --*- C++ -*-===//
+        -:    2://
+        -:    3:// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+        -:    4:// See https://llvm.org/LICENSE.txt for license information.
+        -:    5:// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+        -:    6://
+        -:    7://===----------------------------------------------------------------------===//
+        -:    8:///
+        -:    9:/// \file
+        -:   10:///  This file provides Optional, a template class modeled in the spirit of
+        -:   11:///  OCaml's 'opt' variant.  The idea is to strongly type whether or not
+        -:   12:///  a value can be optional.
+        -:   13:///
+        -:   14://===----------------------------------------------------------------------===//
+        -:   15:
+        -:   16:#ifndef LLVM_ADT_OPTIONAL_H
+        -:   17:#define LLVM_ADT_OPTIONAL_H
+        -:   18:
+        -:   19:#include "llvm/ADT/Hashing.h"
+        -:   20:#include "llvm/ADT/None.h"
+        -:   21:#include "llvm/ADT/STLForwardCompat.h"
+        -:   22:#include "llvm/Support/Compiler.h"
+        -:   23:#include "llvm/Support/type_traits.h"
+        -:   24:#include <cassert>
+        -:   25:#include <new>
+        -:   26:#include <utility>
+        -:   27:
+        -:   28:namespace llvm {
+        -:   29:
+        -:   30:class raw_ostream;
+        -:   31:
+        -:   32:namespace optional_detail {
+        -:   33:
+        -:   34:/// Storage for any type.
+        -:   35://
+        -:   36:// The specialization condition intentionally uses
+        -:   37:// llvm::is_trivially_{copy/move}_constructible instead of
+        -:   38:// std::is_trivially_{copy/move}_constructible. GCC versions prior to 7.4 may
+        -:   39:// instantiate the copy/move constructor of `T` when
+        -:   40:// std::is_trivially_{copy/move}_constructible is instantiated.  This causes
+        -:   41:// compilation to fail if we query the trivially copy/move constructible
+        -:   42:// property of a class which is not copy/move constructible.
+        -:   43://
+        -:   44:// The current implementation of OptionalStorage insists that in order to use
+        -:   45:// the trivial specialization, the value_type must be trivially copy
+        -:   46:// constructible and trivially copy assignable due to =default implementations
+        -:   47:// of the copy/move constructor/assignment.  It does not follow that this is
+        -:   48:// necessarily the case std::is_trivially_copyable is true (hence the expanded
+        -:   49:// specialization condition).
+        -:   50://
+        -:   51:// The move constructible / assignable conditions emulate the remaining behavior
+        -:   52:// of std::is_trivially_copyable.
+        -:   53:template <typename T,
+        -:   54:          bool = (llvm::is_trivially_copy_constructible<T>::value &&
+        -:   55:                  std::is_trivially_copy_assignable<T>::value &&
+        -:   56:                  (llvm::is_trivially_move_constructible<T>::value ||
+        -:   57:                   !std::is_move_constructible<T>::value) &&
+        -:   58:                  (std::is_trivially_move_assignable<T>::value ||
+        -:   59:                   !std::is_move_assignable<T>::value))>
+        -:   60:class OptionalStorage {
+        -:   61:  union {
+        -:   62:    char empty;
+        -:   63:    T val;
+        -:   64:  };
+        -:   65:  bool hasVal = false;
+        -:   66:
+        -:   67:public:
+function _ZN4llvm15optional_detail15OptionalStorageINS_10PGOOptionsELb0EED2Ev called 0 returned 0% blocks executed 0%
+    #####:   68:  ~OptionalStorage() { reset(); }
+    %%%%%:   68-block  0
+Aufruf  0 niemals ausgeführt
+        -:   69:
+    #####:   70:  constexpr OptionalStorage() noexcept : empty() {}
+------------------
+_ZN4llvm15optional_detail15OptionalStorageINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEELb0EEC2Ev:
+function _ZN4llvm15optional_detail15OptionalStorageINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEELb0EEC2Ev called 0 returned 0% blocks executed 0%
+    #####:   70:  constexpr OptionalStorage() noexcept : empty() {}
+------------------
+_ZN4llvm15optional_detail15OptionalStorageINS_10PGOOptionsELb0EEC2Ev:
+function _ZN4llvm15optional_detail15OptionalStorageINS_10PGOOptionsELb0EEC2Ev called 0 returned 0% blocks executed 0%
+    #####:   70:  constexpr OptionalStorage() noexcept : empty() {}
+------------------
+        -:   71:
+        -:   72:  constexpr OptionalStorage(OptionalStorage const &other) : OptionalStorage() {
+        -:   73:    if (other.has_value()) {
+        -:   74:      emplace(other.val);
+        -:   75:    }
+        -:   76:  }
+        -:   77:  constexpr OptionalStorage(OptionalStorage &&other) : OptionalStorage() {
+        -:   78:    if (other.has_value()) {
+        -:   79:      emplace(std::move(other.val));
+        -:   80:    }
+        -:   81:  }
+        -:   82:
+        -:   83:  template <class... Args>
+        -:   84:  constexpr explicit OptionalStorage(in_place_t, Args &&...args)
+        -:   85:      : val(std::forward<Args>(args)...), hasVal(true) {}
+        -:   86:
+function _ZN4llvm15optional_detail15OptionalStorageINS_10PGOOptionsELb0EE5resetEv called 0 returned 0% blocks executed 0%
+    #####:   87:  void reset() noexcept {
+    #####:   88:    if (hasVal) {
+    %%%%%:   88-block  0
+Zweig  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+    #####:   89:      val.~T();
+    %%%%%:   89-block  0
+Aufruf  0 niemals ausgeführt
+    #####:   90:      hasVal = false;
+        -:   91:    }
+    #####:   92:  }
+        -:   93:
+        -:   94:  constexpr bool has_value() const noexcept { return hasVal; }
+        -:   95:  constexpr bool hasValue() const noexcept { return hasVal; }
+        -:   96:
+        -:   97:  T &value() &noexcept {
+        -:   98:    assert(hasVal);
+        -:   99:    return val;
+        -:  100:  }
+        -:  101:  T &getValue() &noexcept {
+        -:  102:    assert(hasVal);
+        -:  103:    return val;
+        -:  104:  }
+        -:  105:  constexpr T const &value() const &noexcept {
+        -:  106:    assert(hasVal);
+        -:  107:    return val;
+        -:  108:  }
+        -:  109:  constexpr T const &getValue() const &noexcept {
+        -:  110:    assert(hasVal);
+        -:  111:    return val;
+        -:  112:  }
+        -:  113:  T &&value() &&noexcept {
+        -:  114:    assert(hasVal);
+        -:  115:    return std::move(val);
+        -:  116:  }
+        -:  117:  T &&getValue() &&noexcept {
+        -:  118:    assert(hasVal);
+        -:  119:    return std::move(val);
+        -:  120:  }
+        -:  121:
+        -:  122:  template <class... Args> void emplace(Args &&...args) {
+        -:  123:    reset();
+        -:  124:    ::new ((void *)std::addressof(val)) T(std::forward<Args>(args)...);
+        -:  125:    hasVal = true;
+        -:  126:  }
+        -:  127:
+        -:  128:  OptionalStorage &operator=(T const &y) {
+        -:  129:    if (has_value()) {
+        -:  130:      val = y;
+        -:  131:    } else {
+        -:  132:      ::new ((void *)std::addressof(val)) T(y);
+        -:  133:      hasVal = true;
+        -:  134:    }
+        -:  135:    return *this;
+        -:  136:  }
+        -:  137:  OptionalStorage &operator=(T &&y) {
+        -:  138:    if (has_value()) {
+        -:  139:      val = std::move(y);
+        -:  140:    } else {
+        -:  141:      ::new ((void *)std::addressof(val)) T(std::move(y));
+        -:  142:      hasVal = true;
+        -:  143:    }
+        -:  144:    return *this;
+        -:  145:  }
+        -:  146:
+        -:  147:  OptionalStorage &operator=(OptionalStorage const &other) {
+        -:  148:    if (other.has_value()) {
+        -:  149:      if (has_value()) {
+        -:  150:        val = other.val;
+        -:  151:      } else {
+        -:  152:        ::new ((void *)std::addressof(val)) T(other.val);
+        -:  153:        hasVal = true;
+        -:  154:      }
+        -:  155:    } else {
+        -:  156:      reset();
+        -:  157:    }
+        -:  158:    return *this;
+        -:  159:  }
+        -:  160:
+        -:  161:  OptionalStorage &operator=(OptionalStorage &&other) {
+        -:  162:    if (other.has_value()) {
+        -:  163:      if (has_value()) {
+        -:  164:        val = std::move(other.val);
+        -:  165:      } else {
+        -:  166:        ::new ((void *)std::addressof(val)) T(std::move(other.val));
+        -:  167:        hasVal = true;
+        -:  168:      }
+        -:  169:    } else {
+        -:  170:      reset();
+        -:  171:    }
+        -:  172:    return *this;
+        -:  173:  }
+        -:  174:};
+        -:  175:
+        -:  176:template <typename T> class OptionalStorage<T, true> {
+        -:  177:  union {
+        -:  178:    char empty;
+        -:  179:    T val;
+        -:  180:  };
+        -:  181:  bool hasVal = false;
+        -:  182:
+        -:  183:public:
+        -:  184:  ~OptionalStorage() = default;
+        -:  185:
+        -:  186:  constexpr OptionalStorage() noexcept : empty{} {}
+        -:  187:
+        -:  188:  constexpr OptionalStorage(OptionalStorage const &other) = default;
+        -:  189:  constexpr OptionalStorage(OptionalStorage &&other) = default;
+        -:  190:
+        -:  191:  OptionalStorage &operator=(OptionalStorage const &other) = default;
+        -:  192:  OptionalStorage &operator=(OptionalStorage &&other) = default;
+        -:  193:
+        -:  194:  template <class... Args>
+        -:  195:  constexpr explicit OptionalStorage(in_place_t, Args &&...args)
+        -:  196:      : val(std::forward<Args>(args)...), hasVal(true) {}
+        -:  197:
+        -:  198:  void reset() noexcept {
+        -:  199:    if (hasVal) {
+        -:  200:      val.~T();
+        -:  201:      hasVal = false;
+        -:  202:    }
+        -:  203:  }
+        -:  204:
+        -:  205:  constexpr bool has_value() const noexcept { return hasVal; }
+        -:  206:  constexpr bool hasValue() const noexcept { return hasVal; }
+        -:  207:
+        -:  208:  T &value() &noexcept {
+        -:  209:    assert(hasVal);
+        -:  210:    return val;
+        -:  211:  }
+        -:  212:  T &getValue() &noexcept {
+        -:  213:    assert(hasVal);
+        -:  214:    return val;
+        -:  215:  }
+        -:  216:  constexpr T const &value() const &noexcept {
+        -:  217:    assert(hasVal);
+        -:  218:    return val;
+        -:  219:  }
+        -:  220:  constexpr T const &getValue() const &noexcept {
+        -:  221:    assert(hasVal);
+        -:  222:    return val;
+        -:  223:  }
+        -:  224:  T &&value() &&noexcept {
+        -:  225:    assert(hasVal);
+        -:  226:    return std::move(val);
+        -:  227:  }
+        -:  228:  T &&getValue() &&noexcept {
+        -:  229:    assert(hasVal);
+        -:  230:    return std::move(val);
+        -:  231:  }
+        -:  232:
+        -:  233:  template <class... Args> void emplace(Args &&...args) {
+        -:  234:    reset();
+        -:  235:    ::new ((void *)std::addressof(val)) T(std::forward<Args>(args)...);
+        -:  236:    hasVal = true;
+        -:  237:  }
+        -:  238:
+        -:  239:  OptionalStorage &operator=(T const &y) {
+        -:  240:    if (has_value()) {
+        -:  241:      val = y;
+        -:  242:    } else {
+        -:  243:      ::new ((void *)std::addressof(val)) T(y);
+        -:  244:      hasVal = true;
+        -:  245:    }
+        -:  246:    return *this;
+        -:  247:  }
+        -:  248:  OptionalStorage &operator=(T &&y) {
+        -:  249:    if (has_value()) {
+        -:  250:      val = std::move(y);
+        -:  251:    } else {
+        -:  252:      ::new ((void *)std::addressof(val)) T(std::move(y));
+        -:  253:      hasVal = true;
+        -:  254:    }
+        -:  255:    return *this;
+        -:  256:  }
+        -:  257:};
+        -:  258:
+        -:  259:} // namespace optional_detail
+        -:  260:
+        -:  261:template <typename T> class Optional {
+        -:  262:  optional_detail::OptionalStorage<T> Storage;
+        -:  263:
+        -:  264:public:
+        -:  265:  using value_type = T;
+        -:  266:
+        -:  267:  constexpr Optional() = default;
+    #####:  268:  constexpr Optional(NoneType) {}
+------------------
+_ZN4llvm8OptionalINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEC2ENS_8NoneTypeE:
+function _ZN4llvm8OptionalINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEC2ENS_8NoneTypeE called 0 returned 0% blocks executed 0%
+    #####:  268:  constexpr Optional(NoneType) {}
+    %%%%%:  268-block  0
+Aufruf  0 niemals ausgeführt
+------------------
+_ZN4llvm8OptionalINS_10PGOOptionsEEC2ENS_8NoneTypeE:
+function _ZN4llvm8OptionalINS_10PGOOptionsEEC2ENS_8NoneTypeE called 0 returned 0% blocks executed 0%
+    #####:  268:  constexpr Optional(NoneType) {}
+    %%%%%:  268-block  0
+Aufruf  0 niemals ausgeführt
+------------------
+        -:  269:
+        -:  270:  constexpr Optional(const T &y) : Storage(in_place, y) {}
+        -:  271:  constexpr Optional(const Optional &O) = default;
+        -:  272:
+        -:  273:  constexpr Optional(T &&y) : Storage(in_place, std::move(y)) {}
+        -:  274:  constexpr Optional(Optional &&O) = default;
+        -:  275:
+        -:  276:  template <typename... ArgTypes>
+        -:  277:  constexpr Optional(in_place_t, ArgTypes &&...Args)
+        -:  278:      : Storage(in_place, std::forward<ArgTypes>(Args)...) {}
+        -:  279:
+        -:  280:  Optional &operator=(T &&y) {
+        -:  281:    Storage = std::move(y);
+        -:  282:    return *this;
+        -:  283:  }
+        -:  284:  Optional &operator=(Optional &&O) = default;
+        -:  285:
+        -:  286:  /// Create a new object by constructing it in place with the given arguments.
+        -:  287:  template <typename... ArgTypes> void emplace(ArgTypes &&... Args) {
+        -:  288:    Storage.emplace(std::forward<ArgTypes>(Args)...);
+        -:  289:  }
+        -:  290:
+        -:  291:  static constexpr Optional create(const T *y) {
+        -:  292:    return y ? Optional(*y) : Optional();
+        -:  293:  }
+        -:  294:
+        -:  295:  Optional &operator=(const T &y) {
+        -:  296:    Storage = y;
+        -:  297:    return *this;
+        -:  298:  }
+        -:  299:  Optional &operator=(const Optional &O) = default;
+        -:  300:
+        -:  301:  void reset() { Storage.reset(); }
+        -:  302:
+        -:  303:  constexpr const T *getPointer() const { return &Storage.value(); }
+        -:  304:  T *getPointer() { return &Storage.value(); }
+        -:  305:  constexpr const T &value() const & { return Storage.value(); }
+        -:  306:  constexpr const T &getValue() const & { return Storage.value(); }
+        -:  307:  T &value() & { return Storage.value(); }
+        -:  308:  T &getValue() & { return Storage.value(); }
+        -:  309:
+        -:  310:  constexpr explicit operator bool() const { return has_value(); }
+        -:  311:  constexpr bool has_value() const { return Storage.has_value(); }
+        -:  312:  constexpr bool hasValue() const { return Storage.has_value(); }
+        -:  313:  constexpr const T *operator->() const { return getPointer(); }
+        -:  314:  T *operator->() { return getPointer(); }
+        -:  315:  constexpr const T &operator*() const & { return value(); }
+        -:  316:  T &operator*() & { return value(); }
+        -:  317:
+        -:  318:  template <typename U> constexpr T value_or(U &&alt) const & {
+        -:  319:    return has_value() ? value() : std::forward<U>(alt);
+        -:  320:  }
+        -:  321:  template <typename U>
+        -:  322:  [[deprecated("Use value_or instead.")]] constexpr T
+        -:  323:  getValueOr(U &&alt) const & {
+        -:  324:    return has_value() ? value() : std::forward<U>(alt);
+        -:  325:  }
+        -:  326:
+        -:  327:  /// Apply a function to the value if present; otherwise return None.
+        -:  328:  template <class Function>
+        -:  329:  auto map(const Function &F) const & -> Optional<decltype(F(value()))> {
+        -:  330:    if (*this)
+        -:  331:      return F(value());
+        -:  332:    return None;
+        -:  333:  }
+        -:  334:
+        -:  335:  T &&value() && { return std::move(Storage.value()); }
+        -:  336:  T &&getValue() && { return std::move(Storage.value()); }
+        -:  337:  T &&operator*() && { return std::move(Storage.value()); }
+        -:  338:
+        -:  339:  template <typename U> T value_or(U &&alt) && {
+        -:  340:    return has_value() ? std::move(value()) : std::forward<U>(alt);
+        -:  341:  }
+        -:  342:  template <typename U>
+        -:  343:  [[deprecated("Use value_or instead.")]] T getValueOr(U &&alt) && {
+        -:  344:    return has_value() ? std::move(value()) : std::forward<U>(alt);
+        -:  345:  }
+        -:  346:
+        -:  347:  /// Apply a function to the value if present; otherwise return None.
+        -:  348:  template <class Function>
+        -:  349:  auto map(const Function &F)
+        -:  350:      && -> Optional<decltype(F(std::move(*this).value()))> {
+        -:  351:    if (*this)
+        -:  352:      return F(std::move(*this).value());
+        -:  353:    return None;
+        -:  354:  }
+        -:  355:};
+        -:  356:
+        -:  357:template <class T> llvm::hash_code hash_value(const Optional<T> &O) {
+        -:  358:  return O ? hash_combine(true, *O) : hash_value(false);
+        -:  359:}
+        -:  360:
+        -:  361:template <typename T, typename U>
+        -:  362:constexpr bool operator==(const Optional<T> &X, const Optional<U> &Y) {
+        -:  363:  if (X && Y)
+        -:  364:    return *X == *Y;
+        -:  365:  return X.has_value() == Y.has_value();
+        -:  366:}
+        -:  367:
+        -:  368:template <typename T, typename U>
+        -:  369:constexpr bool operator!=(const Optional<T> &X, const Optional<U> &Y) {
+        -:  370:  return !(X == Y);
+        -:  371:}
+        -:  372:
+        -:  373:template <typename T, typename U>
+        -:  374:constexpr bool operator<(const Optional<T> &X, const Optional<U> &Y) {
+        -:  375:  if (X && Y)
+        -:  376:    return *X < *Y;
+        -:  377:  return X.has_value() < Y.has_value();
+        -:  378:}
+        -:  379:
+        -:  380:template <typename T, typename U>
+        -:  381:constexpr bool operator<=(const Optional<T> &X, const Optional<U> &Y) {
+        -:  382:  return !(Y < X);
+        -:  383:}
+        -:  384:
+        -:  385:template <typename T, typename U>
+        -:  386:constexpr bool operator>(const Optional<T> &X, const Optional<U> &Y) {
+        -:  387:  return Y < X;
+        -:  388:}
+        -:  389:
+        -:  390:template <typename T, typename U>
+        -:  391:constexpr bool operator>=(const Optional<T> &X, const Optional<U> &Y) {
+        -:  392:  return !(X < Y);
+        -:  393:}
+        -:  394:
+        -:  395:template <typename T>
+        -:  396:constexpr bool operator==(const Optional<T> &X, NoneType) {
+        -:  397:  return !X;
+        -:  398:}
+        -:  399:
+        -:  400:template <typename T>
+        -:  401:constexpr bool operator==(NoneType, const Optional<T> &X) {
+        -:  402:  return X == None;
+        -:  403:}
+        -:  404:
+        -:  405:template <typename T>
+        -:  406:constexpr bool operator!=(const Optional<T> &X, NoneType) {
+        -:  407:  return !(X == None);
+        -:  408:}
+        -:  409:
+        -:  410:template <typename T>
+        -:  411:constexpr bool operator!=(NoneType, const Optional<T> &X) {
+        -:  412:  return X != None;
+        -:  413:}
+        -:  414:
+        -:  415:template <typename T> constexpr bool operator<(const Optional<T> &, NoneType) {
+        -:  416:  return false;
+        -:  417:}
+        -:  418:
+        -:  419:template <typename T> constexpr bool operator<(NoneType, const Optional<T> &X) {
+        -:  420:  return X.has_value();
+        -:  421:}
+        -:  422:
+        -:  423:template <typename T>
+        -:  424:constexpr bool operator<=(const Optional<T> &X, NoneType) {
+        -:  425:  return !(None < X);
+        -:  426:}
+        -:  427:
+        -:  428:template <typename T>
+        -:  429:constexpr bool operator<=(NoneType, const Optional<T> &X) {
+        -:  430:  return !(X < None);
+        -:  431:}
+        -:  432:
+        -:  433:template <typename T> constexpr bool operator>(const Optional<T> &X, NoneType) {
+        -:  434:  return None < X;
+        -:  435:}
+        -:  436:
+        -:  437:template <typename T> constexpr bool operator>(NoneType, const Optional<T> &X) {
+        -:  438:  return X < None;
+        -:  439:}
+        -:  440:
+        -:  441:template <typename T>
+        -:  442:constexpr bool operator>=(const Optional<T> &X, NoneType) {
+        -:  443:  return None <= X;
+        -:  444:}
+        -:  445:
+        -:  446:template <typename T>
+        -:  447:constexpr bool operator>=(NoneType, const Optional<T> &X) {
+        -:  448:  return X <= None;
+        -:  449:}
+        -:  450:
+        -:  451:template <typename T>
+        -:  452:constexpr bool operator==(const Optional<T> &X, const T &Y) {
+        -:  453:  return X && *X == Y;
+        -:  454:}
+        -:  455:
+        -:  456:template <typename T>
+        -:  457:constexpr bool operator==(const T &X, const Optional<T> &Y) {
+        -:  458:  return Y && X == *Y;
+        -:  459:}
+        -:  460:
+        -:  461:template <typename T>
+        -:  462:constexpr bool operator!=(const Optional<T> &X, const T &Y) {
+        -:  463:  return !(X == Y);
+        -:  464:}
+        -:  465:
+        -:  466:template <typename T>
+        -:  467:constexpr bool operator!=(const T &X, const Optional<T> &Y) {
+        -:  468:  return !(X == Y);
+        -:  469:}
+        -:  470:
+        -:  471:template <typename T>
+        -:  472:constexpr bool operator<(const Optional<T> &X, const T &Y) {
+        -:  473:  return !X || *X < Y;
+        -:  474:}
+        -:  475:
+        -:  476:template <typename T>
+        -:  477:constexpr bool operator<(const T &X, const Optional<T> &Y) {
+        -:  478:  return Y && X < *Y;
+        -:  479:}
+        -:  480:
+        -:  481:template <typename T>
+        -:  482:constexpr bool operator<=(const Optional<T> &X, const T &Y) {
+        -:  483:  return !(Y < X);
+        -:  484:}
+        -:  485:
+        -:  486:template <typename T>
+        -:  487:constexpr bool operator<=(const T &X, const Optional<T> &Y) {
+        -:  488:  return !(Y < X);
+        -:  489:}
+        -:  490:
+        -:  491:template <typename T>
+        -:  492:constexpr bool operator>(const Optional<T> &X, const T &Y) {
+        -:  493:  return Y < X;
+        -:  494:}
+        -:  495:
+        -:  496:template <typename T>
+        -:  497:constexpr bool operator>(const T &X, const Optional<T> &Y) {
+        -:  498:  return Y < X;
+        -:  499:}
+        -:  500:
+        -:  501:template <typename T>
+        -:  502:constexpr bool operator>=(const Optional<T> &X, const T &Y) {
+        -:  503:  return !(X < Y);
+        -:  504:}
+        -:  505:
+        -:  506:template <typename T>
+        -:  507:constexpr bool operator>=(const T &X, const Optional<T> &Y) {
+        -:  508:  return !(X < Y);
+        -:  509:}
+        -:  510:
+        -:  511:raw_ostream &operator<<(raw_ostream &OS, NoneType);
+        -:  512:
+        -:  513:template <typename T, typename = decltype(std::declval<raw_ostream &>()
+        -:  514:                                          << std::declval<const T &>())>
+        -:  515:raw_ostream &operator<<(raw_ostream &OS, const Optional<T> &O) {
+        -:  516:  if (O)
+        -:  517:    OS << *O;
+        -:  518:  else
+        -:  519:    OS << None;
+        -:  520:  return OS;
+        -:  521:}
+        -:  522:
+        -:  523:} // end namespace llvm
+        -:  524:
+        -:  525:#endif // LLVM_ADT_OPTIONAL_H

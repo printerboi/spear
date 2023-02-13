@@ -1,0 +1,564 @@
+        -:    0:Source:/usr/include/llvm/ADT/DenseMapInfo.h
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/main.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/main.cpp.gcda
+        -:    0:Runs:1
+        -:    1://===- llvm/ADT/DenseMapInfo.h - Type traits for DenseMap -------*- C++ -*-===//
+        -:    2://
+        -:    3:// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+        -:    4:// See https://llvm.org/LICENSE.txt for license information.
+        -:    5:// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+        -:    6://
+        -:    7://===----------------------------------------------------------------------===//
+        -:    8:///
+        -:    9:/// \file
+        -:   10:/// This file defines DenseMapInfo traits for DenseMap.
+        -:   11:///
+        -:   12://===----------------------------------------------------------------------===//
+        -:   13:
+        -:   14:#ifndef LLVM_ADT_DENSEMAPINFO_H
+        -:   15:#define LLVM_ADT_DENSEMAPINFO_H
+        -:   16:
+        -:   17:#include <cassert>
+        -:   18:#include <cstddef>
+        -:   19:#include <cstdint>
+        -:   20:#include <tuple>
+        -:   21:#include <utility>
+        -:   22:
+        -:   23:namespace llvm {
+        -:   24:
+        -:   25:namespace detail {
+        -:   26:
+        -:   27:/// Simplistic combination of 32-bit hash values into 32-bit hash values.
+        -:   28:static inline unsigned combineHashValue(unsigned a, unsigned b) {
+        -:   29:  uint64_t key = (uint64_t)a << 32 | (uint64_t)b;
+        -:   30:  key += ~(key << 32);
+        -:   31:  key ^= (key >> 22);
+        -:   32:  key += ~(key << 13);
+        -:   33:  key ^= (key >> 8);
+        -:   34:  key += (key << 3);
+        -:   35:  key ^= (key >> 15);
+        -:   36:  key += ~(key << 27);
+        -:   37:  key ^= (key >> 31);
+        -:   38:  return (unsigned)key;
+        -:   39:}
+        -:   40:
+        -:   41:} // end namespace detail
+        -:   42:
+        -:   43:/// An information struct used to provide DenseMap with the various necessary
+        -:   44:/// components for a given value type `T`. `Enable` is an optional additional
+        -:   45:/// parameter that is used to support SFINAE (generally using std::enable_if_t)
+        -:   46:/// in derived DenseMapInfo specializations; in non-SFINAE use cases this should
+        -:   47:/// just be `void`.
+        -:   48:template<typename T, typename Enable = void>
+        -:   49:struct DenseMapInfo {
+        -:   50:  //static inline T getEmptyKey();
+        -:   51:  //static inline T getTombstoneKey();
+        -:   52:  //static unsigned getHashValue(const T &Val);
+        -:   53:  //static bool isEqual(const T &LHS, const T &RHS);
+        -:   54:};
+        -:   55:
+        -:   56:// Provide DenseMapInfo for all pointers. Come up with sentinel pointer values
+        -:   57:// that are aligned to alignof(T) bytes, but try to avoid requiring T to be
+        -:   58:// complete. This allows clients to instantiate DenseMap<T*, ...> with forward
+        -:   59:// declared key types. Assume that no pointer key type requires more than 4096
+        -:   60:// bytes of alignment.
+        -:   61:template<typename T>
+        -:   62:struct DenseMapInfo<T*> {
+        -:   63:  // The following should hold, but it would require T to be complete:
+        -:   64:  // static_assert(alignof(T) <= (1 << Log2MaxAlign),
+        -:   65:  //               "DenseMap does not support pointer keys requiring more than "
+        -:   66:  //               "Log2MaxAlign bits of alignment");
+        -:   67:  static constexpr uintptr_t Log2MaxAlign = 12;
+        -:   68:
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+        -:   73:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_6ModuleEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_6ModuleEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+    %%%%%:   72-block  0
+        -:   73:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_10BasicBlockEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_10BasicBlockEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+    %%%%%:   72-block  0
+        -:   73:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_8FunctionEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_8FunctionEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+    %%%%%:   72-block  0
+        -:   73:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+    %%%%%:   72-block  0
+        -:   73:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_4LoopEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_4LoopEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+    %%%%%:   72-block  0
+        -:   73:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_13LazyCallGraph3SCCEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_13LazyCallGraph3SCCEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:   69:  static inline T* getEmptyKey() {
+    #####:   70:    uintptr_t Val = static_cast<uintptr_t>(-1);
+    #####:   71:    Val <<= Log2MaxAlign;
+    #####:   72:    return reinterpret_cast<T*>(Val);
+    %%%%%:   72-block  0
+        -:   73:  }
+------------------
+        -:   74:
+    #####:   75:  static inline T* getTombstoneKey() {
+    #####:   76:    uintptr_t Val = static_cast<uintptr_t>(-2);
+    #####:   77:    Val <<= Log2MaxAlign;
+    #####:   78:    return reinterpret_cast<T*>(Val);
+        -:   79:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_6ModuleEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_6ModuleEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:   75:  static inline T* getTombstoneKey() {
+    #####:   76:    uintptr_t Val = static_cast<uintptr_t>(-2);
+    #####:   77:    Val <<= Log2MaxAlign;
+    #####:   78:    return reinterpret_cast<T*>(Val);
+    %%%%%:   78-block  0
+        -:   79:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_8FunctionEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_8FunctionEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:   75:  static inline T* getTombstoneKey() {
+    #####:   76:    uintptr_t Val = static_cast<uintptr_t>(-2);
+    #####:   77:    Val <<= Log2MaxAlign;
+    #####:   78:    return reinterpret_cast<T*>(Val);
+    %%%%%:   78-block  0
+        -:   79:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:   75:  static inline T* getTombstoneKey() {
+    #####:   76:    uintptr_t Val = static_cast<uintptr_t>(-2);
+    #####:   77:    Val <<= Log2MaxAlign;
+    #####:   78:    return reinterpret_cast<T*>(Val);
+    %%%%%:   78-block  0
+        -:   79:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_4LoopEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_4LoopEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:   75:  static inline T* getTombstoneKey() {
+    #####:   76:    uintptr_t Val = static_cast<uintptr_t>(-2);
+    #####:   77:    Val <<= Log2MaxAlign;
+    #####:   78:    return reinterpret_cast<T*>(Val);
+    %%%%%:   78-block  0
+        -:   79:  }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_13LazyCallGraph3SCCEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoIPNS_13LazyCallGraph3SCCEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:   75:  static inline T* getTombstoneKey() {
+    #####:   76:    uintptr_t Val = static_cast<uintptr_t>(-2);
+    #####:   77:    Val <<= Log2MaxAlign;
+    #####:   78:    return reinterpret_cast<T*>(Val);
+    %%%%%:   78-block  0
+        -:   79:  }
+------------------
+        -:   80:
+function _ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE12getHashValueEPKS1_ called 0 returned 0% blocks executed 0%
+    #####:   81:  static unsigned getHashValue(const T *PtrVal) {
+    #####:   82:    return (unsigned((uintptr_t)PtrVal) >> 4) ^
+    #####:   83:           (unsigned((uintptr_t)PtrVal) >> 9);
+    %%%%%:   83-block  0
+        -:   84:  }
+        -:   85:
+    #####:   86:  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+------------------
+_ZN4llvm12DenseMapInfoIPNS_6ModuleEvE7isEqualEPKS1_S5_:
+function _ZN4llvm12DenseMapInfoIPNS_6ModuleEvE7isEqualEPKS1_S5_ called 0 returned 0% blocks executed 0%
+    #####:   86:  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+    %%%%%:   86-block  0
+------------------
+_ZN4llvm12DenseMapInfoIPNS_8FunctionEvE7isEqualEPKS1_S5_:
+function _ZN4llvm12DenseMapInfoIPNS_8FunctionEvE7isEqualEPKS1_S5_ called 0 returned 0% blocks executed 0%
+    #####:   86:  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+    %%%%%:   86-block  0
+------------------
+_ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE7isEqualEPKS1_S5_:
+function _ZN4llvm12DenseMapInfoIPNS_11AnalysisKeyEvE7isEqualEPKS1_S5_ called 0 returned 0% blocks executed 0%
+    #####:   86:  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+    %%%%%:   86-block  0
+------------------
+_ZN4llvm12DenseMapInfoIPNS_4LoopEvE7isEqualEPKS1_S5_:
+function _ZN4llvm12DenseMapInfoIPNS_4LoopEvE7isEqualEPKS1_S5_ called 0 returned 0% blocks executed 0%
+    #####:   86:  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+    %%%%%:   86-block  0
+------------------
+_ZN4llvm12DenseMapInfoIPNS_13LazyCallGraph3SCCEvE7isEqualEPKS2_S6_:
+function _ZN4llvm12DenseMapInfoIPNS_13LazyCallGraph3SCCEvE7isEqualEPKS2_S6_ called 0 returned 0% blocks executed 0%
+    #####:   86:  static bool isEqual(const T *LHS, const T *RHS) { return LHS == RHS; }
+    %%%%%:   86-block  0
+------------------
+        -:   87:};
+        -:   88:
+        -:   89:// Provide DenseMapInfo for chars.
+        -:   90:template<> struct DenseMapInfo<char> {
+        -:   91:  static inline char getEmptyKey() { return ~0; }
+        -:   92:  static inline char getTombstoneKey() { return ~0 - 1; }
+        -:   93:  static unsigned getHashValue(const char& Val) { return Val * 37U; }
+        -:   94:
+        -:   95:  static bool isEqual(const char &LHS, const char &RHS) {
+        -:   96:    return LHS == RHS;
+        -:   97:  }
+        -:   98:};
+        -:   99:
+        -:  100:// Provide DenseMapInfo for unsigned chars.
+        -:  101:template <> struct DenseMapInfo<unsigned char> {
+        -:  102:  static inline unsigned char getEmptyKey() { return ~0; }
+        -:  103:  static inline unsigned char getTombstoneKey() { return ~0 - 1; }
+        -:  104:  static unsigned getHashValue(const unsigned char &Val) { return Val * 37U; }
+        -:  105:
+        -:  106:  static bool isEqual(const unsigned char &LHS, const unsigned char &RHS) {
+        -:  107:    return LHS == RHS;
+        -:  108:  }
+        -:  109:};
+        -:  110:
+        -:  111:// Provide DenseMapInfo for unsigned shorts.
+        -:  112:template <> struct DenseMapInfo<unsigned short> {
+        -:  113:  static inline unsigned short getEmptyKey() { return 0xFFFF; }
+        -:  114:  static inline unsigned short getTombstoneKey() { return 0xFFFF - 1; }
+        -:  115:  static unsigned getHashValue(const unsigned short &Val) { return Val * 37U; }
+        -:  116:
+        -:  117:  static bool isEqual(const unsigned short &LHS, const unsigned short &RHS) {
+        -:  118:    return LHS == RHS;
+        -:  119:  }
+        -:  120:};
+        -:  121:
+        -:  122:// Provide DenseMapInfo for unsigned ints.
+        -:  123:template<> struct DenseMapInfo<unsigned> {
+        -:  124:  static inline unsigned getEmptyKey() { return ~0U; }
+        -:  125:  static inline unsigned getTombstoneKey() { return ~0U - 1; }
+        -:  126:  static unsigned getHashValue(const unsigned& Val) { return Val * 37U; }
+        -:  127:
+        -:  128:  static bool isEqual(const unsigned& LHS, const unsigned& RHS) {
+        -:  129:    return LHS == RHS;
+        -:  130:  }
+        -:  131:};
+        -:  132:
+        -:  133:// Provide DenseMapInfo for unsigned longs.
+        -:  134:template<> struct DenseMapInfo<unsigned long> {
+        -:  135:  static inline unsigned long getEmptyKey() { return ~0UL; }
+        -:  136:  static inline unsigned long getTombstoneKey() { return ~0UL - 1L; }
+        -:  137:
+        -:  138:  static unsigned getHashValue(const unsigned long& Val) {
+        -:  139:    return (unsigned)(Val * 37UL);
+        -:  140:  }
+        -:  141:
+        -:  142:  static bool isEqual(const unsigned long& LHS, const unsigned long& RHS) {
+        -:  143:    return LHS == RHS;
+        -:  144:  }
+        -:  145:};
+        -:  146:
+        -:  147:// Provide DenseMapInfo for unsigned long longs.
+        -:  148:template<> struct DenseMapInfo<unsigned long long> {
+        -:  149:  static inline unsigned long long getEmptyKey() { return ~0ULL; }
+        -:  150:  static inline unsigned long long getTombstoneKey() { return ~0ULL - 1ULL; }
+        -:  151:
+        -:  152:  static unsigned getHashValue(const unsigned long long& Val) {
+        -:  153:    return (unsigned)(Val * 37ULL);
+        -:  154:  }
+        -:  155:
+        -:  156:  static bool isEqual(const unsigned long long& LHS,
+        -:  157:                      const unsigned long long& RHS) {
+        -:  158:    return LHS == RHS;
+        -:  159:  }
+        -:  160:};
+        -:  161:
+        -:  162:// Provide DenseMapInfo for shorts.
+        -:  163:template <> struct DenseMapInfo<short> {
+        -:  164:  static inline short getEmptyKey() { return 0x7FFF; }
+        -:  165:  static inline short getTombstoneKey() { return -0x7FFF - 1; }
+        -:  166:  static unsigned getHashValue(const short &Val) { return Val * 37U; }
+        -:  167:  static bool isEqual(const short &LHS, const short &RHS) { return LHS == RHS; }
+        -:  168:};
+        -:  169:
+        -:  170:// Provide DenseMapInfo for ints.
+        -:  171:template<> struct DenseMapInfo<int> {
+        -:  172:  static inline int getEmptyKey() { return 0x7fffffff; }
+        -:  173:  static inline int getTombstoneKey() { return -0x7fffffff - 1; }
+        -:  174:  static unsigned getHashValue(const int& Val) { return (unsigned)(Val * 37U); }
+        -:  175:
+        -:  176:  static bool isEqual(const int& LHS, const int& RHS) {
+        -:  177:    return LHS == RHS;
+        -:  178:  }
+        -:  179:};
+        -:  180:
+        -:  181:// Provide DenseMapInfo for longs.
+        -:  182:template<> struct DenseMapInfo<long> {
+        -:  183:  static inline long getEmptyKey() {
+        -:  184:    return (1UL << (sizeof(long) * 8 - 1)) - 1UL;
+        -:  185:  }
+        -:  186:
+        -:  187:  static inline long getTombstoneKey() { return getEmptyKey() - 1L; }
+        -:  188:
+        -:  189:  static unsigned getHashValue(const long& Val) {
+        -:  190:    return (unsigned)(Val * 37UL);
+        -:  191:  }
+        -:  192:
+        -:  193:  static bool isEqual(const long& LHS, const long& RHS) {
+        -:  194:    return LHS == RHS;
+        -:  195:  }
+        -:  196:};
+        -:  197:
+        -:  198:// Provide DenseMapInfo for long longs.
+        -:  199:template<> struct DenseMapInfo<long long> {
+        -:  200:  static inline long long getEmptyKey() { return 0x7fffffffffffffffLL; }
+        -:  201:  static inline long long getTombstoneKey() { return -0x7fffffffffffffffLL-1; }
+        -:  202:
+        -:  203:  static unsigned getHashValue(const long long& Val) {
+        -:  204:    return (unsigned)(Val * 37ULL);
+        -:  205:  }
+        -:  206:
+        -:  207:  static bool isEqual(const long long& LHS,
+        -:  208:                      const long long& RHS) {
+        -:  209:    return LHS == RHS;
+        -:  210:  }
+        -:  211:};
+        -:  212:
+        -:  213:// Provide DenseMapInfo for all pairs whose members have info.
+        -:  214:template<typename T, typename U>
+        -:  215:struct DenseMapInfo<std::pair<T, U>> {
+        -:  216:  using Pair = std::pair<T, U>;
+        -:  217:  using FirstInfo = DenseMapInfo<T>;
+        -:  218:  using SecondInfo = DenseMapInfo<U>;
+        -:  219:
+    #####:  220:  static inline Pair getEmptyKey() {
+    #####:  221:    return std::make_pair(FirstInfo::getEmptyKey(),
+    #####:  222:                          SecondInfo::getEmptyKey());
+        -:  223:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_6ModuleEEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_6ModuleEEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:  220:  static inline Pair getEmptyKey() {
+    #####:  221:    return std::make_pair(FirstInfo::getEmptyKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  221-block  0
+    #####:  222:                          SecondInfo::getEmptyKey());
+    %%%%%:  222-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  222-block  1
+    %%%%%:  222-block  2
+    %%%%%:  222-block  3
+        -:  223:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_13LazyCallGraph3SCCEEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_13LazyCallGraph3SCCEEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:  220:  static inline Pair getEmptyKey() {
+    #####:  221:    return std::make_pair(FirstInfo::getEmptyKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  221-block  0
+    #####:  222:                          SecondInfo::getEmptyKey());
+    %%%%%:  222-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  222-block  1
+    %%%%%:  222-block  2
+    %%%%%:  222-block  3
+        -:  223:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_4LoopEEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_4LoopEEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:  220:  static inline Pair getEmptyKey() {
+    #####:  221:    return std::make_pair(FirstInfo::getEmptyKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  221-block  0
+    #####:  222:                          SecondInfo::getEmptyKey());
+    %%%%%:  222-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  222-block  1
+    %%%%%:  222-block  2
+    %%%%%:  222-block  3
+        -:  223:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_8FunctionEEvE11getEmptyKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_8FunctionEEvE11getEmptyKeyEv called 0 returned 0% blocks executed 0%
+    #####:  220:  static inline Pair getEmptyKey() {
+    #####:  221:    return std::make_pair(FirstInfo::getEmptyKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  221-block  0
+    #####:  222:                          SecondInfo::getEmptyKey());
+    %%%%%:  222-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  222-block  1
+    %%%%%:  222-block  2
+    %%%%%:  222-block  3
+        -:  223:  }
+------------------
+        -:  224:
+    #####:  225:  static inline Pair getTombstoneKey() {
+    #####:  226:    return std::make_pair(FirstInfo::getTombstoneKey(),
+    #####:  227:                          SecondInfo::getTombstoneKey());
+        -:  228:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_6ModuleEEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_6ModuleEEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:  225:  static inline Pair getTombstoneKey() {
+    #####:  226:    return std::make_pair(FirstInfo::getTombstoneKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  226-block  0
+    #####:  227:                          SecondInfo::getTombstoneKey());
+    %%%%%:  227-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  227-block  1
+    %%%%%:  227-block  2
+    %%%%%:  227-block  3
+        -:  228:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_13LazyCallGraph3SCCEEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_13LazyCallGraph3SCCEEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:  225:  static inline Pair getTombstoneKey() {
+    #####:  226:    return std::make_pair(FirstInfo::getTombstoneKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  226-block  0
+    #####:  227:                          SecondInfo::getTombstoneKey());
+    %%%%%:  227-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  227-block  1
+    %%%%%:  227-block  2
+    %%%%%:  227-block  3
+        -:  228:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_4LoopEEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_4LoopEEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:  225:  static inline Pair getTombstoneKey() {
+    #####:  226:    return std::make_pair(FirstInfo::getTombstoneKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  226-block  0
+    #####:  227:                          SecondInfo::getTombstoneKey());
+    %%%%%:  227-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  227-block  1
+    %%%%%:  227-block  2
+    %%%%%:  227-block  3
+        -:  228:  }
+------------------
+_ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_8FunctionEEvE15getTombstoneKeyEv:
+function _ZN4llvm12DenseMapInfoISt4pairIPNS_11AnalysisKeyEPNS_8FunctionEEvE15getTombstoneKeyEv called 0 returned 0% blocks executed 0%
+    #####:  225:  static inline Pair getTombstoneKey() {
+    #####:  226:    return std::make_pair(FirstInfo::getTombstoneKey(),
+Aufruf  0 niemals ausgeführt
+Zweig  1 niemals ausgeführt
+Zweig  2 niemals ausgeführt
+    $$$$$:  226-block  0
+    #####:  227:                          SecondInfo::getTombstoneKey());
+    %%%%%:  227-block  0
+Aufruf  0 niemals ausgeführt
+Aufruf  1 niemals ausgeführt
+    %%%%%:  227-block  1
+    %%%%%:  227-block  2
+    %%%%%:  227-block  3
+        -:  228:  }
+------------------
+        -:  229:
+        -:  230:  static unsigned getHashValue(const Pair& PairVal) {
+        -:  231:    return detail::combineHashValue(FirstInfo::getHashValue(PairVal.first),
+        -:  232:                                    SecondInfo::getHashValue(PairVal.second));
+        -:  233:  }
+        -:  234:
+    #####:  235:  static bool isEqual(const Pair &LHS, const Pair &RHS) {
+    #####:  236:    return FirstInfo::isEqual(LHS.first, RHS.first) &&
+    #####:  237:           SecondInfo::isEqual(LHS.second, RHS.second);
+        -:  238:  }
+        -:  239:};
+        -:  240:
+        -:  241:// Provide DenseMapInfo for all tuples whose members have info.
+        -:  242:template <typename... Ts> struct DenseMapInfo<std::tuple<Ts...>> {
+        -:  243:  using Tuple = std::tuple<Ts...>;
+        -:  244:
+        -:  245:  static inline Tuple getEmptyKey() {
+        -:  246:    return Tuple(DenseMapInfo<Ts>::getEmptyKey()...);
+        -:  247:  }
+        -:  248:
+        -:  249:  static inline Tuple getTombstoneKey() {
+        -:  250:    return Tuple(DenseMapInfo<Ts>::getTombstoneKey()...);
+        -:  251:  }
+        -:  252:
+        -:  253:  template <unsigned I>
+        -:  254:  static unsigned getHashValueImpl(const Tuple &values, std::false_type) {
+        -:  255:    using EltType = typename std::tuple_element<I, Tuple>::type;
+        -:  256:    std::integral_constant<bool, I + 1 == sizeof...(Ts)> atEnd;
+        -:  257:    return detail::combineHashValue(
+        -:  258:        DenseMapInfo<EltType>::getHashValue(std::get<I>(values)),
+        -:  259:        getHashValueImpl<I + 1>(values, atEnd));
+        -:  260:  }
+        -:  261:
+        -:  262:  template <unsigned I>
+        -:  263:  static unsigned getHashValueImpl(const Tuple &, std::true_type) {
+        -:  264:    return 0;
+        -:  265:  }
+        -:  266:
+        -:  267:  static unsigned getHashValue(const std::tuple<Ts...> &values) {
+        -:  268:    std::integral_constant<bool, 0 == sizeof...(Ts)> atEnd;
+        -:  269:    return getHashValueImpl<0>(values, atEnd);
+        -:  270:  }
+        -:  271:
+        -:  272:  template <unsigned I>
+        -:  273:  static bool isEqualImpl(const Tuple &lhs, const Tuple &rhs, std::false_type) {
+        -:  274:    using EltType = typename std::tuple_element<I, Tuple>::type;
+        -:  275:    std::integral_constant<bool, I + 1 == sizeof...(Ts)> atEnd;
+        -:  276:    return DenseMapInfo<EltType>::isEqual(std::get<I>(lhs), std::get<I>(rhs)) &&
+        -:  277:           isEqualImpl<I + 1>(lhs, rhs, atEnd);
+        -:  278:  }
+        -:  279:
+        -:  280:  template <unsigned I>
+        -:  281:  static bool isEqualImpl(const Tuple &, const Tuple &, std::true_type) {
+        -:  282:    return true;
+        -:  283:  }
+        -:  284:
+        -:  285:  static bool isEqual(const Tuple &lhs, const Tuple &rhs) {
+        -:  286:    std::integral_constant<bool, 0 == sizeof...(Ts)> atEnd;
+        -:  287:    return isEqualImpl<0>(lhs, rhs, atEnd);
+        -:  288:  }
+        -:  289:};
+        -:  290:
+        -:  291:} // end namespace llvm
+        -:  292:
+        -:  293:#endif // LLVM_ADT_DENSEMAPINFO_H

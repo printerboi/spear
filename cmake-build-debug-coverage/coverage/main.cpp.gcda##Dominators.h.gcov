@@ -1,0 +1,334 @@
+        -:    0:Source:/usr/include/llvm/IR/Dominators.h
+        -:    0:Graph:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/main.cpp.gcno
+        -:    0:Data:/home/maximiliank/Dokumente/workbench/Bachelor/bachelorarbeit/cmake-build-debug-coverage/CMakeFiles/ba.dir/main.cpp.gcda
+        -:    0:Runs:1
+        -:    1://===- Dominators.h - Dominator Info Calculation ----------------*- C++ -*-===//
+        -:    2://
+        -:    3:// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+        -:    4:// See https://llvm.org/LICENSE.txt for license information.
+        -:    5:// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+        -:    6://
+        -:    7://===----------------------------------------------------------------------===//
+        -:    8://
+        -:    9:// This file defines the DominatorTree class, which provides fast and efficient
+        -:   10:// dominance queries.
+        -:   11://
+        -:   12://===----------------------------------------------------------------------===//
+        -:   13:
+        -:   14:#ifndef LLVM_IR_DOMINATORS_H
+        -:   15:#define LLVM_IR_DOMINATORS_H
+        -:   16:
+        -:   17:#include "llvm/ADT/APInt.h"
+        -:   18:#include "llvm/ADT/ArrayRef.h"
+        -:   19:#include "llvm/ADT/DenseMap.h"
+        -:   20:#include "llvm/ADT/DenseMapInfo.h"
+        -:   21:#include "llvm/ADT/DepthFirstIterator.h"
+        -:   22:#include "llvm/ADT/Hashing.h"
+        -:   23:#include "llvm/ADT/PointerIntPair.h"
+        -:   24:#include "llvm/ADT/SmallVector.h"
+        -:   25:#include "llvm/ADT/Twine.h"
+        -:   26:#include "llvm/ADT/ilist_iterator.h"
+        -:   27:#include "llvm/ADT/iterator_range.h"
+        -:   28:#include "llvm/IR/BasicBlock.h"
+        -:   29:#include "llvm/IR/CFG.h"
+        -:   30:#include "llvm/IR/PassManager.h"
+        -:   31:#include "llvm/IR/Use.h"
+        -:   32:#include "llvm/Pass.h"
+        -:   33:#include "llvm/Support/CFGDiff.h"
+        -:   34:#include "llvm/Support/CFGUpdate.h"
+        -:   35:#include "llvm/Support/GenericDomTree.h"
+        -:   36:#include "llvm/Support/GenericDomTreeConstruction.h"
+        -:   37:#include <algorithm>
+        -:   38:#include <utility>
+        -:   39:#include <vector>
+        -:   40:
+        -:   41:namespace llvm {
+        -:   42:
+        -:   43:class Function;
+        -:   44:class Instruction;
+        -:   45:class Module;
+        -:   46:class Value;
+        -:   47:class raw_ostream;
+        -:   48:template <class GraphType> struct GraphTraits;
+        -:   49:
+        -:   50:extern template class DomTreeNodeBase<BasicBlock>;
+        -:   51:extern template class DominatorTreeBase<BasicBlock, false>; // DomTree
+        -:   52:extern template class DominatorTreeBase<BasicBlock, true>; // PostDomTree
+        -:   53:
+        -:   54:extern template class cfg::Update<BasicBlock *>;
+        -:   55:
+        -:   56:namespace DomTreeBuilder {
+        -:   57:using BBDomTree = DomTreeBase<BasicBlock>;
+        -:   58:using BBPostDomTree = PostDomTreeBase<BasicBlock>;
+        -:   59:
+        -:   60:using BBUpdates = ArrayRef<llvm::cfg::Update<BasicBlock *>>;
+        -:   61:
+        -:   62:using BBDomTreeGraphDiff = GraphDiff<BasicBlock *, false>;
+        -:   63:using BBPostDomTreeGraphDiff = GraphDiff<BasicBlock *, true>;
+        -:   64:
+        -:   65:extern template void Calculate<BBDomTree>(BBDomTree &DT);
+        -:   66:extern template void CalculateWithUpdates<BBDomTree>(BBDomTree &DT,
+        -:   67:                                                     BBUpdates U);
+        -:   68:
+        -:   69:extern template void Calculate<BBPostDomTree>(BBPostDomTree &DT);
+        -:   70:
+        -:   71:extern template void InsertEdge<BBDomTree>(BBDomTree &DT, BasicBlock *From,
+        -:   72:                                           BasicBlock *To);
+        -:   73:extern template void InsertEdge<BBPostDomTree>(BBPostDomTree &DT,
+        -:   74:                                               BasicBlock *From,
+        -:   75:                                               BasicBlock *To);
+        -:   76:
+        -:   77:extern template void DeleteEdge<BBDomTree>(BBDomTree &DT, BasicBlock *From,
+        -:   78:                                           BasicBlock *To);
+        -:   79:extern template void DeleteEdge<BBPostDomTree>(BBPostDomTree &DT,
+        -:   80:                                               BasicBlock *From,
+        -:   81:                                               BasicBlock *To);
+        -:   82:
+        -:   83:extern template void ApplyUpdates<BBDomTree>(BBDomTree &DT,
+        -:   84:                                             BBDomTreeGraphDiff &,
+        -:   85:                                             BBDomTreeGraphDiff *);
+        -:   86:extern template void ApplyUpdates<BBPostDomTree>(BBPostDomTree &DT,
+        -:   87:                                                 BBPostDomTreeGraphDiff &,
+        -:   88:                                                 BBPostDomTreeGraphDiff *);
+        -:   89:
+        -:   90:extern template bool Verify<BBDomTree>(const BBDomTree &DT,
+        -:   91:                                       BBDomTree::VerificationLevel VL);
+        -:   92:extern template bool Verify<BBPostDomTree>(const BBPostDomTree &DT,
+        -:   93:                                           BBPostDomTree::VerificationLevel VL);
+        -:   94:}  // namespace DomTreeBuilder
+        -:   95:
+        -:   96:using DomTreeNode = DomTreeNodeBase<BasicBlock>;
+        -:   97:
+        -:   98:class BasicBlockEdge {
+        -:   99:  const BasicBlock *Start;
+        -:  100:  const BasicBlock *End;
+        -:  101:
+        -:  102:public:
+        -:  103:  BasicBlockEdge(const BasicBlock *Start_, const BasicBlock *End_) :
+        -:  104:    Start(Start_), End(End_) {}
+        -:  105:
+        -:  106:  BasicBlockEdge(const std::pair<BasicBlock *, BasicBlock *> &Pair)
+        -:  107:      : Start(Pair.first), End(Pair.second) {}
+        -:  108:
+        -:  109:  BasicBlockEdge(const std::pair<const BasicBlock *, const BasicBlock *> &Pair)
+        -:  110:      : Start(Pair.first), End(Pair.second) {}
+        -:  111:
+        -:  112:  const BasicBlock *getStart() const {
+        -:  113:    return Start;
+        -:  114:  }
+        -:  115:
+        -:  116:  const BasicBlock *getEnd() const {
+        -:  117:    return End;
+        -:  118:  }
+        -:  119:
+        -:  120:  /// Check if this is the only edge between Start and End.
+        -:  121:  bool isSingleEdge() const;
+        -:  122:};
+        -:  123:
+        -:  124:template <> struct DenseMapInfo<BasicBlockEdge> {
+        -:  125:  using BBInfo = DenseMapInfo<const BasicBlock *>;
+        -:  126:
+        -:  127:  static unsigned getHashValue(const BasicBlockEdge *V);
+        -:  128:
+        -:  129:  static inline BasicBlockEdge getEmptyKey() {
+        -:  130:    return BasicBlockEdge(BBInfo::getEmptyKey(), BBInfo::getEmptyKey());
+        -:  131:  }
+        -:  132:
+        -:  133:  static inline BasicBlockEdge getTombstoneKey() {
+        -:  134:    return BasicBlockEdge(BBInfo::getTombstoneKey(), BBInfo::getTombstoneKey());
+        -:  135:  }
+        -:  136:
+        -:  137:  static unsigned getHashValue(const BasicBlockEdge &Edge) {
+        -:  138:    return hash_combine(BBInfo::getHashValue(Edge.getStart()),
+        -:  139:                        BBInfo::getHashValue(Edge.getEnd()));
+        -:  140:  }
+        -:  141:
+        -:  142:  static bool isEqual(const BasicBlockEdge &LHS, const BasicBlockEdge &RHS) {
+        -:  143:    return BBInfo::isEqual(LHS.getStart(), RHS.getStart()) &&
+        -:  144:           BBInfo::isEqual(LHS.getEnd(), RHS.getEnd());
+        -:  145:  }
+        -:  146:};
+        -:  147:
+        -:  148:/// Concrete subclass of DominatorTreeBase that is used to compute a
+        -:  149:/// normal dominator tree.
+        -:  150:///
+        -:  151:/// Definition: A block is said to be forward statically reachable if there is
+        -:  152:/// a path from the entry of the function to the block.  A statically reachable
+        -:  153:/// block may become statically unreachable during optimization.
+        -:  154:///
+        -:  155:/// A forward unreachable block may appear in the dominator tree, or it may
+        -:  156:/// not.  If it does, dominance queries will return results as if all reachable
+        -:  157:/// blocks dominate it.  When asking for a Node corresponding to a potentially
+        -:  158:/// unreachable block, calling code must handle the case where the block was
+        -:  159:/// unreachable and the result of getNode() is nullptr.
+        -:  160:///
+        -:  161:/// Generally, a block known to be unreachable when the dominator tree is
+        -:  162:/// constructed will not be in the tree.  One which becomes unreachable after
+        -:  163:/// the dominator tree is initially constructed may still exist in the tree,
+        -:  164:/// even if the tree is properly updated. Calling code should not rely on the
+        -:  165:/// preceding statements; this is stated only to assist human understanding.
+        -:  166:class DominatorTree : public DominatorTreeBase<BasicBlock, false> {
+        -:  167: public:
+        -:  168:  using Base = DominatorTreeBase<BasicBlock, false>;
+        -:  169:
+function _ZN4llvm13DominatorTreeC2Ev called 0 returned 0% blocks executed 0%
+    #####:  170:  DominatorTree() = default;
+    %%%%%:  170-block  0
+Aufruf  0 niemals ausgeführt
+        -:  171:  explicit DominatorTree(Function &F) { recalculate(F); }
+        -:  172:  explicit DominatorTree(DominatorTree &DT, DomTreeBuilder::BBUpdates U) {
+        -:  173:    recalculate(*DT.Parent, U);
+        -:  174:  }
+        -:  175:
+        -:  176:  /// Handle invalidation explicitly.
+        -:  177:  bool invalidate(Function &F, const PreservedAnalyses &PA,
+        -:  178:                  FunctionAnalysisManager::Invalidator &);
+        -:  179:
+        -:  180:  // Ensure base-class overloads are visible.
+        -:  181:  using Base::dominates;
+        -:  182:
+        -:  183:  /// Return true if the (end of the) basic block BB dominates the use U.
+        -:  184:  bool dominates(const BasicBlock *BB, const Use &U) const;
+        -:  185:
+        -:  186:  /// Return true if value Def dominates use U, in the sense that Def is
+        -:  187:  /// available at U, and could be substituted as the used value without
+        -:  188:  /// violating the SSA dominance requirement.
+        -:  189:  ///
+        -:  190:  /// In particular, it is worth noting that:
+        -:  191:  ///  * Non-instruction Defs dominate everything.
+        -:  192:  ///  * Def does not dominate a use in Def itself (outside of degenerate cases
+        -:  193:  ///    like unreachable code or trivial phi cycles).
+        -:  194:  ///  * Invoke/callbr Defs only dominate uses in their default destination.
+        -:  195:  bool dominates(const Value *Def, const Use &U) const;
+        -:  196:  /// Return true if value Def dominates all possible uses inside instruction
+        -:  197:  /// User. Same comments as for the Use-based API apply.
+        -:  198:  bool dominates(const Value *Def, const Instruction *User) const;
+        -:  199:  // Does not accept Value to avoid ambiguity with dominance checks between
+        -:  200:  // two basic blocks.
+        -:  201:  bool dominates(const Instruction *Def, const BasicBlock *BB) const;
+        -:  202:
+        -:  203:  /// Return true if an edge dominates a use.
+        -:  204:  ///
+        -:  205:  /// If BBE is not a unique edge between start and end of the edge, it can
+        -:  206:  /// never dominate the use.
+        -:  207:  bool dominates(const BasicBlockEdge &BBE, const Use &U) const;
+        -:  208:  bool dominates(const BasicBlockEdge &BBE, const BasicBlock *BB) const;
+        -:  209:  /// Returns true if edge \p BBE1 dominates edge \p BBE2.
+        -:  210:  bool dominates(const BasicBlockEdge &BBE1, const BasicBlockEdge &BBE2) const;
+        -:  211:
+        -:  212:  // Ensure base class overloads are visible.
+        -:  213:  using Base::isReachableFromEntry;
+        -:  214:
+        -:  215:  /// Provide an overload for a Use.
+        -:  216:  bool isReachableFromEntry(const Use &U) const;
+        -:  217:
+        -:  218:  // Pop up a GraphViz/gv window with the Dominator Tree rendered using `dot`.
+        -:  219:  void viewGraph(const Twine &Name, const Twine &Title);
+        -:  220:  void viewGraph();
+        -:  221:};
+        -:  222:
+        -:  223://===-------------------------------------
+        -:  224:// DominatorTree GraphTraits specializations so the DominatorTree can be
+        -:  225:// iterable by generic graph iterators.
+        -:  226:
+        -:  227:template <class Node, class ChildIterator> struct DomTreeGraphTraitsBase {
+        -:  228:  using NodeRef = Node *;
+        -:  229:  using ChildIteratorType = ChildIterator;
+        -:  230:  using nodes_iterator = df_iterator<Node *, df_iterator_default_set<Node*>>;
+        -:  231:
+        -:  232:  static NodeRef getEntryNode(NodeRef N) { return N; }
+        -:  233:  static ChildIteratorType child_begin(NodeRef N) { return N->begin(); }
+        -:  234:  static ChildIteratorType child_end(NodeRef N) { return N->end(); }
+        -:  235:
+        -:  236:  static nodes_iterator nodes_begin(NodeRef N) {
+        -:  237:    return df_begin(getEntryNode(N));
+        -:  238:  }
+        -:  239:
+        -:  240:  static nodes_iterator nodes_end(NodeRef N) { return df_end(getEntryNode(N)); }
+        -:  241:};
+        -:  242:
+        -:  243:template <>
+        -:  244:struct GraphTraits<DomTreeNode *>
+        -:  245:    : public DomTreeGraphTraitsBase<DomTreeNode, DomTreeNode::const_iterator> {
+        -:  246:};
+        -:  247:
+        -:  248:template <>
+        -:  249:struct GraphTraits<const DomTreeNode *>
+        -:  250:    : public DomTreeGraphTraitsBase<const DomTreeNode,
+        -:  251:                                    DomTreeNode::const_iterator> {};
+        -:  252:
+        -:  253:template <> struct GraphTraits<DominatorTree*>
+        -:  254:  : public GraphTraits<DomTreeNode*> {
+        -:  255:  static NodeRef getEntryNode(DominatorTree *DT) { return DT->getRootNode(); }
+        -:  256:
+        -:  257:  static nodes_iterator nodes_begin(DominatorTree *N) {
+        -:  258:    return df_begin(getEntryNode(N));
+        -:  259:  }
+        -:  260:
+        -:  261:  static nodes_iterator nodes_end(DominatorTree *N) {
+        -:  262:    return df_end(getEntryNode(N));
+        -:  263:  }
+        -:  264:};
+        -:  265:
+        -:  266:/// Analysis pass which computes a \c DominatorTree.
+        -:  267:class DominatorTreeAnalysis : public AnalysisInfoMixin<DominatorTreeAnalysis> {
+        -:  268:  friend AnalysisInfoMixin<DominatorTreeAnalysis>;
+        -:  269:  static AnalysisKey Key;
+        -:  270:
+        -:  271:public:
+        -:  272:  /// Provide the result typedef for this analysis pass.
+        -:  273:  using Result = DominatorTree;
+        -:  274:
+        -:  275:  /// Run the analysis pass over a function and produce a dominator tree.
+        -:  276:  DominatorTree run(Function &F, FunctionAnalysisManager &);
+        -:  277:};
+        -:  278:
+        -:  279:/// Printer pass for the \c DominatorTree.
+        -:  280:class DominatorTreePrinterPass
+        -:  281:    : public PassInfoMixin<DominatorTreePrinterPass> {
+        -:  282:  raw_ostream &OS;
+        -:  283:
+        -:  284:public:
+        -:  285:  explicit DominatorTreePrinterPass(raw_ostream &OS);
+        -:  286:
+        -:  287:  PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
+        -:  288:};
+        -:  289:
+        -:  290:/// Verifier pass for the \c DominatorTree.
+        -:  291:struct DominatorTreeVerifierPass : PassInfoMixin<DominatorTreeVerifierPass> {
+        -:  292:  PreservedAnalyses run(Function &F, FunctionAnalysisManager &AM);
+        -:  293:};
+        -:  294:
+        -:  295:/// Enables verification of dominator trees.
+        -:  296:///
+        -:  297:/// This check is expensive and is disabled by default.  `-verify-dom-info`
+        -:  298:/// allows selectively enabling the check without needing to recompile.
+        -:  299:extern bool VerifyDomInfo;
+        -:  300:
+        -:  301:/// Legacy analysis pass which computes a \c DominatorTree.
+        -:  302:class DominatorTreeWrapperPass : public FunctionPass {
+        -:  303:  DominatorTree DT;
+        -:  304:
+        -:  305:public:
+        -:  306:  static char ID;
+        -:  307:
+        -:  308:  DominatorTreeWrapperPass();
+        -:  309:
+        -:  310:  DominatorTree &getDomTree() { return DT; }
+        -:  311:  const DominatorTree &getDomTree() const { return DT; }
+        -:  312:
+        -:  313:  bool runOnFunction(Function &F) override;
+        -:  314:
+        -:  315:  void verifyAnalysis() const override;
+        -:  316:
+        -:  317:  void getAnalysisUsage(AnalysisUsage &AU) const override {
+        -:  318:    AU.setPreservesAll();
+        -:  319:  }
+        -:  320:
+        -:  321:  void releaseMemory() override { DT.reset(); }
+        -:  322:
+        -:  323:  void print(raw_ostream &OS, const Module *M = nullptr) const override;
+        -:  324:};
+        -:  325:} // end namespace llvm
+        -:  326:
+        -:  327:#endif // LLVM_IR_DOMINATORS_H
