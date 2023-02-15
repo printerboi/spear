@@ -1,11 +1,12 @@
 #include "ProgramTree.h"
 
 //Static method for ProgramTree-Graph construction
-ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset) {
+ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func) {
     //Create a dummy-Object
     auto *PT = new ProgramTree();
     //Create an empty list for the BasicBlocks
     std::vector<llvm::BasicBlock *> bbs;
+    PT->parentFunction = func;
 
     //Iterate over the given list of BasicBlock-References
     for(auto BB : blockset){

@@ -72,9 +72,10 @@ int main(int argc, const char **argv){
             llvm::ModuleAnalysisManager moduleAnalysisManager;
             llvm::ModulePassManager modulePassManager;
             llvm::FunctionPassManager functionPassManager;
+            llvm::CGSCCPassManager callgraphPassManager;
 
             if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[3] )){
-                auto module_up = std::move(llvm::parseIRFile(argv[3], error, context));
+                auto module_up = llvm::parseIRFile(argv[3], error, context).release();
 
                 passBuilder.registerModuleAnalyses(moduleAnalysisManager);
                 passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
@@ -84,7 +85,28 @@ int main(int argc, const char **argv){
                         loopAnalysisManager, functionAnalysisManager, cGSCCAnalysisManager,
                         moduleAnalysisManager);
 
+                //instname
+                functionPassManager.addPass(llvm::InstructionNamerPass());
+                //mem2reg
+                functionPassManager.addPass(llvm::PromotePass());
 
+                //instcombine
+                //functionPassManager.addPass(llvm::InstCombinePass());
+                //loop-simplify
+                functionPassManager.addPass(llvm::LoopSimplifyPass());
+
+                //loop-rotate
+                functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
+
+                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::InstructionNamerPass()));
+                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::PromotePass()));
+                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::LoopSimplifyPass()));
+                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass())));
+                modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(std::move(functionPassManager)));
+
+                modulePassManager.addPass(Energy(argv[2]));
+                modulePassManager.run(*module_up, moduleAnalysisManager);
+                /*
                 for(auto & F : module_up->getFunctionList()){
                     if( F.getName() == "main" ){
 
@@ -104,7 +126,7 @@ int main(int argc, const char **argv){
                         functionPassManager.addPass(Energy(argv[2]));
                         functionPassManager.run(F, functionAnalysisManager);
                     }
-                }
+                }*/
             }else{
                 std::cerr << helpString;
                 return 1;

@@ -118,7 +118,7 @@ public:
      * @param parent ProgramTree the LoopNode should be contained in
      * @return Returns a reference to the constructed LoopNode
      */
-    static LoopNode* construct(LoopTree *lptr, ProgramTree *parent);
+    static LoopNode* construct(LoopTree *lptr, ProgramTree *parent, llvm::Function *func);
 
     /**
      * Method for determining if the current LoopNode is a "Leaf".
@@ -172,12 +172,14 @@ class ProgramTree {
          */
         std::vector<Edge *> edges;
 
+        llvm::Function * parentFunction;
+
         /**
          * Static method for creating a ProgramTree from a given set of BasicBlocks
          * @param blockset Vector with references to a set of basic blocks
          * @return Returns the constructed ProgramTree
          */
-        static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset);
+        static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func);
 
         /**
          * ProgramTree destructor

@@ -25,7 +25,7 @@ TEST(LLVM_HANDLER_TEST, BASICBLOCKSUMTEST){
 
     auto *lh = new LLVMHandler(energy, 10000);
 
-    double calced = lh->getBasicBlockSum(*bb);
+    double calced = lh->getBasicBlockSum(*bb, bb->getParent());
 
     EXPECT_EQ(calced, 160481.14999999999);
 }

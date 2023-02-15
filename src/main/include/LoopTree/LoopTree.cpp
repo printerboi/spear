@@ -82,6 +82,7 @@ void LoopTree::printPreOrder() {
     }
 }
 
+/*
 double LoopTree::calcEnergy() {
     double sum = 0;
     double result = 0;
@@ -107,7 +108,7 @@ double LoopTree::calcEnergy() {
 
         return result;
     }
-}
+}*/
 
 std::vector<llvm::BasicBlock *> LoopTree::getLatches() {
     if(this->isLeaf()){

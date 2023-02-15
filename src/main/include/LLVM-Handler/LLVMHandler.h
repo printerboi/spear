@@ -15,12 +15,21 @@
 #include "llvm/IR/CFG.h"
 #include "llvm/IR/Constants.h"
 
+class EnergyFunction {
+    public:
+        llvm::Function * func;
+        double energy;
+        EnergyFunction(llvm::Function *func);
+};
 
 /**
  * LLVMHandler -  Class for combining LLVM IR with energy values to reason about the energy consumption of a program
  */
 class LLVMHandler {
     public:
+
+        std::vector<EnergyFunction *> funcqueue;
+
         /**
          * Constructor receiving a string to file. Loads the IR from the file to the class
          * @param energyModel JSON Object containing the energy model
@@ -33,7 +42,7 @@ class LLVMHandler {
          * @param BB Basic block to analyze
          * @return Double value of the approximated energy
          */
-        double getBasicBlockSum(llvm::BasicBlock &BB );
+        double getBasicBlockSum(llvm::BasicBlock &BB, llvm::Function *func );
 
         /**
          * Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be

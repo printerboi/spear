@@ -29,14 +29,14 @@ bool LoopNode::isLeafNode() const {
 }
 
 //Construct a LoopTree by recursively calling this method until we reach a leaf
-LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent) {
+LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Function * func) {
     //Create a Toplevel LoopNode
     LoopNode *LN = new LoopNode(lptr, parent);
 
     //End-condition
     if(LN->isLeafNode()){
         //Create a ProgramTree from this LoopTrees mainloop
-        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
+        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func);
 
         //Add the ProgramTree to the list of subtrees
         LN->subtrees.push_back(PT);
@@ -44,14 +44,14 @@ LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent) {
         //Further recursion
 
         //Create a ProgramTree from this LoopTrees mainloop
-        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector());
+        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func);
         //Add the ProgramTree to the list of subtrees
         LN->subtrees.push_back(PT);
 
         //Iterate over the subloops of this LoopNodes LoopTree
         for(auto *subTree : LN->loopTree->subTrees){
             //Construct a LoopNode for the current Sub-LoopTree
-            LoopNode *SLN = LoopNode::construct(subTree, PT);
+            LoopNode *SLN = LoopNode::construct(subTree, PT, func);
 
             //ProgramTree *SPT = ProgramTree::construct(subTree->mainloop->getBlocksVector());
             //SLN->subtrees.push_back(SPT);

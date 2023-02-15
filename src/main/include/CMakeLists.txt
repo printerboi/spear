@@ -19,6 +19,8 @@ target_sources(ba
         ProgramTree/LoopNode.cpp
         ProgramTree/Node.cpp
         ProgramTree/Edge.cpp
+        FunctionTree/FunctionTree.cpp
+        FunctionTree/FunctionTree.h
         )
 
 add_library(spear SHARED
@@ -41,4 +43,5 @@ add_library(spear SHARED
         ProgramTree/LoopNode.cpp
         ProgramTree/Node.cpp
         ProgramTree/Edge.cpp
-        )
+        FunctionTree/FunctionTree.cpp
+        FunctionTree/FunctionTree.h)

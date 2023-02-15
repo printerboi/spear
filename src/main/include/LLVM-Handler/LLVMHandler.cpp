@@ -6,7 +6,7 @@ LLVMHandler::LLVMHandler( Json::Value energy, long valueIfIntederminate) {
     this->valueIfIndeterminate = valueIfIntederminate;
 }
 
-double LLVMHandler::getBasicBlockSum( llvm::BasicBlock &BB ){
+double LLVMHandler::getBasicBlockSum( llvm::BasicBlock &BB, llvm::Function *parent ){
     //Init the sum of this block
     double blocksum = 0;
 
@@ -40,4 +40,9 @@ long LLVMHandler::getLoopUpperBound(llvm::Loop *L){
     }
 
     return bound;
+}
+
+EnergyFunction::EnergyFunction(llvm::Function *func) {
+    this->func = func;
+    this->energy = 0.00;
 }
