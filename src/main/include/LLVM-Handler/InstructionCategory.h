@@ -8,6 +8,14 @@
 
 #include <llvm/IR/Instruction.h>
 
+
+class EnergyFunction {
+public:
+    llvm::Function * func;
+    double energy;
+    EnergyFunction(llvm::Function *func);
+};
+
 /**
  * [InstructionCategory] - Class handling/containing a enum to categorize instructions
  */
@@ -35,6 +43,7 @@ class InstructionCategory {
         static bool isMemstoreInstruction( llvm::Instruction &Instruction );
         static bool isProgramFlowInstruction( llvm::Instruction &Instruction );
         static bool isDivisionInstruction( llvm::Instruction &Instruction );
+        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, std::vector<EnergyFunction *> function_pool);
 };
 
 #endif //BA_INSTRUCTIONCATEGORY_H

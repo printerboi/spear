@@ -3,6 +3,11 @@
 #include <llvm/IR/Instructions.h>
 #include "InstructionCategory.h"
 
+EnergyFunction::EnergyFunction(llvm::Function *func) {
+    this->func = func;
+    this->energy = 0.00;
+}
+
 
 bool InstructionCategory::isMemloadInstruction(llvm::Instruction &Instruction) {
     return Instruction.mayReadFromMemory();
@@ -65,4 +70,24 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
     }
 
     return catString;
+}
+
+double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, std::vector<EnergyFunction *> function_pool) {
+    double energy = 0.00;
+
+    if(isCallInstruction(Instruction) ){
+        auto call_instruction = llvm::cast<llvm::CallInst>(&Instruction);
+        if(call_instruction != nullptr){
+            auto called_function = call_instruction->getCalledFunction();
+
+            for(auto energy_function : function_pool){
+                if(energy_function->func == called_function){
+                    energy = energy_function->energy;
+                    break;
+                }
+            }
+        }
+    }
+
+    return energy;
 }

@@ -62,7 +62,7 @@ int main(int argc, const char **argv){
             }
         }else if( std::strcmp( argv[1], "-a" ) == 0 && argc == 4 ) {
             std::cout << "Not yet implemented" << std::endl;
-        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc == 4){
+        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc >= 4){
             llvm::LLVMContext context;
             llvm::SMDiagnostic error;
             llvm::PassBuilder passBuilder;
@@ -74,8 +74,9 @@ int main(int argc, const char **argv){
             llvm::FunctionPassManager functionPassManager;
             llvm::CGSCCPassManager callgraphPassManager;
 
-            if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[3] )){
-                auto module_up = llvm::parseIRFile(argv[3], error, context).release();
+
+            if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[7] )){
+                auto module_up = llvm::parseIRFile(argv[7], error, context).release();
 
                 passBuilder.registerModuleAnalyses(moduleAnalysisManager);
                 passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
@@ -98,13 +99,26 @@ int main(int argc, const char **argv){
                 //loop-rotate
                 functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
 
-                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::InstructionNamerPass()));
-                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::PromotePass()));
-                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::LoopSimplifyPass()));
-                //modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass())));
                 modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(std::move(functionPassManager)));
 
-                modulePassManager.addPass(Energy(argv[2]));
+                std::string mode = "program";
+                std::string format = "plain";
+
+                llvm::outs() << argv[4] << "\n";
+                llvm::outs() << argv[5] << "\n";
+                llvm::outs() << argv[6] << "\n";
+                llvm::outs() << argv[7] << "\n";
+
+                if(std::strcmp(argv[3], "-mode") == 0){
+                    mode = argv[4];
+                }
+
+                if(std::strcmp(argv[5], "-format") == 0){
+                    format = argv[6];
+                }
+
+
+                modulePassManager.addPass(Energy(argv[2], mode, format));
                 modulePassManager.run(*module_up, moduleAnalysisManager);
                 /*
                 for(auto & F : module_up->getFunctionList()){

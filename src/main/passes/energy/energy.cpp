@@ -16,16 +16,22 @@
 
 
 llvm::cl::opt<std::string> energyModelPath("m", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
+llvm::cl::opt<std::string> modeParameter("mode", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
+llvm::cl::opt<std::string> formatParameter("format", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
 
 struct Energy : llvm::PassInfoMixin<Energy> {
     Json::Value energyJson;
+    std::string mode;
+    std::string format;
     int MAXITERATIONS = 1000;
 
 
-    explicit Energy(std::string filename){
+    explicit Energy(std::string filename, std::string mode, std::string format){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( filename );
+            this->mode = mode;
+            this->format = format;
         }
     }
 
@@ -33,25 +39,106 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         if( llvm::sys::fs::exists( energyModelPath ) && !llvm::sys::fs::is_directory( energyModelPath ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( energyModelPath );
+            this->mode = modeParameter.c_str();
+            this->format = formatParameter.c_str();
         }
     }
 
-    static void outputMetrics(llvm::Function *F, ProgramTree *PT, LLVMHandler *handler){
-        double energyUsed = PT->getEnergy(handler);
-
-        llvm::outs() << "\n";
-        llvm::outs() << "Function " << F->getName() << "\n";
-        llvm::outs() << "======================================================================" << "\n";
-        llvm::outs() << "Estimated energy consumption: " << energyUsed << " µJ\n";
-        llvm::outs() << "Number of basic blocks: " << F->getBasicBlockList().size() << "\n";
-        llvm::outs() << "Number of instruction: " << F->getInstructionCount() << "\n";
-        llvm::outs() << "Ø energy per block: " << energyUsed / (double) F->getBasicBlockList().size() << " µJ\n";
-        llvm::outs() << "Ø energy per instruction: " << energyUsed / F->getInstructionCount() << " µJ\n";
-        llvm::outs() << "======================================================================" << "\n";
-        llvm::outs() << "\n";
+    static void outputMetricsJSON(Json::Value outputObject){
+        llvm::outs() << outputObject.toStyledString() << "\n";
     }
 
+    static void outputMetricsPlain(Json::Value outputObject){
 
+        for(auto functionObject : outputObject){
+            llvm::outs() << "\n";
+            llvm::outs() << "Function " << functionObject["name"].asString() << "\n";
+            llvm::outs() << "======================================================================" << "\n";
+            llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].asDouble()  << " µJ\n";
+            llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].asDouble()  << "\n";
+            llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].asDouble()  << "\n";
+            llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].asDouble()  << " µJ\n";
+            llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].asDouble() << " µJ\n";
+            llvm::outs() << "======================================================================" << "\n";
+            llvm::outs() << "\n";
+        }
+    }
+
+    ProgramTree* calcEneryOfFunction(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM){
+        auto* DT = new llvm::DominatorTree();
+        DT->recalculate(*function);
+
+        auto &KLoop = FAM->getResult<llvm::LoopAnalysis>(*function);
+
+        //Get the vector of Top-Level loops present in the program
+        auto loops = KLoop.getTopLevelLoops();
+        //Init a vector of references to BasicBlocks for all BBs in the function
+        std::vector<llvm::BasicBlock *> functionBlocks;
+        for(auto &blocks : *function){
+            functionBlocks.push_back(&blocks);
+        }
+
+        //Create the ProgramTree for the BBs present in the current function
+        ProgramTree *PT = ProgramTree::construct(functionBlocks, function);
+
+        //We need to distinguish if the function contains loops
+        if(!loops.empty()){
+            //If the function contains loops
+            //Init a vector for the LoopTrees we will create for the loops
+            std::vector<LoopTree *> trees;
+            //Init a vector for all the latches of the functions.
+            std::vector<llvm::BasicBlock *> latches;
+
+            //Iterate over the top-level loops
+            for (auto liiter = loops.begin(); liiter < loops.end(); ++liiter) {
+                //Get the loop, the iterator points to
+                auto topLoop= *liiter;
+
+                //Construct the LoopTree from the Information of the current top-level loop
+                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), handler);
+
+                //Add the constructed tree to the List of LoopTrees
+                trees.push_back(&LT);
+
+                //Find all latches in the current loop
+                for (auto &bb : LT.getLatches()) {
+                    latches.push_back(bb);
+                }
+
+                //Construct a LoopNode for the current loop
+                LoopNode *LN = LoopNode::construct(&LT, PT, function);
+                //Replace the blocks used by loop in the previous created ProgramTree
+                PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
+            }
+
+            for(auto EF : handler->funcqueue){
+                if(EF->func->getName() == function->getName()){
+                    EF->energy = PT->getEnergy(handler);
+                    break;
+                }
+            }
+
+            //outputMetrics(function, PT, &handler);
+            return PT;
+
+        }else{
+            //If we don't have any loops, the ProgramTree needs no further handling, and we can calculate the energy
+            //directly
+
+            //Get the Energy from the ProgramTree and print it
+            //llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
+
+            for(auto EF : handler->funcqueue){
+                if(EF->func->getName() == function->getName()){
+                    EF->energy = PT->getEnergy(handler);
+                    break;
+                }
+            }
+
+            //outputMetrics(function, PT, handler);
+            return PT;
+        }
+    }
 
     /**
      * Main runner of the energy pass. The pass will apply function-wise.
@@ -61,102 +148,65 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     llvm::PreservedAnalyses run(llvm::Module &M, llvm::ModuleAnalysisManager &MAM) {
         auto &FAM = MAM.getResult<llvm::FunctionAnalysisManagerModuleProxy>(M).getManager();
 
-
-        auto funcList = &M.getFunctionList();
-        std::vector<FunctionTree *> ftrees;
-
-        for(auto &F : *funcList){
-            if(F.getName() == "main"){
-                auto locft = FunctionTree::construct(&F);
-                ftrees.push_back(locft);
-                llvm::outs() << F.getName() << "\n";
-            }
-        }
-
-
         if(this->energyJson){
-            for(auto ft : ftrees){
-                LLVMHandler handler = LLVMHandler( this->energyJson, MAXITERATIONS );
+            auto funcList = &M.getFunctionList();
+            std::vector<FunctionTree *> ftrees;
 
-                for(auto F : ft->getPreOrderVector()){
-                    F->print(llvm::outs());
-                    auto tf = new EnergyFunction(F);
-
-                    handler.funcqueue.push_back(tf);
-
-
-                    auto* DT = new llvm::DominatorTree();
-                    DT->recalculate(*F);
-                    auto &KLoop = FAM.getResult<llvm::LoopAnalysis>(*F);
-
-                    //Get the vector of Top-Level loops present in the program
-                    auto loops = KLoop.getTopLevelLoops();
-                    //Init a vector of references to BasicBlocks for all BBs in the function
-                    std::vector<llvm::BasicBlock *> functionBlocks;
-                    for(auto &blocks : *F){
-                        functionBlocks.push_back(&blocks);
-                    }
-
-                    //Create the ProgramTree for the BBs present in the current function
-                    ProgramTree *PT = ProgramTree::construct(functionBlocks, F);
-
-                    //We need to distinguish if the function contains loops
-                    if(!loops.empty()){
-                        //If the function contains loops
-                        //Init a vector for the LoopTrees we will create for the loops
-                        std::vector<LoopTree *> trees;
-                        //Init a vector for all the latches of the functions.
-                        std::vector<llvm::BasicBlock *> latches;
-
-                        //Iterate over the top-level loops
-                        for (auto liiter = loops.begin(); liiter < loops.end(); ++liiter) {
-                            //Get the loop, the iterator points to
-                            auto topLoop= *liiter;
-
-                            //Construct the LoopTree from the Information of the current top-level loop
-                            LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), &handler);
-
-                            //Add the constructed tree to the List of LoopTrees
-                            trees.push_back(&LT);
-
-                            //Find all latches in the current loop
-                            for (auto &bb : LT.getLatches()) {
-                                latches.push_back(bb);
-                            }
-
-                            //Construct a LoopNode for the current loop
-                            LoopNode *LN = LoopNode::construct(&LT, PT, F);
-                            //Replace the blocks used by loop in the previous created ProgramTree
-                            PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
-                        }
-
-                        for(auto EF : handler.funcqueue){
-                            if(EF->func->getName() == F->getName()){
-                                EF->energy = PT->getEnergy(&handler);
-                                break;
-                            }
-                        }
-
-                        outputMetrics(F, PT, &handler);
-
-                    }else{
-                        //If we don't have any loops, the ProgramTree needs no further handling, and we can calculate the energy
-                        //directly
-
-                        //Get the Energy from the ProgramTree and print it
-                        //llvm::outs() << "Energy used: " << PT->getEnergy(&handler) << " µJ\n";
-
-                        for(auto EF : handler.funcqueue){
-                            if(EF->func->getName() == F->getName()){
-                                EF->energy = PT->getEnergy(&handler);
-                                break;
-                            }
-                        }
-
-                        outputMetrics(F, PT, &handler);
-                    }
+            for(auto &F : *funcList){
+                if(F.getName() == "main"){
+                    auto locft = FunctionTree::construct(&F);
+                    ftrees.push_back(locft);
                 }
             }
+
+            LLVMHandler handler = LLVMHandler( this->energyJson, MAXITERATIONS );
+
+            if(this->mode == "program"){
+                for(auto ft : ftrees){
+                    for(auto F : ft->getPreOrderVector()){
+                        auto tf = new EnergyFunction(F);
+
+
+                        handler.funcqueue.push_back(tf);
+
+                        if(!F->isDeclarationForLinker()){
+                            ProgramTree *programTree = calcEneryOfFunction(F, &handler, &FAM);
+                        }
+
+                    }
+                }
+            }else if(this->mode == "function"){
+                for(auto &F : *funcList){
+                    if(!F.isDeclarationForLinker()){
+                        ProgramTree *programTree = calcEneryOfFunction(&F, &handler, &FAM);
+                    }
+                }
+            }else{
+                llvm::errs() << "Please specify the mode the pass should run on:\n\t-mode program analyzes the program starting in the main function\n\t-mode function analyzes all functions, without respect to calls" << "\n";
+            }
+
+            Json::Value outputObject;
+            for(auto energyFunction : handler.funcqueue){
+                //outputMetricsJSON(energyFunction, outputObject);
+                Json::Value functionObject;
+                functionObject["name"] = energyFunction->func->getName().str();
+                functionObject["energy"] = energyFunction->energy;
+                functionObject["numberOfBasicBlocks"] = energyFunction->func->getBasicBlockList().size();
+                functionObject["numberOfInstructions"] = energyFunction->func->getInstructionCount();
+                functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->getBasicBlockList().size();
+                functionObject["averageEnergyPerInstruction"] = energyFunction->energy / (double) energyFunction->func->getInstructionCount();
+
+                outputObject.append(functionObject);
+            }
+
+            if(format == "JSON"){
+                outputMetricsJSON(outputObject);
+            }else if(format == "plain"){
+                outputMetricsPlain(outputObject);
+            }else{
+                llvm::errs() << "Please provide a valid output format: plain/JSON" << "\n";
+            }
+
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";
         }

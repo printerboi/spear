@@ -28,10 +28,10 @@ add_library(spear SHARED
         JSON-Handler/JSONHandler.h
         Rapl-reader/PowercapReader.cpp
         Rapl-reader/PowercapReader.h
-        LLVM-Handler/InstructionCategory.cpp
-        LLVM-Handler/InstructionCategory.h
         LLVM-Handler/LLVMHandler.cpp
         LLVM-Handler/LLVMHandler.h
+        LLVM-Handler/InstructionCategory.cpp
+        LLVM-Handler/InstructionCategory.h
         Profiler/Profiler.cpp
         Profiler/Profiler.h
         ../../../external/json/jsoncpp.cpp

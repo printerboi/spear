@@ -64,7 +64,6 @@ std::vector<llvm::Function *> FunctionTree::getPreOrderVector() {
     if(this->subtrees.empty()){
         list.push_back(this->func);
     }else{
-        llvm::outs() << "============================================\n";
         for (auto sft : this->subtrees) {
             auto sublist = sft->getPreOrderVector();
             for(auto F : sublist){

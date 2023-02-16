@@ -1,5 +1,6 @@
 
 #include "LLVMHandler.h"
+#include "InstructionCategory.h"
 
 LLVMHandler::LLVMHandler( Json::Value energy, long valueIfIntederminate) {
     this->energyValues = energy;
@@ -16,7 +17,16 @@ double LLVMHandler::getBasicBlockSum( llvm::BasicBlock &BB, llvm::Function *pare
         InstructionCategory::Category cat = InstructionCategory::getCategory(I);
 
         //Get the energy from the JSON energy values by referencing the category
-        double iValue = this->energyValues[InstructionCategory::toString(cat)].asDouble();
+        double iValue = 0.00;
+        if(InstructionCategory::isCallInstruction(I)){
+            double calledValue = InstructionCategory::getCalledFunctionEnergy(I, this->funcqueue);
+            iValue = this->energyValues[InstructionCategory::toString(cat)].asDouble();
+
+            iValue += calledValue;
+        }else{
+            iValue = this->energyValues[InstructionCategory::toString(cat)].asDouble();
+        }
+
         //Add the value to the sum
         blocksum += iValue;
     }
@@ -40,9 +50,4 @@ long LLVMHandler::getLoopUpperBound(llvm::Loop *L){
     }
 
     return bound;
-}
-
-EnergyFunction::EnergyFunction(llvm::Function *func) {
-    this->func = func;
-    this->energy = 0.00;
 }

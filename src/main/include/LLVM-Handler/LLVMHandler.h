@@ -15,13 +15,6 @@
 #include "llvm/IR/CFG.h"
 #include "llvm/IR/Constants.h"
 
-class EnergyFunction {
-    public:
-        llvm::Function * func;
-        double energy;
-        EnergyFunction(llvm::Function *func);
-};
-
 /**
  * LLVMHandler -  Class for combining LLVM IR with energy values to reason about the energy consumption of a program
  */
