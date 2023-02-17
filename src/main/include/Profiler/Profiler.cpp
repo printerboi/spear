@@ -2,6 +2,7 @@
 // Created by max on 26.12.22.
 //
 
+#include <mutex>
 #include "Profiler.h"
 
 Profiler::Profiler(int it, int rep){
@@ -26,7 +27,7 @@ std::vector<double> Profiler::profile() {
 }
 
 double Profiler::benchmarkFile(std::string file) {
-    PowercapReader powReader = PowercapReader();
+    auto powReader = RegisterReader(0);
     char* relPath = getenv("BA_REL_PATH");
 
     char *command = new char[255];
@@ -37,6 +38,11 @@ double Profiler::benchmarkFile(std::string file) {
         auto preEng = (double) powReader.getEnergy();
 
         for (int j = 0; j < this->repetitions; ++j) {
+            cpu_set_t set;
+            CPU_ZERO(&set);        // clear cpu mask
+            CPU_SET(0, &set);      // set cpu 0
+            sched_setaffinity(0, sizeof(cpu_set_t), &set);  // 0 is the calling process
+
             system(command);
         }
         auto postEng = (double) powReader.getEnergy();

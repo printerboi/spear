@@ -5,6 +5,8 @@ target_sources(ba
         PUBLIC JSON-Handler/JSONHandler.h
         PUBLIC Rapl-reader/PowercapReader.cpp
         PUBLIC Rapl-reader/PowercapReader.h
+        PUBLIC Rapl-reader/RegisterReader.cpp
+        PUBLIC Rapl-reader/RegisterReader.h
         PUBLIC LLVM-Handler/InstructionCategory.cpp
         PUBLIC LLVM-Handler/InstructionCategory.h
         PUBLIC LLVM-Handler/LLVMHandler.cpp
@@ -28,6 +30,8 @@ add_library(spear SHARED
         JSON-Handler/JSONHandler.h
         Rapl-reader/PowercapReader.cpp
         Rapl-reader/PowercapReader.h
+        Rapl-reader/RegisterReader.cpp
+        Rapl-reader/RegisterReader.h
         LLVM-Handler/LLVMHandler.cpp
         LLVM-Handler/LLVMHandler.h
         LLVM-Handler/InstructionCategory.cpp
