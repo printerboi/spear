@@ -71,7 +71,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="ProgramTree_8h_source.html">ProgramTree.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="ProgramGraph_8h_source.html">ProgramGraph.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for LoopNode:</div>
 <div class="dyncontent">
@@ -84,8 +84,8 @@ Inheritance diagram for LoopNode:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa263771a5de50de2b51e066563bbc8a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#aa263771a5de50de2b51e066563bbc8a6">LoopNode</a> (<a class="el" href="classLoopTree.html">LoopTree</a> *lpTree, <a class="el" href="classProgramTree.html">ProgramTree</a> *<a class="el" href="classNode.html#a2945004f52e476554f488eb93ff7747f">parent</a>)</td></tr>
-<tr class="separator:aa263771a5de50de2b51e066563bbc8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d65744205955e44a04f0517d5a7e5ba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a5d65744205955e44a04f0517d5a7e5ba">LoopNode</a> (<a class="el" href="classLoopTree.html">LoopTree</a> *lpTree, <a class="el" href="classProgramGraph.html">ProgramGraph</a> *<a class="el" href="classNode.html#a06d203029b4fd6f499b2879a7fda03a4">parent</a>, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> <a class="el" href="classNode.html#aab149ed1099b53c3f3954d20718f511e">strategy</a>)</td></tr>
+<tr class="separator:a5d65744205955e44a04f0517d5a7e5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4afd2722296ce93e0559a35f1c715900"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a4afd2722296ce93e0559a35f1c715900">isLeafNode</a> () const</td></tr>
 <tr class="separator:a4afd2722296ce93e0559a35f1c715900"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76da3fb01528cbe4f8a9d8ffb6507909"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a76da3fb01528cbe4f8a9d8ffb6507909">getEnergy</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler) override</td></tr>
@@ -97,25 +97,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeef0c735da0948bbeaedc474a6c75709"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#aeef0c735da0948bbeaedc474a6c75709">~LoopNode</a> ()</td></tr>
 <tr class="separator:aeef0c735da0948bbeaedc474a6c75709"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classNode"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classNode')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classNode.html">Node</a></td></tr>
-<tr class="memitem:aac976da37731d2109173ab44823a29f6 inherit pub_methods_classNode"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#aac976da37731d2109173ab44823a29f6">Node</a> (<a class="el" href="classProgramTree.html">ProgramTree</a> *<a class="el" href="classNode.html#a2945004f52e476554f488eb93ff7747f">parent</a>)</td></tr>
-<tr class="separator:aac976da37731d2109173ab44823a29f6 inherit pub_methods_classNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa79cde413bbce1ac50cdad17bb9567da inherit pub_methods_classNode"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#aa79cde413bbce1ac50cdad17bb9567da">Node</a> (<a class="el" href="classProgramGraph.html">ProgramGraph</a> *<a class="el" href="classNode.html#a06d203029b4fd6f499b2879a7fda03a4">parent</a>, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> <a class="el" href="classNode.html#aab149ed1099b53c3f3954d20718f511e">strategy</a>)</td></tr>
+<tr class="separator:aa79cde413bbce1ac50cdad17bb9567da inherit pub_methods_classNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:acb4cb1478f0753d2d17c775487f8833d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classLoopNode.html">LoopNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#acb4cb1478f0753d2d17c775487f8833d">construct</a> (<a class="el" href="classLoopTree.html">LoopTree</a> *lptr, <a class="el" href="classProgramTree.html">ProgramTree</a> *<a class="el" href="classNode.html#a2945004f52e476554f488eb93ff7747f">parent</a>)</td></tr>
-<tr class="separator:acb4cb1478f0753d2d17c775487f8833d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8934f91329ea398d050f2f7b684c8673"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classLoopNode.html">LoopNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a8934f91329ea398d050f2f7b684c8673">construct</a> (<a class="el" href="classLoopTree.html">LoopTree</a> *lptr, <a class="el" href="classProgramGraph.html">ProgramGraph</a> *<a class="el" href="classNode.html#a06d203029b4fd6f499b2879a7fda03a4">parent</a>, llvm::Function *func, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> <a class="el" href="classNode.html#aab149ed1099b53c3f3954d20718f511e">strategy</a>)</td></tr>
+<tr class="separator:a8934f91329ea398d050f2f7b684c8673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a34181dd8b9ba9b9ce1c8a99126427993"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classLoopTree.html">LoopTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a34181dd8b9ba9b9ce1c8a99126427993">loopTree</a></td></tr>
 <tr class="separator:a34181dd8b9ba9b9ce1c8a99126427993"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2294c2dc9d0dbcdc32b9bc22c2bab1ba"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classProgramTree.html">ProgramTree</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a2294c2dc9d0dbcdc32b9bc22c2bab1ba">subtrees</a></td></tr>
-<tr class="separator:a2294c2dc9d0dbcdc32b9bc22c2bab1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dc486a4a63e8eb11b166d1b1ce53164"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classProgramGraph.html">ProgramGraph</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a2dc486a4a63e8eb11b166d1b1ce53164">subtrees</a></td></tr>
+<tr class="separator:a2dc486a4a63e8eb11b166d1b1ce53164"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classNode"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classNode')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classNode.html">Node</a></td></tr>
-<tr class="memitem:a2945004f52e476554f488eb93ff7747f inherit pub_attribs_classNode"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classProgramTree.html">ProgramTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a2945004f52e476554f488eb93ff7747f">parent</a></td></tr>
-<tr class="separator:a2945004f52e476554f488eb93ff7747f inherit pub_attribs_classNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d203029b4fd6f499b2879a7fda03a4 inherit pub_attribs_classNode"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a06d203029b4fd6f499b2879a7fda03a4">parent</a></td></tr>
+<tr class="separator:a06d203029b4fd6f499b2879a7fda03a4 inherit pub_attribs_classNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a2d49cb065897f06e74e3e291c66bc6 inherit pub_attribs_classNode"><td class="memItemLeft" align="right" valign="top">std::vector&lt; llvm::BasicBlock * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#a3a2d49cb065897f06e74e3e291c66bc6">blocks</a></td></tr>
 <tr class="separator:a3a2d49cb065897f06e74e3e291c66bc6 inherit pub_attribs_classNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab149ed1099b53c3f3954d20718f511e inherit pub_attribs_classNode"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNode.html#aab149ed1099b53c3f3954d20718f511e">strategy</a></td></tr>
+<tr class="separator:aab149ed1099b53c3f3954d20718f511e inherit pub_attribs_classNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -126,8 +128,8 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classLoopNode.html">LoopNode</a> - A specialization of the <a class="el" href="classNode.html">Node</a> to represent loops extracted from the program. LoopNodes may contain further ProgramTrees representing a recursive structure </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa263771a5de50de2b51e066563bbc8a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa263771a5de50de2b51e066563bbc8a6">&#9670;&nbsp;</a></span>LoopNode()</h2>
+<a id="a5d65744205955e44a04f0517d5a7e5ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d65744205955e44a04f0517d5a7e5ba">&#9670;&nbsp;</a></span>LoopNode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -141,8 +143,14 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classProgramTree.html">ProgramTree</a> *&#160;</td>
-          <td class="paramname"><em>parent</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a>&#160;</td>
+          <td class="paramname"><em>strategy</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -151,10 +159,10 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructor. Creates a <a class="el" href="classLoopNode.html">LoopNode</a> with the given <a class="el" href="classLoopTree.html">LoopTree</a> and the surrounding <a class="el" href="classProgramTree.html">ProgramTree</a> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Constructor. Creates a <a class="el" href="classLoopNode.html">LoopNode</a> with the given <a class="el" href="classLoopTree.html">LoopTree</a> and the surrounding <a class="el" href="classProgramGraph.html">ProgramGraph</a> </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lpTree</td><td>Reference to the <a class="el" href="classLoopTree.html">LoopTree</a> for the loop to represent </td></tr>
-    <tr><td class="paramname">parent</td><td>The parent <a class="el" href="classProgramTree.html">ProgramTree</a>, this <a class="el" href="classLoopNode.html">LoopNode</a> is contained in </td></tr>
+    <tr><td class="paramname">parent</td><td>The parent <a class="el" href="classProgramGraph.html">ProgramGraph</a>, this <a class="el" href="classLoopNode.html">LoopNode</a> is contained in </td></tr>
   </table>
   </dd>
 </dl>
@@ -180,8 +188,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="acb4cb1478f0753d2d17c775487f8833d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb4cb1478f0753d2d17c775487f8833d">&#9670;&nbsp;</a></span>construct()</h2>
+<a id="a8934f91329ea398d050f2f7b684c8673"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8934f91329ea398d050f2f7b684c8673">&#9670;&nbsp;</a></span>construct()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,8 +206,20 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classProgramTree.html">ProgramTree</a> *&#160;</td>
-          <td class="paramname"><em>parent</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">llvm::Function *&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a>&#160;</td>
+          <td class="paramname"><em>strategy</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -213,10 +233,10 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Static Method for constructing a <a class="el" href="classLoopNode.html">LoopNode</a> recursivly trough the given <a class="el" href="classLoopTree.html">LoopTree</a> and the parent <a class="el" href="classProgramTree.html">ProgramTree</a> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Static Method for constructing a <a class="el" href="classLoopNode.html">LoopNode</a> recursivly trough the given <a class="el" href="classLoopTree.html">LoopTree</a> and the parent <a class="el" href="classProgramGraph.html">ProgramGraph</a> </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">lptr</td><td><a class="el" href="classLoopTree.html">LoopTree</a> to construct the <a class="el" href="classLoopNode.html">LoopNode</a> for </td></tr>
-    <tr><td class="paramname">parent</td><td><a class="el" href="classProgramTree.html">ProgramTree</a> the <a class="el" href="classLoopNode.html">LoopNode</a> should be contained in </td></tr>
+    <tr><td class="paramname">parent</td><td><a class="el" href="classProgramGraph.html">ProgramGraph</a> the <a class="el" href="classLoopNode.html">LoopNode</a> should be contained in </td></tr>
   </table>
   </dd>
 </dl>
@@ -339,14 +359,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a2294c2dc9d0dbcdc32b9bc22c2bab1ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2294c2dc9d0dbcdc32b9bc22c2bab1ba">&#9670;&nbsp;</a></span>subtrees</h2>
+<a id="a2dc486a4a63e8eb11b166d1b1ce53164"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dc486a4a63e8eb11b166d1b1ce53164">&#9670;&nbsp;</a></span>subtrees</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classProgramTree.html">ProgramTree</a> *&gt; LoopNode::subtrees</td>
+          <td class="memname">std::vector&lt;<a class="el" href="classProgramGraph.html">ProgramGraph</a> *&gt; LoopNode::subtrees</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -355,8 +375,8 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/main/include/ProgramTree/<a class="el" href="ProgramTree_8h_source.html">ProgramTree.h</a></li>
-<li>src/main/include/ProgramTree/LoopNode.cpp</li>
+<li>src/main/include/ProgramGraph/<a class="el" href="ProgramGraph_8h_source.html">ProgramGraph.h</a></li>
+<li>src/main/include/ProgramGraph/LoopNode.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

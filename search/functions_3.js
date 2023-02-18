@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['findblock_73',['findBlock',['../classProgramTree.html#afa41b9c99c447616f8bb000b9c4b3dbf',1,'ProgramTree']]],
-  ['findedgesstartingatnode_74',['findEdgesStartingAtNode',['../classProgramTree.html#a6a8148bdd4ff177664c0a3b6c80ddbf4',1,'ProgramTree']]]
+  ['edge_93',['Edge',['../classEdge.html#ad22b6fa890c4cd35bcf530f577d52ac0',1,'Edge']]],
+  ['energy_94',['Energy',['../structEnergy.html#afbb550a686fd08279981875408a5ae9f',1,'Energy::Energy(std::string filename, std::string mode, std::string format, std::string strategy, std::string loopbound)'],['../structEnergy.html#ace7d4d30b4d89e661e169c299d65cad9',1,'Energy::Energy()']]]
 ];

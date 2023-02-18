@@ -63,6 +63,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classLLVMHandler-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">LLVMHandler Class Reference</div>  </div>
@@ -73,18 +74,24 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae940748859bbf6c89aa08809b2533709"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#ae940748859bbf6c89aa08809b2533709">LLVMHandler</a> (Json::Value energyModel, long valueIfInteterminate)</td></tr>
-<tr class="separator:ae940748859bbf6c89aa08809b2533709"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43307ff5842d607f0404964500e98c12"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a43307ff5842d607f0404964500e98c12">getBasicBlockSum</a> (llvm::BasicBlock &amp;BB)</td></tr>
-<tr class="separator:a43307ff5842d607f0404964500e98c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7f629a5a88a6014c51954ce793b2e7a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#af7f629a5a88a6014c51954ce793b2e7a">LLVMHandler</a> (Json::Value energyModel, int valueIfInteterminate)</td></tr>
+<tr class="separator:af7f629a5a88a6014c51954ce793b2e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a159b5b9672fc79e57d1ec96a12c9d1f5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5">getBasicBlockSum</a> (llvm::BasicBlock &amp;BB, llvm::Function *func)</td></tr>
+<tr class="separator:a159b5b9672fc79e57d1ec96a12c9d1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d14386c23be3cbea28255394985f786"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a6d14386c23be3cbea28255394985f786">getLoopUpperBound</a> (llvm::Loop *L)</td></tr>
 <tr class="separator:a6d14386c23be3cbea28255394985f786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:ab234f44ca4714e1ef404cd7bac1f4278"><td class="memItemLeft" align="right" valign="top"><a id="ab234f44ca4714e1ef404cd7bac1f4278"></a>
+std::vector&lt; <a class="el" href="classEnergyFunction.html">EnergyFunction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>funcqueue</b></td></tr>
+<tr class="separator:ab234f44ca4714e1ef404cd7bac1f4278"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classLLVMHandler.html">LLVMHandler</a> - Class for combining LLVM IR with energy values to reason about the energy consumption of a program </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae940748859bbf6c89aa08809b2533709"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae940748859bbf6c89aa08809b2533709">&#9670;&nbsp;</a></span>LLVMHandler()</h2>
+<a id="af7f629a5a88a6014c51954ce793b2e7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7f629a5a88a6014c51954ce793b2e7a">&#9670;&nbsp;</a></span>LLVMHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -101,7 +108,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">long&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>valueIfInteterminate</em>&#160;</td>
         </tr>
         <tr>
@@ -127,8 +134,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a43307ff5842d607f0404964500e98c12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43307ff5842d607f0404964500e98c12">&#9670;&nbsp;</a></span>getBasicBlockSum()</h2>
+<a id="a159b5b9672fc79e57d1ec96a12c9d1f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a159b5b9672fc79e57d1ec96a12c9d1f5">&#9670;&nbsp;</a></span>getBasicBlockSum()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,8 +144,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">double LLVMHandler::getBasicBlockSum </td>
           <td>(</td>
           <td class="paramtype">llvm::BasicBlock &amp;&#160;</td>
-          <td class="paramname"><em>BB</em></td><td>)</td>
+          <td class="paramname"><em>BB</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">llvm::Function *&#160;</td>
+          <td class="paramname"><em>func</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

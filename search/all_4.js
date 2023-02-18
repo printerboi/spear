@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['getadjacentnodes_12',['getAdjacentNodes',['../classNode.html#a21b786612db6ab923a11a1b42ff27584',1,'Node']]],
-  ['getbasicblocksum_13',['getBasicBlockSum',['../classLLVMHandler.html#a43307ff5842d607f0404964500e98c12',1,'LLVMHandler']]],
-  ['getcategory_14',['getCategory',['../classInstructionCategory.html#a186de65cac60f25541ff34085dbdb158',1,'InstructionCategory']]],
-  ['getenergy_15',['getEnergy',['../classNode.html#adb3c2dbe4ff346a15c281c8fb2f29e52',1,'Node::getEnergy()'],['../classLoopNode.html#a76da3fb01528cbe4f8a9d8ffb6507909',1,'LoopNode::getEnergy()'],['../classProgramTree.html#a3c3894289b936b982914b816dd8bd22a',1,'ProgramTree::getEnergy()'],['../classPowercapReader.html#a8c44917db28ace079d27c10b6fa9043a',1,'PowercapReader::getEnergy()'],['../classRegisterReader.html#a71e704b8291c42006f4743a97b74e2b0',1,'RegisterReader::getEnergy()']]],
-  ['getlatches_16',['getLatches',['../classLoopTree.html#a5bbe89a53070d2ca8c76a1cccdd221fa',1,'LoopTree']]],
-  ['getloopnodes_17',['getLoopNodes',['../classProgramTree.html#a036dd55200fec8dba01ee8d38f65ffab',1,'ProgramTree']]],
-  ['getloopupperbound_18',['getLoopUpperBound',['../classLLVMHandler.html#a6d14386c23be3cbea28255394985f786',1,'LLVMHandler']]],
-  ['getmultiplier_19',['getMultiplier',['../classRegisterReader.html#a5206015b7b87e3a509d35ca1996fcec9',1,'RegisterReader']]]
+  ['findblock_15',['findBlock',['../classProgramGraph.html#a6b957561bbb816ff251db2e47c8c8a1a',1,'ProgramGraph']]],
+  ['findedgesstartingatnode_16',['findEdgesStartingAtNode',['../classProgramGraph.html#ac8cd186d744d1c92467b50d970af8a2a',1,'ProgramGraph']]],
+  ['func_17',['func',['../classFunctionTree.html#a9130c65e97bdf6bd10c3eea431809760',1,'FunctionTree']]],
+  ['functiontree_18',['FunctionTree',['../classFunctionTree.html',1,'FunctionTree'],['../classFunctionTree.html#a53962ae644f6cbfa614728aa09f32c5a',1,'FunctionTree::FunctionTree()']]]
 ];

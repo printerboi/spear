@@ -79,17 +79,25 @@ Inheritance diagram for Energy:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9f101ca7cbd3f218be8d1b32dab309f4"><td class="memItemLeft" align="right" valign="top"><a id="a9f101ca7cbd3f218be8d1b32dab309f4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Energy</b> (std::string filename)</td></tr>
-<tr class="separator:a9f101ca7cbd3f218be8d1b32dab309f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a45bf1196ff2476bd5ac07aa2a811df"><td class="memItemLeft" align="right" valign="top">llvm::PreservedAnalyses&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a5a45bf1196ff2476bd5ac07aa2a811df">run</a> (llvm::Function &amp;F, llvm::FunctionAnalysisManager &amp;FAM)</td></tr>
-<tr class="separator:a5a45bf1196ff2476bd5ac07aa2a811df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb550a686fd08279981875408a5ae9f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#afbb550a686fd08279981875408a5ae9f">Energy</a> (std::string filename, std::string mode, std::string format, std::string strategy, std::string loopbound)</td></tr>
+<tr class="separator:afbb550a686fd08279981875408a5ae9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace7d4d30b4d89e661e169c299d65cad9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ace7d4d30b4d89e661e169c299d65cad9">Energy</a> ()</td></tr>
+<tr class="separator:ace7d4d30b4d89e661e169c299d65cad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0394efb164432825e072fd3c27e2a77"><td class="memItemLeft" align="right" valign="top">Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ab0394efb164432825e072fd3c27e2a77">constructOutputObject</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> &amp;handler)</td></tr>
+<tr class="separator:ab0394efb164432825e072fd3c27e2a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c548280be5dc9bbdf7fe6b41fd30e6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a9c548280be5dc9bbdf7fe6b41fd30e6d">analysisRunner</a> (llvm::Module &amp;module, llvm::ModuleAnalysisManager &amp;MAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy, int maxiterations)</td></tr>
+<tr class="separator:a9c548280be5dc9bbdf7fe6b41fd30e6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59078dc41c47935b7ff58db115ea379b"><td class="memItemLeft" align="right" valign="top">llvm::PreservedAnalyses&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a59078dc41c47935b7ff58db115ea379b">run</a> (llvm::Module &amp;M, llvm::ModuleAnalysisManager &amp;MAM)</td></tr>
+<tr class="separator:a59078dc41c47935b7ff58db115ea379b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5e0875234c88c09351f9d687c5db85ea"><td class="memItemLeft" align="right" valign="top"><a id="a5e0875234c88c09351f9d687c5db85ea"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>outputMetrics</b> (llvm::Function *F, <a class="el" href="classProgramTree.html">ProgramTree</a> *PT, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler)</td></tr>
-<tr class="separator:a5e0875234c88c09351f9d687c5db85ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00eb76c7c891d94f0170c83539eb9a32"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a00eb76c7c891d94f0170c83539eb9a32">outputMetricsJSON</a> (Json::Value outputObject)</td></tr>
+<tr class="separator:a00eb76c7c891d94f0170c83539eb9a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66f2a3044b7b4baab8917643fda8899"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ab66f2a3044b7b4baab8917643fda8899">outputMetricsPlain</a> (Json::Value outputObject)</td></tr>
+<tr class="separator:ab66f2a3044b7b4baab8917643fda8899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f050ce70e8b86e9f517902105bfe22"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ae1f050ce70e8b86e9f517902105bfe22">calcEneryOfFunction</a> (llvm::Function *function, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler, llvm::FunctionAnalysisManager *FAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy)</td></tr>
+<tr class="separator:ae1f050ce70e8b86e9f517902105bfe22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0475b6aa5a23fb4c549b4abf5a67f3b"><td class="memItemLeft" align="right" valign="top"><a id="af0475b6aa5a23fb4c549b4abf5a67f3b"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRequired</b> ()</td></tr>
 <tr class="separator:af0475b6aa5a23fb4c549b4abf5a67f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,13 +107,22 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ac8bd4889a9fa1795576acf76d3b06101"><td class="memItemLeft" align="right" valign="top"><a id="ac8bd4889a9fa1795576acf76d3b06101"></a>
 Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>energyJson</b></td></tr>
 <tr class="separator:ac8bd4889a9fa1795576acf76d3b06101"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab339e1456d94d150a6cd644bb4f532a2"><td class="memItemLeft" align="right" valign="top"><a id="ab339e1456d94d150a6cd644bb4f532a2"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>MAXITERATIONS</b> = 1000</td></tr>
-<tr class="separator:ab339e1456d94d150a6cd644bb4f532a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5665ba1eebac18f3c5226705ec30d8ec"><td class="memItemLeft" align="right" valign="top"><a id="a5665ba1eebac18f3c5226705ec30d8ec"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>mode</b></td></tr>
+<tr class="separator:a5665ba1eebac18f3c5226705ec30d8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecd3b149785dd4e2840b410ce131c44b"><td class="memItemLeft" align="right" valign="top"><a id="aecd3b149785dd4e2840b410ce131c44b"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
+<tr class="separator:aecd3b149785dd4e2840b410ce131c44b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ebd8c22c796bd46ab2800a6b10e8702"><td class="memItemLeft" align="right" valign="top"><a id="a3ebd8c22c796bd46ab2800a6b10e8702"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>strategy</b></td></tr>
+<tr class="separator:a3ebd8c22c796bd46ab2800a6b10e8702"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a4a9355e9e2a0ea607b3ddf5329f4d3"><td class="memItemLeft" align="right" valign="top"><a id="a9a4a9355e9e2a0ea607b3ddf5329f4d3"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b></td></tr>
+<tr class="separator:a9a4a9355e9e2a0ea607b3ddf5329f4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5a45bf1196ff2476bd5ac07aa2a811df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a45bf1196ff2476bd5ac07aa2a811df">&#9670;&nbsp;</a></span>run()</h2>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="afbb550a686fd08279981875408a5ae9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbb550a686fd08279981875408a5ae9f">&#9670;&nbsp;</a></span>Energy() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -114,16 +131,119 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>MAXITERATIONS</b> = 10
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">llvm::PreservedAnalyses Energy::run </td>
+          <td class="memname">Energy::Energy </td>
           <td>(</td>
-          <td class="paramtype">llvm::Function &amp;&#160;</td>
-          <td class="paramname"><em>F</em>, </td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">llvm::FunctionAnalysisManager &amp;&#160;</td>
-          <td class="paramname"><em>FAM</em>&#160;</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>mode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>strategy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>loopbound</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constructor to run, when called from a method </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filename</td><td>Path to the .json file containing the energymodel </td></tr>
+    <tr><td class="paramname">mode</td><td>Mode to run the analysis on </td></tr>
+    <tr><td class="paramname">format</td><td>Outputformat </td></tr>
+    <tr><td class="paramname">strategy</td><td>Strategy to analyze the program with </td></tr>
+    <tr><td class="paramname">loopbound</td><td>Upper bound of loops that can't be analyzed </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ace7d4d30b4d89e661e169c299d65cad9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace7d4d30b4d89e661e169c299d65cad9">&#9670;&nbsp;</a></span>Energy() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Energy::Energy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Constructor called by the passmanager </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9c548280be5dc9bbdf7fe6b41fd30e6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c548280be5dc9bbdf7fe6b41fd30e6d">&#9670;&nbsp;</a></span>analysisRunner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Energy::analysisRunner </td>
+          <td>(</td>
+          <td class="paramtype">llvm::Module &amp;&#160;</td>
+          <td class="paramname"><em>module</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">llvm::ModuleAnalysisManager &amp;&#160;</td>
+          <td class="paramname"><em>MAM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a>&#160;</td>
+          <td class="paramname"><em>analysisStrategy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxiterations</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -137,10 +257,210 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>MAXITERATIONS</b> = 10
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Main runner of the energy pass. The pass will apply function-wise. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Function to run the analysis on a given module </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">F</td><td>Reference to a function </td></tr>
-    <tr><td class="paramname">FAM</td><td>Reference to a FunctionAnalysisManager </td></tr>
+    <tr><td class="paramname">module</td><td>LLVM::Module to run the analysis on </td></tr>
+    <tr><td class="paramname">MAM</td><td>llvm::ModuleAnalysisManager </td></tr>
+    <tr><td class="paramname">analysisStrategy</td><td>Strategy to analyze the module with </td></tr>
+    <tr><td class="paramname">maxiterations</td><td>Upper bound of loops </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae1f050ce70e8b86e9f517902105bfe22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1f050ce70e8b86e9f517902105bfe22">&#9670;&nbsp;</a></span>calcEneryOfFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classProgramGraph.html">ProgramGraph</a>* Energy::calcEneryOfFunction </td>
+          <td>(</td>
+          <td class="paramtype">llvm::Function *&#160;</td>
+          <td class="paramname"><em>function</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> *&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">llvm::FunctionAnalysisManager *&#160;</td>
+          <td class="paramname"><em>FAM</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a>&#160;</td>
+          <td class="paramname"><em>analysisStrategy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculates ProgramGraph-representation of a function </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">function</td><td>Function to construct the graph for </td></tr>
+    <tr><td class="paramname">handler</td><td>A <a class="el" href="classLLVMHandler.html">LLVMHandler</a> containing the energy-Model </td></tr>
+    <tr><td class="paramname">FAM</td><td>A llvm::FunctionAnalysisManager </td></tr>
+    <tr><td class="paramname">analysisStrategy</td><td>The strategy to analyze the function with </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the calculated <a class="el" href="classProgramGraph.html">ProgramGraph</a> </dd></dl>
+
+</div>
+</div>
+<a id="ab0394efb164432825e072fd3c27e2a77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0394efb164432825e072fd3c27e2a77">&#9670;&nbsp;</a></span>constructOutputObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Json::Value Energy::constructOutputObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> &amp;&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Construct the JSON-Object from which we will draw all necessary information for the output </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handler</td><td><a class="el" href="classLLVMHandler.html">LLVMHandler</a> so we can get the functionQueue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retuns a JSON-Object containing all needed information for the output </dd></dl>
+
+</div>
+</div>
+<a id="a00eb76c7c891d94f0170c83539eb9a32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00eb76c7c891d94f0170c83539eb9a32">&#9670;&nbsp;</a></span>outputMetricsJSON()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Energy::outputMetricsJSON </td>
+          <td>(</td>
+          <td class="paramtype">Json::Value&#160;</td>
+          <td class="paramname"><em>outputObject</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Prints the provided JSON-Object as stylized json string </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">outputObject</td><td>JSON-Object containing information about the analysis </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab66f2a3044b7b4baab8917643fda8899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab66f2a3044b7b4baab8917643fda8899">&#9670;&nbsp;</a></span>outputMetricsPlain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Energy::outputMetricsPlain </td>
+          <td>(</td>
+          <td class="paramtype">Json::Value&#160;</td>
+          <td class="paramname"><em>outputObject</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Print the provided JSON-Object as string </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">outputObject</td><td>JSON-Object containing information about the analysis </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a59078dc41c47935b7ff58db115ea379b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59078dc41c47935b7ff58db115ea379b">&#9670;&nbsp;</a></span>run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">llvm::PreservedAnalyses Energy::run </td>
+          <td>(</td>
+          <td class="paramtype">llvm::Module &amp;&#160;</td>
+          <td class="paramname"><em>M</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">llvm::ModuleAnalysisManager &amp;&#160;</td>
+          <td class="paramname"><em>MAM</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Main runner of the energy pass. The pass will apply module-wise. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">M</td><td>Reference to a Module </td></tr>
+    <tr><td class="paramname">MAM</td><td>Reference to a ModuleAnalysisManager </td></tr>
   </table>
   </dd>
 </dl>

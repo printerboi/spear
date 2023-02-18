@@ -1,4 +1,12 @@
 var searchData=
 [
-  ['handler_20',['handler',['../classLoopTree.html#a15b900fb894985bdc881842d75bd5f9a',1,'LoopTree']]]
+  ['getadjacentnodes_19',['getAdjacentNodes',['../classNode.html#a21b786612db6ab923a11a1b42ff27584',1,'Node']]],
+  ['getbasicblocksum_20',['getBasicBlockSum',['../classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5',1,'LLVMHandler']]],
+  ['getcategory_21',['getCategory',['../classInstructionCategory.html#a186de65cac60f25541ff34085dbdb158',1,'InstructionCategory']]],
+  ['getenergy_22',['getEnergy',['../classNode.html#adb3c2dbe4ff346a15c281c8fb2f29e52',1,'Node::getEnergy()'],['../classLoopNode.html#a76da3fb01528cbe4f8a9d8ffb6507909',1,'LoopNode::getEnergy()'],['../classProgramGraph.html#a618f4338b78bad9c90b17309966fb689',1,'ProgramGraph::getEnergy()'],['../classPowercapReader.html#a8c44917db28ace079d27c10b6fa9043a',1,'PowercapReader::getEnergy()'],['../classRegisterReader.html#a71e704b8291c42006f4743a97b74e2b0',1,'RegisterReader::getEnergy()']]],
+  ['getlatches_23',['getLatches',['../classLoopTree.html#a5bbe89a53070d2ca8c76a1cccdd221fa',1,'LoopTree']]],
+  ['getloopnodes_24',['getLoopNodes',['../classProgramGraph.html#aab2eb08f2095c8d35d33df3db97ab93e',1,'ProgramGraph']]],
+  ['getloopupperbound_25',['getLoopUpperBound',['../classLLVMHandler.html#a6d14386c23be3cbea28255394985f786',1,'LLVMHandler']]],
+  ['getmultiplier_26',['getMultiplier',['../classRegisterReader.html#a5206015b7b87e3a509d35ca1996fcec9',1,'RegisterReader']]],
+  ['getpreordervector_27',['getPreOrderVector',['../classFunctionTree.html#a8bae3dc577cca9d2c0307ab93534e1a8',1,'FunctionTree']]]
 ];

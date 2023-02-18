@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['tostring_102',['toString',['../classInstructionCategory.html#a057f079222bee2c118ec344f5e7e7601',1,'InstructionCategory::toString()'],['../classNode.html#ab68ba2e4b8b4b4aa5cd9cdcfe03277f3',1,'Node::toString()'],['../classEdge.html#aa5867b3b3fb5f2ce22783f05ed8d9438',1,'Edge::toString()'],['../classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e',1,'LoopNode::toString()']]]
+  ['powercapreader_115',['PowercapReader',['../classPowercapReader.html#a415424eaa546b2b86202ba6b06fe2a3c',1,'PowercapReader']]],
+  ['printedges_116',['printEdges',['../classProgramGraph.html#a9e653f7294600e06d970989638aa3d59',1,'ProgramGraph']]],
+  ['printnodes_117',['printNodes',['../classProgramGraph.html#a31499bd68418b43bda45e0d76799744b',1,'ProgramGraph']]],
+  ['printpreorder_118',['printPreOrder',['../classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34',1,'LoopTree']]],
+  ['printpreorder_119',['printPreorder',['../classFunctionTree.html#ad338d9921dc8a5f50788079eb8c4b508',1,'FunctionTree']]],
+  ['profile_120',['profile',['../classProfiler.html#a1ac482be9a580fd4d65f83604de19b65',1,'Profiler']]],
+  ['profiler_121',['Profiler',['../classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1',1,'Profiler']]]
 ];

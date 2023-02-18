@@ -1,4 +1,11 @@
 var searchData=
 [
-  ['tostring_51',['toString',['../classInstructionCategory.html#a057f079222bee2c118ec344f5e7e7601',1,'InstructionCategory::toString()'],['../classNode.html#ab68ba2e4b8b4b4aa5cd9cdcfe03277f3',1,'Node::toString()'],['../classEdge.html#aa5867b3b3fb5f2ce22783f05ed8d9438',1,'Edge::toString()'],['../classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e',1,'LoopNode::toString()']]]
+  ['read_53',['read',['../classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b',1,'JSONHandler']]],
+  ['registerreader_54',['RegisterReader',['../classRegisterReader.html',1,'RegisterReader'],['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader::RegisterReader()']]],
+  ['removeloopedgesfromsubtrees_55',['removeLoopEdgesFromSubtrees',['../classLoopNode.html#acf52f39d97166bc126ce0d1467d8e6be',1,'LoopNode']]],
+  ['removenode_56',['removeNode',['../classProgramGraph.html#a2410389005e0500528af73b06dd8ab56',1,'ProgramGraph']]],
+  ['removeorphanededges_57',['removeOrphanedEdges',['../classProgramGraph.html#afc10742190eb8fa0610e975032d71491',1,'ProgramGraph']]],
+  ['repetitions_58',['repetitions',['../classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf',1,'Profiler']]],
+  ['replacenodeswithloopnode_59',['replaceNodesWithLoopNode',['../classProgramGraph.html#a70085fb5341ec21c2b05db4d26449265',1,'ProgramGraph']]],
+  ['run_60',['run',['../structEnergy.html#a59078dc41c47935b7ff58db115ea379b',1,'Energy']]]
 ];
