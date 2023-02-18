@@ -1,7 +1,7 @@
 # SPEAR
 
 Welcome to SPEAR, the 
-**S**tatic **P**redictive **E**nergy **A**nalysis Tool based on **R**APL.
+**S**tatic **P**redictive **E**nergy **A**nalysis Tool based on Intel **R**APL.
 
 The tool will be developed for my bachelor-thesis
 **"Predictive, static energy consumption analysis based on experimentally determined energy models"**
