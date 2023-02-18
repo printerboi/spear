@@ -50,7 +50,12 @@ otherwise the behaviour of spear will be undefined or the analysis will crash.
 Spear provided a custom flag `-a`, which expects the following parameters:
 
 ```
-spear -a <modelpath> --mode <mode> --format <format> --strategy <strategy> --loopbound <loopbound> <llvmirpath>
+spear -a <modelpath> 
+      --mode <mode> 
+      --format <format> 
+      --strategy <strategy> 
+      --loopbound <loopbound> 
+      <llvmirpath>
 ```
 
 `<modelpath>`: Path to a model calculated by spear with the `-p` flag
