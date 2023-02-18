@@ -1,15 +1,19 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
-  echo "The script expects exactly one parameter! The parameter has to be a valid .ll file"
-else
-  filename="$(basename "$1" .ll)"
+function compileFile() {
+  filename="src/$1.ll"
   echo "Compiling the file $1 downto binary..."
 
-  echo "Generating the bytcodefile $filename.bc"
-  llvm-as "$1"
-  echo "Generating the objectfile $filename.o"
-  llc -filetype=obj "src/$filename.bc"
-  echo "Generating the bynary compiled/$filename"
-  clang "src/$filename.o" -o "compiled/$filename"
-fi
+  echo "Generating the bytcodefile $1.bc"
+  llvm-as "$filename"
+  echo "Generating the objectfile $1.o"
+  llc -filetype=obj "src/$1.bc"
+  echo "Generating the bynary compiled/$1"
+  clang "src/$1.o" -o "compiled/$1"
+}
+
+compileFile base
+compileFile groupB
+compileFile groupD
+compileFile groupG
+compileFile groupM

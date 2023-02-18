@@ -11,13 +11,13 @@ add_llvm_library(Energy MODULE
          ../../../../external/json/jsoncpp.cpp;
         ../../../main/include/Profiler/Profiler.cpp
         ../../../main/include/Profiler/Profiler.h
-        ../../../main/include/ProgramTree/ProgramTree.cpp
-        ../../../main/include/ProgramTree/ProgramTree.h
+        ../../include/ProgramGraph/ProgramGraph.cpp
+        ../../include/ProgramGraph/ProgramGraph.h
         ../../../main/include/LoopTree/LoopTree.cpp
         ../../../main/include/LoopTree/LoopTree.h
-        ../../../main/include/ProgramTree/LoopNode.cpp
-        ../../../main/include/ProgramTree/Node.cpp
-        ../../../main/include/ProgramTree/Edge.cpp
+        ../../include/ProgramGraph/LoopNode.cpp
+        ../../include/ProgramGraph/Node.cpp
+        ../../include/ProgramGraph/Edge.cpp
         ../../../main/include/FunctionTree/FunctionTree.cpp
         ../../../main/include/FunctionTree/FunctionTree.h
        energy.cpp

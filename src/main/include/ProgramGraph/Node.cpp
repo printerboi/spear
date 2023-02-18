@@ -1,7 +1,7 @@
-#include "ProgramTree.h"
+#include "ProgramGraph.h"
 
-//Create a Node by setting the parent property with the given ProgramTree
-Node::Node(ProgramTree *parent, AnalysisStrategy::Strategy strategy) {
+//Create a Node by setting the parent property with the given ProgramGraph
+Node::Node(ProgramGraph *parent, AnalysisStrategy::Strategy strategy) {
     this->parent = parent;
     this->strategy = strategy;
 }
@@ -95,7 +95,7 @@ std::vector<Node *> Node::getAdjacentNodes() {
     //Init the vector
     std::vector<Node *> adjacent;
 
-    //Get the edgdes starting at this node from the parent ProgramTree
+    //Get the edgdes starting at this node from the parent ProgramGraph
     for(auto E : this->parent->findEdgesStartingAtNode(this)){
         //Add the end of the edge to the adjacent vector
         adjacent.push_back(E->end);

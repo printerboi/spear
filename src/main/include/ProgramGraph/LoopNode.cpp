@@ -1,7 +1,7 @@
-#include "ProgramTree.h"
+#include "ProgramGraph.h"
 
-//Creates a LoopNode with the given LoopTree and ProgramTree
-LoopNode::LoopNode(LoopTree *LT, ProgramTree *parent, AnalysisStrategy::Strategy strategy) : Node(parent, strategy) {
+//Creates a LoopNode with the given LoopTree and ProgramGraph
+LoopNode::LoopNode(LoopTree *LT, ProgramGraph *parent, AnalysisStrategy::Strategy strategy) : Node(parent, strategy) {
     this->loopTree = LT;
 }
 
@@ -29,23 +29,23 @@ bool LoopNode::isLeafNode() const {
 }
 
 //Construct a LoopTree by recursively calling this method until we reach a leaf
-LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Function * func, AnalysisStrategy::Strategy strategy) {
+LoopNode* LoopNode::construct(LoopTree *lptr, ProgramGraph *parent, llvm::Function * func, AnalysisStrategy::Strategy strategy) {
     //Create a Toplevel LoopNode
     LoopNode *LN = new LoopNode(lptr, parent, strategy);
 
     //End-condition
     if(LN->isLeafNode()){
-        //Create a ProgramTree from this LoopTrees mainloop
-        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
+        //Create a ProgramGraph from this LoopTrees mainloop
+        ProgramGraph *PT = ProgramGraph::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
 
-        //Add the ProgramTree to the list of subtrees
+        //Add the ProgramGraph to the list of subtrees
         LN->subtrees.push_back(PT);
     }else{
         //Further recursion
 
-        //Create a ProgramTree from this LoopTrees mainloop
-        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
-        //Add the ProgramTree to the list of subtrees
+        //Create a ProgramGraph from this LoopTrees mainloop
+        ProgramGraph *PT = ProgramGraph::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
+        //Add the ProgramGraph to the list of subtrees
         LN->subtrees.push_back(PT);
 
         //Iterate over the subloops of this LoopNodes LoopTree
@@ -53,7 +53,7 @@ LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Functio
             //Construct a LoopNode for the current Sub-LoopTree
             LoopNode *SLN = LoopNode::construct(subTree, PT, func, strategy);
 
-            //ProgramTree *SPT = ProgramTree::construct(subTree->mainloop->getBlocksVector());
+            //ProgramGraph *SPT = ProgramGraph::construct(subTree->mainloop->getBlocksVector());
             //SLN->subtrees.push_back(SPT);
 
             //Init the list of blocks contained in the subloop
@@ -66,7 +66,7 @@ LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Functio
 
             //LoopNode *subLN = LoopNode::construct(&subTree);
 
-            //Replace the nodes in the sub-ProgramTree
+            //Replace the nodes in the sub-ProgramGraph
             PT->replaceNodesWithLoopNode(subTree->mainloop->getBlocksVector(), SLN);
         }
     }
@@ -160,7 +160,7 @@ void LoopNode::removeLoopEdgesFromSubtrees(){
         //Init the list of edges we want to keep
         std::vector<Edge *> tempedges;
 
-        //Iterate over the edges contained in the Sub-ProgramTree
+        //Iterate over the edges contained in the Sub-ProgramGraph
         for(auto e : sT->edges){
             //If the start node is not the latch of the loop, add it to the list of edges we want to keep
             if(e->start != latchnode){
@@ -168,7 +168,7 @@ void LoopNode::removeLoopEdgesFromSubtrees(){
             }
         }
 
-        //Set the edges-list of the Sub-ProgramTree to the calculated list
+        //Set the edges-list of the Sub-ProgramGraph to the calculated list
         sT->edges = tempedges;
 
         //If we have further LoopNodes contained in this LoopNode, remove their loopedges too

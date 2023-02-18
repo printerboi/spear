@@ -1,4 +1,4 @@
-#include "ProgramTree.h"
+#include "ProgramGraph.h"
 
 //Simple constructor. Set the properties to the given pointers
 Edge::Edge(Node *start, Node *end) {

@@ -4,7 +4,13 @@
 
 #endif //BA_ANALYSISSTRATEGY_H
 
+/**
+ * Class for the Strategy enum.
+ */
 class AnalysisStrategy {
 public:
-    enum Strategy { WORSTCASE, AVERAGECASE, BESTCASE, UNDEFINED };
+    /**
+     * Basic Enum to distinguish different types of analysis
+     */
+    enum Strategy { WORSTCASE, AVERAGECASE, BESTCASE };
 };

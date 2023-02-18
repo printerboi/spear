@@ -1,6 +1,6 @@
 
-#ifndef BA_PROGRAMTREE_H
-#define BA_PROGRAMTREE_H
+#ifndef BA_PROGRAMGRAPH_H
+#define BA_PROGRAMGRAPH_H
 
 
 #include <vector>
@@ -11,8 +11,8 @@
 #include "../AnalysisStrategy/AnalysisStrategy.h"
 
 
-//Pre-declaration of the ProgramTree Class
-class ProgramTree;
+//Pre-declaration of the ProgramGraph Class
+class ProgramGraph;
 
 /**
  * Node - A Node in the Programtree. Represents a set of BasicBlocks, which may contain if-statements but is loop-free
@@ -22,7 +22,7 @@ class Node {
         /**
          * Reference to the Tree this node is contained in
          */
-        ProgramTree *parent;
+        ProgramGraph *parent;
 
         /**
          * A vector savint references to the blocks in this node
@@ -35,10 +35,10 @@ class Node {
         AnalysisStrategy::Strategy strategy;
 
         /**
-         * Constructor taking the surrounding ProgramTree
+         * Constructor taking the surrounding ProgramGraph
          * @param parent
          */
-        Node(ProgramTree *parent, AnalysisStrategy::Strategy strategy);
+        Node(ProgramGraph *parent, AnalysisStrategy::Strategy strategy);
 
         /**
          * Method for converting this node to string for debug output
@@ -57,7 +57,7 @@ class Node {
 
 protected:
     /**
-     * Calculates the adjacent Nodes extending through vertices in the parent ProgramTree from this Node outwards
+     * Calculates the adjacent Nodes extending through vertices in the parent ProgramGraph from this Node outwards
      * @return Returns a vector of references to the adjacent nodes
      */
     std::vector<Node *> getAdjacentNodes();
@@ -110,22 +110,22 @@ public:
     /**
      * Vector storing the references to the subtrees encapsulated by this LoopNode
      */
-    std::vector<ProgramTree *> subtrees;
+    std::vector<ProgramGraph *> subtrees;
 
     /**
-     * Constructor. Creates a LoopNode with the given LoopTree and the surrounding ProgramTree
+     * Constructor. Creates a LoopNode with the given LoopTree and the surrounding ProgramGraph
      * @param lpTree Reference to the LoopTree for the loop to represent
-     * @param parent The parent ProgramTree, this LoopNode is contained in
+     * @param parent The parent ProgramGraph, this LoopNode is contained in
      */
-    LoopNode(LoopTree *lpTree, ProgramTree *parent, AnalysisStrategy::Strategy strategy);
+    LoopNode(LoopTree *lpTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy);
 
     /**
-     * Static Method for constructing a LoopNode recursivly trough the given LoopTree and the parent ProgramTree
+     * Static Method for constructing a LoopNode recursivly trough the given LoopTree and the parent ProgramGraph
      * @param lptr LoopTree to construct the LoopNode for
-     * @param parent ProgramTree the LoopNode should be contained in
+     * @param parent ProgramGraph the LoopNode should be contained in
      * @return Returns a reference to the constructed LoopNode
      */
-    static LoopNode* construct(LoopTree *lptr, ProgramTree *parent, llvm::Function *func, AnalysisStrategy::Strategy strategy);
+    static LoopNode* construct(LoopTree *lptr, ProgramGraph *parent, llvm::Function *func, AnalysisStrategy::Strategy strategy);
 
     /**
      * Method for determining if the current LoopNode is a "Leaf".
@@ -165,9 +165,9 @@ public:
 
 
 /**
- * ProgramTree -  Class to (partly) represent a program as a graph
+ * ProgramGraph -  Class to (partly) represent a program as a graph
  */
-class ProgramTree {
+class ProgramGraph {
     public:
         /**
          * Vector containing references to the nodes contained in the graph
@@ -182,16 +182,16 @@ class ProgramTree {
         llvm::Function * parentFunction;
 
         /**
-         * Static method for creating a ProgramTree from a given set of BasicBlocks
+         * Static method for creating a ProgramGraph from a given set of BasicBlocks
          * @param blockset Vector with references to a set of basic blocks
-         * @return Returns the constructed ProgramTree
+         * @return Returns the constructed ProgramGraph
          */
-        static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy);
+        static ProgramGraph* construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy);
 
         /**
-         * ProgramTree destructor
+         * ProgramGraph destructor
          */
-        ~ProgramTree();
+        ~ProgramGraph();
 
         /**
          * Method for printing the string representations of the contained nodes with their calculated energy
@@ -205,7 +205,7 @@ class ProgramTree {
         void printEdges();
 
         /**
-         * Method for getting the Node contained in this ProgramTree, which holds the given BasicBlock
+         * Method for getting the Node contained in this ProgramGraph, which holds the given BasicBlock
          * @param BB A reference to the BasicBlock to find
          * @return A reference to the Node if it was found. Returns a null pointer otherwise.
          */
@@ -230,31 +230,31 @@ class ProgramTree {
         void removeOrphanedEdges();
 
         /**
-         * Method for replacing the nodes in the ProgramTree contained by a loopNode.
+         * Method for replacing the nodes in the ProgramGraph contained by a loopNode.
          * @param blocks Vector of BasicBlocks to replace by the given LoopNode
          * @param LPN LoopNode used for replacing
          */
         void replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN);
 
         /**
-         * Method for calculating the energy of this ProgramTree. Uses the getEnergy() methods of the contained nodes
+         * Method for calculating the energy of this ProgramGraph. Uses the getEnergy() methods of the contained nodes
          * @param handler LLVMHandler used to the get the values for the basic blocks
          * @return Returns the used energy as double
          */
         double getEnergy(LLVMHandler *handler);
 
         /**
-         * Calculates the LoopNodes contained in this ProgramTree
+         * Calculates the LoopNodes contained in this ProgramGraph
          * @return Returns a Vector of references to the contained LoopNodes.
          */
         std::vector<LoopNode *> getLoopNodes();
 
         /**
-         * Calculates if the ProgramTree contains LoopNodes
-         * @return Returns true if the ProgramTree contains LoopNodes. False if otherwise
+         * Calculates if the ProgramGraph contains LoopNodes
+         * @return Returns true if the ProgramGraph contains LoopNodes. False if otherwise
          */
         bool containsLoopNodes();
 };
 
 
-#endif //BA_PROGRAMTREE_H
+#endif //BA_PROGRAMGRAPH_H

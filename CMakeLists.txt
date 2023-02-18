@@ -1,4 +1,4 @@
-project(ba)
+project(spear)
 cmake_minimum_required(VERSION 3.16)
 
 find_package(LLVM REQUIRED CONFIG)
@@ -17,15 +17,15 @@ include(AddLLVM)
 
 
 
-add_executable(ba)
+add_executable(spear)
 add_subdirectory(src)
-target_sources(ba
+target_sources(spear
         PUBLIC main.cpp
         PUBLIC external/json/jsoncpp.cpp
         )
 
 llvm_map_components_to_libnames(llvm_libs support core irreader passes)
 
-target_link_libraries(ba ${llvm_libs})
+target_link_libraries(spear ${llvm_libs})
 
 enable_testing()

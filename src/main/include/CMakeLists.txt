@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-target_sources(ba
+target_sources(spear
         PUBLIC JSON-Handler/JSONHandler.cpp
         PUBLIC JSON-Handler/JSONHandler.h
         PUBLIC Rapl-reader/PowercapReader.cpp
@@ -14,18 +14,18 @@ target_sources(ba
         PUBLIC ../../../external/json/jsoncpp.cpp;
         PUBLIC Profiler/Profiler.cpp
         PUBLIC Profiler/Profiler.h
-        PUBLIC ProgramTree/ProgramTree.cpp
-        PUBLIC ProgramTree/ProgramTree.h
+        PUBLIC ProgramGraph/ProgramGraph.cpp
+        PUBLIC ProgramGraph/ProgramGraph.h
         LoopTree/LoopTree.cpp
         LoopTree/LoopTree.h
-        ProgramTree/LoopNode.cpp
-        ProgramTree/Node.cpp
-        ProgramTree/Edge.cpp
+        ProgramGraph/LoopNode.cpp
+        ProgramGraph/Node.cpp
+        ProgramGraph/Edge.cpp
         FunctionTree/FunctionTree.cpp
         FunctionTree/FunctionTree.h
         )
 
-add_library(spear SHARED
+add_library(spearlib SHARED
         JSON-Handler/JSONHandler.cpp
         JSON-Handler/JSONHandler.h
         Rapl-reader/PowercapReader.cpp
@@ -39,13 +39,13 @@ add_library(spear SHARED
         Profiler/Profiler.cpp
         Profiler/Profiler.h
         ../../../external/json/jsoncpp.cpp
-        ProgramTree/ProgramTree.cpp
-        ProgramTree/ProgramTree.h
+        ProgramGraph/ProgramGraph.cpp
+        ProgramGraph/ProgramGraph.h
         ../passes/energy/energy.cpp
         LoopTree/LoopTree.cpp
         LoopTree/LoopTree.h
-        ProgramTree/LoopNode.cpp
-        ProgramTree/Node.cpp
-        ProgramTree/Edge.cpp
+        ProgramGraph/LoopNode.cpp
+        ProgramGraph/Node.cpp
+        ProgramGraph/Edge.cpp
         FunctionTree/FunctionTree.cpp
         FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h)

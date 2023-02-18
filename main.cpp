@@ -15,10 +15,14 @@
 #include "llvm/Transforms/Scalar/LoopRotation.h"
 
 int main(int argc, const char **argv){
-    std::string helpString = "Usage: ba option <arguments>\n==============================\nOptions:"
-                             "\n\t-b\t Benchmarks the system and generates the energy values used for any further analysis"
-                             "\n\t-a\t ..."
-                             "\n\t-d\t Debug. Please provide a energy JSON file followed by the IR code .ll ";
+    std::string helpString = "Usage: spear option <arguments>\n==============================\nOptions:"
+                             "\n\t-p\t Profile the system and generate the estimated energy usage of the device. Used for any further analysis"
+                             "\n\t-a\t Analyzes a given program. Further parameters are needed:"
+                             "\n\t\t\t --model Path to a .json containing the profile"
+                             "\n\t\t\t --mode Type of analysis (program/function)"
+                             "\n\t\t\t --format Format of the result to print (plain/json)"
+                             "\n\t\t\t --strategy Type of analysis-strategy (worst/best/average)"
+                             "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)";
 
     if( argc >= 2 ){
         if( std::strcmp( argv[1], "-b" ) == 0 && argc == 4 ){
@@ -60,9 +64,7 @@ int main(int argc, const char **argv){
                 std::cerr << "The given arguments are not useable as ints";
                 return 1;
             }
-        }else if( std::strcmp( argv[1], "-a" ) == 0 && argc == 4 ) {
-            std::cout << "Not yet implemented" << std::endl;
-        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc == 12){
+        }else if(std::strcmp( argv[1], "-a" ) == 0 && argc == 12) {
             llvm::LLVMContext context;
             llvm::SMDiagnostic error;
             llvm::PassBuilder passBuilder;
@@ -75,8 +77,7 @@ int main(int argc, const char **argv){
             llvm::CGSCCPassManager callgraphPassManager;
 
 
-
-            if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[11] )){
+            if (std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[11])) {
                 auto module_up = llvm::parseIRFile(argv[11], error, context).release();
 
                 passBuilder.registerModuleAnalyses(moduleAnalysisManager);
@@ -92,13 +93,11 @@ int main(int argc, const char **argv){
                 //mem2reg
                 functionPassManager.addPass(llvm::PromotePass());
 
-                //instcombine
-                //functionPassManager.addPass(llvm::InstCombinePass());
                 //loop-simplify
                 functionPassManager.addPass(llvm::LoopSimplifyPass());
 
                 //loop-rotate
-                functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
+                functionPassManager.addPass(llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()));
                 modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(std::move(functionPassManager)));
 
                 std::string mode;
@@ -107,29 +106,32 @@ int main(int argc, const char **argv){
                 std::string loopbound;
 
 
-                if(std::strcmp(argv[3], "--mode") == 0){
+                if (std::strcmp(argv[3], "--mode") == 0) {
                     mode = argv[4];
                 }
 
-                if(std::strcmp(argv[5], "--format") == 0){
+                if (std::strcmp(argv[5], "--format") == 0) {
                     format = argv[6];
                 }
 
-                if(std::strcmp(argv[7], "--strategy") == 0){
+                if (std::strcmp(argv[7], "--strategy") == 0) {
                     strategy = argv[8];
                 }
 
-                if(std::strcmp(argv[9], "--loopbound") == 0){
+                if (std::strcmp(argv[9], "--loopbound") == 0) {
                     loopbound = argv[10];
                 }
 
                 modulePassManager.addPass(Energy(argv[2], mode, format, strategy, loopbound));
                 modulePassManager.run(*module_up, moduleAnalysisManager);
 
-            }else{
+            } else {
                 std::cerr << helpString;
                 return 1;
             }
+        }else if(std::strcmp( argv[1], "-h" ) == 0){
+            std::cerr << helpString;
+            return 1;
         }else{
             std::cerr << helpString;
             return 1;

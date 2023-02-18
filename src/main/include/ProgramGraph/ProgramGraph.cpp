@@ -1,9 +1,9 @@
-#include "ProgramTree.h"
+#include "ProgramGraph.h"
 
-//Static method for ProgramTree-Graph construction
-ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy) {
+//Static method for ProgramGraph-Graph construction
+ProgramGraph* ProgramGraph::construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy) {
     //Create a dummy-Object
-    auto *PT = new ProgramTree();
+    auto *PT = new ProgramGraph();
     //Create an empty list for the BasicBlocks
     std::vector<llvm::BasicBlock *> bbs;
     PT->parentFunction = func;
@@ -40,7 +40,7 @@ ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset, ll
     return PT;
 }
 
-ProgramTree::~ProgramTree() {
+ProgramGraph::~ProgramGraph() {
     for (auto N : this->nodes) {
         delete N;
     }
@@ -51,7 +51,7 @@ ProgramTree::~ProgramTree() {
 }
 
 //Print the Graph in preorder
-void ProgramTree::printNodes(LLVMHandler *handler) {
+void ProgramGraph::printNodes(LLVMHandler *handler) {
     //Iterate over the nodes in the graph
     for (auto N : this->nodes) {
         llvm::outs() << "\n----------------------------------------------------------------------\n";
@@ -72,7 +72,7 @@ void ProgramTree::printNodes(LLVMHandler *handler) {
 }
 
 //Search for the given block in the graph
-Node *ProgramTree::findBlock(llvm::BasicBlock *BB) {
+Node *ProgramGraph::findBlock(llvm::BasicBlock *BB) {
     //Iterate over the nodes
     for(auto Node : this->nodes){
 
@@ -88,7 +88,7 @@ Node *ProgramTree::findBlock(llvm::BasicBlock *BB) {
 }
 
 //Print te edges of the graph
-void ProgramTree::printEdges() {
+void ProgramGraph::printEdges() {
     //Iterate over the edges and use the toString() method of the edges
     for (auto E : edges) {
         llvm::outs() << "\n";
@@ -110,7 +110,7 @@ void ProgramTree::printEdges() {
 }
 
 //Replaces the given blocks with the given loopnode
-void ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
+void ProgramGraph::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
     //Init the list of nodes, that need replacement
     std::vector<Node *> nodesToReplace;
     std::vector<std::string> allblocks;
@@ -176,7 +176,7 @@ void ProgramTree::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> block
 }
 
 //Remove a given Node from the graph
-void ProgramTree::removeNode(Node *N) {
+void ProgramGraph::removeNode(Node *N) {
     //Init the list of Nodes we want to keep
     std::vector<Node *> newNodes;
 
@@ -193,7 +193,7 @@ void ProgramTree::removeNode(Node *N) {
 }
 
 //Removes all edges from the graph, that refere to nodes no longer present in the graph
-void ProgramTree::removeOrphanedEdges() {
+void ProgramGraph::removeOrphanedEdges() {
     //Init the list of edges, we want to keep
     std::vector<Edge *> cleanedEdges;
 
@@ -215,7 +215,7 @@ void ProgramTree::removeOrphanedEdges() {
 }
 
 //Calculate the energy of the graph
-double ProgramTree::getEnergy(LLVMHandler *handler) {
+double ProgramGraph::getEnergy(LLVMHandler *handler) {
     //Init the calculation result
     double sum = 0.0;
     //Get the first node of the graph
@@ -230,7 +230,7 @@ double ProgramTree::getEnergy(LLVMHandler *handler) {
 }
 
 //Find all the edges starting at the given Node
-std::vector<Edge *> ProgramTree::findEdgesStartingAtNode(Node *N) {
+std::vector<Edge *> ProgramGraph::findEdgesStartingAtNode(Node *N) {
     //Init the list
     std::vector<Edge *> selection;
 
@@ -248,12 +248,12 @@ std::vector<Edge *> ProgramTree::findEdgesStartingAtNode(Node *N) {
 }
 
 //Test if thie graph contains a LoopNode
-bool ProgramTree::containsLoopNodes() {
+bool ProgramGraph::containsLoopNodes() {
     return !this->getLoopNodes().empty();
 }
 
 //Get all the LoopNodes contained in the Graph
-std::vector<LoopNode *> ProgramTree::getLoopNodes() {
+std::vector<LoopNode *> ProgramGraph::getLoopNodes() {
     //Init the list
     std::vector<LoopNode *> loopnodes;
 
