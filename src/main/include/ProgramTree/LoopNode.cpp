@@ -1,7 +1,7 @@
 #include "ProgramTree.h"
 
 //Creates a LoopNode with the given LoopTree and ProgramTree
-LoopNode::LoopNode(LoopTree *LT, ProgramTree *parent) : Node(parent) {
+LoopNode::LoopNode(LoopTree *LT, ProgramTree *parent, AnalysisStrategy::Strategy strategy) : Node(parent, strategy) {
     this->loopTree = LT;
 }
 
@@ -29,14 +29,14 @@ bool LoopNode::isLeafNode() const {
 }
 
 //Construct a LoopTree by recursively calling this method until we reach a leaf
-LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Function * func) {
+LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Function * func, AnalysisStrategy::Strategy strategy) {
     //Create a Toplevel LoopNode
-    LoopNode *LN = new LoopNode(lptr, parent);
+    LoopNode *LN = new LoopNode(lptr, parent, strategy);
 
     //End-condition
     if(LN->isLeafNode()){
         //Create a ProgramTree from this LoopTrees mainloop
-        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func);
+        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
 
         //Add the ProgramTree to the list of subtrees
         LN->subtrees.push_back(PT);
@@ -44,14 +44,14 @@ LoopNode* LoopNode::construct(LoopTree *lptr, ProgramTree *parent, llvm::Functio
         //Further recursion
 
         //Create a ProgramTree from this LoopTrees mainloop
-        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func);
+        ProgramTree *PT = ProgramTree::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
         //Add the ProgramTree to the list of subtrees
         LN->subtrees.push_back(PT);
 
         //Iterate over the subloops of this LoopNodes LoopTree
         for(auto *subTree : LN->loopTree->subTrees){
             //Construct a LoopNode for the current Sub-LoopTree
-            LoopNode *SLN = LoopNode::construct(subTree, PT, func);
+            LoopNode *SLN = LoopNode::construct(subTree, PT, func, strategy);
 
             //ProgramTree *SPT = ProgramTree::construct(subTree->mainloop->getBlocksVector());
             //SLN->subtrees.push_back(SPT);
@@ -95,17 +95,54 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
 
     //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
     if(!adjsNodes.empty()){
-        double min = DBL_MAX;
-        for(auto N : adjsNodes){
-            double locsum = N->getEnergy(handler);
-            if (locsum < min){
-                min = locsum;
+        auto compare = 0.00;
 
-            }
+        switch (this->strategy) {
+            case AnalysisStrategy::WORSTCASE :
+                compare = DBL_MAX;
+
+                //Iterate over the adjacent nodes
+                for(auto N : adjsNodes){
+                    //Calculate the sum of the node
+                    double locsum = N->getEnergy(handler);
+
+                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                    if (locsum < compare){
+                        compare = locsum;
+                    }
+                }
+
+                sum += compare;
+                break;
+            case AnalysisStrategy::BESTCASE :
+                compare = DBL_MIN;
+
+                //Iterate over the adjacent nodes
+                for(auto N : adjsNodes){
+                    //Calculate the sum of the node
+                    double locsum = N->getEnergy(handler);
+
+                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                    if (locsum < compare){
+                        compare = locsum;
+                    }
+                }
+
+                sum += compare;
+                break;
+            case AnalysisStrategy::AVERAGECASE :
+                compare = 0.00;
+
+                srand(time(nullptr));
+                int randomIndex = rand() % adjsNodes.size();
+                double locsum = adjsNodes[randomIndex]->getEnergy(handler);
+                compare = locsum;
+                sum += compare;
+
+                break;
         }
-
-        sum += min;
     }
+
 
     //Return the calculation result
     return sum;

@@ -1,7 +1,7 @@
 #include "ProgramTree.h"
 
 //Static method for ProgramTree-Graph construction
-ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func) {
+ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy) {
     //Create a dummy-Object
     auto *PT = new ProgramTree();
     //Create an empty list for the BasicBlocks
@@ -11,7 +11,7 @@ ProgramTree* ProgramTree::construct(std::vector<llvm::BasicBlock *> blockset, ll
     //Iterate over the given list of BasicBlock-References
     for(auto BB : blockset){
         //For each block create a new Node
-        auto *NN = new Node(PT);
+        auto *NN = new Node(PT, strategy);
         //Add the block to the Node
         NN->blocks.push_back(BB);
         //Add the node to the graph

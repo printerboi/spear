@@ -1,8 +1,9 @@
 #include "ProgramTree.h"
 
 //Create a Node by setting the parent property with the given ProgramTree
-Node::Node(ProgramTree *parent) {
+Node::Node(ProgramTree *parent, AnalysisStrategy::Strategy strategy) {
     this->parent = parent;
+    this->strategy = strategy;
 }
 
 std::string Node::toString() {
@@ -29,24 +30,55 @@ double Node::getEnergy(LLVMHandler *handler) {
 
     //If there are adjacent nodes...
     if(!adjsNodes.empty()){
-        //todo Distinguish between bestcase, wortcase and averagecase
         //Find the smallest energy-value-path of all the adjacent nodes
         //Init the minimal pathvalue
-        double min = DBL_MAX;
+        auto compare = 0.00;
 
-        //Iterate over the adjacent nodes
-        for(auto N : adjsNodes){
-            //Calculate the sum of the node
-            double locsum = N->getEnergy(handler);
+        switch (this->strategy) {
+            case AnalysisStrategy::WORSTCASE :
+                 compare = DBL_MAX;
 
-            //Set the minimal energy value if the calculated energy is smaller than the current minimum
-            if (locsum < min){
-                min = locsum;
-            }
+                //Iterate over the adjacent nodes
+                for(auto N : adjsNodes){
+                    //Calculate the sum of the node
+                    double locsum = N->getEnergy(handler);
+
+                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                    if (locsum < compare){
+                        compare = locsum;
+                    }
+                }
+
+                sum += compare;
+                break;
+            case AnalysisStrategy::BESTCASE :
+                compare = DBL_MIN;
+
+                //Iterate over the adjacent nodes
+                for(auto N : adjsNodes){
+                    //Calculate the sum of the node
+                    double locsum = N->getEnergy(handler);
+
+                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                    if (locsum < compare){
+                        compare = locsum;
+                    }
+                }
+
+                sum += compare;
+                break;
+            case AnalysisStrategy::AVERAGECASE :
+                compare = 0.00;
+
+                srand(time(nullptr));
+                int randomIndex = rand() % adjsNodes.size();
+                double locsum = adjsNodes[randomIndex]->getEnergy(handler);
+                compare = locsum;
+                sum += compare;
+
+                break;
         }
 
-        //Add the minimal energy value to the energy-value of this node
-        sum += min;
     }
 
     //Calculate the energy-cost of this node's basic blocks and add it to the sum

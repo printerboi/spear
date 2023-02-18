@@ -62,7 +62,7 @@ int main(int argc, const char **argv){
             }
         }else if( std::strcmp( argv[1], "-a" ) == 0 && argc == 4 ) {
             std::cout << "Not yet implemented" << std::endl;
-        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc >= 4){
+        }else if(std::strcmp( argv[1], "-d" ) == 0 && argc == 12){
             llvm::LLVMContext context;
             llvm::SMDiagnostic error;
             llvm::PassBuilder passBuilder;
@@ -75,8 +75,9 @@ int main(int argc, const char **argv){
             llvm::CGSCCPassManager callgraphPassManager;
 
 
-            if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[7] )){
-                auto module_up = llvm::parseIRFile(argv[7], error, context).release();
+
+            if( std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[11] )){
+                auto module_up = llvm::parseIRFile(argv[11], error, context).release();
 
                 passBuilder.registerModuleAnalyses(moduleAnalysisManager);
                 passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
@@ -98,49 +99,33 @@ int main(int argc, const char **argv){
 
                 //loop-rotate
                 functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
-
                 modulePassManager.addPass(llvm::createModuleToFunctionPassAdaptor(std::move(functionPassManager)));
 
-                std::string mode = "program";
-                std::string format = "plain";
+                std::string mode;
+                std::string format;
+                std::string strategy;
+                std::string loopbound;
 
-                llvm::outs() << argv[4] << "\n";
-                llvm::outs() << argv[5] << "\n";
-                llvm::outs() << argv[6] << "\n";
-                llvm::outs() << argv[7] << "\n";
 
-                if(std::strcmp(argv[3], "-mode") == 0){
+                if(std::strcmp(argv[3], "--mode") == 0){
                     mode = argv[4];
                 }
 
-                if(std::strcmp(argv[5], "-format") == 0){
+                if(std::strcmp(argv[5], "--format") == 0){
                     format = argv[6];
                 }
 
+                if(std::strcmp(argv[7], "--strategy") == 0){
+                    strategy = argv[8];
+                }
 
-                modulePassManager.addPass(Energy(argv[2], mode, format));
+                if(std::strcmp(argv[9], "--loopbound") == 0){
+                    loopbound = argv[10];
+                }
+
+                modulePassManager.addPass(Energy(argv[2], mode, format, strategy, loopbound));
                 modulePassManager.run(*module_up, moduleAnalysisManager);
-                /*
-                for(auto & F : module_up->getFunctionList()){
-                    if( F.getName() == "main" ){
 
-                        //instname
-                        functionPassManager.addPass(llvm::InstructionNamerPass());
-                        //mem2reg
-                        functionPassManager.addPass(llvm::PromotePass());
-
-                        //instcombine
-                        //functionPassManager.addPass(llvm::InstCombinePass());
-                        //loop-simplify
-                        functionPassManager.addPass(llvm::LoopSimplifyPass());
-
-                        //loop-rotate
-                        functionPassManager.addPass( llvm::createFunctionToLoopPassAdaptor(llvm::LoopRotatePass()) );
-
-                        functionPassManager.addPass(Energy(argv[2]));
-                        functionPassManager.run(F, functionAnalysisManager);
-                    }
-                }*/
             }else{
                 std::cerr << helpString;
                 return 1;

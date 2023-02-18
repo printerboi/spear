@@ -2,7 +2,7 @@
 #include "LLVMHandler.h"
 #include "InstructionCategory.h"
 
-LLVMHandler::LLVMHandler( Json::Value energy, long valueIfIntederminate) {
+LLVMHandler::LLVMHandler( Json::Value energy, int valueIfIntederminate) {
     this->energyValues = energy;
     this->valueIfIndeterminate = valueIfIntederminate;
 }

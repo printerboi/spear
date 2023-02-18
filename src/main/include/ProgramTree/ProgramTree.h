@@ -8,6 +8,8 @@
 #include "llvm/IR/BasicBlock.h"
 #include "../LoopTree/LoopTree.h"
 #include <cfloat>
+#include "../AnalysisStrategy/AnalysisStrategy.h"
+
 
 //Pre-declaration of the ProgramTree Class
 class ProgramTree;
@@ -28,10 +30,15 @@ class Node {
         std::vector<llvm::BasicBlock *> blocks;
 
         /**
+         * The strategy the analysis should follow
+         */
+        AnalysisStrategy::Strategy strategy;
+
+        /**
          * Constructor taking the surrounding ProgramTree
          * @param parent
          */
-        Node(ProgramTree *parent);
+        Node(ProgramTree *parent, AnalysisStrategy::Strategy strategy);
 
         /**
          * Method for converting this node to string for debug output
@@ -110,7 +117,7 @@ public:
      * @param lpTree Reference to the LoopTree for the loop to represent
      * @param parent The parent ProgramTree, this LoopNode is contained in
      */
-    LoopNode(LoopTree *lpTree, ProgramTree *parent);
+    LoopNode(LoopTree *lpTree, ProgramTree *parent, AnalysisStrategy::Strategy strategy);
 
     /**
      * Static Method for constructing a LoopNode recursivly trough the given LoopTree and the parent ProgramTree
@@ -118,7 +125,7 @@ public:
      * @param parent ProgramTree the LoopNode should be contained in
      * @return Returns a reference to the constructed LoopNode
      */
-    static LoopNode* construct(LoopTree *lptr, ProgramTree *parent, llvm::Function *func);
+    static LoopNode* construct(LoopTree *lptr, ProgramTree *parent, llvm::Function *func, AnalysisStrategy::Strategy strategy);
 
     /**
      * Method for determining if the current LoopNode is a "Leaf".
@@ -179,7 +186,7 @@ class ProgramTree {
          * @param blockset Vector with references to a set of basic blocks
          * @return Returns the constructed ProgramTree
          */
-        static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func);
+        static ProgramTree* construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy);
 
         /**
          * ProgramTree destructor

@@ -28,7 +28,7 @@ class LLVMHandler {
          * @param energyModel JSON Object containing the energy model
          * @param file String containing a valid file path
          */
-        explicit LLVMHandler( Json::Value energyModel, long valueIfInteterminate );
+        explicit LLVMHandler( Json::Value energyModel, int valueIfInteterminate );
 
         /**
          * Method to calculate the energy-consumption of block with respect to the given energy model
@@ -55,7 +55,7 @@ private:
     /**
      * Fallback value of the loop bound calculation representing an upper bound
      */
-    long valueIfIndeterminate;
+    int valueIfIndeterminate;
 
 };
 

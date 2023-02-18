@@ -15,23 +15,29 @@
 #include "../../include/FunctionTree/FunctionTree.h"
 
 
-llvm::cl::opt<std::string> energyModelPath("m", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
-llvm::cl::opt<std::string> modeParameter("mode", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
-llvm::cl::opt<std::string> formatParameter("format", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
+llvm::cl::opt<std::string> energyModelPath("model", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
+llvm::cl::opt<std::string> modeParameter("mode", llvm::cl::desc("Mode the analysis runs on"), llvm::cl::value_desc("Please choose out of the options program/function"));
+llvm::cl::opt<std::string> formatParameter("format", llvm::cl::desc("Format to print as result"), llvm::cl::value_desc("Please choose out of the options json/plain"));
+llvm::cl::opt<std::string> analysisStrategyParameter("strategy", llvm::cl::desc("The strategy to analyze"), llvm::cl::value_desc("Please choose out of the options worst/average/best"));
+llvm::cl::opt<std::string> loopboundParameter("loopbound", llvm::cl::desc("A value to over-approximate loops, which upper bound can't be calculated"), llvm::cl::value_desc("Please provide a positive integer value"));
+
 
 struct Energy : llvm::PassInfoMixin<Energy> {
     Json::Value energyJson;
     std::string mode;
     std::string format;
-    int MAXITERATIONS = 1000;
+    std::string strategy;
+    std::string loopbound;
 
 
-    explicit Energy(std::string filename, std::string mode, std::string format){
+    explicit Energy(std::string filename, std::string mode, std::string format, std::string strategy, std::string loopbound){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( filename );
             this->mode = mode;
             this->format = format;
+            this->strategy = strategy;
+            this->loopbound = loopbound;
         }
     }
 
@@ -41,6 +47,8 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             this->energyJson = JSONHandler::read( energyModelPath );
             this->mode = modeParameter.c_str();
             this->format = formatParameter.c_str();
+            this->strategy = analysisStrategyParameter.c_str();
+            this->loopbound = loopboundParameter.c_str();
         }
     }
 
@@ -64,7 +72,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
     }
 
-    ProgramTree* calcEneryOfFunction(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM){
+    ProgramTree* calcEneryOfFunction(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM, AnalysisStrategy::Strategy analysisStrategy){
         auto* DT = new llvm::DominatorTree();
         DT->recalculate(*function);
 
@@ -79,7 +87,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
 
         //Create the ProgramTree for the BBs present in the current function
-        ProgramTree *PT = ProgramTree::construct(functionBlocks, function);
+        ProgramTree *PT = ProgramTree::construct(functionBlocks, function, analysisStrategy);
 
         //We need to distinguish if the function contains loops
         if(!loops.empty()){
@@ -106,7 +114,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 }
 
                 //Construct a LoopNode for the current loop
-                LoopNode *LN = LoopNode::construct(&LT, PT, function);
+                LoopNode *LN = LoopNode::construct(&LT, PT, function, analysisStrategy);
                 //Replace the blocks used by loop in the previous created ProgramTree
                 PT->replaceNodesWithLoopNode(topLoop->getBlocksVector(), LN);
             }
@@ -140,16 +148,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
     }
 
-    /**
-     * Main runner of the energy pass. The pass will apply function-wise.
-     * @param F Reference to a function
-     * @param FAM Reference to a FunctionAnalysisManager
-     */
-    llvm::PreservedAnalyses run(llvm::Module &M, llvm::ModuleAnalysisManager &MAM) {
-        auto &FAM = MAM.getResult<llvm::FunctionAnalysisManagerModuleProxy>(M).getManager();
+    void analysisRunner(llvm::Module &module, llvm::ModuleAnalysisManager &MAM, AnalysisStrategy::Strategy analysisStrategy, int maxiterations){
+        auto &FAM = MAM.getResult<llvm::FunctionAnalysisManagerModuleProxy>(module).getManager();
 
         if(this->energyJson){
-            auto funcList = &M.getFunctionList();
+            auto funcList = &module.getFunctionList();
             std::vector<FunctionTree *> ftrees;
 
             for(auto &F : *funcList){
@@ -159,7 +162,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 }
             }
 
-            LLVMHandler handler = LLVMHandler( this->energyJson, MAXITERATIONS );
+            LLVMHandler handler = LLVMHandler( this->energyJson, maxiterations);
 
             if(this->mode == "program"){
                 for(auto ft : ftrees){
@@ -170,7 +173,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                         handler.funcqueue.push_back(tf);
 
                         if(!F->isDeclarationForLinker()){
-                            ProgramTree *programTree = calcEneryOfFunction(F, &handler, &FAM);
+                            ProgramTree *programTree = calcEneryOfFunction(F, &handler, &FAM, analysisStrategy);
                         }
 
                     }
@@ -178,7 +181,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             }else if(this->mode == "function"){
                 for(auto &F : *funcList){
                     if(!F.isDeclarationForLinker()){
-                        ProgramTree *programTree = calcEneryOfFunction(&F, &handler, &FAM);
+                        ProgramTree *programTree = calcEneryOfFunction(&F, &handler, &FAM, analysisStrategy);
                     }
                 }
             }else{
@@ -196,7 +199,8 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->getBasicBlockList().size();
                 functionObject["averageEnergyPerInstruction"] = energyFunction->energy / (double) energyFunction->func->getInstructionCount();
 
-                outputObject.append(functionObject);
+                //outputObject.append(functionObject);
+                outputObject[energyFunction->func->getName().str()] = functionObject;
             }
 
             if(format == "JSON"){
@@ -210,6 +214,37 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }else{
             llvm::errs() << "Please provide an energyfile with -m <path to the energy.json>" << "\n";
         }
+    }
+
+    /**
+     * Main runner of the energy pass. The pass will apply function-wise.
+     * @param F Reference to a function
+     * @param FAM Reference to a FunctionAnalysisManager
+     */
+    llvm::PreservedAnalyses run(llvm::Module &M, llvm::ModuleAnalysisManager &MAM) {
+
+        try {
+            int maxiterations = std::stoi(this->loopbound);
+
+            if(maxiterations >= 0){
+                if(strcmp(this->strategy.c_str(), "best") == 0){
+                    analysisRunner(M, MAM, AnalysisStrategy::BESTCASE, maxiterations);
+                }else if(strcmp(this->strategy.c_str(), "worst") == 0){
+                    analysisRunner(M, MAM, AnalysisStrategy::WORSTCASE, maxiterations);
+                }else if(strcmp(this->strategy.c_str(), "average") == 0){
+                    analysisRunner(M, MAM, AnalysisStrategy::AVERAGECASE, maxiterations);
+                }else{
+                    llvm::errs() << "Please provide a valid analysis strategy: best/worst/average" << "\n";
+                }
+            }else{
+                throw std::invalid_argument("Loopbound can't be negative");
+            }
+
+        }catch(std::invalid_argument &I){
+            llvm::errs() << "Please provide a positive integer for the loopbound" << "\n";
+        }
+
+
 
 
         return llvm::PreservedAnalyses::all();

@@ -48,4 +48,4 @@ add_library(spear SHARED
         ProgramTree/Node.cpp
         ProgramTree/Edge.cpp
         FunctionTree/FunctionTree.cpp
-        FunctionTree/FunctionTree.h)
+        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h)
