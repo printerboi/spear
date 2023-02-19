@@ -99,7 +99,7 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
 
         switch (this->strategy) {
             case AnalysisStrategy::WORSTCASE :
-                compare = DBL_MAX;
+                compare = DBL_MIN;
 
                 //Iterate over the adjacent nodes
                 for(auto N : adjsNodes){
@@ -107,7 +107,7 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
                     double locsum = N->getEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (locsum < compare){
+                    if (locsum > compare){
                         compare = locsum;
                     }
                 }
@@ -115,7 +115,7 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
                 sum += compare;
                 break;
             case AnalysisStrategy::BESTCASE :
-                compare = DBL_MIN;
+                compare = DBL_MAX;
 
                 //Iterate over the adjacent nodes
                 for(auto N : adjsNodes){

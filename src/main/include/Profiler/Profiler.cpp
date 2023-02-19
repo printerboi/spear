@@ -11,11 +11,11 @@ Profiler::Profiler(int it, int rep){
 }
 
 std::vector<double> Profiler::profile() {
-    double baseValue = benchmarkFile("profile/compiled/base");
-    double groupM = benchmarkFile("profile/compiled/groupM");
-    double groupB = benchmarkFile("profile/compiled/groupB");
-    double groupD = benchmarkFile("profile/compiled/groupD");
-    double groupG = benchmarkFile("profile/compiled/groupG");
+    double baseValue = benchmarkFile("profile/src/compiled/base");
+    double groupM = benchmarkFile("profile/src/compiled/groupM");
+    double groupB = benchmarkFile("profile/src/compiled/groupB");
+    double groupD = benchmarkFile("profile/src/compiled/groupD");
+    double groupG = benchmarkFile("profile/src/compiled/groupG");
 
     return {
             groupM,
