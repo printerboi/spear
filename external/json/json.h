@@ -1816,7 +1816,7 @@ public:
    */
   bool validate(Json::Value* invalid) const;
 
-  /** A simple way to update a specific setting.
+  /** A debug way to update a specific setting.
    */
   Value& operator[](const String& key);
 
@@ -1945,7 +1945,7 @@ public:
    */
   virtual int write(Value const& root, OStream* sout) = 0;
 
-  /** \brief A simple abstract factory.
+  /** \brief A debug abstract factory.
    */
   class JSON_API Factory {
   public:
@@ -2024,7 +2024,7 @@ public:
    *   otherwise, indicate bad settings via 'invalid'.
    */
   bool validate(Json::Value* invalid) const;
-  /** A simple way to update a specific setting.
+  /** A debug way to update a specific setting.
    */
   Value& operator[](const String& key);
 

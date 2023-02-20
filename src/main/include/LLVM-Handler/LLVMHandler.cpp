@@ -41,11 +41,13 @@ long LLVMHandler::getLoopUpperBound(llvm::Loop *L){
     long bound = this->valueIfIndeterminate;
     //Assume the number to compare with is the second argument of the instruction
 
-    for(int i=0; i < li->getNumOperands(); i++){
-        //Try to cast the value to a constantint pointer
-        if (auto *CI = llvm::dyn_cast<llvm::ConstantInt>(li->getOperand(i))) {
-            //Gets a 64-bit signed int value from the cast constant
-            bound = CI->getSExtValue();
+    if(li != nullptr){
+        for(int i=0; i < li->getNumOperands(); i++){
+            //Try to cast the value to a constantint pointer
+            if (auto *CI = llvm::dyn_cast<llvm::ConstantInt>(li->getOperand(i))) {
+                //Gets a 64-bit signed int value from the cast constant
+                bound = CI->getSExtValue();
+            }
         }
     }
 

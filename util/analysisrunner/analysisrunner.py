@@ -2,6 +2,7 @@ import csv
 import os
 import json
 import struct
+import sys
 from time import sleep
 import subprocess
 from pathlib import Path
@@ -75,11 +76,11 @@ def write_analysis_result_to_csv(result):
             w.writerow([entry["name"], entry["worst"], entry["average"], entry["best"], entry["measurement"]])
 
 
-def main():
-    simpledirpath = "../../programs/simple"
+def main(analysispath):
+    simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-    bound = "1000"
+    bound = "100"
 
     analysis_dict = {}
 
@@ -97,7 +98,7 @@ def main():
 
             analysis_dict[file]["name"] = file
 
-            measurement = runprogram("{}/compiled/{}".format(simpledirpath, filename))
+            measurement = runprogram("{}/{}".format(simpledirpath, filename))
             analysis_dict[file]["measurement"] = measurement
 
     write_analysis_result_to_csv(analysis_dict)
@@ -111,4 +112,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 2:
+        main(sys.argv[1])
+    else:
+        print("Please provide a path to a folder containing .ll files")

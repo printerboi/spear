@@ -25,7 +25,7 @@ int main(int argc, const char **argv){
                              "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)";
 
     if( argc >= 2 ){
-        if( std::strcmp( argv[1], "-b" ) == 0 && argc == 4 ){
+        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 4 ){
             try {
                 //Get the parameters from the arguments
                 int rep = std::stoi( argv[2] );
