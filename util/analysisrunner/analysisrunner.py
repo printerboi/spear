@@ -10,7 +10,7 @@ from pathlib import Path
 libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
 modelpath = "../../cmake-build-debug/benchmarkresult.json"
 core = 1
-iterations = 50
+iterations = 100
 
 
 def runprogram(file):
@@ -81,7 +81,7 @@ def main(analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-    bound = "10"
+    bound = "500"
 
     analysis_dict = {}
 

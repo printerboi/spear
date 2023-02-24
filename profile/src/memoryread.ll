@@ -1,4 +1,5 @@
 define i32 @main() #0 {
-  %1 = load ptr, ptr 0, align 8
+  %ptr = alloca i32
+  %val = load i32, ptr %ptr
   ret i32 0
 }
