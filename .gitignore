@@ -38,4 +38,6 @@ docs
 venv/
 
 profile/compiled
-programs/debug/compiled
+programs/debug/compiled/
+programs/simple/compiled/
+programs/advanced/compiled/
