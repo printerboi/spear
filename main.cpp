@@ -47,12 +47,12 @@ int main(int argc, const char **argv){
 
                 //Group the vector format of the results
                 std::vector<std::pair<std::string, double>> data = {
-                        {InstructionCategory::toString(InstructionCategory::Category::MEMSTORE), result[0]},
-                        {InstructionCategory::toString(InstructionCategory::Category::MEMLOAD), result[0]},
-                        {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[1]},
-                        {InstructionCategory::toString(InstructionCategory::Category::DIVISION), result[2]},
-                        {InstructionCategory::toString(InstructionCategory::Category::OTHER), result[3]},
-                        {"Base", result[4]},
+                        {InstructionCategory::toString(InstructionCategory::Category::CAST),        result[0]},
+                        {InstructionCategory::toString(InstructionCategory::Category::MEMLOAD),     result[1]},
+                        {InstructionCategory::toString(InstructionCategory::Category::MEMSTORE),    result[2]},
+                        {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[3]},
+                        {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result[4]},
+                        {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result[5]},
                 };
                 //Pass the grouped values to the csv handler, so it can be written to a file
                 //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);

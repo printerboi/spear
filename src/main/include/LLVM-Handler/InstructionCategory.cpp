@@ -10,7 +10,7 @@ EnergyFunction::EnergyFunction(llvm::Function *func) {
 
 
 bool InstructionCategory::isMemloadInstruction(llvm::Instruction &Instruction) {
-    return Instruction.mayReadFromMemory();
+    return Instruction.mayReadFromMemory() || llvm::isa<llvm::GetElementPtrInst>(Instruction);
 }
 
 bool InstructionCategory::isCallInstruction(llvm::Instruction &Instruction) {
@@ -34,6 +34,10 @@ bool InstructionCategory::isDivisionInstruction( llvm::Instruction &Instruction 
     );
 }
 
+bool InstructionCategory::isCastInstruction(llvm::Instruction &Instruction) {
+    return llvm::isa<llvm::CastInst>(Instruction);
+}
+
 InstructionCategory::Category InstructionCategory::getCategory( llvm::Instruction &Instruction ){
     if( isMemloadInstruction( Instruction ) ){
         return InstructionCategory::Category::MEMLOAD;
@@ -43,6 +47,8 @@ InstructionCategory::Category InstructionCategory::getCategory( llvm::Instructio
         return InstructionCategory::Category::PROGRAMFLOW;
     }else if( isDivisionInstruction( Instruction ) ){
         return InstructionCategory::Category::DIVISION;
+    }else if( isCastInstruction( Instruction ) ){
+        return InstructionCategory::Category::CAST;
     }else{
         return InstructionCategory::Category::OTHER;
     }
@@ -63,6 +69,9 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
             break;
         case Category::DIVISION:
             catString = "Division";
+            break;
+        case Category::CAST:
+            catString = "Cast";
             break;
         case Category::OTHER:
             catString = "Other";

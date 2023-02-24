@@ -15,19 +15,21 @@ Profiler::Profiler(int it, int rep, std::string path){
 }
 
 std::vector<double> Profiler::profile() {
-    double baseValue = benchmarkFile("src/compiled/base");
-    double groupM = benchmarkFile("src/compiled/groupM");
-    double groupB = benchmarkFile("src/compiled/groupB");
-    double groupD = benchmarkFile("src/compiled/groupD");
-    double groupG = benchmarkFile("src/compiled/groupG");
+    double cast = benchmarkFile("src/compiled/cast");
+    double memoryread = benchmarkFile("src/compiled/memoryread");
+    double memorywrite = benchmarkFile("src/compiled/memorywrite");
+    double programflow = benchmarkFile("src/compiled/programflow");
+    double division = benchmarkFile("src/compiled/division");
+    double stdbinary = benchmarkFile("src/compiled/stdbinary");
 
 
     return {
-            groupM,
-            groupB,
-            groupD,
-            groupG,
-            baseValue
+            cast,
+            memoryread,
+            memorywrite,
+            programflow,
+            division,
+            stdbinary
     };
 }
 
