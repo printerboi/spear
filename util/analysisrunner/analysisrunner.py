@@ -10,7 +10,7 @@ from pathlib import Path
 libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
 modelpath = "../../cmake-build-debug/benchmarkresult.json"
 core = 1
-iterations = 100
+iterations = 50
 
 
 def runprogram(file):
@@ -20,6 +20,7 @@ def runprogram(file):
         os.sched_setaffinity(0, {core})
         process = subprocess.Popen([file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
+        os.sched_setaffinity(0, list(range(0, os.cpu_count())))
 
     aftereng = readRapl()
 
@@ -80,7 +81,7 @@ def main(analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-    bound = "100"
+    bound = "10"
 
     analysis_dict = {}
 

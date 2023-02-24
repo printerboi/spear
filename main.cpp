@@ -25,14 +25,14 @@ int main(int argc, const char **argv){
                              "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)";
 
     if( argc >= 2 ){
-        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 4 ){
+        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 5 ){
             try {
                 //Get the parameters from the arguments
                 int rep = std::stoi( argv[2] );
                 int ite = std::stoi( argv[3] );
 
                 //Create a Profiler-object
-                Profiler B = Profiler(ite, rep);
+                Profiler B = Profiler(ite, rep, argv[4]);
 
                 std::cout << "Starting the profile..." << std::endl;
 

@@ -23,13 +23,15 @@ class Profiler {
          * Times a single program will be executed
          */
         int repetitions;
+
+        std::string programspath;
         /**
          * Creates a Profiler object and sets the iterations and repetitions property according to the parameters
          * @constructor
          * @param it Iterations for the average
          * @param rep Times a program will be executed repeatedly
          */
-        explicit Profiler(int it, int rep);
+        explicit Profiler(int it, int rep, std::string path);
         /**
          * Runs the profile and returns the values for the benchmarked files
          */

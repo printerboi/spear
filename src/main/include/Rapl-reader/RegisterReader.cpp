@@ -45,7 +45,7 @@ double RegisterReader::getMultiplier() {
     char buffer[8] = {};
     uint64_t result = 0;
     read(this->unitReg, buffer);
-    buffer[1] = (char) (buffer[1] & 0xF);
+    buffer[1] = (char) ((buffer[1] >> 8) & 0xF);
     std::memcpy(&result, &buffer[1], 1);
     double multiplier = pow(0.5, (double) result);
     return (double) multiplier;
