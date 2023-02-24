@@ -20,13 +20,6 @@ def conv_to_numeric(dictionary):
         dictionary[key] = float(dictionary[key])
 
 
-# Removes the base value from the provided dict
-def cleanData(dictionary):
-    d = dict(dictionary)
-    del d['Base']
-    return d
-
-
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         # Opening JSON file
@@ -35,7 +28,7 @@ if __name__ == "__main__":
 
         # Convert the entry data to float values
         # Remove the base value from the entry
-        cleaned = cleanData(entries)
+        cleaned = entries
 
         # Construct the dataframe
         plotdata = pd.DataFrame({"Energy µJ": list(cleaned.values())}, index=list(cleaned.keys()))
