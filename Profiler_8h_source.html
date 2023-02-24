@@ -85,17 +85,19 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classProfiler.html#ad9c3c73e305f81758670e6020d31fa89">   21</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classProfiler.html#ad9c3c73e305f81758670e6020d31fa89">iterations</a>;</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">   25</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">repetitions</a>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1">Profiler</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::vector&lt;double&gt; <a class="code" href="classProfiler.html#a1ac482be9a580fd4d65f83604de19b65">profile</a>();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordtype">double</span> benchmarkFile(std::string file);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_PROFILER_H</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        std::string programspath;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classProfiler.html#a151c5a2ef579bb3e79013ad0388dfb29">Profiler</a>(<span class="keywordtype">int</span> it, <span class="keywordtype">int</span> rep, std::string path);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        std::vector&lt;double&gt; <a class="code" href="classProfiler.html#a1ac482be9a580fd4d65f83604de19b65">profile</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">double</span> benchmarkFile(std::string file);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_PROFILER_H</span></div>
 <div class="ttc" id="aclassProfiler_html"><div class="ttname"><a href="classProfiler.html">Profiler</a></div><div class="ttdef"><b>Definition:</b> Profiler.h:16</div></div>
-<div class="ttc" id="aclassProfiler_html_a1ac482be9a580fd4d65f83604de19b65"><div class="ttname"><a href="classProfiler.html#a1ac482be9a580fd4d65f83604de19b65">Profiler::profile</a></div><div class="ttdeci">std::vector&lt; double &gt; profile()</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:13</div></div>
-<div class="ttc" id="aclassProfiler_html_a7f4dbb498902f7de106e2420f7a4f4b1"><div class="ttname"><a href="classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1">Profiler::Profiler</a></div><div class="ttdeci">Profiler(int it, int rep)</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:8</div></div>
+<div class="ttc" id="aclassProfiler_html_a151c5a2ef579bb3e79013ad0388dfb29"><div class="ttname"><a href="classProfiler.html#a151c5a2ef579bb3e79013ad0388dfb29">Profiler::Profiler</a></div><div class="ttdeci">Profiler(int it, int rep, std::string path)</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:11</div></div>
+<div class="ttc" id="aclassProfiler_html_a1ac482be9a580fd4d65f83604de19b65"><div class="ttname"><a href="classProfiler.html#a1ac482be9a580fd4d65f83604de19b65">Profiler::profile</a></div><div class="ttdeci">std::vector&lt; double &gt; profile()</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:17</div></div>
 <div class="ttc" id="aclassProfiler_html_ac5a4b7ec83464e2039eb4787f0ed6acf"><div class="ttname"><a href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">Profiler::repetitions</a></div><div class="ttdeci">int repetitions</div><div class="ttdef"><b>Definition:</b> Profiler.h:25</div></div>
 <div class="ttc" id="aclassProfiler_html_ad9c3c73e305f81758670e6020d31fa89"><div class="ttname"><a href="classProfiler.html#ad9c3c73e305f81758670e6020d31fa89">Profiler::iterations</a></div><div class="ttdeci">int iterations</div><div class="ttdef"><b>Definition:</b> Profiler.h:21</div></div>
 </div><!-- fragment --></div><!-- contents -->

@@ -74,8 +74,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7f4dbb498902f7de106e2420f7a4f4b1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProfiler.html#a7f4dbb498902f7de106e2420f7a4f4b1">Profiler</a> (int it, int rep)</td></tr>
-<tr class="separator:a7f4dbb498902f7de106e2420f7a4f4b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a151c5a2ef579bb3e79013ad0388dfb29"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProfiler.html#a151c5a2ef579bb3e79013ad0388dfb29">Profiler</a> (int it, int rep, std::string path)</td></tr>
+<tr class="separator:a151c5a2ef579bb3e79013ad0388dfb29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ac482be9a580fd4d65f83604de19b65"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProfiler.html#a1ac482be9a580fd4d65f83604de19b65">profile</a> ()</td></tr>
 <tr class="separator:a1ac482be9a580fd4d65f83604de19b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -85,12 +85,15 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad9c3c73e305f81758670e6020d31fa89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5a4b7ec83464e2039eb4787f0ed6acf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProfiler.html#ac5a4b7ec83464e2039eb4787f0ed6acf">repetitions</a></td></tr>
 <tr class="separator:ac5a4b7ec83464e2039eb4787f0ed6acf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa69b73d5e32d0c318a7131627f107f96"><td class="memItemLeft" align="right" valign="top"><a id="aa69b73d5e32d0c318a7131627f107f96"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>programspath</b></td></tr>
+<tr class="separator:aa69b73d5e32d0c318a7131627f107f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Simple class to profile the llvm-code and output the data in an appropriate format </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7f4dbb498902f7de106e2420f7a4f4b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f4dbb498902f7de106e2420f7a4f4b1">&#9670;&nbsp;</a></span>Profiler()</h2>
+<a id="a151c5a2ef579bb3e79013ad0388dfb29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a151c5a2ef579bb3e79013ad0388dfb29">&#9670;&nbsp;</a></span>Profiler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -108,7 +111,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>rep</em>&#160;</td>
+          <td class="paramname"><em>rep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
