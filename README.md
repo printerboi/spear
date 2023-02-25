@@ -31,8 +31,10 @@ E.g.:
 ```
 spear -p 100 100
 ```
+Please execute the command above with elevated rights. Otherwise, Spear can not interfere the energy-values from the system
+as the RAPL Interface is limited to elevated rights only.
 
-Please choose the parameters for iterations and repetitions accordingly to your setup.
+Choose the parameters for iterations and repetitions accordingly to your setup.
 Larger iterations will increase the accuracy of the calculated model, but will also increase the time to profiler runs.
 
 ## Running an Analysis

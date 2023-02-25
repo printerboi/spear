@@ -3,12 +3,11 @@ import os
 import json
 import struct
 import sys
-from time import sleep
 import subprocess
 from pathlib import Path
 
 libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
-modelpath = "../../cmake-build-debug/benchmarkresult.json"
+modelpath = "../../cmake-build-debug/profile.json"
 core = 1
 iterations = 100
 

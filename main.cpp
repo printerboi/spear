@@ -56,9 +56,9 @@ int main(int argc, const char **argv){
                 };
                 //Pass the grouped values to the csv handler, so it can be written to a file
                 //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
-                JSONHandler::write("benchmarkresult.json", data);
+                JSONHandler::write("profile.json", data);
 
-                std::cout << "Benchmark finished!" << std::endl;
+                std::cout << "Profiling finished!" << std::endl;
                 std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
             }catch( std::invalid_argument &iv ){
                 std::cerr << "The given arguments are not useable as ints";
