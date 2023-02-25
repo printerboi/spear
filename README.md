@@ -22,7 +22,8 @@ from the Intel RAPL Interface.
 
 Before running an analysis with spear, you have to profile your device with the built-in profiler.
 You have to compile the profile-scripts for your machine. We provided a shell-script to simplify this step.
-Run the script `irToBinary.sh` in the `profile/` folder
+Run the script `utils/llvmToBinary/irToBinary.sh` and provide the path to the profile-folder e.g `../../profile/src`
+as argument to prepare the files. 
 
 After the compilation run spear with the flag `-p` and provide the number of iterations and repetitions.
 E.g.:
@@ -32,17 +33,19 @@ spear -p 100 100
 ```
 
 Please choose the parameters for iterations and repetitions accordingly to your setup.
+Larger iterations will increase the accuracy of the calculated model, but will also increase the time to profiler runs.
 
 ## Running an Analysis
 
 We implemented two ways to run the analysis. Before the analysis make sure, you compiled your program with the following
-parameters:
+script we provided:
 
 ```
-clang++ -O0 -Xclang -disable-O0-optnone -fno-discard-value-names -S -emit-llvm <file>
+util/llvmToBinary/cppToBinary.sh <path>
 ```
-Where `<file>` is the source-file you want to analyze.
-Please compile your source-file with this command,
+
+Where `<path>` is the path to your program-files. The script will compile all `.cpp` files in the given path
+Please compile your source-files with this script,
 otherwise the behaviour of spear will be undefined or the analysis will crash.
 
 ### 1) Using Spear
