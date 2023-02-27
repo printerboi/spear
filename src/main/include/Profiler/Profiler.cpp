@@ -6,6 +6,7 @@
 #include "Profiler.h"
 #include <thread>
 #include <unistd.h>
+#include "iostream"
 
 
 Profiler::Profiler(int it, int rep, std::string path){
@@ -49,6 +50,7 @@ double Profiler::benchmarkFile(std::string file) {
         for (int j = 0; j < this->repetitions; ++j) {
 
             //system(command);
+            std::cout << command << "\n";
             execl(command, nullptr, nullptr);
 
         }
