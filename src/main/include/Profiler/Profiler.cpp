@@ -39,7 +39,7 @@ double Profiler::benchmarkFile(std::string file) {
     std::string relPath = this->programspath;
     cpu_set_t set;
 
-    char *command = new char[255];
+    char *command = new char[1024];
     sprintf(command, "%s/%s", relPath.c_str(), file.c_str());
     double engAverage = 0;
 
@@ -51,6 +51,7 @@ double Profiler::benchmarkFile(std::string file) {
 
             //system(command);
             std::cout << command << "\n";
+            std::cout << this->repetitions << "\n";
             execv(command, nullptr);
 
         }
