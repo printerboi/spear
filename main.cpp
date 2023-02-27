@@ -31,10 +31,12 @@ int main(int argc, const char **argv){
                 int rep = std::stoi( argv[2] );
                 int ite = std::stoi( argv[3] );
 
+                std::cout << "Starting the profile..." << std::endl;
+
                 //Create a Profiler-object
                 Profiler B = Profiler(ite, rep, argv[4]);
 
-                std::cout << "Starting the profile..." << std::endl;
+                std::cout << "Profiling finished." << std::endl;
 
                 //Start the time measurement
                 auto start = std::chrono::system_clock::now();
