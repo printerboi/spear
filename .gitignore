@@ -41,3 +41,4 @@ profile/compiled
 programs/debug/compiled/
 programs/simple/compiled/
 programs/advanced/compiled/
+util/analysisrunner/analysis_result.csv
