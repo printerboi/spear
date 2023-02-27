@@ -52,6 +52,7 @@ double Profiler::benchmarkFile(std::string file) {
             //system(command);
             std::cout << command << "\n";
             execl(command, nullptr, nullptr);
+            perror("Exec failed with: ");
 
         }
         auto postEng = (double) powReader.getEnergy();
