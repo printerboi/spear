@@ -13,7 +13,7 @@ std::string Node::toString() {
     //Iterate over the contained blocks
     for (auto BB : this->blocks) {
         //Add the current basicblocks name to the output string
-        output.append(BB->getName());
+        output.append(BB->getName().str());
     }
 
     //Return the string
