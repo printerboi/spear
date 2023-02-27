@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-include_directories("${CMAKE_SOURCE_DIR}/external/json")
 
 target_sources(spear
         PUBLIC JSON-Handler/JSONHandler.cpp
@@ -13,6 +12,7 @@ target_sources(spear
         PUBLIC LLVM-Handler/InstructionCategory.h
         PUBLIC LLVM-Handler/LLVMHandler.cpp
         PUBLIC LLVM-Handler/LLVMHandler.h
+        PUBLIC ../../../external/json/json.h;
         PUBLIC ../../../external/json/jsoncpp.cpp;
         PUBLIC Profiler/Profiler.cpp
         PUBLIC Profiler/Profiler.h
@@ -40,6 +40,7 @@ add_library(spearlib SHARED
         LLVM-Handler/InstructionCategory.h
         Profiler/Profiler.cpp
         Profiler/Profiler.h
+        ../../../external/json/json.h;
         ../../../external/json/jsoncpp.cpp
         ProgramGraph/ProgramGraph.cpp
         ProgramGraph/ProgramGraph.h
