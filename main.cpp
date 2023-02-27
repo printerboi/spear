@@ -58,7 +58,7 @@ int main(int argc, const char **argv){
                 //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
                 char *outputpath = new char[255];
                 sprintf(outputpath, "%s/profile.json", argv[5]);
-                std::cout << "Writing " << outputpath;
+                std::cout << "Writing " << outputpath << "\n";
                 JSONHandler::write(outputpath, data);
 
                 std::cout << "Profiling finished!" << std::endl;
