@@ -44,9 +44,9 @@ int main(int argc, const char **argv){
                 //Launch the benchmarking
                 std::vector<double> result = B.profile();
                 //Stop the time measurement
-                auto end = std::chrono::system_clock::now();
+                //auto end = std::chrono::system_clock::now();
                 //Calculate the elapsed time by substracting the two timestamps
-                std::chrono::duration<double> timerun = end - start;
+                //std::chrono::duration<double> timerun = end - start;
 
                 perror("Something failed?");
 
