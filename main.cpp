@@ -22,7 +22,8 @@ int main(int argc, const char **argv){
                              "\n\t\t\t --mode Type of analysis (program/function)"
                              "\n\t\t\t --format Format of the result to print (plain/json)"
                              "\n\t\t\t --strategy Type of analysis-strategy (worst/best/average)"
-                             "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)";
+                             "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)"
+                             "\n\n";
 
     if( argc >= 2 ){
         if( std::strcmp( argv[1], "-p" ) == 0 && argc == 6 && std::filesystem::exists(argv[5]) ){
@@ -46,6 +47,8 @@ int main(int argc, const char **argv){
                 auto end = std::chrono::system_clock::now();
                 //Calculate the elapsed time by substracting the two timestamps
                 std::chrono::duration<double> timerun = end - start;
+
+                perror("Something failed?");
 
                 //Group the vector format of the results
                 std::vector<std::pair<std::string, double>> data = {
