@@ -21,6 +21,7 @@ add_executable(spear)
 add_subdirectory(src)
 target_sources(spear
         PUBLIC main.cpp
+        PUBLIC external/json/json.h
         PUBLIC external/json/jsoncpp.cpp
         )
 
