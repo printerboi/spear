@@ -67,7 +67,7 @@ int main(int argc, const char **argv){
                 JSONHandler::write(outputpath, data);
 
                 std::cout << "Profiling finished!" << std::endl;
-                std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
+                //std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
             }catch( std::invalid_argument &iv ){
                 std::cerr << "The given arguments are not useable as ints";
                 return 1;
