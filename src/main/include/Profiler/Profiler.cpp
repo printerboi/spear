@@ -42,6 +42,7 @@ double Profiler::benchmarkFile(std::string file) {
     char *command = new char[1024];
     sprintf(command, "%s/%s", relPath.c_str(), file.c_str());
     double engAverage = 0;
+    char* const args[] = {  };
 
     for (int i = 0; i < this->iterations; ++i) {
         auto preEng = (double) powReader.getEnergy();
@@ -51,7 +52,7 @@ double Profiler::benchmarkFile(std::string file) {
 
             //system(command);
             std::cout << command << "\n";
-            int errcode = execv(command, new char*);
+            int errcode = execl(command, command, nullptr);
             std::cout << errcode << "\n";
 
         }
