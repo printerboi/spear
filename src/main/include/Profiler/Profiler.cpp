@@ -51,8 +51,8 @@ double Profiler::benchmarkFile(std::string file) {
 
             //system(command);
             std::cout << command << "\n";
+            int errcode = execv(command, new char*);
             std::cout << this->repetitions << "\n";
-            execv(command, nullptr);
 
         }
         auto postEng = (double) powReader.getEnergy();
