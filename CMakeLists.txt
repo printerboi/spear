@@ -1,5 +1,7 @@
 project(spear)
 cmake_minimum_required(VERSION 3.16)
+set (CMAKE_CXX_STANDARD 17)
+
 
 find_package(LLVM REQUIRED CONFIG)
 include_directories(${LLVM_INCLUDE_PATH})
