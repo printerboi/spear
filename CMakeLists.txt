@@ -18,11 +18,13 @@ include(AddLLVM)
 
 
 add_executable(spear)
+target_sources(spear
+        PUBLIC external/json/json.h
+        PUBLIC external/json/jsoncpp.cpp
+        )
 add_subdirectory(src)
 target_sources(spear
         PUBLIC main.cpp
-        PUBLIC external/json/json.h
-        PUBLIC external/json/jsoncpp.cpp
         )
 
 llvm_map_components_to_libnames(llvm_libs support core irreader passes)
