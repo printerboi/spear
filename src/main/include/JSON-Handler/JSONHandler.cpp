@@ -3,6 +3,7 @@
 //
 
 #include <fstream>
+#include "iostream"
 #include "JSONHandler.h"
 
 JSONHandler::JSONHandler() = default;
@@ -23,13 +24,17 @@ void JSONHandler::write(std::string filename, std::vector<std::pair<std::string,
     std::ofstream fileStream;
     fileStream.open(filename);
 
-    for ( auto p : data ) {
-        dataJson[p.first] = p.second;
-    }
+    if(fileStream.is_open()){
+        for ( auto p : data ) {
+            dataJson[p.first] = p.second;
+        }
 
-    fileStream << swriter.write("");
-    fileStream << swriter.write(dataJson);
-    fileStream.close();
+        fileStream << swriter.write("");
+        fileStream << swriter.write(dataJson);
+        fileStream.close();
+    }else{
+        std::cout << "ERROR ERROR ERROR FILE NOT OPEN" << "\n";
+    }
 }
 
 
