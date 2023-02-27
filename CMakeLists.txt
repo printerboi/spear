@@ -10,6 +10,7 @@ message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
+include_directories(external/json)
 
 list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 include(AddLLVM)
@@ -18,10 +19,6 @@ include(AddLLVM)
 
 
 add_executable(spear)
-target_sources(spear
-        PUBLIC external/json/json.h
-        PUBLIC external/json/jsoncpp.cpp
-        )
 add_subdirectory(src)
 target_sources(spear
         PUBLIC main.cpp
