@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
+include_directories("${CMAKE_SOURCE_DIR}/external/json")
+
 target_sources(spear
         PUBLIC JSON-Handler/JSONHandler.cpp
         PUBLIC JSON-Handler/JSONHandler.h
