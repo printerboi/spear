@@ -29,7 +29,6 @@ void JSONHandler::write(std::string filename, std::vector<std::pair<std::string,
             dataJson[p.first] = p.second;
         }
 
-        fileStream << swriter.write("");
         fileStream << swriter.write(dataJson);
         fileStream.close();
     }else{

@@ -6,6 +6,7 @@
 #include "Profiler.h"
 #include <thread>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "iostream"
 
 
@@ -16,6 +17,7 @@ Profiler::Profiler(int it, int rep, std::string path){
 }
 
 std::vector<double> Profiler::profile() {
+
     double cast = benchmarkFile("src/compiled/cast");
     double memoryread = benchmarkFile("src/compiled/memoryread");
     double memorywrite = benchmarkFile("src/compiled/memorywrite");
@@ -35,43 +37,71 @@ std::vector<double> Profiler::profile() {
 }
 
 double Profiler::benchmarkFile(std::string file) {
-    auto powReader = RegisterReader(0);
+    auto powReader = new RegisterReader(0);
     std::string relPath = this->programspath;
-    cpu_set_t set;
 
     char *command = new char[1024];
+    char *path = new char[1024];
     sprintf(command, "%s/%s", relPath.c_str(), file.c_str());
+    sprintf(path, "%s/%s", relPath.c_str(), "src/compiled");
+
     double engAverage = 0;
     char* const args[] = {  };
 
     for (int i = 0; i < this->iterations; ++i) {
-        auto preEng = (double) powReader.getEnergy();
-        auto start = std::chrono::system_clock::now();
 
-        for (int j = 0; j < this->repetitions; ++j) {
+        int pid, status;
+        pid = fork();
 
-            //system(command);
-            std::cout << command << "\n";
-            int errcode = execl(command, command, nullptr);
-            std::cout << errcode << "\n";
+        if(pid==0){
+            for (int j = 0; j < this->repetitions; ++j) {
+
+                //system(command);
+                execlp(command, command);
+            }
 
         }
-        auto postEng = (double) powReader.getEnergy();
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<double> timerun = end - start;
 
-        auto beforeSleep = (double) powReader.getEnergy();
-        std::this_thread::sleep_for(timerun);
-        auto afterSleep = (double) powReader.getEnergy();
+        auto preEng = (double) powReader->getEnergy();
+        //auto start = std::chrono::system_clock::now();
+        struct timespec start, end;
+        clock_gettime(CLOCK_REALTIME, &start);
+
+        if (waitpid(pid, &status, 0) > 0) {
+            auto postEng = (double) powReader->getEnergy();
+            //auto end = std::chrono::system_clock::now();
+            clock_gettime(CLOCK_REALTIME, &end);
+
+            auto timerun = end.tv_nsec - start.tv_nsec;
+
+            //std::cout << "time run: " << timerun << "\n";
+
+            auto beforeSleep = (double) powReader->getEnergy();
+            std::this_thread::sleep_for(std::chrono::nanoseconds(timerun));
+            auto afterSleep = (double) powReader->getEnergy();
 
 
-        auto noise = afterSleep - beforeSleep;
-        auto absEng = (postEng - preEng) - noise;
+            //auto noise = afterSleep - beforeSleep;
+            double noise = 0.0;
+            auto absEng = (postEng - preEng) - noise;
 
-        absEng = absEng / this->repetitions;
+            absEng = absEng / this->repetitions;
 
-        engAverage = engAverage + absEng;
+            //std::cout << postEng << "\n";
+            //std::cout << preEng << "\n";
+
+            engAverage = engAverage + absEng;
+        }
+
+
+
+
     }
 
-    return engAverage/this->iterations;
+    //int status;
+
+    //if (waitpid(pid, &status, 0) > 0) {
+        return engAverage/this->iterations;
+    //}
+
 }

@@ -34,41 +34,46 @@ int main(int argc, const char **argv){
 
                 std::cout << "Starting the profile..." << std::endl;
 
-                //Create a Profiler-object
-                Profiler B = Profiler(ite, rep, argv[4]);
+                if(std::filesystem::exists(argv[4])){
+                    //Create a Profiler-object
+                    Profiler B = Profiler(ite, rep, argv[4]);
 
 
 
-                //Start the time measurement
-                auto start = std::chrono::system_clock::now();
-                //Launch the benchmarking
-                std::vector<double> result = B.profile();
-                std::cout << "Profiling finished." << std::endl;
-                //Stop the time measurement
-                //auto end = std::chrono::system_clock::now();
-                //Calculate the elapsed time by substracting the two timestamps
-                //std::chrono::duration<double> timerun = end - start;
+                    //Start the time measurement
+                    auto start = std::chrono::system_clock::now();
+                    //Launch the benchmarking
+                    std::vector<double> result = B.profile();
+                    std::cout << "Profiling finished." << std::endl;
+                    //Stop the time measurement
+                    auto end = std::chrono::system_clock::now();
+                    //Calculate the elapsed time by substracting the two timestamps
+                    std::chrono::duration<double> timerun = end - start;
 
-                perror("Something failed?");
+                    //Group the vector format of the results
+                    std::vector<std::pair<std::string, double>> data = {
+                            {InstructionCategory::toString(InstructionCategory::Category::CAST),        result[0]},
+                            {InstructionCategory::toString(InstructionCategory::Category::MEMLOAD),     result[1]},
+                            {InstructionCategory::toString(InstructionCategory::Category::MEMSTORE),    result[2]},
+                            {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[3]},
+                            {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result[4]},
+                            {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result[5]},
+                    };
+                    //Pass the grouped values to the csv handler, so it can be written to a file
+                    //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
+                    char *outputpath = new char[255];
+                    sprintf(outputpath, "%s/profile.json", argv[5]);
+                    std::cout << "Writing " << outputpath << "\n";
+                    JSONHandler::write(outputpath, data);
 
-                //Group the vector format of the results
-                std::vector<std::pair<std::string, double>> data = {
-                        {InstructionCategory::toString(InstructionCategory::Category::CAST),        result[0]},
-                        {InstructionCategory::toString(InstructionCategory::Category::MEMLOAD),     result[1]},
-                        {InstructionCategory::toString(InstructionCategory::Category::MEMSTORE),    result[2]},
-                        {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[3]},
-                        {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result[4]},
-                        {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result[5]},
-                };
-                //Pass the grouped values to the csv handler, so it can be written to a file
-                //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
-                char *outputpath = new char[255];
-                sprintf(outputpath, "%s/profile.json", argv[5]);
-                std::cout << "Writing " << outputpath << "\n";
-                JSONHandler::write(outputpath, data);
+                    std::cout << "Profiling finished!" << std::endl;
+                    std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
+                }else{
+                    std::cerr << "The given path to the profile does not exist!!!";
+                    return 1;
+                }
 
-                std::cout << "Profiling finished!" << std::endl;
-                //std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
+
             }catch( std::invalid_argument &iv ){
                 std::cerr << "The given arguments are not useable as ints";
                 return 1;

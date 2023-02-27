@@ -31,6 +31,8 @@ void RegisterReader::read(int reg, char (&regValBuffer) [8]) {
     //our previously defined 64-integer regValBuffer
     pread(regfd, &regValBuffer, 8, reg);
 
+    close(regfd);
+
 }
 
 uint64_t RegisterReader::getEnergy() {
