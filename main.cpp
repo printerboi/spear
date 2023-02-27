@@ -25,7 +25,8 @@ int main(int argc, const char **argv){
                              "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)";
 
     if( argc >= 2 ){
-        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 5 ){
+        std::cout << std::filesystem::exists(argv[5]) << "\n\n\n\n";
+        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 6 && std::filesystem::exists(argv[5]) ){
             try {
                 //Get the parameters from the arguments
                 int rep = std::stoi( argv[2] );
@@ -56,7 +57,9 @@ int main(int argc, const char **argv){
                 };
                 //Pass the grouped values to the csv handler, so it can be written to a file
                 //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
-                JSONHandler::write("profile.json", data);
+                char *outputpath = new char[255];
+                sprintf(outputpath, "%s/profile.json", argv[5]);
+                JSONHandler::write(outputpath, data);
 
                 std::cout << "Profiling finished!" << std::endl;
                 std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
