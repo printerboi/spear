@@ -18,11 +18,11 @@ class Profiler {
         /**
          * Times the energy values will be executed. Needed for the average
          */
-        int iterations;
+        long iterations;
         /**
          * Times a single program will be executed
          */
-        int repetitions;
+        long repetitions;
 
         std::string programspath;
         /**
@@ -42,7 +42,7 @@ class Profiler {
          * @param file String to the file that needs to be benchmarked
          * @return The used energy
          */
-        double benchmarkFile(std::string file);
+        double benchmarkFile(std::string file, double *ptr);
 };
 
 

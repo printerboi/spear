@@ -22,8 +22,9 @@ RegisterReader::RegisterReader(int core) {
     sprintf(this->regFile, "/dev/cpu/%d/msr", core);
 }
 
-void RegisterReader::read(int reg, char (&regValBuffer) [8]) {
+long long RegisterReader::read(int reg) {
     int regfd = 0;
+    uint64_t regValBuffer;
 
     //Open the file containing our registers in readonly mode
     regfd = open(this->regFile, O_RDONLY);
@@ -33,23 +34,26 @@ void RegisterReader::read(int reg, char (&regValBuffer) [8]) {
 
     close(regfd);
 
+    return (long long) regValBuffer;
 }
 
-uint64_t RegisterReader::getEnergy() {
+double RegisterReader::getEnergy() {
     char regValBuffer[8] = {};
-    uint64_t result = 0;
-    read(this->energyReg, regValBuffer);
-    std::memcpy(&result, regValBuffer, 8);
-    return result;
+    u_int64_t result = read(this->energyReg);
+    //std::memcpy(&result, regValBuffer, 8);
+
+    auto mutlitplier = this->getMultiplier();
+    //result = (double) result * mutlitplier;
+
+    return (double) result * mutlitplier;
 }
 
 double RegisterReader::getMultiplier() {
-    char buffer[8] = {};
-    uint64_t result = 0;
-    read(this->unitReg, buffer);
-    buffer[1] = (char) ((buffer[1] >> 8) & 0xF);
-    std::memcpy(&result, &buffer[1], 1);
-    double multiplier = pow(0.5, (double) result);
+    double unit;
+    long long result = read(this->unitReg);
+    unit = (char) ((result >> 8) & 0x1F);
+    //std::memcpy(&result, &buffer, 1);
+    double multiplier = pow(0.5, (double) unit);
     return (double) multiplier;
 }
 

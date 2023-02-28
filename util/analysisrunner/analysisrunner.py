@@ -44,9 +44,9 @@ def readRapl():
 
         rf.seek(0)
         rf.seek(unitreg)
-        rawenergy = rf.read(8)
-        unit = struct.unpack('L', rawenergy)
-        cleaned_unit = unit[0] & 0xf
+        rawunit = rf.read(8)
+        unit = struct.unpack('Q', rawunit)[0]
+        cleaned_unit = (unit >> 8) & 0x1F
 
     return cleaned_energy * pow(0.5, cleaned_unit)
 
@@ -80,7 +80,7 @@ def main(analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-    bound = "500"
+    bound = "100"
 
     analysis_dict = {}
 
