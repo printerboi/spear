@@ -80,7 +80,7 @@ def main(analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-    bound = "100"
+    bound = "50"
 
     analysis_dict = {}
 

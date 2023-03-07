@@ -24,7 +24,7 @@ class InstructionCategory {
         /**
          * [Category] - Enum containing the possible categories
          */
-        enum Category { MEMSTORE, MEMLOAD, PROGRAMFLOW, DIVISION, CAST, OTHER };
+        enum Category { MEMSTORE, MEMLOAD, PROGRAMFLOW, DIVISION, CAST, CALL, OTHER };
         /**
          * [getCategory] - Calculates the category enum type of the provided Instruction
          * @param Instruction LLVM Instruction to categorize

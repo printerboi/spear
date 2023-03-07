@@ -25,6 +25,7 @@ Profiler::Profiler(int it, int rep, std::string path){
 std::vector<double> Profiler::profile() {
 
     double casptr = 0.0;
+    double callptr = 0.0;
     double memreadptr = 0.0;
     double memwritptr = 0.0;
     double flowptr = 0.0;
@@ -32,6 +33,7 @@ std::vector<double> Profiler::profile() {
     double stdbinptr = 0.0;
 
     benchmarkFile("src/compiled/cast", &casptr);
+    benchmarkFile("src/compiled/call", &callptr);
     benchmarkFile("src/compiled/memoryread", &memreadptr);
     benchmarkFile("src/compiled/memorywrite", &memwritptr);
     benchmarkFile("src/compiled/programflow", &flowptr);
@@ -57,6 +59,7 @@ std::vector<double> Profiler::profile() {
 
     return {
         casptr,
+        callptr,
         memreadptr,
         memwritptr,
         flowptr,

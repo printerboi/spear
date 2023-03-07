@@ -73,6 +73,9 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
         case Category::CAST:
             catString = "Cast";
             break;
+        case Category::CALL:
+            catString = "Call";
+            break;
         case Category::OTHER:
             catString = "Other";
             break;
