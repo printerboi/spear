@@ -55,7 +55,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     Energy(){
         if( llvm::sys::fs::exists( energyModelPath ) && !llvm::sys::fs::is_directory( energyModelPath ) ){
             //Create a JSONHandler object and read in the energypath
-            this->energyJson = JSONHandler::read( energyModelPath );
+            this->energyJson = JSONHandler::read( energyModelPath )["profile"];
             this->mode = modeParameter.c_str();
             this->format = formatParameter.c_str();
             this->strategy = analysisStrategyParameter.c_str();
@@ -228,6 +228,13 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 //If the user requested the program-mode we have to consider function calls and their energy-usage
 
                 for(auto ft : ftrees){
+
+                    std::vector<llvm::StringRef> names;
+                    for(auto F : ft->getPreOrderVector()){
+                        names.push_back(F->getName());
+                    }
+
+
                     for(auto F : ft->getPreOrderVector()){
                         //Construct a new EnergyFunction to the current function
                         auto tf = new EnergyFunction(F);

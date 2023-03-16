@@ -18,22 +18,43 @@ Json::Value JSONHandler::read(std::string filename) {
     return data;
 }
 
-void JSONHandler::write(std::string filename, std::vector<std::pair<std::string, double>> data) {
+void JSONHandler::write(std::string filename, std::vector<std::pair<std::string, std::string>> cpu, std::string timestart, std::string timeend, std::string iterations, std::vector<std::pair<std::string, double>> profile) {
     Json::StyledWriter swriter;
-    Json::Value dataJson;
+    Json::Value data;
+    Json::Value cpuJson;
+    Json::Value profileJson;
     std::ofstream fileStream;
     fileStream.open(filename);
 
     if(fileStream.is_open()){
-        for ( auto p : data ) {
-            dataJson[p.first] = p.second;
+        data["cpu"] = cpuJson;
+        for ( auto c : cpu ) {
+            data["cpu"][c.first] = c.second;
         }
 
-        fileStream << swriter.write(dataJson);
+        data["startOfExecution"] = timestart;
+        data["endOfExecution"] = timeend;
+        data["iterations"] = iterations;
+
+        data["profile"] = profileJson;
+        for ( auto p : profile ) {
+            data["profile"][p.first] = p.second;
+        }
+
+        fileStream << swriter.write(data);
         fileStream.close();
     }else{
         std::cout << "ERROR ERROR ERROR FILE NOT OPEN" << "\n";
     }
+}
+
+Json::Value JSONHandler::parse(std::string json) {
+    Json::Value data;
+    std::stringstream jsonstream;
+    jsonstream << json;
+    jsonstream >> data;
+
+    return data;
 }
 
 

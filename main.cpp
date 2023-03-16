@@ -26,45 +26,55 @@ int main(int argc, const char **argv){
                              "\n\n";
 
     if( argc >= 2 ){
-        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 6 && std::filesystem::exists(argv[5]) ){
+        if( std::strcmp( argv[1], "-p" ) == 0 && argc == 5 && std::filesystem::exists(argv[4]) ){
             try {
                 //Get the parameters from the arguments
                 int rep = std::stoi( argv[2] );
-                int ite = std::stoi( argv[3] );
 
                 std::cout << "Starting the profile..." << std::endl;
 
-                if(std::filesystem::exists(argv[4])){
+                if(std::filesystem::exists(argv[3])){
                     //Create a Profiler-object
-                    Profiler B = Profiler(ite, rep, argv[4]);
+                    Profiler profiler = Profiler( rep, argv[3]);
 
 
 
                     //Start the time measurement
                     auto start = std::chrono::system_clock::now();
                     //Launch the benchmarking
-                    std::vector<double> result = B.profile();
+                    std::vector<double> result = profiler.profile();
                     //Stop the time measurement
                     auto end = std::chrono::system_clock::now();
                     //Calculate the elapsed time by substracting the two timestamps
                     std::chrono::duration<double> timerun = end - start;
 
+                    std::stringstream starttimestream;
+                    std::stringstream endtimestream;
+                    starttimestream << start.time_since_epoch().count();
+                    endtimestream << end.time_since_epoch().count();
+
+                    std::vector<std::pair<std::string, std::string>> cpu = {
+                            {"name", profiler.getCPUName()},
+                            {"architecture", profiler.getArchitecture()},
+                            {"cores", profiler.getNumberOfCores()}
+                    };
+
                     //Group the vector format of the results
                     std::vector<std::pair<std::string, double>> data = {
-                            {InstructionCategory::toString(InstructionCategory::Category::CAST),        result[0]},
-                            {InstructionCategory::toString(InstructionCategory::Category::CALL),        result[1]},
-                            {InstructionCategory::toString(InstructionCategory::Category::MEMLOAD),     result[2]},
-                            {InstructionCategory::toString(InstructionCategory::Category::MEMSTORE),    result[3]},
-                            {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[4]},
-                            {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result[5]},
-                            {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result[6]},
+                            /*{InstructionCategory::toString(InstructionCategory::Category::CAST),        result[0]},*/
+                            {InstructionCategory::toString(InstructionCategory::Category::CALL),        result[0]},
+                            {InstructionCategory::toString(InstructionCategory::Category::MEMORY),     result[1]},
+                            /*{InstructionCategory::toString(InstructionCategory::Category::MEMSTORE),    result[3]},*/
+                            {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result[2]},
+                            {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result[3]},
+                            {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result[4]},
                     };
                     //Pass the grouped values to the csv handler, so it can be written to a file
                     //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
                     char *outputpath = new char[255];
-                    sprintf(outputpath, "%s/profile.json", argv[5]);
+                    sprintf(outputpath, "%s/profile.json", argv[4]);
                     std::cout << "Writing " << outputpath << "\n";
-                    JSONHandler::write(outputpath, data);
+                    JSONHandler::write(outputpath, cpu, starttimestream.str(), endtimestream.str(), std::to_string(profiler.getIterations()),  data);
 
                     std::cout << "Profiling finished!" << std::endl;
                     std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;

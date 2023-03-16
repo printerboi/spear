@@ -9,6 +9,8 @@
 #include <sys/mman.h>
 #include <sys/wait.h>
 #include "iostream"
+#include "../JSON-Handler/JSONHandler.h"
+
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
@@ -16,8 +18,7 @@
 #define SHMSZ     27
 
 
-Profiler::Profiler(int it, int rep, std::string path){
-    this->iterations = it;
+Profiler::Profiler(int rep, std::string path){
     this->repetitions = rep;
     this->programspath = path;
 }
@@ -32,10 +33,10 @@ std::vector<double> Profiler::profile() {
     double divpointer = 0.0;
     double stdbinptr = 0.0;
 
-    benchmarkFile("src/compiled/cast", &casptr);
+    //benchmarkFile("src/compiled/cast", &casptr);
     benchmarkFile("src/compiled/call", &callptr);
     benchmarkFile("src/compiled/memoryread", &memreadptr);
-    benchmarkFile("src/compiled/memorywrite", &memwritptr);
+    //benchmarkFile("src/compiled/memorywrite", &memwritptr);
     benchmarkFile("src/compiled/programflow", &flowptr);
     benchmarkFile("src/compiled/division", &divpointer);
     benchmarkFile("src/compiled/stdbinary", &stdbinptr);
@@ -58,10 +59,8 @@ std::vector<double> Profiler::profile() {
     };*/
 
     return {
-        casptr,
         callptr,
         memreadptr,
-        memwritptr,
         flowptr,
         divpointer,
         stdbinptr
@@ -97,7 +96,7 @@ double Profiler::benchmarkFile(std::string file, double *ptr) {
     double engAverage = 0;
     char* const args[] = {  };
 
-    auto *preeng  = (uint64_t *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE,
+    auto *preeng  = (double *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE,
                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     auto *start  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE,
                                       MAP_SHARED | MAP_ANONYMOUS, -1, 0);
@@ -105,12 +104,12 @@ double Profiler::benchmarkFile(std::string file, double *ptr) {
                                             MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 
 
-    std::cout << "Starting the profile of " << command << "\n";
+    //std::cout << "Starting the profile of " << command << "\n";
 
-    long cummulated_eng = 0.0;
+    double cummulated_eng = 0.0;
     cpu_set_t set;
 
-    for (int i = 0; i < this->iterations; i++){
+    for (int i = 0; i < this->repetitions; i++){
         pid_t c_pid = fork();
 
         if(c_pid == 0){
@@ -119,12 +118,7 @@ double Profiler::benchmarkFile(std::string file, double *ptr) {
             CPU_SET(0, &set);      // set cpu 3
             sched_setaffinity(c_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
 
-
-            uint64_t cmp = powReader->getEnergy();
             *preeng = powReader->getEnergy();
-            /*while (*preeng == cmp){
-                *preeng = powReader->getEnergy();
-            }*/
 
             execl(command, command);
             exit(1);
@@ -134,29 +128,184 @@ double Profiler::benchmarkFile(std::string file, double *ptr) {
             CPU_SET(3, &set);      // set cpu 3
             sched_setaffinity(c_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
 
-            //std::cout << "\tParent with pid " << c_pid << " forking. \n"<< std::flush;
 
             wait(nullptr);
 
-            //uint64_t cmp = powReader->getEnergy();
-            uint64_t posteng = powReader->getEnergy();
-            /*while (posteng == cmp){
-                posteng = powReader->getEnergy();
-            }*/
+            double posteng = powReader->getEnergy();
 
-            //std::cout << "time run: " << timerun << "\n";
+            //If the register overflows...
+            if(*preeng > posteng){
+                pid_t ic_pid = fork();
 
-            //std::cout << "\tChild finished execution with "<< *preeng << "\n" << std::flush;
-            //std::cout << "\tParent finished execution with "<< posteng << "\n" << std::flush;
-            //std::cout << "\t\t\t=> "<< posteng - *preeng << "\n" << std::flush;
+                if(ic_pid == 0){
+                    //std::cout << "\t\tChild with pid " << c_pid << " executing the file. \n" << std::flush;
+                    CPU_ZERO(&set);        // clear cpu mask
+                    CPU_SET(0, &set);      // set cpu 3
+                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
 
-            cummulated_eng += posteng - *preeng;
+                    *preeng = powReader->getEnergy();
+
+                    execl(command, command);
+                    exit(1);
+
+                }else {
+                    CPU_ZERO(&set);        // clear cpu mask
+                    CPU_SET(3, &set);      // set cpu 3
+                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
+
+                    wait(nullptr);
+
+                    posteng = powReader->getEnergy();
+                }
+
+            }else{
+                cummulated_eng += posteng - *preeng;
+            }
+
         }
 
         //std::cout << "\tI ran after the exec " << "\n" << std::flush;
     }
 
-    *ptr = (double) cummulated_eng/(double) this->iterations;
+    *ptr = cummulated_eng/(double) this->repetitions;
 
     return 0;
 }
+
+std::string Profiler::getCPUName() {
+    char buffer[128];
+    std::string result;
+    std::string command = "cat /proc/cpuinfo | grep 'model name' | uniq";
+
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) {
+        return "failed to execute the command";
+    }
+
+    while (!feof(pipe)) {
+        if (fgets(buffer, 128, pipe) != nullptr)
+            result += buffer;
+    }
+
+    pclose(pipe);
+
+    std::stringstream resstream;
+    std::string segment;
+    resstream << result;
+
+    std::vector<std::string> seglist;
+    while(std::getline(resstream, segment, ':'))
+    {
+        seglist.push_back(segment);
+    }
+
+    if(segment.length() >=2 ){
+        auto lastchar = segment[segment.length()-1];
+        auto firstchar = segment[0];
+
+        if(lastchar == '\n'){
+            segment.erase(segment.length()-1);
+        }
+
+        if(firstchar == ' '){
+            segment.erase(0, 1);
+        }
+
+    }
+
+    return  segment;
+}
+
+std::string Profiler::getArchitecture() {
+    char buffer[128];
+    std::string result;
+    std::string command = "cat /proc/cpuinfo | grep 'cpu family' | uniq";
+
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) {
+        return "failed to execute the command";
+    }
+
+    while (!feof(pipe)) {
+        if (fgets(buffer, 128, pipe) != nullptr)
+            result += buffer;
+    }
+
+    pclose(pipe);
+
+    std::stringstream resstream;
+    std::string segment;
+    resstream << result;
+
+    std::vector<std::string> seglist;
+    while(std::getline(resstream, segment, ':'))
+    {
+        seglist.push_back(segment);
+    }
+
+    if(segment.length() >=2 ){
+        auto lastchar = segment[segment.length()-1];
+        auto firstchar = segment[0];
+
+        if(lastchar == '\n'){
+            segment.erase(segment.length()-1);
+        }
+
+        if(firstchar == ' '){
+            segment.erase(0, 1);
+        }
+
+    }
+
+
+    return segment;
+}
+
+long Profiler::getIterations() {
+    return this->repetitions;
+}
+
+std::string Profiler::getNumberOfCores() {
+    char buffer[128];
+    std::string result;
+    std::string command = " cat /proc/cpuinfo | grep 'siblings' | uniq";
+
+    FILE* pipe = popen(command.c_str(), "r");
+    if (!pipe) {
+        return "failed to execute the command";
+    }
+
+    while (!feof(pipe)) {
+        if (fgets(buffer, 128, pipe) != nullptr)
+            result += buffer;
+    }
+
+    pclose(pipe);
+
+    std::stringstream resstream;
+    std::string segment;
+    resstream << result;
+
+    std::vector<std::string> seglist;
+    while(std::getline(resstream, segment, ':'))
+    {
+        seglist.push_back(segment);
+    }
+
+    if(segment.length() >=2 ){
+        auto lastchar = segment[segment.length()-1];
+        auto firstchar = segment[0];
+
+        if(lastchar == '\n'){
+            segment.erase(segment.length()-1);
+        }
+
+        if(firstchar == ' '){
+            segment.erase(0, 1);
+        }
+
+    }
+
+    return segment;
+}
+

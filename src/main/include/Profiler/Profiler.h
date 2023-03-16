@@ -9,16 +9,13 @@
 #include "../Rapl-reader/PowercapReader.h"
 #include "string"
 #include "vector"
+#include "json/json.h"
 
 /**
  * Simple class to profile the llvm-code and output the data in an appropriate format
  */
 class Profiler {
     public:
-        /**
-         * Times the energy values will be executed. Needed for the average
-         */
-        long iterations;
         /**
          * Times a single program will be executed
          */
@@ -31,11 +28,19 @@ class Profiler {
          * @param it Iterations for the average
          * @param rep Times a program will be executed repeatedly
          */
-        explicit Profiler(int it, int rep, std::string path);
+        explicit Profiler(int rep, std::string path);
         /**
          * Runs the profile and returns the values for the benchmarked files
          */
         std::vector<double> profile();
+
+        std::string getCPUName();
+
+        std::string getArchitecture();
+
+        long getIterations();
+
+        std::string getNumberOfCores();
     private:
         /**
          * Benchmarks a single file, calculates the used energy and returns the calculated value

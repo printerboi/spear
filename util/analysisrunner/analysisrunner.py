@@ -6,13 +6,13 @@ import sys
 import subprocess
 from pathlib import Path
 
-libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
-modelpath = "../../cmake-build-debug/profile.json"
+#libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
+#modelpath = "../../cmake-build-debug/profile.json"
 core = 1
-iterations = 100
+#iterations = 100
 
 
-def runprogram(file):
+def runprogram(file, iterations):
     ges_energy = 0
     beforeeng = readRapl()
     for iteration in range(0, iterations):
@@ -51,7 +51,7 @@ def readRapl():
     return cleaned_energy * pow(0.5, cleaned_unit)
 
 
-def execute_analysis(file, strategy, loopbound):
+def execute_analysis(file, strategy, loopbound, libpath, modelpath):
     command = 'opt -disable-output ' \
               '-load-pass-plugin {0} ' \
               '--passes="function(instnamer,mem2reg,loop-simplify,loop-rotate),energy" ' \
@@ -76,11 +76,11 @@ def write_analysis_result_to_csv(result):
             w.writerow([entry["name"], entry["worst"], entry["average"], entry["best"], entry["measurement"]])
 
 
-def main(analysispath):
+def main(libpath, modelpath, bound, iterations, analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-    bound = "50"
+
 
     analysis_dict = {}
 
@@ -93,12 +93,12 @@ def main(analysispath):
             analysis_dict[file] = {}
             for strategy in stategies:
                 # print("\t{}...".format(strategy))
-                json_result = execute_analysis(relpath, strategy, bound)
+                json_result = execute_analysis(relpath, strategy, int(bound), libpath, modelpath)
                 analysis_dict[file][strategy] = json_result["main"]["energy"]
 
             analysis_dict[file]["name"] = file
 
-            measurement = runprogram("{}/{}".format(simpledirpath, filename))
+            measurement = runprogram("{}/{}".format(simpledirpath, filename), int(iterations))
             analysis_dict[file]["measurement"] = measurement
 
     write_analysis_result_to_csv(analysis_dict)
@@ -112,7 +112,7 @@ def main(analysispath):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        main(sys.argv[1])
+    if len(sys.argv) == 6:
+        main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     else:
         print("Please provide a path to a folder containing .ll files")

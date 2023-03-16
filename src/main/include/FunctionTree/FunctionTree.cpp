@@ -44,7 +44,7 @@ std::vector<llvm::Function *> FunctionTree::getCalledFunctions() {
         //Iterate over the instructions of the function
         for( auto &I : BB){
             //If we find an instruction, that is a call-instruction
-            if(InstructionCategory::isCallInstruction(I)){
+            if(llvm::isa<llvm::CallInst>( I )){
                 auto calleeInst = llvm::cast<llvm::CallInst>(&I);
                 //Get the called function
                 auto *cf = calleeInst->getCalledFunction();

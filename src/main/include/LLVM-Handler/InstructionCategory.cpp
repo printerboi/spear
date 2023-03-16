@@ -14,7 +14,18 @@ bool InstructionCategory::isMemloadInstruction(llvm::Instruction &Instruction) {
 }
 
 bool InstructionCategory::isCallInstruction(llvm::Instruction &Instruction) {
-    return llvm::isa<llvm::CallInst>( Instruction );
+    return llvm::isa<llvm::CallInst>( Instruction ) ||
+        llvm::isa<llvm::CallBrInst>( Instruction ) ||
+        llvm::isa<llvm::InvokeInst>( Instruction );
+}
+
+bool InstructionCategory::isMemoryInstruction(llvm::Instruction &Instruction) {
+    return llvm::isa<llvm::LoadInst>( Instruction ) ||
+            llvm::isa<llvm::StoreInst>( Instruction ) ||
+            llvm::isa<llvm::AllocaInst>( Instruction ) ||
+            llvm::isa<llvm::AtomicCmpXchgInst>( Instruction ) ||
+            llvm::isa<llvm::AtomicRMWInst>( Instruction ) ||
+            llvm::isa<llvm::GetElementPtrInst>( Instruction );
 }
 
 bool InstructionCategory::isMemstoreInstruction(llvm::Instruction &Instruction) {
@@ -23,14 +34,21 @@ bool InstructionCategory::isMemstoreInstruction(llvm::Instruction &Instruction) 
 
 bool InstructionCategory::isProgramFlowInstruction( llvm::Instruction &Instruction ){
     return llvm::isa<llvm::BranchInst>(Instruction) ||
-            llvm::isa<llvm::CallInst>(Instruction) ||
+            llvm::isa<llvm::IndirectBrInst>(Instruction) ||
+            llvm::isa<llvm::SwitchInst>(Instruction) ||
+            llvm::isa<llvm::CatchSwitchInst>(Instruction) ||
+            llvm::isa<llvm::CatchReturnInst>(Instruction) ||
             llvm::isa<llvm::ReturnInst>(Instruction);
 }
 
 bool InstructionCategory::isDivisionInstruction( llvm::Instruction &Instruction ){
     return llvm::isa<llvm::BinaryOperator>(Instruction) && (
             std::strcmp(Instruction.getOpcodeName(), "sdiv") == 0 ||
-            std::strcmp(Instruction.getOpcodeName(), "udiv") == 0
+            std::strcmp(Instruction.getOpcodeName(), "udiv") == 0 ||
+            std::strcmp(Instruction.getOpcodeName(), "fidv") == 0 ||
+            std::strcmp(Instruction.getOpcodeName(), "urem") == 0 ||
+            std::strcmp(Instruction.getOpcodeName(), "srem") == 0 ||
+            std::strcmp(Instruction.getOpcodeName(), "frem") == 0
     );
 }
 
@@ -39,16 +57,14 @@ bool InstructionCategory::isCastInstruction(llvm::Instruction &Instruction) {
 }
 
 InstructionCategory::Category InstructionCategory::getCategory( llvm::Instruction &Instruction ){
-    if( isMemloadInstruction( Instruction ) ){
-        return InstructionCategory::Category::MEMLOAD;
-    }else if( isMemstoreInstruction( Instruction ) ){
-        return InstructionCategory::Category::MEMSTORE;
-    }else if( isProgramFlowInstruction( Instruction ) || isCallInstruction( Instruction ) ){
+    if( isMemoryInstruction( Instruction ) ){
+        return InstructionCategory::Category::MEMORY;
+    }else if( isProgramFlowInstruction( Instruction ) ){
         return InstructionCategory::Category::PROGRAMFLOW;
     }else if( isDivisionInstruction( Instruction ) ){
         return InstructionCategory::Category::DIVISION;
-    }else if( isCastInstruction( Instruction ) ){
-        return InstructionCategory::Category::CAST;
+    }else if( isCallInstruction( Instruction ) ){
+        return InstructionCategory::Category::CALL;
     }else{
         return InstructionCategory::Category::OTHER;
     }
@@ -58,20 +74,14 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
     std::string catString = "undefined";
 
     switch (category) {
-        case Category::MEMLOAD:
-            catString = "Memload";
-            break;
-        case Category::MEMSTORE:
-            catString = "Memstore";
+        case Category::MEMORY:
+            catString = "Memory";
             break;
         case Category::PROGRAMFLOW:
             catString = "Programflow";
             break;
         case Category::DIVISION:
             catString = "Division";
-            break;
-        case Category::CAST:
-            catString = "Cast";
             break;
         case Category::CALL:
             catString = "Call";
@@ -87,7 +97,7 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
 double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, std::vector<EnergyFunction *> function_pool) {
     double energy = 0.00;
 
-    if(isCallInstruction(Instruction) ){
+    if(llvm::isa<llvm::CallInst>( Instruction ) ){
         auto call_instruction = llvm::cast<llvm::CallInst>(&Instruction);
         if(call_instruction != nullptr){
             auto called_function = call_instruction->getCalledFunction();
