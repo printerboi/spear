@@ -82,16 +82,18 @@ $(function() {
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classJSONHandler.html#a8fb7b9d53805c97b3516130beaca0536">   18</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classJSONHandler.html#a8fb7b9d53805c97b3516130beaca0536">JSONHandler</a>();</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classJSONHandler.html#a0c391148028050bfe4545971f484f0db">write</a>(std::string filename, std::vector&lt;std::pair&lt;std::string, double&gt;&gt; data);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classJSONHandler.html#aa5d4e822dfe1ac06f304bd84596e0ef5">write</a>(std::string filename, std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt; cpu, std::string timestart, std::string timeend, std::string  iteratons, std::vector&lt;std::pair&lt;std::string, double&gt;&gt; data);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">static</span> Json::Value <a class="code" href="classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b">read</a>(std::string filename);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;};</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_JSONHANDLER_H</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">static</span> Json::Value parse(std::string json);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;};</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_JSONHANDLER_H</span></div>
 <div class="ttc" id="aclassJSONHandler_html"><div class="ttname"><a href="classJSONHandler.html">JSONHandler</a></div><div class="ttdef"><b>Definition:</b> JSONHandler.h:13</div></div>
-<div class="ttc" id="aclassJSONHandler_html_a0c391148028050bfe4545971f484f0db"><div class="ttname"><a href="classJSONHandler.html#a0c391148028050bfe4545971f484f0db">JSONHandler::write</a></div><div class="ttdeci">static void write(std::string filename, std::vector&lt; std::pair&lt; std::string, double &gt;&gt; data)</div><div class="ttdef"><b>Definition:</b> JSONHandler.cpp:21</div></div>
 <div class="ttc" id="aclassJSONHandler_html_a8fb7b9d53805c97b3516130beaca0536"><div class="ttname"><a href="classJSONHandler.html#a8fb7b9d53805c97b3516130beaca0536">JSONHandler::JSONHandler</a></div><div class="ttdeci">JSONHandler()</div></div>
+<div class="ttc" id="aclassJSONHandler_html_aa5d4e822dfe1ac06f304bd84596e0ef5"><div class="ttname"><a href="classJSONHandler.html#aa5d4e822dfe1ac06f304bd84596e0ef5">JSONHandler::write</a></div><div class="ttdeci">static void write(std::string filename, std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; cpu, std::string timestart, std::string timeend, std::string iteratons, std::vector&lt; std::pair&lt; std::string, double &gt;&gt; data)</div><div class="ttdef"><b>Definition:</b> JSONHandler.cpp:21</div></div>
 <div class="ttc" id="aclassJSONHandler_html_af02117cc5de152e9155467ba4dedff7b"><div class="ttname"><a href="classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b">JSONHandler::read</a></div><div class="ttdeci">static Json::Value read(std::string filename)</div><div class="ttdef"><b>Definition:</b> JSONHandler.cpp:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

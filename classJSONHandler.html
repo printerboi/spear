@@ -79,10 +79,13 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a0c391148028050bfe4545971f484f0db"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#a0c391148028050bfe4545971f484f0db">write</a> (std::string filename, std::vector&lt; std::pair&lt; std::string, double &gt;&gt; data)</td></tr>
-<tr class="separator:a0c391148028050bfe4545971f484f0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5d4e822dfe1ac06f304bd84596e0ef5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#aa5d4e822dfe1ac06f304bd84596e0ef5">write</a> (std::string filename, std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; cpu, std::string timestart, std::string timeend, std::string iteratons, std::vector&lt; std::pair&lt; std::string, double &gt;&gt; data)</td></tr>
+<tr class="separator:aa5d4e822dfe1ac06f304bd84596e0ef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af02117cc5de152e9155467ba4dedff7b"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b">read</a> (std::string filename)</td></tr>
 <tr class="separator:af02117cc5de152e9155467ba4dedff7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5c47c6568fbc67152177605377939ab"><td class="memItemLeft" align="right" valign="top"><a id="ab5c47c6568fbc67152177605377939ab"></a>
+static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (std::string json)</td></tr>
+<tr class="separator:ab5c47c6568fbc67152177605377939ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for handling the reading and writing of JSON files to save and load the energy data measured in the profile </p>
@@ -147,8 +150,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a0c391148028050bfe4545971f484f0db"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c391148028050bfe4545971f484f0db">&#9670;&nbsp;</a></span>write()</h2>
+<a id="aa5d4e822dfe1ac06f304bd84596e0ef5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5d4e822dfe1ac06f304bd84596e0ef5">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -161,6 +164,30 @@ Static Public Member Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt;&#160;</td>
+          <td class="paramname"><em>cpu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>timestart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>timeend</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>iteratons</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
