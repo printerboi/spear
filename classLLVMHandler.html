@@ -78,8 +78,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af7f629a5a88a6014c51954ce793b2e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a159b5b9672fc79e57d1ec96a12c9d1f5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5">getBasicBlockSum</a> (llvm::BasicBlock &amp;BB, llvm::Function *func)</td></tr>
 <tr class="separator:a159b5b9672fc79e57d1ec96a12c9d1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d14386c23be3cbea28255394985f786"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a6d14386c23be3cbea28255394985f786">getLoopUpperBound</a> (llvm::Loop *L)</td></tr>
-<tr class="separator:a6d14386c23be3cbea28255394985f786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aed5e20fd643e251ea505738ca2e7a4"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a2aed5e20fd643e251ea505738ca2e7a4">getLoopUpperBound</a> (llvm::Loop *L, llvm::ScalarEvolution *se)</td></tr>
+<tr class="separator:a2aed5e20fd643e251ea505738ca2e7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -169,8 +169,8 @@ std::vector&lt; <a class="el" href="classEnergyFunction.html">EnergyFunction</a>
 
 </div>
 </div>
-<a id="a6d14386c23be3cbea28255394985f786"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d14386c23be3cbea28255394985f786">&#9670;&nbsp;</a></span>getLoopUpperBound()</h2>
+<a id="a2aed5e20fd643e251ea505738ca2e7a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aed5e20fd643e251ea505738ca2e7a4">&#9670;&nbsp;</a></span>getLoopUpperBound()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,8 +179,18 @@ std::vector&lt; <a class="el" href="classEnergyFunction.html">EnergyFunction</a>
           <td class="memname">long LLVMHandler::getLoopUpperBound </td>
           <td>(</td>
           <td class="paramtype">llvm::Loop *&#160;</td>
-          <td class="paramname"><em>L</em></td><td>)</td>
+          <td class="paramname"><em>L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">llvm::ScalarEvolution *&#160;</td>
+          <td class="paramname"><em>se</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">

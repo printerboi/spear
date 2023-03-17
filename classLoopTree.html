@@ -74,8 +74,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a41adfcea0bf35ede6eb2c43e5b802eb2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopTree.html#a41adfcea0bf35ede6eb2c43e5b802eb2">LoopTree</a> (llvm::Loop *main, std::vector&lt; llvm::Loop * &gt; subloops, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *<a class="el" href="classLoopTree.html#a15b900fb894985bdc881842d75bd5f9a">handler</a>)</td></tr>
-<tr class="separator:a41adfcea0bf35ede6eb2c43e5b802eb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bcc43fc9c1952d88ed44668fe1981a7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopTree.html#a9bcc43fc9c1952d88ed44668fe1981a7">LoopTree</a> (llvm::Loop *main, std::vector&lt; llvm::Loop * &gt; subloops, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *<a class="el" href="classLoopTree.html#a15b900fb894985bdc881842d75bd5f9a">handler</a>, llvm::ScalarEvolution *se)</td></tr>
+<tr class="separator:a9bcc43fc9c1952d88ed44668fe1981a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0845dbdf362f32d6443f3d1b405c626"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopTree.html#ae0845dbdf362f32d6443f3d1b405c626">calcEnergy</a> ()</td></tr>
 <tr class="separator:ae0845dbdf362f32d6443f3d1b405c626"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad97586e2ef41e7fa8f720ee920b3db34"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34">printPreOrder</a> ()</td></tr>
@@ -101,8 +101,8 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classLoopTree.html">LoopTree</a> - A recursive datastructure to handle encapsulated loops </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a41adfcea0bf35ede6eb2c43e5b802eb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41adfcea0bf35ede6eb2c43e5b802eb2">&#9670;&nbsp;</a></span>LoopTree()</h2>
+<a id="a9bcc43fc9c1952d88ed44668fe1981a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bcc43fc9c1952d88ed44668fe1981a7">&#9670;&nbsp;</a></span>LoopTree()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -123,7 +123,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> *&#160;</td>
-          <td class="paramname"><em>handler</em>&#160;</td>
+          <td class="paramname"><em>handler</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">llvm::ScalarEvolution *&#160;</td>
+          <td class="paramname"><em>se</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

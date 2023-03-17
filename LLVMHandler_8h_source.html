@@ -95,7 +95,7 @@ $(function() {
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5">getBasicBlockSum</a>(llvm::BasicBlock &amp;BB, llvm::Function *func );</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;         <span class="keywordtype">long</span> <a class="code" href="classLLVMHandler.html#a6d14386c23be3cbea28255394985f786">getLoopUpperBound</a>(llvm::Loop *L);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;         <span class="keywordtype">long</span> <a class="code" href="classLLVMHandler.html#a2aed5e20fd643e251ea505738ca2e7a4">getLoopUpperBound</a>(llvm::Loop *L, llvm::ScalarEvolution *se);</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">private</span>:</div>
@@ -108,9 +108,9 @@ $(function() {
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_LLVMHANDLER_H</span></div>
 <div class="ttc" id="aclassLLVMHandler_html"><div class="ttname"><a href="classLLVMHandler.html">LLVMHandler</a></div><div class="ttdef"><b>Definition:</b> LLVMHandler.h:21</div></div>
-<div class="ttc" id="aclassLLVMHandler_html_a159b5b9672fc79e57d1ec96a12c9d1f5"><div class="ttname"><a href="classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5">LLVMHandler::getBasicBlockSum</a></div><div class="ttdeci">double getBasicBlockSum(llvm::BasicBlock &amp;BB, llvm::Function *func)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:10</div></div>
-<div class="ttc" id="aclassLLVMHandler_html_a6d14386c23be3cbea28255394985f786"><div class="ttname"><a href="classLLVMHandler.html#a6d14386c23be3cbea28255394985f786">LLVMHandler::getLoopUpperBound</a></div><div class="ttdeci">long getLoopUpperBound(llvm::Loop *L)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:37</div></div>
-<div class="ttc" id="aclassLLVMHandler_html_af7f629a5a88a6014c51954ce793b2e7a"><div class="ttname"><a href="classLLVMHandler.html#af7f629a5a88a6014c51954ce793b2e7a">LLVMHandler::LLVMHandler</a></div><div class="ttdeci">LLVMHandler(Json::Value energyModel, int valueIfInteterminate)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:5</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_a159b5b9672fc79e57d1ec96a12c9d1f5"><div class="ttname"><a href="classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5">LLVMHandler::getBasicBlockSum</a></div><div class="ttdeci">double getBasicBlockSum(llvm::BasicBlock &amp;BB, llvm::Function *func)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:11</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_a2aed5e20fd643e251ea505738ca2e7a4"><div class="ttname"><a href="classLLVMHandler.html#a2aed5e20fd643e251ea505738ca2e7a4">LLVMHandler::getLoopUpperBound</a></div><div class="ttdeci">long getLoopUpperBound(llvm::Loop *L, llvm::ScalarEvolution *se)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:38</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_af7f629a5a88a6014c51954ce793b2e7a"><div class="ttname"><a href="classLLVMHandler.html#af7f629a5a88a6014c51954ce793b2e7a">LLVMHandler::LLVMHandler</a></div><div class="ttdeci">LLVMHandler(Json::Value energyModel, int valueIfInteterminate)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:6</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
