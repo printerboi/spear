@@ -6,7 +6,7 @@ int adder(int *number){
 
 int main(){
     int a = 10;
-    for(int i=0; i < 10; i++){
+    for(int i=0; i < 100; i+=50){
         a = adder(&a);
     }
 

@@ -41,11 +41,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     explicit Energy(std::string filename, std::string mode, std::string format, std::string strategy, std::string loopbound){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
-            this->energyJson = JSONHandler::read( filename );
-            this->mode = mode;
-            this->format = format;
-            this->strategy = strategy;
-            this->loopbound = loopbound;
+            this->energyJson = JSONHandler::read( filename )["profile"];
+            this->mode = mode.c_str();
+            this->format = format.c_str();
+            this->strategy = strategy.c_str();
+            this->loopbound = loopbound.c_str();
         }
     }
 
@@ -131,6 +131,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         DT->recalculate(*function);
 
         auto &KLoop = FAM->getResult<llvm::LoopAnalysis>(*function);
+        auto &se = FAM->getResult<llvm::ScalarEvolutionAnalysis>(*function);
 
         //Get the vector of Top-Level loops present in the program
         auto loops = KLoop.getTopLevelLoops();
@@ -157,7 +158,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 auto topLoop= *liiter;
 
                 //Construct the LoopTree from the Information of the current top-level loop
-                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), handler);
+                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), handler, &se);
 
                 //Add the constructed tree to the List of LoopTrees
                 trees.push_back(&LT);

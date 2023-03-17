@@ -43,7 +43,7 @@ class LLVMHandler {
          * @param L The loop to analyze
          * @return The long value representing the iterations the given loop will approximately run
          */
-         long getLoopUpperBound(llvm::Loop *L);
+         long getLoopUpperBound(llvm::Loop *L, llvm::ScalarEvolution *se);
 
 
 private:

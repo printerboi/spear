@@ -6,10 +6,12 @@ import sys
 import subprocess
 from pathlib import Path
 
-#libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
-#modelpath = "../../cmake-build-debug/profile.json"
+# libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
+# modelpath = "../../cmake-build-debug/profile.json"
 core = 1
-#iterations = 100
+
+
+# iterations = 100
 
 
 def runprogram(file, iterations):
@@ -54,7 +56,7 @@ def readRapl():
 def execute_analysis(file, strategy, loopbound, libpath, modelpath):
     command = 'opt -disable-output ' \
               '-load-pass-plugin {0} ' \
-              '--passes="function(instnamer,mem2reg,loop-simplify,loop-rotate),energy" ' \
+              '--passes="function(instcombine,mem2reg,loop-simplify,loop-rotate),energy" ' \
               '--model {1} ' \
               '--mode program ' \
               '--format json ' \
@@ -80,7 +82,6 @@ def main(libpath, modelpath, bound, iterations, analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
-
 
     analysis_dict = {}
 

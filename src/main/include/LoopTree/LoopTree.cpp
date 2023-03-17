@@ -2,14 +2,14 @@
 #include "LoopTree.h"
 
 
-LoopTree::LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHandler *handler){
+LoopTree::LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHandler *handler, llvm::ScalarEvolution *se){
     this->mainloop = main;
     this->handler = handler;
 
     //Iterate over the given Subloops
     for (auto sl : subloops) {
         //For each subloop create a new LoopTree with parameters regarding this subloop
-        LoopTree *Slt = new LoopTree(sl, sl->getSubLoops(), this->handler);
+        auto *Slt = new LoopTree(sl, sl->getSubLoops(), this->handler, se);
 
         //Add the subtree to the vector of subtrees
         this->subTrees.push_back(Slt);
@@ -20,7 +20,7 @@ LoopTree::LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHan
     this->blocks.insert(this->blocks.end(), calcedBlocks.begin(), calcedBlocks.end());
 
     //Calculate the iterations of this loop
-    this->iterations = handler->getLoopUpperBound(this->mainloop);
+    this->iterations = handler->getLoopUpperBound(this->mainloop, se);
 }
 
 

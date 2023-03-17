@@ -36,7 +36,7 @@ public:
      * @param subloops The loops contained in the mainloop
      * @param handler A LLVMHandler to handle calculations on the LLVM IR
      */
-    LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHandler *handler);
+    LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHandler *handler, llvm::ScalarEvolution *se);
 
     /**
      * Calculate the energy over this node, combined with the energy of the subloops
