@@ -56,7 +56,7 @@ def readRapl():
 def execute_analysis(file, strategy, loopbound, libpath, modelpath):
     command = 'opt -disable-output ' \
               '-load-pass-plugin {0} ' \
-              '--passes="function(instcombine,mem2reg,loop-simplify,loop-rotate),energy" ' \
+              '--passes="function(mem2reg,loop-rotate),energy" ' \
               '--model {1} ' \
               '--mode program ' \
               '--format json ' \
