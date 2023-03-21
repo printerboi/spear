@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['isleafnode_107',['isLeafNode',['../classLoopNode.html#a4afd2722296ce93e0559a35f1c715900',1,'LoopNode']]]
+  ['jsonhandler_105',['JSONHandler',['../classJSONHandler.html#a8fb7b9d53805c97b3516130beaca0536',1,'JSONHandler']]]
 ];

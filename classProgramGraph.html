@@ -81,16 +81,16 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a31499bd68418b43bda45e0d76799744b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e653f7294600e06d970989638aa3d59"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a9e653f7294600e06d970989638aa3d59">printEdges</a> ()</td></tr>
 <tr class="separator:a9e653f7294600e06d970989638aa3d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b957561bbb816ff251db2e47c8c8a1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a6b957561bbb816ff251db2e47c8c8a1a">findBlock</a> (llvm::BasicBlock *BB)</td></tr>
-<tr class="separator:a6b957561bbb816ff251db2e47c8c8a1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8cd186d744d1c92467b50d970af8a2a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classEdge.html">Edge</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#ac8cd186d744d1c92467b50d970af8a2a">findEdgesStartingAtNode</a> (<a class="el" href="classNode.html">Node</a> *N)</td></tr>
-<tr class="separator:ac8cd186d744d1c92467b50d970af8a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2410389005e0500528af73b06dd8ab56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a2410389005e0500528af73b06dd8ab56">removeNode</a> (<a class="el" href="classNode.html">Node</a> *N)</td></tr>
-<tr class="separator:a2410389005e0500528af73b06dd8ab56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9450ec4e99c330c26535491056e8a639"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classNode.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a9450ec4e99c330c26535491056e8a639">findBlock</a> (llvm::BasicBlock *basicBlock)</td></tr>
+<tr class="separator:a9450ec4e99c330c26535491056e8a639"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acef8229424136eb7f7cf35038d831e59"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classEdge.html">Edge</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#acef8229424136eb7f7cf35038d831e59">findEdgesStartingAtNode</a> (<a class="el" href="classNode.html">Node</a> *sourceNode)</td></tr>
+<tr class="separator:acef8229424136eb7f7cf35038d831e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d7172355f93bc903a9a3f6bdf215451"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a3d7172355f93bc903a9a3f6bdf215451">removeNode</a> (<a class="el" href="classNode.html">Node</a> *nodeToRemove)</td></tr>
+<tr class="separator:a3d7172355f93bc903a9a3f6bdf215451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc10742190eb8fa0610e975032d71491"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#afc10742190eb8fa0610e975032d71491">removeOrphanedEdges</a> ()</td></tr>
 <tr class="separator:afc10742190eb8fa0610e975032d71491"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70085fb5341ec21c2b05db4d26449265"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a70085fb5341ec21c2b05db4d26449265">replaceNodesWithLoopNode</a> (std::vector&lt; llvm::BasicBlock * &gt; blocks, <a class="el" href="classLoopNode.html">LoopNode</a> *LPN)</td></tr>
-<tr class="separator:a70085fb5341ec21c2b05db4d26449265"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2463f6a911a85ed865ad09c26dc5c3a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a2463f6a911a85ed865ad09c26dc5c3a6">replaceNodesWithLoopNode</a> (const std::vector&lt; llvm::BasicBlock * &gt; &amp;blocks, <a class="el" href="classLoopNode.html">LoopNode</a> *loopNode)</td></tr>
+<tr class="separator:a2463f6a911a85ed865ad09c26dc5c3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a618f4338b78bad9c90b17309966fb689"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a618f4338b78bad9c90b17309966fb689">getEnergy</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler)</td></tr>
 <tr class="separator:a618f4338b78bad9c90b17309966fb689"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab2eb08f2095c8d35d33df3db97ab93e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classLoopNode.html">LoopNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#aab2eb08f2095c8d35d33df3db97ab93e">getLoopNodes</a> ()</td></tr>
@@ -100,8 +100,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aac74821692c7d9a22c7f3e88227d88a7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#aac74821692c7d9a22c7f3e88227d88a7">construct</a> (std::vector&lt; llvm::BasicBlock * &gt; blockset, llvm::Function *func, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> strategy)</td></tr>
-<tr class="separator:aac74821692c7d9a22c7f3e88227d88a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05ff04d5d445dcb4c244c70543c737b4"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgramGraph.html#a05ff04d5d445dcb4c244c70543c737b4">construct</a> (const std::vector&lt; llvm::BasicBlock * &gt; &amp;blockset, llvm::Function *function, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> strategy)</td></tr>
+<tr class="separator:a05ff04d5d445dcb4c244c70543c737b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -135,8 +135,8 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aac74821692c7d9a22c7f3e88227d88a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac74821692c7d9a22c7f3e88227d88a7">&#9670;&nbsp;</a></span>construct()</h2>
+<a id="a05ff04d5d445dcb4c244c70543c737b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05ff04d5d445dcb4c244c70543c737b4">&#9670;&nbsp;</a></span>construct()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,14 +147,14 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
         <tr>
           <td class="memname"><a class="el" href="classProgramGraph.html">ProgramGraph</a> * ProgramGraph::construct </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; llvm::BasicBlock * &gt;&#160;</td>
+          <td class="paramtype">const std::vector&lt; llvm::BasicBlock * &gt; &amp;&#160;</td>
           <td class="paramname"><em>blockset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">llvm::Function *&#160;</td>
-          <td class="paramname"><em>func</em>, </td>
+          <td class="paramname"><em>function</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -202,8 +202,8 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
 
 </div>
 </div>
-<a id="a6b957561bbb816ff251db2e47c8c8a1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b957561bbb816ff251db2e47c8c8a1a">&#9670;&nbsp;</a></span>findBlock()</h2>
+<a id="a9450ec4e99c330c26535491056e8a639"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9450ec4e99c330c26535491056e8a639">&#9670;&nbsp;</a></span>findBlock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,14 +212,14 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
           <td class="memname"><a class="el" href="classNode.html">Node</a> * ProgramGraph::findBlock </td>
           <td>(</td>
           <td class="paramtype">llvm::BasicBlock *&#160;</td>
-          <td class="paramname"><em>BB</em></td><td>)</td>
+          <td class="paramname"><em>basicBlock</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Method for getting the <a class="el" href="classNode.html">Node</a> contained in this <a class="el" href="classProgramGraph.html">ProgramGraph</a>, which holds the given BasicBlock </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">BB</td><td>A reference to the BasicBlock to find </td></tr>
+    <tr><td class="paramname">basicBlock</td><td>A reference to the BasicBlock to find </td></tr>
   </table>
   </dd>
 </dl>
@@ -227,8 +227,8 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
 
 </div>
 </div>
-<a id="ac8cd186d744d1c92467b50d970af8a2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac8cd186d744d1c92467b50d970af8a2a">&#9670;&nbsp;</a></span>findEdgesStartingAtNode()</h2>
+<a id="acef8229424136eb7f7cf35038d831e59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acef8229424136eb7f7cf35038d831e59">&#9670;&nbsp;</a></span>findEdgesStartingAtNode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,14 +237,14 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
           <td class="memname">std::vector&lt; <a class="el" href="classEdge.html">Edge</a> * &gt; ProgramGraph::findEdgesStartingAtNode </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classNode.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>N</em></td><td>)</td>
+          <td class="paramname"><em>sourceNode</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Calculates the edges going outwards from the given node. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">N</td><td>A reference to the <a class="el" href="classNode.html">Node</a> the edges are extending from </td></tr>
+    <tr><td class="paramname">sourceNode</td><td>A reference to the <a class="el" href="classNode.html">Node</a> the edges are extending from </td></tr>
   </table>
   </dd>
 </dl>
@@ -337,8 +337,8 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
 
 </div>
 </div>
-<a id="a2410389005e0500528af73b06dd8ab56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2410389005e0500528af73b06dd8ab56">&#9670;&nbsp;</a></span>removeNode()</h2>
+<a id="a3d7172355f93bc903a9a3f6bdf215451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d7172355f93bc903a9a3f6bdf215451">&#9670;&nbsp;</a></span>removeNode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -347,14 +347,14 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
           <td class="memname">void ProgramGraph::removeNode </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classNode.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>N</em></td><td>)</td>
+          <td class="paramname"><em>nodeToRemove</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Removes the given <a class="el" href="classNode.html">Node</a> from this ProgramTre </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">N</td><td>Reference to the <a class="el" href="classNode.html">Node</a> to remove </td></tr>
+    <tr><td class="paramname">nodeToRemove</td><td>Reference to the <a class="el" href="classNode.html">Node</a> to remove </td></tr>
   </table>
   </dd>
 </dl>
@@ -379,8 +379,8 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
 
 </div>
 </div>
-<a id="a70085fb5341ec21c2b05db4d26449265"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70085fb5341ec21c2b05db4d26449265">&#9670;&nbsp;</a></span>replaceNodesWithLoopNode()</h2>
+<a id="a2463f6a911a85ed865ad09c26dc5c3a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2463f6a911a85ed865ad09c26dc5c3a6">&#9670;&nbsp;</a></span>replaceNodesWithLoopNode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -388,14 +388,14 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
         <tr>
           <td class="memname">void ProgramGraph::replaceNodesWithLoopNode </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; llvm::BasicBlock * &gt;&#160;</td>
+          <td class="paramtype">const std::vector&lt; llvm::BasicBlock * &gt; &amp;&#160;</td>
           <td class="paramname"><em>blocks</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classLoopNode.html">LoopNode</a> *&#160;</td>
-          <td class="paramname"><em>LPN</em>&#160;</td>
+          <td class="paramname"><em>loopNode</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -407,7 +407,7 @@ llvm::Function *&#160;</td><td class="memItemRight" valign="bottom"><b>parentFun
 <p>Method for replacing the nodes in the <a class="el" href="classProgramGraph.html">ProgramGraph</a> contained by a loopNode. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">blocks</td><td>Vector of BasicBlocks to replace by the given <a class="el" href="classLoopNode.html">LoopNode</a> </td></tr>
-    <tr><td class="paramname">LPN</td><td><a class="el" href="classLoopNode.html">LoopNode</a> used for replacing </td></tr>
+    <tr><td class="paramname">loopNode</td><td><a class="el" href="classLoopNode.html">LoopNode</a> used for replacing </td></tr>
   </table>
   </dd>
 </dl>

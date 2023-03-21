@@ -1,4 +1,8 @@
 var searchData=
 [
-  ['benchmarkcode_87',['benchmarkCode',['../classRegisterReader.html#a1629470cdf0ce4e87e7a79ce024a583c',1,'RegisterReader']]]
+  ['calcenergy_85',['calcEnergy',['../classLoopTree.html#ae0845dbdf362f32d6443f3d1b405c626',1,'LoopTree']]],
+  ['calceneryoffunction_86',['calcEneryOfFunction',['../structEnergy.html#ae1f050ce70e8b86e9f517902105bfe22',1,'Energy']]],
+  ['construct_87',['construct',['../classFunctionTree.html#a542b290443ad4e4ff6cacacf000b664d',1,'FunctionTree::construct()'],['../classLoopNode.html#aa839f9197faf463b654798067cee1382',1,'LoopNode::construct()'],['../classProgramGraph.html#a05ff04d5d445dcb4c244c70543c737b4',1,'ProgramGraph::construct()']]],
+  ['constructoutputobject_88',['constructOutputObject',['../structEnergy.html#ad85aaa6f5e4ce15fd306f3d2c3e71bef',1,'Energy']]],
+  ['containsloopnodes_89',['containsLoopNodes',['../classProgramGraph.html#a9acb2b3f9ecb3af4b87b7ff10398f3fa',1,'ProgramGraph']]]
 ];
