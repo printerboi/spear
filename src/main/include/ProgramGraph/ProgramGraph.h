@@ -91,7 +91,7 @@ public:
      * Method for converting the edge to a string representation
      * @return
      */
-    std::string toString();
+    std::string toString() const;
 };
 
 
@@ -114,18 +114,18 @@ public:
 
     /**
      * Constructor. Creates a LoopNode with the given LoopTree and the surrounding ProgramGraph
-     * @param lpTree Reference to the LoopTree for the loop to represent
+     * @param loopTree Reference to the LoopTree for the loop to represent
      * @param parent The parent ProgramGraph, this LoopNode is contained in
      */
-    LoopNode(LoopTree *lpTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy);
+    LoopNode(LoopTree *loopTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy);
 
     /**
      * Static Method for constructing a LoopNode recursivly trough the given LoopTree and the parent ProgramGraph
-     * @param lptr LoopTree to construct the LoopNode for
+     * @param loopTree LoopTree to construct the LoopNode for
      * @param parent ProgramGraph the LoopNode should be contained in
      * @return Returns a reference to the constructed LoopNode
      */
-    static LoopNode* construct(LoopTree *lptr, ProgramGraph *parent, llvm::Function *func, AnalysisStrategy::Strategy strategy);
+    static LoopNode* construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Function *function, AnalysisStrategy::Strategy strategy);
 
     /**
      * Method for determining if the current LoopNode is a "Leaf".
@@ -186,7 +186,7 @@ class ProgramGraph {
          * @param blockset Vector with references to a set of basic blocks
          * @return Returns the constructed ProgramGraph
          */
-        static ProgramGraph* construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy);
+        static ProgramGraph* construct(const std::vector<llvm::BasicBlock *>& blockset, llvm::Function *function, AnalysisStrategy::Strategy strategy);
 
         /**
          * ProgramGraph destructor
@@ -206,23 +206,23 @@ class ProgramGraph {
 
         /**
          * Method for getting the Node contained in this ProgramGraph, which holds the given BasicBlock
-         * @param BB A reference to the BasicBlock to find
+         * @param basicBlock A reference to the BasicBlock to find
          * @return A reference to the Node if it was found. Returns a null pointer otherwise.
          */
-        Node *findBlock(llvm::BasicBlock *BB);
+        Node *findBlock(llvm::BasicBlock *basicBlock);
 
         /**
          * Calculates the edges going outwards from the given node.
-         * @param N A reference to the Node the edges are extending from
+         * @param sourceNode A reference to the Node the edges are extending from
          * @return Returns a vector of references to the edges
          */
-        std::vector<Edge *> findEdgesStartingAtNode(Node *N);
+        std::vector<Edge *> findEdgesStartingAtNode(Node *sourceNode);
 
         /**
          * Removes the given Node from this ProgramTre
-         * @param N Reference to the Node to remove
+         * @param nodeToRemove Reference to the Node to remove
          */
-        void removeNode(Node *N);
+        void removeNode(Node *nodeToRemove);
 
         /**
          * Method for removing all edges from the graph, which start node or end node got removed
@@ -232,9 +232,9 @@ class ProgramGraph {
         /**
          * Method for replacing the nodes in the ProgramGraph contained by a loopNode.
          * @param blocks Vector of BasicBlocks to replace by the given LoopNode
-         * @param LPN LoopNode used for replacing
+         * @param loopNode LoopNode used for replacing
          */
-        void replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN);
+        void replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *>& blocks, LoopNode *loopNode);
 
         /**
          * Method for calculating the energy of this ProgramGraph. Uses the getEnergy() methods of the contained nodes

@@ -7,7 +7,7 @@ Edge::Edge(Node *start, Node *end) {
 }
 
 //Represents the Edge as string
-std::string Edge::toString() {
+std::string Edge::toString() const {
     //Init the string with an (
     std::string output = "(";
 

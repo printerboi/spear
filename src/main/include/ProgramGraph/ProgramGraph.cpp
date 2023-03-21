@@ -1,68 +1,68 @@
 #include "ProgramGraph.h"
 
 //Static method for ProgramGraph-Graph construction
-ProgramGraph* ProgramGraph::construct(std::vector<llvm::BasicBlock *> blockset, llvm::Function *func, AnalysisStrategy::Strategy strategy) {
+ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blockset, llvm::Function *function, AnalysisStrategy::Strategy strategy) {
     //Create a dummy-Object
-    auto *PT = new ProgramGraph();
+    auto *programGraph = new ProgramGraph();
     //Create an empty list for the BasicBlocks
-    std::vector<llvm::BasicBlock *> bbs;
-    PT->parentFunction = func;
+    std::vector<llvm::BasicBlock *> basicBlockSet;
+    programGraph->parentFunction = function;
 
     //Iterate over the given list of BasicBlock-References
-    for(auto BB : blockset){
+    for(auto basicBlock : blockset){
         //For each block create a new Node
-        auto *NN = new Node(PT, strategy);
+        auto *node = new Node(programGraph, strategy);
         //Add the block to the Node
-        NN->blocks.push_back(BB);
+        node->blocks.push_back(basicBlock);
         //Add the node to the graph
-        PT->nodes.push_back(NN);
+        programGraph->nodes.push_back(node);
     }
 
     //Iterate over the blocks to create the edges of the graph
-    for (auto BB : blockset) {
+    for (auto basicBlock : blockset) {
         //Determine the successors to the current block in the cfg
-        for (auto succ : llvm::successors(BB)) {
+        for (auto successor : llvm::successors(basicBlock)) {
             //Get the nodes defining the edge
-            Node *start = PT->findBlock(BB);
-            Node *end = PT->findBlock(succ);
+            Node *start = programGraph->findBlock(basicBlock);
+            Node *end = programGraph->findBlock(successor);
 
             //If both of the defining nodes were found
             if(start != nullptr && end != nullptr){
                 //Create the edge
-                auto *E = new Edge(start, end);
+                auto *edge = new Edge(start, end);
                 //Add the edge to the edge-list of the graph
-                PT->edges.push_back(E);
+                programGraph->edges.push_back(edge);
             }
         }
     }
 
     //Return the graph
-    return PT;
+    return programGraph;
 }
 
 ProgramGraph::~ProgramGraph() {
-    for (auto N : this->nodes) {
-        delete N;
+    for (auto node : this->nodes) {
+        delete node;
     }
 
-    for (auto E : this->edges) {
-        delete E;
+    for (auto edge : this->edges) {
+        delete edge;
     }
 }
 
 //Print the Graph in preorder
 void ProgramGraph::printNodes(LLVMHandler *handler) {
     //Iterate over the nodes in the graph
-    for (auto N : this->nodes) {
+    for (auto node : this->nodes) {
         llvm::outs() << "\n----------------------------------------------------------------------\n";
-        llvm::outs() << N->toString() <<  "\n";
+        llvm::outs() << node->toString() << "\n";
         //If the current Node is a LoopNode...
-        if(dynamic_cast<LoopNode*>(N) != nullptr){
+        if(dynamic_cast<LoopNode*>(node) != nullptr){
             //Print a special representation if we are dealing with a LoopNode
-            llvm::outs() << "(" << dynamic_cast<LoopNode*>(N)->loopTree->iterations << ") " << this->getEnergy(handler) << " µJ" << ")";
-            for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
+            llvm::outs() << "(" << dynamic_cast<LoopNode*>(node)->loopTree->iterations << ") " << this->getEnergy(handler) << " µJ" << ")";
+            for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subtrees) {
                 llvm::outs() << "\n|\t\t\t\t\tBEGIN Subnodes\t\t\t\t\t|\n";
-                sPT->printNodes(handler);
+                subProgramGraph->printNodes(handler);
                 llvm::outs() << "\n|\t\t\t\t\tEND Subnodes\t\t\t\t\t|\n";
             }
         }
@@ -72,12 +72,12 @@ void ProgramGraph::printNodes(LLVMHandler *handler) {
 }
 
 //Search for the given block in the graph
-Node *ProgramGraph::findBlock(llvm::BasicBlock *BB) {
+Node *ProgramGraph::findBlock(llvm::BasicBlock *basicBlock) {
     //Iterate over the nodes
     for(auto Node : this->nodes){
 
         //Use the standard find method to search the vector
-        if(std::find(Node->blocks.begin(), Node->blocks.end(), BB) != Node->blocks.end()){
+        if(std::find(Node->blocks.begin(), Node->blocks.end(), basicBlock) != Node->blocks.end()){
             //If found return the node
             return Node;
         }
@@ -90,19 +90,19 @@ Node *ProgramGraph::findBlock(llvm::BasicBlock *BB) {
 //Print te edges of the graph
 void ProgramGraph::printEdges() {
     //Iterate over the edges and use the toString() method of the edges
-    for (auto E : edges) {
+    for (auto edge : edges) {
         llvm::outs() << "\n";
-        llvm::outs() << E->toString() << "\n";
+        llvm::outs() << edge->toString() << "\n";
     }
 
     //Iterate over the nodes of the graph
-    for (auto N : this->nodes) {
+    for (auto node : this->nodes) {
         //If we are dealing with a LoopNode
-        if(dynamic_cast<LoopNode*>(N) != nullptr){
+        if(dynamic_cast<LoopNode*>(node) != nullptr){
             //Print the edges contained in the LoopNode
-            for (auto sPT : dynamic_cast<LoopNode*>(N)->subtrees) {
+            for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subtrees) {
                 llvm::outs() << "\n|\t\t\t\t\tBEGIN Subedges\t\t\t\t\t|\n";
-                sPT->printEdges();
+                subProgramGraph->printEdges();
                 llvm::outs() << "\n|\t\t\t\t\tEND Subedges\t\t\t\t\t|\n";
             }
         }
@@ -110,44 +110,44 @@ void ProgramGraph::printEdges() {
 }
 
 //Replaces the given blocks with the given loopnode
-void ProgramGraph::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> blocks, LoopNode *LPN) {
+void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *>& blocks, LoopNode *loopNode) {
     //Init the list of nodes, that need replacement
     std::vector<Node *> nodesToReplace;
     std::vector<std::string> allblocks;
     std::vector<std::string> toRemoveBlocks;
 
     //Iterate over the given blocks
-    for (auto bb : blocks) {
+    for (auto basicBlock : blocks) {
         //Find the corresponding nodes to the blocks
-        Node *toReplace = this->findBlock(bb);
+        Node *toReplace = this->findBlock(basicBlock);
 
         //If a Node for the block was found...
         if(toReplace != nullptr){
             //Add the node to the list
             nodesToReplace.push_back(toReplace);
-            for(auto nb : toReplace->blocks){
-                toRemoveBlocks.push_back(nb->getName().str());
+            for(auto blockOfNode : toReplace->blocks){
+                toRemoveBlocks.push_back(blockOfNode->getName().str());
             }
         }
 
-        for(auto nb : toReplace->blocks){
-            allblocks.push_back(nb->getName().str());
+        for(auto blockOfNode : toReplace->blocks){
+            allblocks.push_back(blockOfNode->getName().str());
         }
     }
 
     //Add the given LoopNode to the list of nodes for this graph
-    this->nodes.push_back(LPN);
+    this->nodes.push_back(loopNode);
 
     //If we need to replace some nodes...
     if(!nodesToReplace.empty()){
         //Get the entry-block of the LoopNode
-        auto entrycandidate = LPN->loopTree->mainloop->getBlocksVector()[0];
+        auto entrycandidate = loopNode->loopTree->mainloop->getBlocksVector()[0];
         //Find the node corresponding to this block
         Node *entry = this->findBlock(entrycandidate);
         auto entryname = entry->toString();
 
         //Get the exit-node of the LoopNode
-        Node *exit = this->findBlock(LPN->loopTree->mainloop->getLoopLatch());
+        Node *exit = this->findBlock(loopNode->loopTree->mainloop->getLoopLatch());
         auto exiname = exit->toString();
 
         //Iterate over the edges of this graph
@@ -155,19 +155,19 @@ void ProgramGraph::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> bloc
             //If we find an edge, which end-node is the entry-node of the loop
             if(edge->end == entry){
                 //Change the edges endpoint to the LoopNode
-                edge->end = LPN;
+                edge->end = loopNode;
             }
 
             //If we find an edge, which start-node is the exit-node of the loop
             if(edge->start == exit){
                 //Change the edges startpoint to the LoopNode
-                edge->start = LPN;
+                edge->start = loopNode;
             }
         }
 
         //Remove the nodes encapsulated by the loop
-        for(auto ntrpl : nodesToReplace){
-            this->removeNode(ntrpl);
+        for(auto node : nodesToReplace){
+            this->removeNode(node);
         }
 
         //Take care of all edges, that may be orphaned after the editing of the graph
@@ -176,14 +176,14 @@ void ProgramGraph::replaceNodesWithLoopNode(std::vector<llvm::BasicBlock *> bloc
 }
 
 //Remove a given Node from the graph
-void ProgramGraph::removeNode(Node *N) {
+void ProgramGraph::removeNode(Node *nodeToRemove) {
     //Init the list of Nodes we want to keep
     std::vector<Node *> newNodes;
 
     //Iterate over the nodes of the graph
     for (auto node : this->nodes) {
         //Add the nodes to the keep-list if it is unequal to the given Node
-        if(node != N){
+        if(node != nodeToRemove){
             newNodes.push_back(node);
         }
     }
@@ -219,27 +219,27 @@ double ProgramGraph::getEnergy(LLVMHandler *handler) {
     //Init the calculation result
     double sum = 0.0;
     //Get the first node of the graph
-    auto currnode = this->nodes[0];
+    auto currentNode = this->nodes[0];
 
     //Start the energy-calculation from the start node
     //Uses the recursvice calculation of the nodes by itself
-    sum = currnode->getEnergy(handler);
+    sum = currentNode->getEnergy(handler);
 
     //Return the result
     return sum;
 }
 
 //Find all the edges starting at the given Node
-std::vector<Edge *> ProgramGraph::findEdgesStartingAtNode(Node *N) {
+std::vector<Edge *> ProgramGraph::findEdgesStartingAtNode(Node *sourceNode) {
     //Init the list
     std::vector<Edge *> selection;
 
     //Iterate over the edges
-    for(auto E : this->edges){
+    for(auto edge : this->edges){
         //If the start of the edge is the given Node
-        if(E->start == N){
+        if(edge->start == sourceNode){
             //Add the edge to the list
-            selection.push_back(E);
+            selection.push_back(edge);
         }
     }
 
@@ -258,12 +258,12 @@ std::vector<LoopNode *> ProgramGraph::getLoopNodes() {
     std::vector<LoopNode *> loopnodes;
 
     //Iterate over the nodes
-    for(auto n : this->nodes){
+    for(auto node : this->nodes){
         //Test if the current node is a LoopNode
-        auto *LPNCandicate = dynamic_cast<LoopNode *>(n);
-        if(LPNCandicate != nullptr){
+        auto *loopNodeCandidate = dynamic_cast<LoopNode *>(node);
+        if(loopNodeCandidate != nullptr){
             //If we're dealing with a LoopNode, add it to the list
-            loopnodes.push_back(LPNCandicate);
+            loopnodes.push_back(loopNodeCandidate);
         }
     }
 

@@ -11,9 +11,9 @@ std::string Node::toString() {
     std::string output;
 
     //Iterate over the contained blocks
-    for (auto BB : this->blocks) {
+    for (auto basicBlock : this->blocks) {
         //Add the current basicblocks name to the output string
-        output.append(BB->getName().str());
+        output.append(basicBlock->getName().str());
     }
 
     //Return the string
@@ -26,10 +26,10 @@ double Node::getEnergy(LLVMHandler *handler) {
     double sum = 0.0;
 
     //Calculate the adjacent nodes of this node
-    auto adjsNodes = this->getAdjacentNodes();
+    auto adjacentNodes = this->getAdjacentNodes();
 
     //If there are adjacent nodes...
-    if(!adjsNodes.empty()){
+    if(!adjacentNodes.empty()){
         //Find the smallest energy-value-path of all the adjacent nodes
         //Init the minimal pathvalue
         auto compare = 0.00;
@@ -39,9 +39,9 @@ double Node::getEnergy(LLVMHandler *handler) {
                  compare = DBL_MIN;
 
                 //Iterate over the adjacent nodes
-                for(auto N : adjsNodes){
+                for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = N->getEnergy(handler);
+                    double locsum = node->getEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
                     if (locsum > compare){
@@ -55,9 +55,9 @@ double Node::getEnergy(LLVMHandler *handler) {
                 compare = DBL_MAX;
 
                 //Iterate over the adjacent nodes
-                for(auto N : adjsNodes){
+                for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = N->getEnergy(handler);
+                    double locsum = node->getEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
                     if (locsum < compare){
@@ -68,13 +68,29 @@ double Node::getEnergy(LLVMHandler *handler) {
                 sum += compare;
                 break;
             case AnalysisStrategy::AVERAGECASE :
-                compare = 0.00;
+                double locsum = 0.00;
 
-                srand(time(nullptr));
-                int randomIndex = rand() % adjsNodes.size();
-                double locsum = adjsNodes[randomIndex]->getEnergy(handler);
+                if(adjacentNodes.size() > 1){
+                    double leftSum = adjacentNodes[0]->getEnergy(handler);
+                    double rightSum = adjacentNodes[1]->getEnergy(handler);
+
+                    if(handler->inefficient <= handler->efficient){
+                        locsum += std::max(leftSum, rightSum);
+                        handler->inefficient++;
+                    }else{
+                        locsum += std::min(leftSum, rightSum);
+                        handler->efficient++;
+                    }
+                }else{
+                    locsum = adjacentNodes[0]->getEnergy(handler);
+                }
+
+/*                srand(time(nullptr));
+                int randomIndex = rand() % adjacentNodes.size();
+                double locsum = adjacentNodes[randomIndex]->getEnergy(handler);
                 compare = locsum;
-                sum += compare;
+                sum += compare;*/
+                sum += locsum;
 
                 break;
         }
@@ -96,9 +112,9 @@ std::vector<Node *> Node::getAdjacentNodes() {
     std::vector<Node *> adjacent;
 
     //Get the edgdes starting at this node from the parent ProgramGraph
-    for(auto E : this->parent->findEdgesStartingAtNode(this)){
+    for(auto edge : this->parent->findEdgesStartingAtNode(this)){
         //Add the end of the edge to the adjacent vector
-        adjacent.push_back(E->end);
+        adjacent.push_back(edge->end);
     }
 
     //Return the adjacent nodes vector

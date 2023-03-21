@@ -1,8 +1,8 @@
 #include "ProgramGraph.h"
 
 //Creates a LoopNode with the given LoopTree and ProgramGraph
-LoopNode::LoopNode(LoopTree *LT, ProgramGraph *parent, AnalysisStrategy::Strategy strategy) : Node(parent, strategy) {
-    this->loopTree = LT;
+LoopNode::LoopNode(LoopTree *loopTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy) : Node(parent, strategy) {
+    this->loopTree = loopTree;
 }
 
 //Get the string representation of this LoopNode
@@ -12,12 +12,12 @@ std::string LoopNode::toString() {
 
     //Get the Address of this LoopNode
     const void* addr = static_cast<const void*>(this);
-    std::stringstream ss;
-    ss << addr;
+    std::stringstream convertStream;
+    convertStream << addr;
 
     //Add the address to the output
     output.append("LOOPNODE ");
-    output.append(ss.str());
+    output.append(convertStream.str());
 
     //Return output string
     return output;
@@ -29,53 +29,53 @@ bool LoopNode::isLeafNode() const {
 }
 
 //Construct a LoopTree by recursively calling this method until we reach a leaf
-LoopNode* LoopNode::construct(LoopTree *lptr, ProgramGraph *parent, llvm::Function * func, AnalysisStrategy::Strategy strategy) {
+LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Function * function, AnalysisStrategy::Strategy strategy) {
     //Create a Toplevel LoopNode
-    LoopNode *LN = new LoopNode(lptr, parent, strategy);
+    auto *loopNode = new LoopNode(loopTree, parent, strategy);
 
     //End-condition
-    if(LN->isLeafNode()){
+    if(loopNode->isLeafNode()){
         //Create a ProgramGraph from this LoopTrees mainloop
-        ProgramGraph *PT = ProgramGraph::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
+        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), function, strategy);
 
         //Add the ProgramGraph to the list of subtrees
-        LN->subtrees.push_back(PT);
+        loopNode->subtrees.push_back(programGraph);
     }else{
         //Further recursion
 
         //Create a ProgramGraph from this LoopTrees mainloop
-        ProgramGraph *PT = ProgramGraph::construct(LN->loopTree->mainloop->getBlocksVector(), func, strategy);
+        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), function, strategy);
         //Add the ProgramGraph to the list of subtrees
-        LN->subtrees.push_back(PT);
+        loopNode->subtrees.push_back(programGraph);
 
         //Iterate over the subloops of this LoopNodes LoopTree
-        for(auto *subTree : LN->loopTree->subTrees){
+        for(auto *subTree : loopNode->loopTree->subTrees){
             //Construct a LoopNode for the current Sub-LoopTree
-            LoopNode *SLN = LoopNode::construct(subTree, PT, func, strategy);
+            LoopNode *subLoopNode = LoopNode::construct(subTree, programGraph, function, strategy);
 
             //ProgramGraph *SPT = ProgramGraph::construct(subTree->mainloop->getBlocksVector());
-            //SLN->subtrees.push_back(SPT);
+            //subLoopNode->subtrees.push_back(SPT);
 
             //Init the list of blocks contained in the subloop
             std::vector<std::string> allblocks;
 
             //Add the subloops blocks to the list of contained blocks
-            for(auto nb : subTree->mainloop->getBlocksVector()){
-                allblocks.push_back(nb->getName().str());
+            for(auto subBlock : subTree->mainloop->getBlocksVector()){
+                allblocks.push_back(subBlock->getName().str());
             }
 
             //LoopNode *subLN = LoopNode::construct(&subTree);
 
             //Replace the nodes in the sub-ProgramGraph
-            PT->replaceNodesWithLoopNode(subTree->mainloop->getBlocksVector(), SLN);
+            programGraph->replaceNodesWithLoopNode(subTree->mainloop->getBlocksVector(), subLoopNode);
         }
     }
 
     //Remove the loop-edges in this LoopNode, so we won't create infinite recursions
-    LN->removeLoopEdgesFromSubtrees();
+    loopNode->removeLoopEdgesFromSubtrees();
 
     //Return the LoopNode
-    return LN;
+    return loopNode;
 }
 
 //Get the LoopNodes energy
@@ -83,7 +83,7 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
     //Init the calculation result
     double sum = 0.0;
     //Calculate the adjacent nodes
-    auto adjsNodes = this->getAdjacentNodes();
+    auto adjacentNodes = this->getAdjacentNodes();
 
     //Get the energy from all contained subtrees
     for(auto subTrees : this->subtrees){
@@ -94,7 +94,7 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
     sum = (double) this->loopTree->iterations * sum;
 
     //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
-    if(!adjsNodes.empty()){
+    if(!adjacentNodes.empty()){
         auto compare = 0.00;
 
         switch (this->strategy) {
@@ -102,13 +102,13 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
                 compare = DBL_MIN;
 
                 //Iterate over the adjacent nodes
-                for(auto N : adjsNodes){
+                for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = N->getEnergy(handler);
+                    double localSum = node->getEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (locsum > compare){
-                        compare = locsum;
+                    if (localSum > compare){
+                        compare = localSum;
                     }
                 }
 
@@ -118,13 +118,13 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
                 compare = DBL_MAX;
 
                 //Iterate over the adjacent nodes
-                for(auto N : adjsNodes){
+                for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = N->getEnergy(handler);
+                    double localSum = node->getEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (locsum < compare){
-                        compare = locsum;
+                    if (localSum < compare){
+                        compare = localSum;
                     }
                 }
 
@@ -132,12 +132,29 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
                 break;
             case AnalysisStrategy::AVERAGECASE :
                 compare = 0.00;
+                double localSum = 0.00;
 
-                srand(time(nullptr));
-                int randomIndex = rand() % adjsNodes.size();
-                double locsum = adjsNodes[randomIndex]->getEnergy(handler);
-                compare = locsum;
-                sum += compare;
+                if(adjacentNodes.size() > 1){
+                    double leftSum = adjacentNodes[0]->getEnergy(handler);
+                    double rightSum = adjacentNodes[1]->getEnergy(handler);
+
+                    if(handler->inefficient <= handler->efficient){
+                        localSum += std::max(leftSum, rightSum);
+                        handler->inefficient++;
+                    }else{
+                        localSum += std::min(leftSum, rightSum);
+                        handler->efficient++;
+                    }
+                }else{
+                    localSum = adjacentNodes[0]->getEnergy(handler);
+                }
+
+/*                srand(time(nullptr));
+                int randomIndex = rand() % adjacentNodes.size();
+                double localSum = adjacentNodes[randomIndex]->getEnergy(handler);
+                compare = localSum;
+                sum += compare;*/
+                sum += localSum;
 
                 break;
         }
@@ -152,37 +169,37 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
 //Remove the loop-edges from the LoopNode
 void LoopNode::removeLoopEdgesFromSubtrees(){
     //Iterate over the ProgramTrees contained in this LoopNode
-    for(auto sT : this->subtrees){
+    for(auto subtree : this->subtrees){
         //Get the BasicBlock used as latch in this ProgramTrees LoopTree
         auto *latchblock = this->loopTree->mainloop->getLoopLatch();
         //Get the Node the latchblock is contained in
-        auto *latchnode = sT->findBlock(latchblock);
+        auto *latchnode = subtree->findBlock(latchblock);
         //Init the list of edges we want to keep
         std::vector<Edge *> tempedges;
 
         //Iterate over the edges contained in the Sub-ProgramGraph
-        for(auto e : sT->edges){
+        for(auto edge : subtree->edges){
             //If the start node is not the latch of the loop, add it to the list of edges we want to keep
-            if(e->start != latchnode){
-                tempedges.push_back(e);
+            if(edge->start != latchnode){
+                tempedges.push_back(edge);
             }
         }
 
         //Set the edges-list of the Sub-ProgramGraph to the calculated list
-        sT->edges = tempedges;
+        subtree->edges = tempedges;
 
         //If we have further LoopNodes contained in this LoopNode, remove their loopedges too
-        if(sT->containsLoopNodes()){
-            auto subLoopNodes = sT->getLoopNodes();
-            for(auto sln : subLoopNodes){
-                sln->removeLoopEdgesFromSubtrees();
+        if(subtree->containsLoopNodes()){
+            auto subLoopNodes = subtree->getLoopNodes();
+            for(auto subLoopNode : subLoopNodes){
+                subLoopNode->removeLoopEdgesFromSubtrees();
             }
         }
     }
 }
 
 LoopNode::~LoopNode() {
-    for (auto sbt : this->subtrees) {
-        delete sbt;
+    for (auto subtree : this->subtrees) {
+        delete subtree;
     }
 }

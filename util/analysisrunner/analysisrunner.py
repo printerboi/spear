@@ -1,4 +1,5 @@
 import csv
+import math
 import os
 import json
 import struct
@@ -72,10 +73,13 @@ def execute_analysis(file, strategy, loopbound, libpath, modelpath):
 def write_analysis_result_to_csv(result):
     with open('analysis_result.csv', 'w') as f:
         w = csv.writer(f)
-        w.writerow(["Datei", "Worstcase", "Averagecase", "Bestcase", "Measurement"])
+        w.writerow(["Datei", "Worstcase", "Averagecase", "Bestcase", "Mean", "Varianz", "Standard Deviation", "Measurement"])
         for key in result.keys():
             entry = result[key]
-            w.writerow([entry["name"], entry["worst"], entry["average"], entry["best"], entry["measurement"]])
+            mean = (entry["worst"] + entry["average"] + entry["best"])/3
+            variant = ((entry["worst"]-mean)**2 + (entry["average"]-mean)**2 + (entry["best"]-mean)**2)/3
+            deviation = math.sqrt(variant)
+            w.writerow([entry["name"], entry["worst"], entry["average"], entry["best"], mean, variant, deviation, entry["measurement"]])
 
 
 def main(libpath, modelpath, bound, iterations, analysispath):

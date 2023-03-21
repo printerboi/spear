@@ -1,6 +1,3 @@
-//
-// Created by max on 25.11.22.
-//
 
 #ifndef RAPL_READER_REGISTERREADER_H
 #define RAPL_READER_REGISTERREADER_H
@@ -31,10 +28,6 @@ class RegisterReader {
          */
         explicit RegisterReader(int core);
         /**
-         * Placeholder method to profile c code directly. DO NOT USE!!!
-         */
-        void benchmarkCode();
-        /**
          * Method to read the energy from the respective register
          * @return The current energy-counter
          */
@@ -47,11 +40,11 @@ class RegisterReader {
     private:
         /**
          * Reads a register in the register-file of the class
-         * @param reg Offset of the register in the file
+         * @param registerOffset Offset of the register in the file
          * @param bytesToRead Bytes to read from the register
          * @return Value in the register as 64-bit unsigned integer
          */
-        long long read(int reg);
+        long long read(int registerOffset);
 };
 
 

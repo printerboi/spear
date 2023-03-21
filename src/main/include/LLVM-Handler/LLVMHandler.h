@@ -45,6 +45,8 @@ class LLVMHandler {
          */
          long getLoopUpperBound(llvm::Loop *L, llvm::ScalarEvolution *se);
 
+         int efficient;
+         int inefficient;
 
 private:
 
