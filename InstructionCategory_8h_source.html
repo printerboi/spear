@@ -84,7 +84,7 @@ $(function() {
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    llvm::Function * func;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">double</span> energy;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="classEnergyFunction.html">EnergyFunction</a>(llvm::Function *func);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="classEnergyFunction.html">EnergyFunction</a>(llvm::Function *<span class="keyword">function</span>);</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classInstructionCategory.html">   22</a></span>&#160;<span class="keyword">class </span><a class="code" href="classInstructionCategory.html">InstructionCategory</a> {</div>
@@ -100,7 +100,7 @@ $(function() {
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> isProgramFlowInstruction( llvm::Instruction &amp;Instruction );</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> isCastInstruction( llvm::Instruction &amp;Instruction );</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> isDivisionInstruction( llvm::Instruction &amp;Instruction );</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">double</span> getCalledFunctionEnergy( llvm::Instruction &amp;Instruction, std::vector&lt;EnergyFunction *&gt; function_pool);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">double</span> getCalledFunctionEnergy( llvm::Instruction &amp;Instruction, <span class="keyword">const</span> std::vector&lt;EnergyFunction *&gt;&amp; poolOfFunctions);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;};</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_INSTRUCTIONCATEGORY_H</span></div>

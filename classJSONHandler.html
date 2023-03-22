@@ -79,13 +79,13 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aa5d4e822dfe1ac06f304bd84596e0ef5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#aa5d4e822dfe1ac06f304bd84596e0ef5">write</a> (std::string filename, std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; cpu, std::string timestart, std::string timeend, std::string iteratons, std::vector&lt; std::pair&lt; std::string, double &gt;&gt; data)</td></tr>
-<tr class="separator:aa5d4e822dfe1ac06f304bd84596e0ef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af02117cc5de152e9155467ba4dedff7b"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#af02117cc5de152e9155467ba4dedff7b">read</a> (std::string filename)</td></tr>
-<tr class="separator:af02117cc5de152e9155467ba4dedff7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5c47c6568fbc67152177605377939ab"><td class="memItemLeft" align="right" valign="top"><a id="ab5c47c6568fbc67152177605377939ab"></a>
-static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (std::string json)</td></tr>
-<tr class="separator:ab5c47c6568fbc67152177605377939ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4e3eede508334dad2b2084255d6a018"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#ae4e3eede508334dad2b2084255d6a018">write</a> (const std::string &amp;filename, const std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; &amp;cpu, const std::string &amp;timeStartString, const std::string &amp;timeEndString, const std::string &amp;iterationsString, const std::vector&lt; std::pair&lt; std::string, double &gt;&gt; &amp;data)</td></tr>
+<tr class="separator:ae4e3eede508334dad2b2084255d6a018"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a497824aafc1a48b6a4364ae96af40150"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classJSONHandler.html#a497824aafc1a48b6a4364ae96af40150">read</a> (const std::string &amp;filename)</td></tr>
+<tr class="separator:a497824aafc1a48b6a4364ae96af40150"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca26880d8340502d031dd3e1495180a6"><td class="memItemLeft" align="right" valign="top"><a id="aca26880d8340502d031dd3e1495180a6"></a>
+static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</b> (const std::string &amp;json)</td></tr>
+<tr class="separator:aca26880d8340502d031dd3e1495180a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for handling the reading and writing of JSON files to save and load the energy data measured in the profile </p>
@@ -117,8 +117,8 @@ static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af02117cc5de152e9155467ba4dedff7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af02117cc5de152e9155467ba4dedff7b">&#9670;&nbsp;</a></span>read()</h2>
+<a id="a497824aafc1a48b6a4364ae96af40150"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a497824aafc1a48b6a4364ae96af40150">&#9670;&nbsp;</a></span>read()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -129,7 +129,7 @@ static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</
         <tr>
           <td class="memname">Json::Value JSONHandler::read </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
           <td></td>
         </tr>
@@ -150,8 +150,8 @@ static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</
 
 </div>
 </div>
-<a id="aa5d4e822dfe1ac06f304bd84596e0ef5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa5d4e822dfe1ac06f304bd84596e0ef5">&#9670;&nbsp;</a></span>write()</h2>
+<a id="ae4e3eede508334dad2b2084255d6a018"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4e3eede508334dad2b2084255d6a018">&#9670;&nbsp;</a></span>write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,37 +162,37 @@ static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>parse</
         <tr>
           <td class="memname">void JSONHandler::write </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; std::string, std::string &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>cpu</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>timestart</em>, </td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>timeStartString</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>timeend</em>, </td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>timeEndString</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>iteratons</em>, </td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>iterationsString</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, double &gt;&gt;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::pair&lt; std::string, double &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>data</em>&#160;</td>
         </tr>
         <tr>

@@ -76,10 +76,10 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af7f629a5a88a6014c51954ce793b2e7a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#af7f629a5a88a6014c51954ce793b2e7a">LLVMHandler</a> (Json::Value energyModel, int valueIfInteterminate)</td></tr>
 <tr class="separator:af7f629a5a88a6014c51954ce793b2e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a159b5b9672fc79e57d1ec96a12c9d1f5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a159b5b9672fc79e57d1ec96a12c9d1f5">getBasicBlockSum</a> (llvm::BasicBlock &amp;BB, llvm::Function *func)</td></tr>
-<tr class="separator:a159b5b9672fc79e57d1ec96a12c9d1f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2aed5e20fd643e251ea505738ca2e7a4"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a2aed5e20fd643e251ea505738ca2e7a4">getLoopUpperBound</a> (llvm::Loop *L, llvm::ScalarEvolution *se)</td></tr>
-<tr class="separator:a2aed5e20fd643e251ea505738ca2e7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dd99014a02cc7c7b239252e1196391b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a6dd99014a02cc7c7b239252e1196391b">getBasicBlockSum</a> (llvm::BasicBlock &amp;basicBlock, llvm::Function *func)</td></tr>
+<tr class="separator:a6dd99014a02cc7c7b239252e1196391b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee060b77069aeccbadd1f6c0ffa209f4"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#aee060b77069aeccbadd1f6c0ffa209f4">getLoopUpperBound</a> (llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const</td></tr>
+<tr class="separator:aee060b77069aeccbadd1f6c0ffa209f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -140,8 +140,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a159b5b9672fc79e57d1ec96a12c9d1f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a159b5b9672fc79e57d1ec96a12c9d1f5">&#9670;&nbsp;</a></span>getBasicBlockSum()</h2>
+<a id="a6dd99014a02cc7c7b239252e1196391b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dd99014a02cc7c7b239252e1196391b">&#9670;&nbsp;</a></span>getBasicBlockSum()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +150,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></
           <td class="memname">double LLVMHandler::getBasicBlockSum </td>
           <td>(</td>
           <td class="paramtype">llvm::BasicBlock &amp;&#160;</td>
-          <td class="paramname"><em>BB</em>, </td>
+          <td class="paramname"><em>basicBlock</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -167,7 +167,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></
 </div><div class="memdoc">
 <p>Method to calculate the energy-consumption of block with respect to the given energy model </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">BB</td><td>Basic block to analyze </td></tr>
+    <tr><td class="paramname">basicBlock</td><td>Basic block to analyze </td></tr>
   </table>
   </dd>
 </dl>
@@ -175,8 +175,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></
 
 </div>
 </div>
-<a id="a2aed5e20fd643e251ea505738ca2e7a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2aed5e20fd643e251ea505738ca2e7a4">&#9670;&nbsp;</a></span>getLoopUpperBound()</h2>
+<a id="aee060b77069aeccbadd1f6c0ffa209f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee060b77069aeccbadd1f6c0ffa209f4">&#9670;&nbsp;</a></span>getLoopUpperBound()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,24 +185,24 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></
           <td class="memname">long LLVMHandler::getLoopUpperBound </td>
           <td>(</td>
           <td class="paramtype">llvm::Loop *&#160;</td>
-          <td class="paramname"><em>L</em>, </td>
+          <td class="paramname"><em>loop</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">llvm::ScalarEvolution *&#160;</td>
-          <td class="paramname"><em>se</em>&#160;</td>
+          <td class="paramname"><em>scalarEvolution</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be calculated the parameter valueIfIndeterminate will be used as upper bound </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">L</td><td>The loop to analyze </td></tr>
+    <tr><td class="paramname">loop</td><td>The loop to analyze </td></tr>
   </table>
   </dd>
 </dl>
