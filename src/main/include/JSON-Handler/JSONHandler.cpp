@@ -8,7 +8,7 @@
 
 JSONHandler::JSONHandler() = default;
 
-Json::Value JSONHandler::read(std::string filename) {
+Json::Value JSONHandler::read(const std::string& filename) {
     Json::Reader reader;
     Json::Value data;
     std::ifstream fileStream;
@@ -18,8 +18,17 @@ Json::Value JSONHandler::read(std::string filename) {
     return data;
 }
 
-void JSONHandler::write(std::string filename, std::vector<std::pair<std::string, std::string>> cpu, std::string timestart, std::string timeend, std::string iterations, std::vector<std::pair<std::string, double>> profile) {
-    Json::StyledWriter swriter;
+void JSONHandler::write(
+        const std::string& filename,
+        const std::vector<std::pair<std::string, std::string>>& cpu,
+        const std::string& timeStartString,
+        const std::string& timeEndString,
+        const std::string& iterationsString,
+        const std::vector<std::pair<std::string,
+        double>>& profile
+    ) {
+
+    Json::StyledWriter styledWriter;
     Json::Value data;
     Json::Value cpuJson;
     Json::Value profileJson;
@@ -28,27 +37,27 @@ void JSONHandler::write(std::string filename, std::vector<std::pair<std::string,
 
     if(fileStream.is_open()){
         data["cpu"] = cpuJson;
-        for ( auto c : cpu ) {
-            data["cpu"][c.first] = c.second;
+        for ( const auto& cpuObj : cpu ) {
+            data["cpu"][cpuObj.first] = cpuObj.second;
         }
 
-        data["startOfExecution"] = timestart;
-        data["endOfExecution"] = timeend;
-        data["iterations"] = iterations;
+        data["startOfExecution"] = timeStartString;
+        data["endOfExecution"] = timeEndString;
+        data["iterationsString"] = iterationsString;
 
         data["profile"] = profileJson;
-        for ( auto p : profile ) {
-            data["profile"][p.first] = p.second;
+        for ( const auto& profileObj : profile ) {
+            data["profile"][profileObj.first] = profileObj.second;
         }
 
-        fileStream << swriter.write(data);
+        fileStream << styledWriter.write(data);
         fileStream.close();
     }else{
         std::cout << "ERROR ERROR ERROR FILE NOT OPEN" << "\n";
     }
 }
 
-Json::Value JSONHandler::parse(std::string json) {
+Json::Value JSONHandler::parse(const std::string& json) {
     Json::Value data;
     std::stringstream jsonstream;
     jsonstream << json;

@@ -12,50 +12,50 @@ FunctionTree::FunctionTree(llvm::Function *func) {
 //Construct a Functiontree from a given function
 FunctionTree* FunctionTree::construct(llvm::Function *func) {
     //Init the tree
-    auto *FT = new FunctionTree(func);
+    auto *functionTree = new FunctionTree(func);
     //Get the called functions, so we can generate the subtrees
-    auto calls = FT->getCalledFunctions();
+    auto calls = functionTree->getCalledFunctions();
 
     //If we call functions, we are not in a leaf...
     if(!calls.empty()){
         //Iterate over the calls
-        for (auto &F : calls) {
+        for (auto &function : calls) {
             //If we have a function that isn't the function we started at...
-            if(F != FT->func){
+            if(function != functionTree->func){
                 //Call construct recursively, as there might be further calls in the called functions
-                auto sFT = construct(F);
+                auto subFunctionTree = construct(function);
                 //Add the constructed tree to the subtrees list
-                FT->subtrees.push_back(sFT);
+                functionTree->subtrees.push_back(subFunctionTree);
             }
         }
     }
 
     //Return the constructed FunctionTree
-    return FT;
+    return functionTree;
 }
 
 //Calculate the functions called from the Function saved in this FunctionTree
-std::vector<llvm::Function *> FunctionTree::getCalledFunctions() {
+std::vector<llvm::Function *> FunctionTree::getCalledFunctions() const {
     //Init the vector
-    std::vector<llvm::Function *> funcs;
+    std::vector<llvm::Function *> functions;
 
     //Iterate over the BasicBlocks of the function
-    for (auto &BB : *this->func) {
+    for (auto &basicBlock : *this->func) {
         //Iterate over the instructions of the function
-        for( auto &I : BB){
+        for( auto &instruction : basicBlock){
             //If we find an instruction, that is a call-instruction
-            if(llvm::isa<llvm::CallInst>( I )){
-                auto calleeInst = llvm::cast<llvm::CallInst>(&I);
+            if(llvm::isa<llvm::CallInst>(instruction )){
+                auto calleeInst = llvm::cast<llvm::CallInst>(&instruction);
                 //Get the called function
-                auto *cf = calleeInst->getCalledFunction();
+                auto *calledFunction = calleeInst->getCalledFunction();
                 //Add the function to the list
-                funcs.push_back(cf);
+                functions.push_back(calledFunction);
             }
         }
     }
 
     //Return the calculated list
-    return funcs;
+    return functions;
 }
 
 //Print the tree in pre-order
@@ -65,8 +65,8 @@ void FunctionTree::printPreorder() {
         llvm::outs() << "Node " << this->func->getName() << "\n";
     }else{
         llvm::outs() << "============================================\n";
-        for (auto sft : this->subtrees) {
-            sft->printPreorder();
+        for (auto subFunctionTree : this->subtrees) {
+            subFunctionTree->printPreorder();
         }
         llvm::outs() << "------------Node-----------\n";
         llvm::outs() << "Node " << this->func->getName() << "\n";
@@ -77,32 +77,32 @@ void FunctionTree::printPreorder() {
 
 //Get the tree as list in pre-order
 std::vector<llvm::Function *> FunctionTree::getPreOrderVector() {
-    //init the list
-    std::vector<llvm::Function *> list;
+    //init the functionList
+    std::vector<llvm::Function *> functionList;
 
     //Test if we are in a leaf
     if(this->subtrees.empty()){
-        //If we are in a leaf, add this function to the list. No further recursion will be taken
-        list.push_back(this->func);
+        //If we are in a leaf, add this function to the functionList. No further recursion will be taken
+        functionList.push_back(this->func);
     }else{
         //If we have subTrees, iterate over them
-        for (auto sft : this->subtrees) {
+        for (auto subFunctionTree : this->subtrees) {
             //Recursivly call this method on the current subtree
-            auto sublist = sft->getPreOrderVector();
+            auto subFunctionTreePreOrder = subFunctionTree->getPreOrderVector();
 
-            //Check if the function is already in the list, if so don't add it to the list
-            for(auto F : sublist){
-                if(std::find(list.begin(), list.end(), F) == list.end()){
-                    list.push_back(F);
+            //Check if the function is already in the functionList, if so don't add it to the functionList
+            for(auto function : subFunctionTreePreOrder){
+                if(std::find(functionList.begin(), functionList.end(), function) == functionList.end()){
+                    functionList.push_back(function);
                 }
             }
         }
-        //Add the current function to the list
-        list.push_back(this->func);
+        //Add the current function to the functionList
+        functionList.push_back(this->func);
     }
 
-    //Return the list
-    return list;
+    //Return the functionList
+    return functionList;
 }
 
 

@@ -1,6 +1,3 @@
-//
-// Created by max on 26.12.22.
-//
 
 #ifndef BA_PROFILER_H
 #define BA_PROFILER_H
@@ -36,18 +33,18 @@ class Profiler {
 
         std::string getCPUName();
 
-        std::string getArchitecture();
+        static std::string getArchitecture();
 
-        long getIterations();
+        long getIterations() const;
 
-        std::string getNumberOfCores();
+        static std::string getNumberOfCores();
     private:
         /**
          * Benchmarks a single file, calculates the used energy and returns the calculated value
          * @param file String to the file that needs to be benchmarked
          * @return The used energy
          */
-        double benchmarkFile(std::string file, double *ptr);
+        double benchmarkFile(const std::string& file, double *energyPointer) const;
 };
 
 

@@ -36,7 +36,7 @@ public:
      * @param subloops The loops contained in the mainloop
      * @param handler A LLVMHandler to handle calculations on the LLVM IR
      */
-    LoopTree(llvm::Loop *main, std::vector<llvm::Loop *> subloops, LLVMHandler *handler, llvm::ScalarEvolution *se);
+    LoopTree(llvm::Loop *main, const std::vector<llvm::Loop *>& subloops, LLVMHandler *handler, llvm::ScalarEvolution *scalarEvolution);
 
     /**
      * Calculate the energy over this node, combined with the energy of the subloops
@@ -77,7 +77,7 @@ private:
      * Simple method to check if the current LoopTree is a leaf and has now subloops
      * @return Returns true if the current LoopTree is a leaf, false otherwise
      */
-    bool isLeaf();
+    bool isLeaf() const;
 
 };
 

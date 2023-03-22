@@ -55,7 +55,7 @@ private:
      * Calculate the functions called by the root-node of the tree
      * @return Returns a vector containing references to the called functions
      */
-    std::vector<llvm::Function *> getCalledFunctions();
+    std::vector<llvm::Function *> getCalledFunctions() const;
 
 
 };

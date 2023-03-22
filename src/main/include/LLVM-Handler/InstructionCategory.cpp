@@ -3,8 +3,8 @@
 #include <llvm/IR/Instructions.h>
 #include "InstructionCategory.h"
 
-EnergyFunction::EnergyFunction(llvm::Function *func) {
-    this->func = func;
+EnergyFunction::EnergyFunction(llvm::Function *function) {
+    this->func = function;
     this->energy = 0.00;
 }
 
@@ -71,30 +71,30 @@ InstructionCategory::Category InstructionCategory::getCategory( llvm::Instructio
 }
 
 std::string InstructionCategory::toString(InstructionCategory::Category category) {
-    std::string catString = "undefined";
+    std::string categoryString = "undefined";
 
     switch (category) {
         case Category::MEMORY:
-            catString = "Memory";
+            categoryString = "Memory";
             break;
         case Category::PROGRAMFLOW:
-            catString = "Programflow";
+            categoryString = "Programflow";
             break;
         case Category::DIVISION:
-            catString = "Division";
+            categoryString = "Division";
             break;
         case Category::CALL:
-            catString = "Call";
+            categoryString = "Call";
             break;
         case Category::OTHER:
-            catString = "Other";
+            categoryString = "Other";
             break;
     }
 
-    return catString;
+    return categoryString;
 }
 
-double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, std::vector<EnergyFunction *> function_pool) {
+double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, const std::vector<EnergyFunction *>& poolOfFunctions) {
     double energy = 0.00;
 
     if(llvm::isa<llvm::CallInst>( Instruction ) ){
@@ -102,7 +102,7 @@ double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instructi
         if(call_instruction != nullptr){
             auto called_function = call_instruction->getCalledFunction();
 
-            for(auto energy_function : function_pool){
+            for(auto energy_function : poolOfFunctions){
                 if(energy_function->func == called_function){
                     energy = energy_function->energy;
                     break;

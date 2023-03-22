@@ -13,7 +13,7 @@ class EnergyFunction {
 public:
     llvm::Function * func;
     double energy;
-    EnergyFunction(llvm::Function *func);
+    EnergyFunction(llvm::Function *function);
 };
 
 /**
@@ -45,7 +45,7 @@ class InstructionCategory {
         static bool isProgramFlowInstruction( llvm::Instruction &Instruction );
         static bool isCastInstruction( llvm::Instruction &Instruction );
         static bool isDivisionInstruction( llvm::Instruction &Instruction );
-        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, std::vector<EnergyFunction *> function_pool);
+        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, const std::vector<EnergyFunction *>& poolOfFunctions);
 };
 
 #endif //BA_INSTRUCTIONCATEGORY_H

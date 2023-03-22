@@ -1,6 +1,3 @@
-//
-// Created by max on 26.12.22.
-//
 
 #include <mutex>
 #include "Profiler.h"
@@ -8,14 +5,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
-#include "iostream"
 #include "../JSON-Handler/JSONHandler.h"
-
-
-#include <sys/ipc.h>
-#include <sys/shm.h>
-
-#define SHMSZ     27
 
 
 Profiler::Profiler(int rep, std::string path){
@@ -67,108 +57,80 @@ std::vector<double> Profiler::profile() {
     };
 }
 
-void *executeFile(void *ptr){
-    pthread_t thread = pthread_self();
-    char *file;
-    file = (char *) ptr;
-
-    cpu_set_t set;
-
-    CPU_ZERO(&set);        // clear cpu mask
-    CPU_SET(0, &set);      // set cpu 3
-    printf("Executing %s\n", file);
-    pthread_setaffinity_np(thread, sizeof(cpu_set_t), &set);  // 0 is the calling process
-
-    //execl(file, file);
-    system(file);
-    return nullptr;
-}
-
-double Profiler::benchmarkFile(std::string file, double *ptr) {
+double Profiler::benchmarkFile(const std::string& file, double *energyPointer) const {
     auto powReader = new RegisterReader(0);
-    std::string relPath = this->programspath;
+    std::string programPath = this->programspath;
 
     char *command = new char[1024];
     char *path = new char[1024];
-    sprintf(command, "%s/%s", relPath.c_str(), file.c_str());
-    sprintf(path, "%s/%s", relPath.c_str(), "src/compiled");
+    sprintf(command, "%s/%s", programPath.c_str(), file.c_str());
+    sprintf(path, "%s/%s", programPath.c_str(), "src/compiled");
 
-    double engAverage = 0;
+    double energyAverage = 0;
     char* const args[] = {  };
 
-    auto *preeng  = (double *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE,
-                         MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-    auto *start  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE,
-                                      MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-    auto *end  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE,
-                                            MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-
-
-    //std::cout << "Starting the profile of " << command << "\n";
-
-    double cummulated_eng = 0.0;
-    cpu_set_t set;
+    auto *sharedEnergyBefore  = (double *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    auto *sharedStart  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    auto *sharedEnd  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    
+    double accumulatedEnergy = 0.0;
+    cpu_set_t cpuMask;
 
     for (int i = 0; i < this->repetitions; i++){
-        pid_t c_pid = fork();
+        pid_t childProcessId = fork();
 
-        if(c_pid == 0){
-            //std::cout << "\t\tChild with pid " << c_pid << " executing the file. \n" << std::flush;
-            CPU_ZERO(&set);        // clear cpu mask
-            CPU_SET(0, &set);      // set cpu 3
-            sched_setaffinity(c_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
+        if(childProcessId == 0){
+            //std::cout << "\t\tChild with pid " << childProcessId << " executing the file. \n" << std::flush;
+            CPU_ZERO(&cpuMask);        // clear cpu mask
+            CPU_SET(0, &cpuMask);      // cpuMask cpu 3
+            sched_setaffinity(childProcessId, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
-            *preeng = powReader->getEnergy();
+            *sharedEnergyBefore = powReader->getEnergy();
 
             execl(command, command);
             exit(1);
 
         }else{
-            CPU_ZERO(&set);        // clear cpu mask
-            CPU_SET(3, &set);      // set cpu 3
-            sched_setaffinity(c_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
-
+            CPU_ZERO(&cpuMask);        // clear cpu mask
+            CPU_SET(3, &cpuMask);      // cpuMask cpu 3
+            sched_setaffinity(childProcessId, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
             wait(nullptr);
 
-            double posteng = powReader->getEnergy();
+            double energyAfter = powReader->getEnergy();
 
             //If the register overflows...
-            if(*preeng > posteng){
+            if(*sharedEnergyBefore > energyAfter){
                 pid_t ic_pid = fork();
 
                 if(ic_pid == 0){
-                    //std::cout << "\t\tChild with pid " << c_pid << " executing the file. \n" << std::flush;
-                    CPU_ZERO(&set);        // clear cpu mask
-                    CPU_SET(0, &set);      // set cpu 3
-                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
+                    CPU_ZERO(&cpuMask);        // clear cpu mask
+                    CPU_SET(0, &cpuMask);      // cpuMask cpu 3
+                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
-                    *preeng = powReader->getEnergy();
+                    *sharedEnergyBefore = powReader->getEnergy();
 
                     execl(command, command);
                     exit(1);
 
                 }else {
-                    CPU_ZERO(&set);        // clear cpu mask
-                    CPU_SET(3, &set);      // set cpu 3
-                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &set);  // 0 is the calling process
+                    CPU_ZERO(&cpuMask);        // clear cpu mask
+                    CPU_SET(3, &cpuMask);      // cpuMask cpu 3
+                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
                     wait(nullptr);
 
-                    posteng = powReader->getEnergy();
+                    energyAfter = powReader->getEnergy();
                 }
 
             }else{
-                cummulated_eng += posteng - *preeng;
+                accumulatedEnergy += energyAfter - *sharedEnergyBefore;
             }
 
         }
-
-        //std::cout << "\tI ran after the exec " << "\n" << std::flush;
     }
 
-    *ptr = cummulated_eng/(double) this->repetitions;
-
+    *energyPointer = accumulatedEnergy / (double) this->repetitions;
     return 0;
 }
 
@@ -199,7 +161,7 @@ std::string Profiler::getCPUName() {
         seglist.push_back(segment);
     }
 
-    if(segment.length() >=2 ){
+    if(segment.length() >= 2 ){
         auto lastchar = segment[segment.length()-1];
         auto firstchar = segment[0];
 
@@ -261,7 +223,7 @@ std::string Profiler::getArchitecture() {
     return segment;
 }
 
-long Profiler::getIterations() {
+long Profiler::getIterations() const {
     return this->repetitions;
 }
 

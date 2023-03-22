@@ -32,18 +32,18 @@ class LLVMHandler {
 
         /**
          * Method to calculate the energy-consumption of block with respect to the given energy model
-         * @param BB Basic block to analyze
+         * @param basicBlock Basic block to analyze
          * @return Double value of the approximated energy
          */
-        double getBasicBlockSum(llvm::BasicBlock &BB, llvm::Function *func );
+        double getBasicBlockSum(llvm::BasicBlock &basicBlock, llvm::Function *func );
 
         /**
          * Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be
          * calculated the parameter valueIfIndeterminate will be used as upper bound
-         * @param L The loop to analyze
+         * @param loop The loop to analyze
          * @return The long value representing the iterations the given loop will approximately run
          */
-         long getLoopUpperBound(llvm::Loop *L, llvm::ScalarEvolution *se);
+         long getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const;
 
          int efficient;
          int inefficient;

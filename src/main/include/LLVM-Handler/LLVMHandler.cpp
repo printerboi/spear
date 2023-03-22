@@ -1,78 +1,82 @@
 
 #include "LLVMHandler.h"
 #include "InstructionCategory.h"
-#include <math.h>
+#include <cmath>
+
+#include <utility>
 
 LLVMHandler::LLVMHandler( Json::Value energy, int valueIfIntederminate) {
-    this->energyValues = energy;
+    this->energyValues = std::move(energy);
     this->valueIfIndeterminate = valueIfIntederminate;
+    this->inefficient = 0;
+    this->efficient = 0;
 }
 
-double LLVMHandler::getBasicBlockSum( llvm::BasicBlock &BB, llvm::Function *parent ){
+double LLVMHandler::getBasicBlockSum(llvm::BasicBlock &basicBlock, llvm::Function *parent ){
     //Init the sum of this block
     double blocksum = 0;
 
     //Iterate over the instructions in this block
-    for ( auto &I : BB ) {
+    for ( auto &instruction : basicBlock ) {
         //Categorize the current instruction
-        InstructionCategory::Category cat = InstructionCategory::getCategory(I);
+        InstructionCategory::Category category = InstructionCategory::getCategory(instruction);
 
         //Get the energy from the JSON energy values by referencing the category
-        double iValue = 0.00;
-        if(InstructionCategory::isCallInstruction(I)){
-            double calledValue = InstructionCategory::getCalledFunctionEnergy(I, this->funcqueue);
-            iValue = this->energyValues[InstructionCategory::toString(cat)].asDouble();
+        double instructionValue = 0.00;
+        if(InstructionCategory::isCallInstruction(instruction)){
+            double calledValue = InstructionCategory::getCalledFunctionEnergy(instruction, this->funcqueue);
+            instructionValue = this->energyValues[InstructionCategory::toString(category)].asDouble();
 
-            iValue += calledValue;
+            instructionValue += calledValue;
         }else{
-            iValue = this->energyValues[InstructionCategory::toString(cat)].asDouble();
+            instructionValue = this->energyValues[InstructionCategory::toString(category)].asDouble();
         }
 
         //Add the value to the sum
-        blocksum += iValue;
+        blocksum += instructionValue;
     }
 
     return blocksum;
 }
 
-long LLVMHandler::getLoopUpperBound(llvm::Loop *L, llvm::ScalarEvolution *se){
+long LLVMHandler::getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const{
     //Get the Latch instruction responsible for containing the compare instruction
-    auto li = L->getLatchCmpInst();
-    //Init the bound with a default value if we are not comparing with a natural number
-    long bound = this->valueIfIndeterminate;
-    auto balt = L->getBounds(*se);
+    auto li = loop->getLatchCmpInst();
+    //Init the boundValue with a default value if we are not comparing with a natural number
+    long boundValue = this->valueIfIndeterminate;
+    auto loopBound = loop->getBounds(*scalarEvolution);
     //Assume the number to compare with is the second argument of the instruction
 
-    if(balt.hasValue()){
-        auto &end = balt->getFinalIVValue();
-        auto &start = balt->getInitialIVValue();
-        auto step = balt->getStepValue();
-        auto direction = balt->getDirection();
+    if(loopBound.hasValue()){
+        auto &endValueObj = loopBound->getFinalIVValue();
+        auto &startValueObj = loopBound->getInitialIVValue();
+        auto stepValueObj = loopBound->getStepValue();
+        auto direction = loopBound->getDirection();
 
-        long constIntEnd;
-        long constIntStart;
-        long constIntStep;
+        long endValue;
+        long startValue;
+        long stepValue;
 
-        auto* CIE = llvm::dyn_cast<llvm::ConstantInt>(&end);
-        auto* CIS = llvm::dyn_cast<llvm::ConstantInt>(&start);
-        auto* CII = llvm::dyn_cast<llvm::ConstantInt>(step);
+        auto* constantIntEnd = llvm::dyn_cast<llvm::ConstantInt>(&endValueObj);
+        auto* constantIntStart = llvm::dyn_cast<llvm::ConstantInt>(&startValueObj);
+        auto* constantIntStep = llvm::dyn_cast<llvm::ConstantInt>(stepValueObj);
 
-        if ( CIE && CIS && CII ) {
-            if (CIE->getBitWidth() <= 32 && CIS->getBitWidth() <= 32 && CII->getBitWidth() <= 32) {
-                constIntEnd = CIE->getSExtValue();
-                constIntStart = CIS->getSExtValue();
-                constIntStep = CII->getSExtValue();
+        if (constantIntEnd && constantIntStart && constantIntStep ) {
+            if (constantIntEnd->getBitWidth() <= 32 && constantIntStart->getBitWidth() <= 32 && constantIntStep->getBitWidth() <= 32) {
+                endValue = constantIntEnd->getSExtValue();
+                startValue = constantIntStart->getSExtValue();
+                stepValue = constantIntStep->getSExtValue();
 
                 if(direction == llvm::Loop::LoopBounds::Direction::Decreasing){
-                    double num_rep = ceil((double)constIntStart/(double) abs(constIntStep) - (double)constIntEnd);
-                    bound = (long) num_rep;
+                    double numberOfRepetitions = ceil((double)startValue / (double) std::abs(stepValue) - (double)endValue);
+                    boundValue = (long) numberOfRepetitions;
                 }else if(direction == llvm::Loop::LoopBounds::Direction::Increasing){
-                    double num_rep = ceil((double)constIntEnd/(double) abs(constIntStep) - (double)constIntStart);
-                    bound = (long) num_rep;
+                    double numberOfRepetitions = ceil((double)endValue / (double) std::abs(stepValue) - (double)startValue);
+                    boundValue = (long) numberOfRepetitions;
                 }
             }
         }
     }
 
-    return bound;
+    return boundValue;
 }
