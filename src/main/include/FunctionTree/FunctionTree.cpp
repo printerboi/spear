@@ -13,7 +13,7 @@ FunctionTree::FunctionTree(llvm::Function *func) {
 FunctionTree* FunctionTree::construct(llvm::Function *func) {
     //Init the tree
     auto *functionTree = new FunctionTree(func);
-    //Get the called functions, so we can generate the subtrees
+    //Get the called functions, so we can generate the subgraphs
     auto calls = functionTree->getCalledFunctions();
 
     //If we call functions, we are not in a leaf...
@@ -24,7 +24,7 @@ FunctionTree* FunctionTree::construct(llvm::Function *func) {
             if(function != functionTree->func){
                 //Call construct recursively, as there might be further calls in the called functions
                 auto subFunctionTree = construct(function);
-                //Add the constructed tree to the subtrees list
+                //Add the constructed tree to the subgraphs list
                 functionTree->subtrees.push_back(subFunctionTree);
             }
         }

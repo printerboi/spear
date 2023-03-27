@@ -60,7 +60,7 @@ void ProgramGraph::printNodes(LLVMHandler *handler) {
         if(dynamic_cast<LoopNode*>(node) != nullptr){
             //Print a special representation if we are dealing with a LoopNode
             llvm::outs() << "(" << dynamic_cast<LoopNode*>(node)->loopTree->iterations << ") " << this->getEnergy(handler) << " µJ" << ")";
-            for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subtrees) {
+            for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subgraphs) {
                 llvm::outs() << "\n|\t\t\t\t\tBEGIN Subnodes\t\t\t\t\t|\n";
                 subProgramGraph->printNodes(handler);
                 llvm::outs() << "\n|\t\t\t\t\tEND Subnodes\t\t\t\t\t|\n";
@@ -100,7 +100,7 @@ void ProgramGraph::printEdges() {
         //If we are dealing with a LoopNode
         if(dynamic_cast<LoopNode*>(node) != nullptr){
             //Print the edges contained in the LoopNode
-            for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subtrees) {
+            for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subgraphs) {
                 llvm::outs() << "\n|\t\t\t\t\tBEGIN Subedges\t\t\t\t\t|\n";
                 subProgramGraph->printEdges();
                 llvm::outs() << "\n|\t\t\t\t\tEND Subedges\t\t\t\t\t|\n";

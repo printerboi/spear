@@ -5,14 +5,14 @@
 
 #include <utility>
 
-LLVMHandler::LLVMHandler( Json::Value energy, int valueIfIntederminate) {
+LLVMHandler::LLVMHandler( Json::Value energy, int valueIfIndeterminable) {
     this->energyValues = std::move(energy);
-    this->valueIfIndeterminate = valueIfIntederminate;
+    this->valueIfIndeterminable = valueIfIndeterminable;
     this->inefficient = 0;
     this->efficient = 0;
 }
 
-double LLVMHandler::getBasicBlockSum(llvm::BasicBlock &basicBlock, llvm::Function *parent ){
+double LLVMHandler::getBasicBlockSum(llvm::BasicBlock &basicBlock ){
     //Init the sum of this block
     double blocksum = 0;
 
@@ -23,7 +23,7 @@ double LLVMHandler::getBasicBlockSum(llvm::BasicBlock &basicBlock, llvm::Functio
 
         //Get the energy from the JSON energy values by referencing the category
         double instructionValue = 0.00;
-        if(InstructionCategory::isCallInstruction(instruction)){
+        if(category == InstructionCategory::Category::CALL){
             double calledValue = InstructionCategory::getCalledFunctionEnergy(instruction, this->funcqueue);
             instructionValue = this->energyValues[InstructionCategory::toString(category)].asDouble();
 
@@ -43,7 +43,7 @@ long LLVMHandler::getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *sca
     //Get the Latch instruction responsible for containing the compare instruction
     auto li = loop->getLatchCmpInst();
     //Init the boundValue with a default value if we are not comparing with a natural number
-    long boundValue = this->valueIfIndeterminate;
+    long boundValue = this->valueIfIndeterminable;
     auto loopBound = loop->getBounds(*scalarEvolution);
     //Assume the number to compare with is the second argument of the instruction
 

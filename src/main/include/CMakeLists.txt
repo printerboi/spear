@@ -10,6 +10,8 @@ target_sources(spear
         PUBLIC Rapl-reader/RegisterReader.h
         PUBLIC LLVM-Handler/InstructionCategory.cpp
         PUBLIC LLVM-Handler/InstructionCategory.h
+        PUBLIC LLVM-Handler/EnergyFunction.h
+        PUBLIC LLVM-Handler/EnergyFunction.cpp
         PUBLIC LLVM-Handler/LLVMHandler.cpp
         PUBLIC LLVM-Handler/LLVMHandler.h
         PUBLIC ../../../external/json/json.h;
@@ -51,4 +53,4 @@ add_library(spearlib SHARED
         ProgramGraph/Node.cpp
         ProgramGraph/Edge.cpp
         FunctionTree/FunctionTree.cpp
-        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h)
+        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h LLVM-Handler/EnergyFunction.h LLVM-Handler/EnergyFunction.cpp)

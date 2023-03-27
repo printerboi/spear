@@ -6,6 +6,8 @@ add_llvm_library(Energy MODULE
         ../../../main/include/Rapl-reader/PowercapReader.h
         ../../../main/include/LLVM-Handler/InstructionCategory.cpp
         ../../../main/include/LLVM-Handler/InstructionCategory.h
+        ../../../main/include/LLVM-Handler/EnergyFunction.h
+        ../../../main/include/LLVM-Handler/EnergyFunction.cpp
         ../../../main/include/LLVM-Handler/LLVMHandler.cpp
         ../../../main/include/LLVM-Handler/LLVMHandler.h
          ../../../../external/json/jsoncpp.cpp;

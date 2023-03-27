@@ -35,7 +35,7 @@ public:
     /**
      * Static method to construct a FunctionTree from a given llvm::Function
      * @param function Reference to a llvm::Function
-     * @return Returns the built FunctionTree with all subtrees
+     * @return Returns the built FunctionTree with all subgraphs
      */
     static FunctionTree* construct(llvm::Function * function);
 

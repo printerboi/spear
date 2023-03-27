@@ -32,11 +32,6 @@ class RegisterReader {
          * @return The current energy-counter
          */
         double getEnergy();
-        /**
-         * Method to read the energy-unit from the respective register
-         * @return The current multiplier used for the energy-counter
-         */
-        double getMultiplier();
     private:
         /**
          * Reads a register in the register-file of the class
@@ -45,6 +40,11 @@ class RegisterReader {
          * @return Value in the register as 64-bit unsigned integer
          */
         long long read(int registerOffset);
+        /**
+         * Method to read the energy-unit from the respective register
+         * @return The current multiplier used for the energy-counter
+         */
+        double readMultiplier();
 };
 
 

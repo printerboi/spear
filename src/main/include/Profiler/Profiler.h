@@ -18,24 +18,22 @@ class Profiler {
          */
         long repetitions;
 
-        std::string programspath;
+        std::map<std::string, std::string> *profileCode;
         /**
          * Creates a Profiler object and sets the iterations and repetitions property according to the parameters
          * @constructor
          * @param it Iterations for the average
          * @param rep Times a program will be executed repeatedly
          */
-        explicit Profiler(int rep, std::string path);
+        explicit Profiler(int rep, std::map<std::string, std::string> *profileCode);
         /**
          * Runs the profile and returns the values for the benchmarked files
          */
-        std::vector<double> profile();
+        std::map<std::string, double> profile();
 
-        std::string getCPUName();
+        static std::string getCPUName();
 
         static std::string getArchitecture();
-
-        long getIterations() const;
 
         static std::string getNumberOfCores();
     private:
@@ -44,7 +42,7 @@ class Profiler {
          * @param file String to the file that needs to be benchmarked
          * @return The used energy
          */
-        double benchmarkFile(const std::string& file, double *energyPointer) const;
+        double measureFile(const std::string& file) const;
 };
 
 

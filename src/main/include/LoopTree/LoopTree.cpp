@@ -11,14 +11,15 @@ LoopTree::LoopTree(llvm::Loop *main, const std::vector<llvm::Loop *>& subloops, 
         //For each subloop create a new LoopTree with parameters regarding this subloop
         auto *subLoopTree = new LoopTree(subLoop, subLoop->getSubLoops(), this->handler, scalarEvolution);
 
-        //Add the subtree to the vector of subtrees
+        //Add the subtree to the vector of subgraphs
         this->subTrees.push_back(subLoopTree);
     }
 
-    //Calculate the basic blocks only contained in this loop, excluding all blocks present in the subtrees
+    //Calculate the basic blocks only contained in this loop, excluding all blocks present in the subgraphs
     std::vector<llvm::BasicBlock *> calcedBlocks = calcBlocks();
     this->blocks.insert(this->blocks.end(), calcedBlocks.begin(), calcedBlocks.end());
 
+    this->iterations=0;
     //Calculate the iterations of this loop
     this->iterations = handler->getLoopUpperBound(this->mainloop, scalarEvolution);
 }

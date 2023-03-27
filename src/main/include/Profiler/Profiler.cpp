@@ -8,75 +8,34 @@
 #include "../JSON-Handler/JSONHandler.h"
 
 
-Profiler::Profiler(int rep, std::string path){
-    this->repetitions = rep;
-    this->programspath = path;
+Profiler::Profiler(int repetitions, std::map<std::string, std::string> *profileCode){
+    this->repetitions = repetitions;
+    this->profileCode = profileCode;
 }
 
-std::vector<double> Profiler::profile() {
+std::map<std::string, double> Profiler::profile() {
 
-    double casptr = 0.0;
-    double callptr = 0.0;
-    double memreadptr = 0.0;
-    double memwritptr = 0.0;
-    double flowptr = 0.0;
-    double divpointer = 0.0;
-    double stdbinptr = 0.0;
+    auto codemap = *this->profileCode;
+    std::map<std::string, double> results;
 
-    //benchmarkFile("src/compiled/cast", &casptr);
-    benchmarkFile("src/compiled/call", &callptr);
-    benchmarkFile("src/compiled/memoryread", &memreadptr);
-    //benchmarkFile("src/compiled/memorywrite", &memwritptr);
-    benchmarkFile("src/compiled/programflow", &flowptr);
-    benchmarkFile("src/compiled/division", &divpointer);
-    benchmarkFile("src/compiled/stdbinary", &stdbinptr);
+    results["call"] = measureFile(codemap.at("call"));
+    results["memory"] = measureFile(codemap.at("memory"));
+    results["programflow"] = measureFile(codemap.at("programflow"));
+    results["division"] = measureFile(codemap.at("division"));
+    results["others"] = measureFile(codemap.at("others"));
 
-    /*double cast = benchmarkFile("src/compiled/cast", casptr);
-    double memoryread = benchmarkFile("src/compiled/memoryread", memreadptr);
-    double memorywrite = benchmarkFile("src/compiled/memoryread", memreadptr);
-    double programflow = benchmarkFile("src/compiled/programflow", flowptr);
-    double division = benchmarkFile("src/compiled/division", divpointer);
-    double stdbinary = benchmarkFile("src/compiled/stdbinary", stdbinptr);*/
-
-
-    /*return {
-            cast,
-            memoryread,
-            memorywrite,
-            programflow,
-            division,
-            stdbinary
-    };*/
-
-    return {
-        callptr,
-        memreadptr,
-        flowptr,
-        divpointer,
-        stdbinptr
-    };
+    return results;
 }
 
-double Profiler::benchmarkFile(const std::string& file, double *energyPointer) const {
+double Profiler::measureFile(const std::string& file) const {
+    double energy = 0.0;
     auto powReader = new RegisterReader(0);
-    std::string programPath = this->programspath;
-
-    char *command = new char[1024];
-    char *path = new char[1024];
-    sprintf(command, "%s/%s", programPath.c_str(), file.c_str());
-    sprintf(path, "%s/%s", programPath.c_str(), "src/compiled");
-
-    double energyAverage = 0;
-    char* const args[] = {  };
-
     auto *sharedEnergyBefore  = (double *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-    auto *sharedStart  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-    auto *sharedEnd  = (struct timespec *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-    
     double accumulatedEnergy = 0.0;
     cpu_set_t cpuMask;
 
     for (int i = 0; i < this->repetitions; i++){
+
         pid_t childProcessId = fork();
 
         if(childProcessId == 0){
@@ -87,7 +46,7 @@ double Profiler::benchmarkFile(const std::string& file, double *energyPointer) c
 
             *sharedEnergyBefore = powReader->getEnergy();
 
-            execl(command, command);
+            execv(file.c_str(), new char*);
             exit(1);
 
         }else{
@@ -110,7 +69,7 @@ double Profiler::benchmarkFile(const std::string& file, double *energyPointer) c
 
                     *sharedEnergyBefore = powReader->getEnergy();
 
-                    execl(command, command);
+                    execv(file.c_str(), new char*);
                     exit(1);
 
                 }else {
@@ -123,6 +82,7 @@ double Profiler::benchmarkFile(const std::string& file, double *energyPointer) c
                     energyAfter = powReader->getEnergy();
                 }
 
+                accumulatedEnergy += energyAfter - *sharedEnergyBefore;
             }else{
                 accumulatedEnergy += energyAfter - *sharedEnergyBefore;
             }
@@ -130,8 +90,8 @@ double Profiler::benchmarkFile(const std::string& file, double *energyPointer) c
         }
     }
 
-    *energyPointer = accumulatedEnergy / (double) this->repetitions;
-    return 0;
+    energy = accumulatedEnergy / (double) this->repetitions;
+    return energy;
 }
 
 std::string Profiler::getCPUName() {
@@ -221,10 +181,6 @@ std::string Profiler::getArchitecture() {
 
 
     return segment;
-}
-
-long Profiler::getIterations() const {
-    return this->repetitions;
 }
 
 std::string Profiler::getNumberOfCores() {

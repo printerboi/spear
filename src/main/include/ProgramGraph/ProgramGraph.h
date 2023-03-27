@@ -108,9 +108,9 @@ public:
     LoopTree *loopTree;
 
     /**
-     * Vector storing the references to the subtrees encapsulated by this LoopNode
+     * Vector storing the references to the subgraphs encapsulated by this LoopNode
      */
-    std::vector<ProgramGraph *> subtrees;
+    std::vector<ProgramGraph *> subgraphs;
 
     /**
      * Constructor. Creates a LoopNode with the given LoopTree and the surrounding ProgramGraph
@@ -144,7 +144,7 @@ public:
     double getEnergy(LLVMHandler *handler) override;
 
     /**
-     * Method for breaking cycles in the subtrees of this LoopNode.
+     * Method for breaking cycles in the subgraphs of this LoopNode.
      * Prevents infity-calculations while dealing with recursion.
      */
     void removeLoopEdgesFromSubtrees();

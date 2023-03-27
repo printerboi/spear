@@ -32,12 +32,12 @@ long long RegisterReader::read(int registerOffset) {
 
 double RegisterReader::getEnergy() {
     u_int64_t result = read(this->energyReg);
-    auto mutlitplier = this->getMultiplier();
+    auto mutlitplier = this->readMultiplier();
 
     return (double) result * mutlitplier;
 }
 
-double RegisterReader::getMultiplier() {
+double RegisterReader::readMultiplier() {
     double unit;
     long long result = read(this->unitReg);
     unit = (char) ((result >> 8) & 0x1F);

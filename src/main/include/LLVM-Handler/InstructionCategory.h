@@ -7,14 +7,7 @@
 
 
 #include <llvm/IR/Instruction.h>
-
-
-class EnergyFunction {
-public:
-    llvm::Function * func;
-    double energy;
-    EnergyFunction(llvm::Function *function);
-};
+#include "EnergyFunction.h"
 
 /**
  * [InstructionCategory] - Class handling/containing a enum to categorize instructions

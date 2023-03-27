@@ -11,12 +11,12 @@
 class LoopTree {
 public:
     /**
-     * Member to store the loop from which the treenode extends to the subtrees containing the subloops
+     * Member to store the loop from which the treenode extends to the subgraphs containing the subloops
      */
     llvm::Loop * mainloop;
 
     /**
-     * Vector storing all subtrees extending from this treenode
+     * Vector storing all subgraphs extending from this treenode
      */
     std::vector<LoopTree *> subTrees;
 

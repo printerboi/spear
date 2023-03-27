@@ -23,7 +23,7 @@ std::string LoopNode::toString() {
     return output;
 }
 
-//Test if this LoopNde has subtrees
+//Test if this LoopNde has subgraphs
 bool LoopNode::isLeafNode() const {
     return this->loopTree->subTrees.empty();
 }
@@ -38,15 +38,15 @@ LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Fu
         //Create a ProgramGraph from this LoopTrees mainloop
         ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), function, strategy);
 
-        //Add the ProgramGraph to the list of subtrees
-        loopNode->subtrees.push_back(programGraph);
+        //Add the ProgramGraph to the list of subgraphs
+        loopNode->subgraphs.push_back(programGraph);
     }else{
         //Further recursion
 
         //Create a ProgramGraph from this LoopTrees mainloop
         ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), function, strategy);
-        //Add the ProgramGraph to the list of subtrees
-        loopNode->subtrees.push_back(programGraph);
+        //Add the ProgramGraph to the list of subgraphs
+        loopNode->subgraphs.push_back(programGraph);
 
         //Iterate over the subloops of this LoopNodes LoopTree
         for(auto *subTree : loopNode->loopTree->subTrees){
@@ -54,7 +54,7 @@ LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Fu
             LoopNode *subLoopNode = LoopNode::construct(subTree, programGraph, function, strategy);
 
             //ProgramGraph *SPT = ProgramGraph::construct(subTree->mainloop->getBlocksVector());
-            //subLoopNode->subtrees.push_back(SPT);
+            //subLoopNode->subgraphs.push_back(SPT);
 
             //Init the list of blocks contained in the subloop
             std::vector<std::string> allblocks;
@@ -85,12 +85,12 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
     //Calculate the adjacent nodes
     auto adjacentNodes = this->getAdjacentNodes();
 
-    //Get the energy from all contained subtrees
-    for(auto subTrees : this->subtrees){
+    //Get the energy from all contained subgraphs
+    for(auto subTrees : this->subgraphs){
         sum += subTrees->getEnergy(handler);
     }
 
-    //Multiply the calculated energy from the subtrees by the iterations of this LoopNode's loop
+    //Multiply the calculated energy from the subgraphs by the iterations of this LoopNode's loop
     sum = (double) this->loopTree->iterations * sum;
 
     //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
@@ -169,7 +169,7 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
 //Remove the loop-edges from the LoopNode
 void LoopNode::removeLoopEdgesFromSubtrees(){
     //Iterate over the ProgramTrees contained in this LoopNode
-    for(auto subtree : this->subtrees){
+    for(auto subtree : this->subgraphs){
         //Get the BasicBlock used as latch in this ProgramTrees LoopTree
         auto *latchblock = this->loopTree->mainloop->getLoopLatch();
         //Get the Node the latchblock is contained in
@@ -199,7 +199,7 @@ void LoopNode::removeLoopEdgesFromSubtrees(){
 }
 
 LoopNode::~LoopNode() {
-    for (auto subtree : this->subtrees) {
+    for (auto subtree : this->subgraphs) {
         delete subtree;
     }
 }

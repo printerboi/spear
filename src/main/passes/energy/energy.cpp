@@ -15,6 +15,7 @@
 #include "../../include/JSON-Handler/JSONHandler.h"
 #include "../../include/ProgramGraph/ProgramGraph.h"
 #include "../../include/FunctionTree/FunctionTree.h"
+#include "../../include/LLVM-Handler//EnergyFunction.h"
 
 
 llvm::cl::opt<std::string> energyModelPath("model", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
@@ -39,7 +40,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param strategy Strategy to analyze the program with
      * @param loopbound Upper bound of loops that can't be analyzed
      */
-    explicit Energy(std::string filename, std::string mode, std::string format, std::string strategy, std::string loopbound){
+    explicit Energy(const std::string& filename, std::string mode, std::string format, std::string strategy, std::string loopbound){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( filename )["profile"];
@@ -125,15 +126,14 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param analysisStrategy The strategy to analyze the function with
      * @return Returns the calculated ProgramGraph
      */
-    static ProgramGraph* calcEneryOfFunction(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM, AnalysisStrategy::Strategy analysisStrategy){
+    static ProgramGraph* constructProgramRepresentation(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM, AnalysisStrategy::Strategy analysisStrategy){
         auto* domtree = new llvm::DominatorTree();
         domtree->recalculate(*function);
 
         auto &loopAnalysis = FAM->getResult<llvm::LoopAnalysis>(*function);
         auto &scalarEvolution = FAM->getResult<llvm::ScalarEvolutionAnalysis>(*function);
 
-        //Get the vector of Top-Level loops present in the program
-        auto loops = loopAnalysis.getTopLevelLoops();
+
         //Init a vector of references to BasicBlocks for all BBs in the function
         std::vector<llvm::BasicBlock *> functionBlocks;
         for(auto &blocks : *function){
@@ -143,13 +143,12 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         //Create the ProgramGraph for the BBs present in the current function
         ProgramGraph *programGraph = ProgramGraph::construct(functionBlocks, function, analysisStrategy);
 
+        //Get the vector of Top-Level loops present in the program
+        auto loops = loopAnalysis.getTopLevelLoops();
+
         //We need to distinguish if the function contains loops
         if(!loops.empty()){
             //If the function contains loops
-            //Init a vector for the LoopTrees we will create for the loops
-            std::vector<LoopTree *> trees;
-            //Init a vector for all the latches of the functions.
-            std::vector<llvm::BasicBlock *> latches;
 
             //Iterate over the top-level loops
             for (auto liiter = loops.begin(); liiter < loops.end(); ++liiter) {
@@ -158,14 +157,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
                 //Construct the LoopTree from the Information of the current top-level loop
                 LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), handler, &scalarEvolution);
-
-                //Add the constructed tree to the List of LoopTrees
-                trees.push_back(&LT);
-
-                //Find all latches in the current loop
-                for (auto &bb : LT.getLatches()) {
-                    latches.push_back(bb);
-                }
 
                 //Construct a LoopNode for the current loop
                 LoopNode *loopNode = LoopNode::construct(&LT, programGraph, function, analysisStrategy);
@@ -210,13 +201,13 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         if(this->energyJson){
             //Get the functions from the module
             auto funcList = &module.getFunctionList();
-            std::vector<FunctionTree *> functionTrees;
+            FunctionTree * functionTree;
 
             //Construct the functionTrees to the functions of the module
             for(auto &function : *funcList){
                 if(function.getName() == "main"){
                     auto mainFunctionTree = FunctionTree::construct(&function);
-                    functionTrees.push_back(mainFunctionTree);
+                    functionTree = (mainFunctionTree);
                 }
             }
 
@@ -227,27 +218,25 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             if(this->mode == "program"){
                 //If the user requested the program-mode we have to consider function calls and their energy-usage
 
-                for(auto ft : functionTrees){
-                    std::vector<llvm::StringRef> names;
-                    for(auto function : ft->getPreOrderVector()){
-                        names.push_back(function->getName());
+                std::vector<llvm::StringRef> names;
+                for(auto function : functionTree->getPreOrderVector()){
+                    names.push_back(function->getName());
+                }
+
+
+                for(auto function : functionTree->getPreOrderVector()){
+                    //Construct a new EnergyFunction to the current function
+                    auto newFuntion = new EnergyFunction(function);
+
+                    //Add the EnergyFunction to the queue
+                    handler.funcqueue.push_back(newFuntion);
+
+                    //Check if the current function is external. Analysis of external functions, that only were declared, will result in an infinite loop
+                    if(!function->isDeclarationForLinker()){
+                        //Calculate the energy
+                        constructProgramRepresentation(function, &handler, &functionAnalysisManager, analysisStrategy);
                     }
 
-
-                    for(auto function : ft->getPreOrderVector()){
-                        //Construct a new EnergyFunction to the current function
-                        auto newFuntion = new EnergyFunction(function);
-
-                        //Add the EnergyFunction to the queue
-                        handler.funcqueue.push_back(newFuntion);
-
-                        //Check if the current function is external. Analysis of external functions, that only were declared, will result in an infinite loop
-                        if(!function->isDeclarationForLinker()){
-                            //Calculate the energy
-                            calcEneryOfFunction(function, &handler, &functionAnalysisManager, analysisStrategy);
-                        }
-
-                    }
                 }
             }else if(this->mode == "function"){
                 //If the user requested the function-mode, calls only add their own energy-usage without the energy of the called function
@@ -256,7 +245,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                     //Check if the current function is external. Analysis of external functions, that only were declared, will result in an infinite loop
                     if(!function.isDeclarationForLinker()){
                         //Calculate the energy
-                        calcEneryOfFunction(&function, &handler, &functionAnalysisManager, analysisStrategy);
+                        constructProgramRepresentation(&function, &handler, &functionAnalysisManager, analysisStrategy);
                     }
                 }
             }else{

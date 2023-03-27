@@ -3,11 +3,6 @@
 #include <llvm/IR/Instructions.h>
 #include "InstructionCategory.h"
 
-EnergyFunction::EnergyFunction(llvm::Function *function) {
-    this->func = function;
-    this->energy = 0.00;
-}
-
 
 bool InstructionCategory::isMemloadInstruction(llvm::Instruction &Instruction) {
     return Instruction.mayReadFromMemory() || llvm::isa<llvm::GetElementPtrInst>(Instruction);

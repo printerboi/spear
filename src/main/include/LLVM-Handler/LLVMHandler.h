@@ -28,18 +28,18 @@ class LLVMHandler {
          * @param energyModel JSON Object containing the energy model
          * @param file String containing a valid file path
          */
-        explicit LLVMHandler( Json::Value energyModel, int valueIfInteterminate );
+        explicit LLVMHandler( Json::Value energyModel, int valueIfIndeterminable );
 
         /**
          * Method to calculate the energy-consumption of block with respect to the given energy model
          * @param basicBlock Basic block to analyze
          * @return Double value of the approximated energy
          */
-        double getBasicBlockSum(llvm::BasicBlock &basicBlock, llvm::Function *func );
+        double getBasicBlockSum(llvm::BasicBlock &basicBlock);
 
         /**
          * Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be
-         * calculated the parameter valueIfIndeterminate will be used as upper bound
+         * calculated the parameter valueIfIndeterminable will be used as upper bound
          * @param loop The loop to analyze
          * @return The long value representing the iterations the given loop will approximately run
          */
@@ -57,7 +57,7 @@ private:
     /**
      * Fallback value of the loop bound calculation representing an upper bound
      */
-    int valueIfIndeterminate;
+    int valueIfIndeterminable;
 
 };
 
