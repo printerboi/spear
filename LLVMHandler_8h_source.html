@@ -91,9 +91,9 @@ $(function() {
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        std::vector&lt;EnergyFunction *&gt; funcqueue;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classLLVMHandler.html#af7f629a5a88a6014c51954ce793b2e7a">LLVMHandler</a>( Json::Value energyModel, <span class="keywordtype">int</span> valueIfInteterminate );</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classLLVMHandler.html#a831088f76f521c6ce2e017d0bffeda21">LLVMHandler</a>( Json::Value energyModel, <span class="keywordtype">int</span> valueIfIndeterminable );</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classLLVMHandler.html#a6dd99014a02cc7c7b239252e1196391b">getBasicBlockSum</a>(llvm::BasicBlock &amp;basicBlock, llvm::Function *func );</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classLLVMHandler.html#a6064b85e1ea1d7fc307ae8cb6670a878">getBasicBlockSum</a>(llvm::BasicBlock &amp;basicBlock);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;         <span class="keywordtype">long</span> <a class="code" href="classLLVMHandler.html#aee060b77069aeccbadd1f6c0ffa209f4">getLoopUpperBound</a>(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
@@ -103,16 +103,16 @@ $(function() {
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    Json::Value energyValues;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">int</span> valueIfIndeterminate;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">int</span> valueIfIndeterminable;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;};</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_LLVMHANDLER_H</span></div>
 <div class="ttc" id="aclassLLVMHandler_html"><div class="ttname"><a href="classLLVMHandler.html">LLVMHandler</a></div><div class="ttdef"><b>Definition:</b> LLVMHandler.h:21</div></div>
-<div class="ttc" id="aclassLLVMHandler_html_a6dd99014a02cc7c7b239252e1196391b"><div class="ttname"><a href="classLLVMHandler.html#a6dd99014a02cc7c7b239252e1196391b">LLVMHandler::getBasicBlockSum</a></div><div class="ttdeci">double getBasicBlockSum(llvm::BasicBlock &amp;basicBlock, llvm::Function *func)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:15</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_a6064b85e1ea1d7fc307ae8cb6670a878"><div class="ttname"><a href="classLLVMHandler.html#a6064b85e1ea1d7fc307ae8cb6670a878">LLVMHandler::getBasicBlockSum</a></div><div class="ttdeci">double getBasicBlockSum(llvm::BasicBlock &amp;basicBlock)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:15</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_a831088f76f521c6ce2e017d0bffeda21"><div class="ttname"><a href="classLLVMHandler.html#a831088f76f521c6ce2e017d0bffeda21">LLVMHandler::LLVMHandler</a></div><div class="ttdeci">LLVMHandler(Json::Value energyModel, int valueIfIndeterminable)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:8</div></div>
 <div class="ttc" id="aclassLLVMHandler_html_aee060b77069aeccbadd1f6c0ffa209f4"><div class="ttname"><a href="classLLVMHandler.html#aee060b77069aeccbadd1f6c0ffa209f4">LLVMHandler::getLoopUpperBound</a></div><div class="ttdeci">long getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:42</div></div>
-<div class="ttc" id="aclassLLVMHandler_html_af7f629a5a88a6014c51954ce793b2e7a"><div class="ttname"><a href="classLLVMHandler.html#af7f629a5a88a6014c51954ce793b2e7a">LLVMHandler::LLVMHandler</a></div><div class="ttdeci">LLVMHandler(Json::Value energyModel, int valueIfInteterminate)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:8</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -79,8 +79,8 @@ Inheritance diagram for Energy:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afbb550a686fd08279981875408a5ae9f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#afbb550a686fd08279981875408a5ae9f">Energy</a> (std::string filename, std::string mode, std::string format, std::string strategy, std::string loopbound)</td></tr>
-<tr class="separator:afbb550a686fd08279981875408a5ae9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafb27f344d125abe05f24a02c4b60b2d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#aafb27f344d125abe05f24a02c4b60b2d">Energy</a> (const std::string &amp;filename, std::string mode, std::string format, std::string strategy, std::string loopbound)</td></tr>
+<tr class="separator:aafb27f344d125abe05f24a02c4b60b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace7d4d30b4d89e661e169c299d65cad9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ace7d4d30b4d89e661e169c299d65cad9">Energy</a> ()</td></tr>
 <tr class="separator:ace7d4d30b4d89e661e169c299d65cad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3681ad7d784824a1afa9bc27be08fdb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a3681ad7d784824a1afa9bc27be08fdb1">analysisRunner</a> (llvm::Module &amp;module, llvm::ModuleAnalysisManager &amp;MAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy, int maxiterations) const</td></tr>
@@ -96,8 +96,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a00eb76c7c891d94f0170c83539eb9a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabda85c129383b8de5b8f37ceb8f5442"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#aabda85c129383b8de5b8f37ceb8f5442">outputMetricsPlain</a> (const Json::Value &amp;outputObject)</td></tr>
 <tr class="separator:aabda85c129383b8de5b8f37ceb8f5442"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1f050ce70e8b86e9f517902105bfe22"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ae1f050ce70e8b86e9f517902105bfe22">calcEneryOfFunction</a> (llvm::Function *function, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler, llvm::FunctionAnalysisManager *FAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy)</td></tr>
-<tr class="separator:ae1f050ce70e8b86e9f517902105bfe22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5aa44aae5954f940b525ca721015354"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#af5aa44aae5954f940b525ca721015354">constructProgramRepresentation</a> (llvm::Function *function, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler, llvm::FunctionAnalysisManager *FAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy)</td></tr>
+<tr class="separator:af5aa44aae5954f940b525ca721015354"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0475b6aa5a23fb4c549b4abf5a67f3b"><td class="memItemLeft" align="right" valign="top"><a id="af0475b6aa5a23fb4c549b4abf5a67f3b"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRequired</b> ()</td></tr>
 <tr class="separator:af0475b6aa5a23fb4c549b4abf5a67f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,8 +121,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b><
 <tr class="separator:a9a4a9355e9e2a0ea607b3ddf5329f4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afbb550a686fd08279981875408a5ae9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afbb550a686fd08279981875408a5ae9f">&#9670;&nbsp;</a></span>Energy() <span class="overload">[1/2]</span></h2>
+<a id="aafb27f344d125abe05f24a02c4b60b2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafb27f344d125abe05f24a02c4b60b2d">&#9670;&nbsp;</a></span>Energy() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -133,7 +133,7 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b><
         <tr>
           <td class="memname">Energy::Energy </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
         </tr>
         <tr>
@@ -269,8 +269,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b><
 
 </div>
 </div>
-<a id="ae1f050ce70e8b86e9f517902105bfe22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1f050ce70e8b86e9f517902105bfe22">&#9670;&nbsp;</a></span>calcEneryOfFunction()</h2>
+<a id="ad85aaa6f5e4ce15fd306f3d2c3e71bef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad85aaa6f5e4ce15fd306f3d2c3e71bef">&#9670;&nbsp;</a></span>constructOutputObject()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,7 +279,40 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b><
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="classProgramGraph.html">ProgramGraph</a>* Energy::calcEneryOfFunction </td>
+          <td class="memname">static Json::Value Energy::constructOutputObject </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> &amp;&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Construct the JSON-Object from which we will draw all necessary information for the output </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handler</td><td><a class="el" href="classLLVMHandler.html">LLVMHandler</a> so we can get the functionQueue </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Retuns a JSON-Object containing all needed information for the output </dd></dl>
+
+</div>
+</div>
+<a id="af5aa44aae5954f940b525ca721015354"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5aa44aae5954f940b525ca721015354">&#9670;&nbsp;</a></span>constructProgramRepresentation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classProgramGraph.html">ProgramGraph</a>* Energy::constructProgramRepresentation </td>
           <td>(</td>
           <td class="paramtype">llvm::Function *&#160;</td>
           <td class="paramname"><em>function</em>, </td>
@@ -324,39 +357,6 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b><
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the calculated <a class="el" href="classProgramGraph.html">ProgramGraph</a> </dd></dl>
-
-</div>
-</div>
-<a id="ad85aaa6f5e4ce15fd306f3d2c3e71bef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad85aaa6f5e4ce15fd306f3d2c3e71bef">&#9670;&nbsp;</a></span>constructOutputObject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static Json::Value Energy::constructOutputObject </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> &amp;&#160;</td>
-          <td class="paramname"><em>handler</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Construct the JSON-Object from which we will draw all necessary information for the output </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">handler</td><td><a class="el" href="classLLVMHandler.html">LLVMHandler</a> so we can get the functionQueue </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Retuns a JSON-Object containing all needed information for the output </dd></dl>
 
 </div>
 </div>

@@ -6,7 +6,7 @@ var searchData=
   ['printnodes_45',['printNodes',['../classProgramGraph.html#a31499bd68418b43bda45e0d76799744b',1,'ProgramGraph']]],
   ['printpreorder_46',['printPreOrder',['../classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34',1,'LoopTree']]],
   ['printpreorder_47',['printPreorder',['../classFunctionTree.html#ad338d9921dc8a5f50788079eb8c4b508',1,'FunctionTree']]],
-  ['profile_48',['profile',['../classProfiler.html#a1ac482be9a580fd4d65f83604de19b65',1,'Profiler']]],
-  ['profiler_49',['Profiler',['../classProfiler.html',1,'Profiler'],['../classProfiler.html#a695d015a936fefeae06f59f3d49eae7e',1,'Profiler::Profiler()']]],
+  ['profile_48',['profile',['../classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e',1,'Profiler']]],
+  ['profiler_49',['Profiler',['../classProfiler.html',1,'Profiler'],['../classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985',1,'Profiler::Profiler()']]],
   ['programgraph_50',['ProgramGraph',['../classProgramGraph.html',1,'']]]
 ];
