@@ -31,6 +31,11 @@ public:
     LLVMHandler* handler;
 
     /**
+     * The over approximated iterations of the loop contained in this node
+     */
+    long iterations;
+
+    /**
      * Constructor building the recursive datastructure
      * @param main The loop from which the tree should be builded
      * @param subloops The loops contained in the mainloop
@@ -39,15 +44,11 @@ public:
     LoopTree(llvm::Loop *main, const std::vector<llvm::Loop *>& subloops, LLVMHandler *handler, llvm::ScalarEvolution *scalarEvolution);
 
     /**
-     * Calculate the energy over this node, combined with the energy of the subloops
-     * @return Returns the energy as double value
-     */
-    double calcEnergy();
-
-    /**
      * Prints this node in preorder
      */
     void printPreOrder();
+
+    long getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const;
 
     /**
      * Gets the Latches of the LoopTree
@@ -61,10 +62,6 @@ public:
      */
     ~LoopTree();
 
-/**
- * The over approximated iterations of the loop contained in this node
- */
-long iterations;
 private:
 
     /**

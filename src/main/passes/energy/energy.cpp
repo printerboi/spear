@@ -72,9 +72,9 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      */
     static Json::Value constructOutputObject(LLVMHandler &handler){
         Json::Value outputObject;
-        std::vector<EnergyFunction *> localFunctionQueue;
 
-        for(auto energyFunction : handler.funcqueue){
+        for (const auto& [key, value] : handler.funcmap){
+            auto energyFunction = value;
             Json::Value functionObject;
             functionObject["name"] = energyFunction->func->getName().str();
             functionObject["energy"] = energyFunction->energy;
@@ -164,26 +164,23 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 programGraph->replaceNodesWithLoopNode(topLoop->getBlocksVector(), loopNode);
             }
 
-            for(auto energyFunction : handler->funcqueue){
-                if(energyFunction->func->getName() == function->getName()){
-                    energyFunction->energy = programGraph->getEnergy(handler);
-                    break;
-                }
-            }
+
+            energyCalculation(programGraph, handler, function);
+
 
             return programGraph;
 
         }else{
 
-            for(auto energyFunction : handler->funcqueue){
-                if(energyFunction->func->getName() == function->getName()){
-                    energyFunction->energy = programGraph->getEnergy(handler);
-                    break;
-                }
-            }
+            energyCalculation(programGraph, handler, function);
 
             return programGraph;
         }
+    }
+
+    static void energyCalculation(ProgramGraph *programGraph, LLVMHandler *handler, llvm::Function *function){
+        auto energyFunction = handler->funcmap[function->getName().str()];
+        energyFunction->energy = programGraph->getEnergy(handler);
     }
 
     /**
@@ -229,7 +226,9 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                     auto newFuntion = new EnergyFunction(function);
 
                     //Add the EnergyFunction to the queue
-                    handler.funcqueue.push_back(newFuntion);
+                    //handler.funcqueue.push_back(newFuntion);
+                    handler.funcmap[function->getName().str()] = newFuntion;
+                    auto energyFunction = handler.funcmap.at(function->getName().str());
 
                     //Check if the current function is external. Analysis of external functions, that only were declared, will result in an infinite loop
                     if(!function->isDeclarationForLinker()){
@@ -246,11 +245,15 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                     if(!function.isDeclarationForLinker()){
                         //Calculate the energy
                         constructProgramRepresentation(&function, &handler, &functionAnalysisManager, analysisStrategy);
+
+
                     }
                 }
             }else{
                 llvm::errs() << "Please specify the mode the pass should run on:\n\t-mode program analyzes the program starting in the main function\n\t-mode function analyzes all functions, without respect to calls" << "\n";
             }
+
+
 
             //Construct the output
             Json::Value output = constructOutputObject(handler);

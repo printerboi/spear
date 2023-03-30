@@ -21,7 +21,7 @@ std::string Node::toString() {
 }
 
 //Calculate the energy of this Node. Is capable of dealing with if-conditions
-double Node::getEnergy(LLVMHandler *handler) {
+double Node::getNodeEnergy(LLVMHandler *handler) {
     //Init the result of the calculation
     double sum = 0.0;
 
@@ -41,7 +41,7 @@ double Node::getEnergy(LLVMHandler *handler) {
                 //Iterate over the adjacent nodes
                 for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = node->getEnergy(handler);
+                    double locsum = node->getNodeEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
                     if (locsum > compare){
@@ -57,7 +57,7 @@ double Node::getEnergy(LLVMHandler *handler) {
                 //Iterate over the adjacent nodes
                 for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = node->getEnergy(handler);
+                    double locsum = node->getNodeEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
                     if (locsum < compare){
@@ -71,8 +71,8 @@ double Node::getEnergy(LLVMHandler *handler) {
                 double locsum = 0.00;
 
                 if(adjacentNodes.size() > 1){
-                    double leftSum = adjacentNodes[0]->getEnergy(handler);
-                    double rightSum = adjacentNodes[1]->getEnergy(handler);
+                    double leftSum = adjacentNodes[0]->getNodeEnergy(handler);
+                    double rightSum = adjacentNodes[1]->getNodeEnergy(handler);
 
                     if(handler->inefficient <= handler->efficient){
                         locsum += std::max(leftSum, rightSum);
@@ -82,12 +82,12 @@ double Node::getEnergy(LLVMHandler *handler) {
                         handler->efficient++;
                     }
                 }else{
-                    locsum = adjacentNodes[0]->getEnergy(handler);
+                    locsum = adjacentNodes[0]->getNodeEnergy(handler);
                 }
 
 /*                srand(time(nullptr));
                 int randomIndex = rand() % adjacentNodes.size();
-                double locsum = adjacentNodes[randomIndex]->getEnergy(handler);
+                double locsum = adjacentNodes[randomIndex]->getNodeEnergy(handler);
                 compare = locsum;
                 sum += compare;*/
                 sum += locsum;

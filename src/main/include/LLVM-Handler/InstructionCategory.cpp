@@ -89,7 +89,7 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
     return categoryString;
 }
 
-double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, const std::vector<EnergyFunction *>& poolOfFunctions) {
+double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, std::map<std::string, EnergyFunction*>& poolOfFunctions) {
     double energy = 0.00;
 
     if(llvm::isa<llvm::CallInst>( Instruction ) ){
@@ -97,12 +97,8 @@ double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instructi
         if(call_instruction != nullptr){
             auto called_function = call_instruction->getCalledFunction();
 
-            for(auto energy_function : poolOfFunctions){
-                if(energy_function->func == called_function){
-                    energy = energy_function->energy;
-                    break;
-                }
-            }
+            auto energyFunction = poolOfFunctions[called_function->getName().str()];
+            energy = energyFunction->energy;
         }
     }
 

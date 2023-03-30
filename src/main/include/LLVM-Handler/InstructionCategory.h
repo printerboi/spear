@@ -7,6 +7,7 @@
 
 
 #include <llvm/IR/Instruction.h>
+#include <map>
 #include "EnergyFunction.h"
 
 /**
@@ -38,7 +39,7 @@ class InstructionCategory {
         static bool isProgramFlowInstruction( llvm::Instruction &Instruction );
         static bool isCastInstruction( llvm::Instruction &Instruction );
         static bool isDivisionInstruction( llvm::Instruction &Instruction );
-        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, const std::vector<EnergyFunction *>& poolOfFunctions);
+        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, std::map<std::string, EnergyFunction*>& poolOfFunctions);
 };
 
 #endif //BA_INSTRUCTIONCATEGORY_H

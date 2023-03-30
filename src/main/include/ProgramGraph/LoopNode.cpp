@@ -72,14 +72,14 @@ LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Fu
     }
 
     //Remove the loop-edges in this LoopNode, so we won't create infinite recursions
-    loopNode->removeLoopEdgesFromSubtrees();
+    loopNode->removeLoopEdgesFromSubGraphs();
 
     //Return the LoopNode
     return loopNode;
 }
 
 //Get the LoopNodes energy
-double LoopNode::getEnergy(LLVMHandler *handler) {
+double LoopNode::getNodeEnergy(LLVMHandler *handler) {
     //Init the calculation result
     double sum = 0.0;
     //Calculate the adjacent nodes
@@ -95,9 +95,15 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
 
     //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
     if(!adjacentNodes.empty()){
-        auto compare = 0.00;
 
-        switch (this->strategy) {
+        //Iterate over the adjacent nodes
+        for(auto node : adjacentNodes){
+            //Calculate the sum of the node
+            sum += node->getNodeEnergy(handler);
+
+        }
+
+        /*switch (this->strategy) {
             case AnalysisStrategy::WORSTCASE :
                 compare = DBL_MIN;
 
@@ -146,18 +152,18 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
                         handler->efficient++;
                     }
                 }else{
-                    localSum = adjacentNodes[0]->getEnergy(handler);
+                    localSum = adjacentNodes[0]->getNodeEnergy(handler);
                 }
 
-/*                srand(time(nullptr));
+*//*                srand(time(nullptr));
                 int randomIndex = rand() % adjacentNodes.size();
-                double localSum = adjacentNodes[randomIndex]->getEnergy(handler);
+                double localSum = adjacentNodes[randomIndex]->getNodeEnergy(handler);
                 compare = localSum;
-                sum += compare;*/
+                sum += compare;*//*
                 sum += localSum;
 
                 break;
-        }
+        }*/
     }
 
 
@@ -167,18 +173,18 @@ double LoopNode::getEnergy(LLVMHandler *handler) {
 
 
 //Remove the loop-edges from the LoopNode
-void LoopNode::removeLoopEdgesFromSubtrees(){
+void LoopNode::removeLoopEdgesFromSubGraphs(){
     //Iterate over the ProgramTrees contained in this LoopNode
-    for(auto subtree : this->subgraphs){
+    for(auto subgraph : this->subgraphs){
         //Get the BasicBlock used as latch in this ProgramTrees LoopTree
         auto *latchblock = this->loopTree->mainloop->getLoopLatch();
         //Get the Node the latchblock is contained in
-        auto *latchnode = subtree->findBlock(latchblock);
+        auto *latchnode = subgraph->findBlock(latchblock);
         //Init the list of edges we want to keep
         std::vector<Edge *> tempedges;
 
         //Iterate over the edges contained in the Sub-ProgramGraph
-        for(auto edge : subtree->edges){
+        for(auto edge : subgraph->edges){
             //If the start node is not the latch of the loop, add it to the list of edges we want to keep
             if(edge->start != latchnode){
                 tempedges.push_back(edge);
@@ -186,13 +192,13 @@ void LoopNode::removeLoopEdgesFromSubtrees(){
         }
 
         //Set the edges-list of the Sub-ProgramGraph to the calculated list
-        subtree->edges = tempedges;
+        subgraph->edges = tempedges;
 
         //If we have further LoopNodes contained in this LoopNode, remove their loopedges too
-        if(subtree->containsLoopNodes()){
-            auto subLoopNodes = subtree->getLoopNodes();
+        if(subgraph->containsLoopNodes()){
+            auto subLoopNodes = subgraph->getLoopNodes();
             for(auto subLoopNode : subLoopNodes){
-                subLoopNode->removeLoopEdgesFromSubtrees();
+                subLoopNode->removeLoopEdgesFromSubGraphs();
             }
         }
     }

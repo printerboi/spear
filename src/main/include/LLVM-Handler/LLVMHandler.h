@@ -21,7 +21,7 @@
 class LLVMHandler {
     public:
 
-        std::vector<EnergyFunction *> funcqueue;
+        std::map<std::string, EnergyFunction*> funcmap;
 
         /**
          * Constructor receiving a string to file. Loads the IR from the file to the class
@@ -37,27 +37,19 @@ class LLVMHandler {
          */
         double getBasicBlockSum(llvm::BasicBlock &basicBlock);
 
-        /**
-         * Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be
-         * calculated the parameter valueIfIndeterminable will be used as upper bound
-         * @param loop The loop to analyze
-         * @return The long value representing the iterations the given loop will approximately run
-         */
-         long getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const;
-
          int efficient;
          int inefficient;
 
+/**
+ * Fallback value of the loop bound calculation representing an upper bound
+ */
+int valueIfIndeterminable;
 private:
 
     /**
      * JSON-Value containin the energy model used for the calculations
      */
     Json::Value energyValues;
-    /**
-     * Fallback value of the loop bound calculation representing an upper bound
-     */
-    int valueIfIndeterminable;
 
 };
 

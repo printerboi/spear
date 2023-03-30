@@ -6,7 +6,6 @@ ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blo
     auto *programGraph = new ProgramGraph();
     //Create an empty list for the BasicBlocks
     std::vector<llvm::BasicBlock *> basicBlockSet;
-    programGraph->parentFunction = function;
 
     //Iterate over the given list of BasicBlock-References
     for(auto basicBlock : blockset){
@@ -113,7 +112,6 @@ void ProgramGraph::printEdges() {
 void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *>& blocks, LoopNode *loopNode) {
     //Init the list of nodes, that need replacement
     std::vector<Node *> nodesToReplace;
-    std::vector<std::string> allblocks;
     std::vector<std::string> toRemoveBlocks;
 
     //Iterate over the given blocks
@@ -130,9 +128,6 @@ void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *
             }
         }
 
-        for(auto blockOfNode : toReplace->blocks){
-            allblocks.push_back(blockOfNode->getName().str());
-        }
     }
 
     //Add the given LoopNode to the list of nodes for this graph
@@ -223,7 +218,7 @@ double ProgramGraph::getEnergy(LLVMHandler *handler) {
 
     //Start the energy-calculation from the start node
     //Uses the recursvice calculation of the nodes by itself
-    sum = currentNode->getEnergy(handler);
+    sum = currentNode->getNodeEnergy(handler);
 
     //Return the result
     return sum;

@@ -21,7 +21,7 @@ LoopTree::LoopTree(llvm::Loop *main, const std::vector<llvm::Loop *>& subloops, 
 
     this->iterations=0;
     //Calculate the iterations of this loop
-    this->iterations = handler->getLoopUpperBound(this->mainloop, scalarEvolution);
+    this->iterations = this->getLoopUpperBound(this->mainloop, scalarEvolution);
 }
 
 
@@ -54,6 +54,48 @@ std::vector<llvm::BasicBlock *> LoopTree::calcBlocks(){
         //If we are in a leaf, we can simply return the init blocks, as there are no subloops
         return initBlocks;
     }
+}
+
+long LoopTree::getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const{
+    //Get the Latch instruction responsible for containing the compare instruction
+    auto li = loop->getLatchCmpInst();
+    //Init the boundValue with a default value if we are not comparing with a natural number
+    long boundValue = this->handler->valueIfIndeterminable;
+    auto loopBound = loop->getBounds(*scalarEvolution);
+    //Assume the number to compare with is the second argument of the instruction
+
+    if(loopBound.hasValue()){
+        auto &endValueObj = loopBound->getFinalIVValue();
+        auto &startValueObj = loopBound->getInitialIVValue();
+        auto stepValueObj = loopBound->getStepValue();
+        auto direction = loopBound->getDirection();
+
+        long endValue;
+        long startValue;
+        long stepValue;
+
+        auto* constantIntEnd = llvm::dyn_cast<llvm::ConstantInt>(&endValueObj);
+        auto* constantIntStart = llvm::dyn_cast<llvm::ConstantInt>(&startValueObj);
+        auto* constantIntStep = llvm::dyn_cast<llvm::ConstantInt>(stepValueObj);
+
+        if (constantIntEnd && constantIntStart && constantIntStep ) {
+            if (constantIntEnd->getBitWidth() <= 32 && constantIntStart->getBitWidth() <= 32 && constantIntStep->getBitWidth() <= 32) {
+                endValue = constantIntEnd->getSExtValue();
+                startValue = constantIntStart->getSExtValue();
+                stepValue = constantIntStep->getSExtValue();
+
+                if(direction == llvm::Loop::LoopBounds::Direction::Decreasing){
+                    double numberOfRepetitions = ceil((double)startValue / (double) std::abs(stepValue) - (double)endValue);
+                    boundValue = (long) numberOfRepetitions;
+                }else if(direction == llvm::Loop::LoopBounds::Direction::Increasing){
+                    double numberOfRepetitions = ceil((double)endValue / (double) std::abs(stepValue) - (double)startValue);
+                    boundValue = (long) numberOfRepetitions;
+                }
+            }
+        }
+    }
+
+    return boundValue;
 }
 
 bool LoopTree::isLeaf() const {

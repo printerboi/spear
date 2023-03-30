@@ -24,7 +24,7 @@ double LLVMHandler::getBasicBlockSum(llvm::BasicBlock &basicBlock ){
         //Get the energy from the JSON energy values by referencing the category
         double instructionValue = 0.00;
         if(category == InstructionCategory::Category::CALL){
-            double calledValue = InstructionCategory::getCalledFunctionEnergy(instruction, this->funcqueue);
+            double calledValue = InstructionCategory::getCalledFunctionEnergy(instruction, this->funcmap);
             instructionValue = this->energyValues[InstructionCategory::toString(category)].asDouble();
 
             instructionValue += calledValue;
@@ -37,46 +37,4 @@ double LLVMHandler::getBasicBlockSum(llvm::BasicBlock &basicBlock ){
     }
 
     return blocksum;
-}
-
-long LLVMHandler::getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const{
-    //Get the Latch instruction responsible for containing the compare instruction
-    auto li = loop->getLatchCmpInst();
-    //Init the boundValue with a default value if we are not comparing with a natural number
-    long boundValue = this->valueIfIndeterminable;
-    auto loopBound = loop->getBounds(*scalarEvolution);
-    //Assume the number to compare with is the second argument of the instruction
-
-    if(loopBound.hasValue()){
-        auto &endValueObj = loopBound->getFinalIVValue();
-        auto &startValueObj = loopBound->getInitialIVValue();
-        auto stepValueObj = loopBound->getStepValue();
-        auto direction = loopBound->getDirection();
-
-        long endValue;
-        long startValue;
-        long stepValue;
-
-        auto* constantIntEnd = llvm::dyn_cast<llvm::ConstantInt>(&endValueObj);
-        auto* constantIntStart = llvm::dyn_cast<llvm::ConstantInt>(&startValueObj);
-        auto* constantIntStep = llvm::dyn_cast<llvm::ConstantInt>(stepValueObj);
-
-        if (constantIntEnd && constantIntStart && constantIntStep ) {
-            if (constantIntEnd->getBitWidth() <= 32 && constantIntStart->getBitWidth() <= 32 && constantIntStep->getBitWidth() <= 32) {
-                endValue = constantIntEnd->getSExtValue();
-                startValue = constantIntStart->getSExtValue();
-                stepValue = constantIntStep->getSExtValue();
-
-                if(direction == llvm::Loop::LoopBounds::Direction::Decreasing){
-                    double numberOfRepetitions = ceil((double)startValue / (double) std::abs(stepValue) - (double)endValue);
-                    boundValue = (long) numberOfRepetitions;
-                }else if(direction == llvm::Loop::LoopBounds::Direction::Increasing){
-                    double numberOfRepetitions = ceil((double)endValue / (double) std::abs(stepValue) - (double)startValue);
-                    boundValue = (long) numberOfRepetitions;
-                }
-            }
-        }
-    }
-
-    return boundValue;
 }

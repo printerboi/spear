@@ -53,7 +53,7 @@ class Node {
          * @param handler A Reference to a LLVMHandler for calculating the energy usage
          * @return Returns the esitmated energy for this Node as double
          */
-        virtual double getEnergy(LLVMHandler *handler);
+        virtual double getNodeEnergy(LLVMHandler *handler);
 
 protected:
     /**
@@ -137,17 +137,17 @@ public:
     /**
      * Method for calculating the energy of this LoopNode. Calculates the energy with respect to all contained subloops.
      * Multiplies the contained energy, by the iterations of this nodes loop.
-     * Overrides the inherited getEnergy method
+     * Overrides the inherited getNodeEnergy method
      * @param handler A LLVMHandler used for energy calculation
      * @return Returns the calculated energy as double
      */
-    double getEnergy(LLVMHandler *handler) override;
+    double getNodeEnergy(LLVMHandler *handler) override;
 
     /**
      * Method for breaking cycles in the subgraphs of this LoopNode.
      * Prevents infity-calculations while dealing with recursion.
      */
-    void removeLoopEdgesFromSubtrees();
+    void removeLoopEdgesFromSubGraphs();
 
     /**
      * Method for representing the LoopNode as string.
@@ -178,8 +178,6 @@ class ProgramGraph {
          * Vector containing references to the edges of the graph
          */
         std::vector<Edge *> edges;
-
-        llvm::Function * parentFunction;
 
         /**
          * Static method for creating a ProgramGraph from a given set of BasicBlocks
@@ -237,7 +235,7 @@ class ProgramGraph {
         void replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *>& blocks, LoopNode *loopNode);
 
         /**
-         * Method for calculating the energy of this ProgramGraph. Uses the getEnergy() methods of the contained nodes
+         * Method for calculating the energy of this ProgramGraph. Uses the getNodeEnergy() methods of the contained nodes
          * @param handler LLVMHandler used to the get the values for the basic blocks
          * @return Returns the used energy as double
          */
