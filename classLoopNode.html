@@ -88,10 +88,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9ed8fbdf9af17f6c52f7ccd4bc0de458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4afd2722296ce93e0559a35f1c715900"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a4afd2722296ce93e0559a35f1c715900">isLeafNode</a> () const</td></tr>
 <tr class="separator:a4afd2722296ce93e0559a35f1c715900"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76da3fb01528cbe4f8a9d8ffb6507909"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#a76da3fb01528cbe4f8a9d8ffb6507909">getEnergy</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler) override</td></tr>
-<tr class="separator:a76da3fb01528cbe4f8a9d8ffb6507909"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf52f39d97166bc126ce0d1467d8e6be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#acf52f39d97166bc126ce0d1467d8e6be">removeLoopEdgesFromSubtrees</a> ()</td></tr>
-<tr class="separator:acf52f39d97166bc126ce0d1467d8e6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade3bc5c606bb094f609d8741d2a1bea"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#aade3bc5c606bb094f609d8741d2a1bea">getNodeEnergy</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler) override</td></tr>
+<tr class="separator:aade3bc5c606bb094f609d8741d2a1bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2c48a161e3fca624295b9c608c6e560"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#ae2c48a161e3fca624295b9c608c6e560">removeLoopEdgesFromSubGraphs</a> ()</td></tr>
+<tr class="separator:ae2c48a161e3fca624295b9c608c6e560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af948b34b636a7ae9dabfd7ae25b76f0e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e">toString</a> () override</td></tr>
 <tr class="separator:af948b34b636a7ae9dabfd7ae25b76f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeef0c735da0948bbeaedc474a6c75709"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLoopNode.html#aeef0c735da0948bbeaedc474a6c75709">~LoopNode</a> ()</td></tr>
@@ -244,8 +244,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a76da3fb01528cbe4f8a9d8ffb6507909"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a76da3fb01528cbe4f8a9d8ffb6507909">&#9670;&nbsp;</a></span>getEnergy()</h2>
+<a id="aade3bc5c606bb094f609d8741d2a1bea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aade3bc5c606bb094f609d8741d2a1bea">&#9670;&nbsp;</a></span>getNodeEnergy()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -254,7 +254,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double LoopNode::getEnergy </td>
+          <td class="memname">double LoopNode::getNodeEnergy </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> *&#160;</td>
           <td class="paramname"><em>handler</em></td><td>)</td>
@@ -267,7 +267,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Method for calculating the energy of this <a class="el" href="classLoopNode.html">LoopNode</a>. Calculates the energy with respect to all contained subloops. Multiplies the contained energy, by the iterations of this nodes loop. Overrides the inherited getEnergy method </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Method for calculating the energy of this <a class="el" href="classLoopNode.html">LoopNode</a>. Calculates the energy with respect to all contained subloops. Multiplies the contained energy, by the iterations of this nodes loop. Overrides the inherited getNodeEnergy method </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">handler</td><td>A <a class="el" href="classLLVMHandler.html">LLVMHandler</a> used for energy calculation </td></tr>
   </table>
@@ -275,7 +275,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the calculated energy as double </dd></dl>
 
-<p>Reimplemented from <a class="el" href="classNode.html#adb3c2dbe4ff346a15c281c8fb2f29e52">Node</a>.</p>
+<p>Reimplemented from <a class="el" href="classNode.html#a04bb91ca2357d18d8f16c2a40f9cbda0">Node</a>.</p>
 
 </div>
 </div>
@@ -297,14 +297,14 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="acf52f39d97166bc126ce0d1467d8e6be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf52f39d97166bc126ce0d1467d8e6be">&#9670;&nbsp;</a></span>removeLoopEdgesFromSubtrees()</h2>
+<a id="ae2c48a161e3fca624295b9c608c6e560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2c48a161e3fca624295b9c608c6e560">&#9670;&nbsp;</a></span>removeLoopEdgesFromSubGraphs()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void LoopNode::removeLoopEdgesFromSubtrees </td>
+          <td class="memname">void LoopNode::removeLoopEdgesFromSubGraphs </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

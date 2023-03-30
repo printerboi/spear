@@ -74,24 +74,24 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a831088f76f521c6ce2e017d0bffeda21"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a831088f76f521c6ce2e017d0bffeda21">LLVMHandler</a> (Json::Value energyModel, int valueIfIndeterminable)</td></tr>
+<tr class="memitem:a831088f76f521c6ce2e017d0bffeda21"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a831088f76f521c6ce2e017d0bffeda21">LLVMHandler</a> (Json::Value energyModel, int <a class="el" href="classLLVMHandler.html#ad013cd1f31a0ed8edaeb3863654bd8cd">valueIfIndeterminable</a>)</td></tr>
 <tr class="separator:a831088f76f521c6ce2e017d0bffeda21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6064b85e1ea1d7fc307ae8cb6670a878"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#a6064b85e1ea1d7fc307ae8cb6670a878">getBasicBlockSum</a> (llvm::BasicBlock &amp;basicBlock)</td></tr>
 <tr class="separator:a6064b85e1ea1d7fc307ae8cb6670a878"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee060b77069aeccbadd1f6c0ffa209f4"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#aee060b77069aeccbadd1f6c0ffa209f4">getLoopUpperBound</a> (llvm::Loop *loop, llvm::ScalarEvolution *scalarEvolution) const</td></tr>
-<tr class="separator:aee060b77069aeccbadd1f6c0ffa209f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab234f44ca4714e1ef404cd7bac1f4278"><td class="memItemLeft" align="right" valign="top"><a id="ab234f44ca4714e1ef404cd7bac1f4278"></a>
-std::vector&lt; <a class="el" href="classEnergyFunction.html">EnergyFunction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>funcqueue</b></td></tr>
-<tr class="separator:ab234f44ca4714e1ef404cd7bac1f4278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a534e90ca38dde3b838205199b8c6ea68"><td class="memItemLeft" align="right" valign="top"><a id="a534e90ca38dde3b838205199b8c6ea68"></a>
+std::map&lt; std::string, <a class="el" href="classEnergyFunction.html">EnergyFunction</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>funcmap</b></td></tr>
+<tr class="separator:a534e90ca38dde3b838205199b8c6ea68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1304979d443a337acfd4e313dcd5e977"><td class="memItemLeft" align="right" valign="top"><a id="a1304979d443a337acfd4e313dcd5e977"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>efficient</b></td></tr>
 <tr class="separator:a1304979d443a337acfd4e313dcd5e977"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade1a5c084eaea452661cdf7d7997817c"><td class="memItemLeft" align="right" valign="top"><a id="ade1a5c084eaea452661cdf7d7997817c"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></tr>
 <tr class="separator:ade1a5c084eaea452661cdf7d7997817c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad013cd1f31a0ed8edaeb3863654bd8cd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classLLVMHandler.html#ad013cd1f31a0ed8edaeb3863654bd8cd">valueIfIndeterminable</a></td></tr>
+<tr class="separator:ad013cd1f31a0ed8edaeb3863654bd8cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classLLVMHandler.html">LLVMHandler</a> - Class for combining LLVM IR with energy values to reason about the energy consumption of a program </p>
@@ -165,38 +165,19 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>inefficient</b></td></
 
 </div>
 </div>
-<a id="aee060b77069aeccbadd1f6c0ffa209f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aee060b77069aeccbadd1f6c0ffa209f4">&#9670;&nbsp;</a></span>getLoopUpperBound()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad013cd1f31a0ed8edaeb3863654bd8cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad013cd1f31a0ed8edaeb3863654bd8cd">&#9670;&nbsp;</a></span>valueIfIndeterminable</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">long LLVMHandler::getLoopUpperBound </td>
-          <td>(</td>
-          <td class="paramtype">llvm::Loop *&#160;</td>
-          <td class="paramname"><em>loop</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">llvm::ScalarEvolution *&#160;</td>
-          <td class="paramname"><em>scalarEvolution</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="memname">int LLVMHandler::valueIfIndeterminable</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculates the upper bound of iterations to a given loop. If the upper bound is unknown or can't be calculated the parameter valueIfIndeterminable will be used as upper bound </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">loop</td><td>The loop to analyze </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The long value representing the iterations the given loop will approximately run </dd></dl>
+<p>Fallback value of the loop bound calculation representing an upper bound </p>
 
 </div>
 </div>
