@@ -20,12 +20,11 @@ Json::Value JSONHandler::read(const std::string& filename) {
 
 void JSONHandler::write(
         const std::string& filename,
-        const std::vector<std::pair<std::string, std::string>>& cpu,
+        const std::map<std::string, std::string>& cpu,
         const std::string& timeStartString,
         const std::string& timeEndString,
         const std::string& iterationsString,
-        const std::vector<std::pair<std::string,
-        double>>& profile
+        const std::map<std::string, double>& profile
     ) {
 
     Json::StyledWriter styledWriter;

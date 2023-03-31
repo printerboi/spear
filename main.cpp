@@ -60,18 +60,16 @@ int main(int argc, const char **argv){
                     starttimestream << start.time_since_epoch().count();
                     endtimestream << end.time_since_epoch().count();
 
-                    std::vector<std::pair<std::string, std::string>> cpu = {
+                    std::map<std::string, std::string> cpu = {
                             {"name", Profiler::getCPUName()},
                             {"architecture", Profiler::getArchitecture()},
                             {"cores", Profiler::getNumberOfCores()}
                     };
 
                     //Group the vector format of the results
-                    std::vector<std::pair<std::string, double>> data = {
-                            /*{InstructionCategory::toString(InstructionCategory::Category::CAST),        result[0]},*/
+                    std::map<std::string, double> data = {
                             {InstructionCategory::toString(InstructionCategory::Category::CALL),        result.at("call")},
                             {InstructionCategory::toString(InstructionCategory::Category::MEMORY),     result.at("memory")},
-                            /*{InstructionCategory::toString(InstructionCategory::Category::MEMSTORE),    result[3]},*/
                             {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result.at("programflow")},
                             {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result.at("division")},
                             {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result.at("others")},

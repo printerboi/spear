@@ -12,7 +12,7 @@ ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blo
         //For each block create a new Node
         auto *node = new Node(programGraph, strategy);
         //Add the block to the Node
-        node->blocks.push_back(basicBlock);
+        node->block = basicBlock;
         //Add the node to the graph
         programGraph->nodes.push_back(node);
     }
@@ -76,7 +76,7 @@ Node *ProgramGraph::findBlock(llvm::BasicBlock *basicBlock) {
     for(auto Node : this->nodes){
 
         //Use the standard find method to search the vector
-        if(std::find(Node->blocks.begin(), Node->blocks.end(), basicBlock) != Node->blocks.end()){
+        if(Node->block == basicBlock){
             //If found return the node
             return Node;
         }
@@ -112,7 +112,6 @@ void ProgramGraph::printEdges() {
 void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *>& blocks, LoopNode *loopNode) {
     //Init the list of nodes, that need replacement
     std::vector<Node *> nodesToReplace;
-    std::vector<std::string> toRemoveBlocks;
 
     //Iterate over the given blocks
     for (auto basicBlock : blocks) {
@@ -123,9 +122,6 @@ void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *
         if(toReplace != nullptr){
             //Add the node to the list
             nodesToReplace.push_back(toReplace);
-            for(auto blockOfNode : toReplace->blocks){
-                toRemoveBlocks.push_back(blockOfNode->getName().str());
-            }
         }
 
     }

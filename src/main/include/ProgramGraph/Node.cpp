@@ -10,11 +10,7 @@ std::string Node::toString() {
     //Init the output-string
     std::string output;
 
-    //Iterate over the contained blocks
-    for (auto basicBlock : this->blocks) {
-        //Add the current basicblocks name to the output string
-        output.append(basicBlock->getName().str());
-    }
+    output.append(block->getName().str());
 
     //Return the string
     return output;
@@ -98,9 +94,7 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
     }
 
     //Calculate the energy-cost of this node's basic blocks and add it to the sum
-    for(auto &block : this->blocks){
-        sum = sum + handler->getBasicBlockSum(*block);
-    }
+    sum = sum + handler->getBasicBlockSum(*block);
 
     //Return the calculated energy
     return sum;

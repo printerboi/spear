@@ -27,7 +27,7 @@ class Node {
         /**
          * A vector savint references to the blocks in this node
          */
-        std::vector<llvm::BasicBlock *> blocks;
+        llvm::BasicBlock * block;
 
         /**
          * The strategy the analysis should follow
