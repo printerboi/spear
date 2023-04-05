@@ -29,14 +29,14 @@ bool LoopNode::isLeafNode() const {
 }
 
 //Construct a LoopTree by recursively calling this method until we reach a leaf
-LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Function * function, AnalysisStrategy::Strategy strategy) {
+LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy) {
     //Create a Toplevel LoopNode
     auto *loopNode = new LoopNode(loopTree, parent, strategy);
 
     //End-condition
     if(loopNode->isLeafNode()){
         //Create a ProgramGraph from this LoopTrees mainloop
-        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), function, strategy);
+        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), strategy);
 
         //Add the ProgramGraph to the list of subgraphs
         loopNode->subgraphs.push_back(programGraph);
@@ -44,14 +44,14 @@ LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Fu
         //Further recursion
 
         //Create a ProgramGraph from this LoopTrees mainloop
-        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), function, strategy);
+        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), strategy);
         //Add the ProgramGraph to the list of subgraphs
         loopNode->subgraphs.push_back(programGraph);
 
         //Iterate over the subloops of this LoopNodes LoopTree
         for(auto *subTree : loopNode->loopTree->subTrees){
             //Construct a LoopNode for the current Sub-LoopTree
-            LoopNode *subLoopNode = LoopNode::construct(subTree, programGraph, function, strategy);
+            LoopNode *subLoopNode = LoopNode::construct(subTree, programGraph, strategy);
 
             //ProgramGraph *SPT = ProgramGraph::construct(subTree->mainloop->getBlocksVector());
             //subLoopNode->subgraphs.push_back(SPT);

@@ -18,7 +18,7 @@
 #include "../../include/LLVM-Handler//EnergyFunction.h"
 
 
-llvm::cl::opt<std::string> energyModelPath("model", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
+llvm::cl::opt<std::string> energyModelPath("profile", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
 llvm::cl::opt<std::string> modeParameter("mode", llvm::cl::desc("Mode the analysis runs on"), llvm::cl::value_desc("Please choose out of the options program/function"));
 llvm::cl::opt<std::string> formatParameter("format", llvm::cl::desc("Format to print as result"), llvm::cl::value_desc("Please choose out of the options json/plain"));
 llvm::cl::opt<std::string> analysisStrategyParameter("strategy", llvm::cl::desc("The strategy to analyze"), llvm::cl::value_desc("Please choose out of the options worst/average/best"));
@@ -126,7 +126,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param analysisStrategy The strategy to analyze the function with
      * @return Returns the calculated ProgramGraph
      */
-    static ProgramGraph* constructProgramRepresentation(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM, AnalysisStrategy::Strategy analysisStrategy){
+    static void constructProgramRepresentation(llvm::Function *function, LLVMHandler *handler, llvm::FunctionAnalysisManager *FAM, AnalysisStrategy::Strategy analysisStrategy){
         auto* domtree = new llvm::DominatorTree();
         domtree->recalculate(*function);
 
@@ -141,7 +141,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
 
         //Create the ProgramGraph for the BBs present in the current function
-        ProgramGraph *programGraph = ProgramGraph::construct(functionBlocks, function, analysisStrategy);
+        ProgramGraph *programGraph = ProgramGraph::construct(functionBlocks, analysisStrategy);
 
         //Get the vector of Top-Level loops present in the program
         auto loops = loopAnalysis.getTopLevelLoops();
@@ -159,7 +159,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), handler, &scalarEvolution);
 
                 //Construct a LoopNode for the current loop
-                LoopNode *loopNode = LoopNode::construct(&LT, programGraph, function, analysisStrategy);
+                LoopNode *loopNode = LoopNode::construct(&LT, programGraph, analysisStrategy);
                 //Replace the blocks used by loop in the previous created ProgramGraph
                 programGraph->replaceNodesWithLoopNode(topLoop->getBlocksVector(), loopNode);
             }
@@ -167,14 +167,9 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
             energyCalculation(programGraph, handler, function);
 
-
-            return programGraph;
-
         }else{
 
             energyCalculation(programGraph, handler, function);
-
-            return programGraph;
         }
     }
 

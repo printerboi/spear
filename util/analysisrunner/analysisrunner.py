@@ -58,7 +58,7 @@ def execute_analysis(file, strategy, loopbound, libpath, modelpath):
     command = 'opt -disable-output ' \
               '-load-pass-plugin {0} ' \
               '--passes="function(mem2reg,loop-rotate),energy" ' \
-              '--model {1} ' \
+              '--profile {1} ' \
               '--mode program ' \
               '--format json ' \
               '--strategy {2} ' \

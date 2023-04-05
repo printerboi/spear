@@ -8,22 +8,30 @@
 #include "iostream"
 #include "filesystem"
 #include <chrono>
+#include <getopt.h>
+
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Analysis/RegionPass.h"
 #include "llvm/Transforms/Utils/InstructionNamer.h"
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 #include "llvm/Transforms/Scalar/LoopRotation.h"
 
-int main(int argc, const char **argv){
+static struct option spearOptions[] = {
+        {"profile", optional_argument, nullptr, 'p'},
+        {"analyze", optional_argument, nullptr, 'a'},
+        {nullptr}
+};
+
+int main(int argc, char *argv[]){
     std::string helpString = "Usage: spear option <arguments>\n==============================\nOptions:"
                              "\n\t-p\t Profile the system and generate the estimated energy usage of the device. Used for any further analysis"
                              "\n\t-a\t Analyzes a given program. Further parameters are needed:"
-                             "\n\t\t\t --model Path to a .json containing the profile"
                              "\n\t\t\t --mode Type of analysis (program/function)"
                              "\n\t\t\t --format Format of the result to print (plain/json)"
                              "\n\t\t\t --strategy Type of analysis-strategy (worst/best/average)"
                              "\n\t\t\t --loopbound Value with with which loops get approximed if their upper bound can't be calculated (0 - INT_MAX)"
                              "\n\n";
+
 
     if( argc >= 2 ){
         if( std::strcmp( argv[1], "-p" ) == 0 && argc == 5 && std::filesystem::exists(argv[4]) ){

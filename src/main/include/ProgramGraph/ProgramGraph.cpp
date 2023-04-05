@@ -1,7 +1,7 @@
 #include "ProgramGraph.h"
 
 //Static method for ProgramGraph-Graph construction
-ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blockset, llvm::Function *function, AnalysisStrategy::Strategy strategy) {
+ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blockset, AnalysisStrategy::Strategy strategy) {
     //Create a dummy-Object
     auto *programGraph = new ProgramGraph();
     //Create an empty list for the BasicBlocks

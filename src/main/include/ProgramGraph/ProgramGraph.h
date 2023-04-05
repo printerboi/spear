@@ -125,7 +125,7 @@ public:
      * @param parent ProgramGraph the LoopNode should be contained in
      * @return Returns a reference to the constructed LoopNode
      */
-    static LoopNode* construct(LoopTree *loopTree, ProgramGraph *parent, llvm::Function *function, AnalysisStrategy::Strategy strategy);
+    static LoopNode* construct(LoopTree *loopTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy);
 
     /**
      * Method for determining if the current LoopNode is a "Leaf".
@@ -184,7 +184,7 @@ class ProgramGraph {
          * @param blockset Vector with references to a set of basic blocks
          * @return Returns the constructed ProgramGraph
          */
-        static ProgramGraph* construct(const std::vector<llvm::BasicBlock *>& blockset, llvm::Function *function, AnalysisStrategy::Strategy strategy);
+        static ProgramGraph* construct(const std::vector<llvm::BasicBlock *>& blockset, AnalysisStrategy::Strategy strategy);
 
         /**
          * ProgramGraph destructor
