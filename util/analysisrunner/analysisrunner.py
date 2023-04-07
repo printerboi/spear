@@ -73,7 +73,7 @@ def execute_analysis(file, strategy, loopbound, libpath, modelpath):
 def write_analysis_result_to_csv(result):
     with open('analysis_result.csv', 'w') as f:
         w = csv.writer(f)
-        w.writerow(["Datei", "Worstcase", "Averagecase", "Bestcase", "Mean", "Varianz", "Standard Deviation", "Measurement"])
+        w.writerow(["File", "Worstcase", "Averagecase", "Bestcase", "Mean", "Variance", "Standard Deviation", "Measurement"])
         for key in result.keys():
             entry = result[key]
             mean = (entry["worst"] + entry["average"] + entry["best"])/3
