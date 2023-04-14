@@ -26,6 +26,6 @@ target_sources(spear
 
 llvm_map_components_to_libnames(llvm_libs support core irreader passes)
 
-target_link_libraries(spear ${llvm_libs})
+target_link_libraries(spear LLVM)
 
 enable_testing()
