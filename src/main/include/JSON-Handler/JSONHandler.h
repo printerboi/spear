@@ -22,7 +22,7 @@ class JSONHandler {
          * @param filename String containing the path to the file the method should write to
          * @param data Datastructure containing the energy values with respect to the specific group
          */
-        static void write(const std::string& filename, const std::map<std::string, std::string>& cpu, const std::string& timeStartString, const std::string& timeEndString, const std::string&  iterationsString, const std::map<std::string, double>& data);
+        static void write(const std::string& filename, const std::map<std::string, std::string>& cpu, const std::string& timeStartString, const std::string& timeEndString, const std::string&  iterationsString, const std::map<std::string, double>& data, const std::string& unit);
 
         /**
          * Method for reading the Json-Values from a provided file

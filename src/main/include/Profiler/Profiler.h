@@ -36,6 +36,8 @@ class Profiler {
         static std::string getArchitecture();
 
         static std::string getNumberOfCores();
+
+        static std::string getUnit();
     private:
         /**
          * Benchmarks a single file, calculates the used energy and returns the calculated value

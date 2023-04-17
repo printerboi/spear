@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
                     char *outputpath = new char[255];
                     sprintf(outputpath, "%s/profile.json", argv[4]);
                     std::cout << "Writing " << outputpath << "\n";
-                    JSONHandler::write(outputpath, cpu, starttimestream.str(), endtimestream.str(), std::to_string(profiler.repetitions),  data);
+                    JSONHandler::write(outputpath, cpu, starttimestream.str(), endtimestream.str(), std::to_string(profiler.repetitions),  data, Profiler::getUnit());
 
                     std::cout << "Profiling finished!" << std::endl;
                     std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;

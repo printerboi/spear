@@ -80,8 +80,18 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             functionObject["energy"] = energyFunction->energy;
             functionObject["numberOfBasicBlocks"] = energyFunction->func->getBasicBlockList().size();
             functionObject["numberOfInstructions"] = energyFunction->func->getInstructionCount();
-            functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->getBasicBlockList().size();
-            functionObject["averageEnergyPerInstruction"] = energyFunction->energy / (double) energyFunction->func->getInstructionCount();
+
+            if(energyFunction->func->getBasicBlockList().size() > 0){
+                functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->getBasicBlockList().size();
+            } else {
+                functionObject["averageEnergyPerBlock"] = 0;
+            }
+
+            if(energyFunction->func->getInstructionCount() > 0){
+                functionObject["averageEnergyPerInstruction"] = energyFunction->energy / (double) energyFunction->func->getInstructionCount();
+            } else {
+                functionObject["averageEnergyPerInstruction"] = 0;
+            }
 
             outputObject[energyFunction->func->getName().str()] = functionObject;
         }
@@ -108,11 +118,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             llvm::outs() << "\n";
             llvm::outs() << "Function " << functionObject["name"].asString() << "\n";
             llvm::outs() << "======================================================================" << "\n";
-            llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].asDouble()  << " µJ\n";
-            llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].asDouble()  << "\n";
-            llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].asDouble()  << "\n";
-            llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].asDouble()  << " µJ\n";
-            llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].asDouble() << " µJ\n";
+            llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].asDouble()  << " J\n";
+            llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].asInt()  << "\n";
+            llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].asInt()  << "\n";
+            llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].asDouble()  << " J\n";
+            llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].asDouble() << " J\n";
             llvm::outs() << "======================================================================" << "\n";
             llvm::outs() << "\n";
         }

@@ -24,7 +24,8 @@ void JSONHandler::write(
         const std::string& timeStartString,
         const std::string& timeEndString,
         const std::string& iterationsString,
-        const std::map<std::string, double>& profile
+        const std::map<std::string, double>& profile,
+        const std::string& unit
     ) {
 
     Json::StyledWriter styledWriter;
@@ -43,6 +44,7 @@ void JSONHandler::write(
         data["startOfExecution"] = timeStartString;
         data["endOfExecution"] = timeEndString;
         data["iterationsString"] = iterationsString;
+        data["unit"] = unit;
 
         data["profile"] = profileJson;
         for ( const auto& profileObj : profile ) {

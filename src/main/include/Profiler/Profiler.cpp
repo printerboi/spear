@@ -90,7 +90,12 @@ double Profiler::measureFile(const std::string& file) const {
         }
     }
 
-    energy = accumulatedEnergy / (double) this->repetitions;
+    if(this->repetitions > 0){
+        energy = accumulatedEnergy / (double) this->repetitions;
+    }else{
+        energy = accumulatedEnergy;
+    }
+
     return energy;
 }
 
@@ -225,5 +230,12 @@ std::string Profiler::getNumberOfCores() {
     }
 
     return segment;
+}
+
+std::string Profiler::getUnit() {
+    auto powReader = new RegisterReader(0);
+    auto unit = powReader->readMultiplier();
+
+    return std::to_string(unit);
 }
 
