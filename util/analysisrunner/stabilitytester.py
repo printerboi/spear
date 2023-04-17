@@ -104,6 +104,7 @@ def main(spearpath, profilepath):
         print(output)
         with open("{}/profile.json".format(abspahts["savedir"]), 'r') as f:
             data = json.load(f)
+            print(data)
             addToResult(its, data)
 
     print("Printing result to file...")
