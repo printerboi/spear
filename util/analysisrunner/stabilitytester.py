@@ -4,6 +4,7 @@ import os
 import json
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 
 result = {}
 stats = {"mean": {}, "variant": {}, "stddeviation": {}}
@@ -12,16 +13,45 @@ group = ["duration", "call", "division", "memory", "other", "programflow"]
 
 def plot():
     tpllist = {}
-    valgroups = ["call", "division", "memory", "other", "programflow"]
+    singlegraphs = ["duration", "call", "division", "memory", "other", "programflow"]
+    allgraphs = ["call", "division", "memory", "other", "programflow"]
 
-    for gro in valgroups:
+    for gro in singlegraphs:
         tpllist[gro] = []
 
     for key in result.keys():
-        for gro in valgroups:
+        for gro in singlegraphs:
             tpllist[gro].append((key, result[key][gro]))
 
-    for gro in valgroups:
+    for gro in singlegraphs:
+        xs = []
+        ys = []
+        for tpl in tpllist[gro]:
+            xs.append(tpl[0])
+            ys.append(tpl[1])
+
+        plt.clf()
+
+        if gro != "duration":
+            plt.axhline(y=stats["mean"][gro], color='r', linestyle='-')
+            plt.axhline(y=stats["mean"][gro] + stats["stddeviation"][gro], color='g', linestyle='-')
+            plt.axhline(y=stats["mean"][gro] - stats["stddeviation"][gro], color='g', linestyle='-')
+
+            plt.plot(xs, ys, label="Gruppe " + gro)
+            plt.xlabel('Iterationen')
+            plt.ylabel('Energie in J')
+            plt.title("Entwicklung der Energiewerte bei Änderung der Messwiederholungen")
+        else:
+            plt.plot(xs, ys, label="Laufzeit")
+            plt.xlabel('Iterationen')
+            plt.ylabel('Zeit in s')
+            plt.title("Entwicklung der Laufzeit abhängig von den Messwiederholungen")
+
+        plt.legend()
+        plt.savefig("stability/plot_{}.png".format(gro))
+
+    plt.clf()
+    for gro in allgraphs:
         xs = []
         ys = []
         for tpl in tpllist[gro]:
@@ -34,7 +64,7 @@ def plot():
     plt.ylabel('Energie in J')
     plt.title("Entwicklung der Energiewerte bei Änderung der Messwiederholungen")
     plt.legend()
-    plt.savefig("stability/plot.png")
+    plt.savefig("stability/plot_gesamt.png")
 
 
 def addToResult(iterations, data):
@@ -52,27 +82,23 @@ def addToResult(iterations, data):
 def write_result_to_file():
     with open('./stability/stability_result.csv', 'w') as f:
         size = len(result.keys())
+        groupvals = {}
 
         for gro in group:
             stats["mean"][gro] = 0.0
             stats["variant"][gro] = 0.0
             stats["stddeviation"][gro] = 0.0
+            groupvals[gro] = []
 
         # Calc mean
         for key in result.keys():
             for gro in group:
-                stats["mean"][gro] = stats["mean"][gro] + result[key][gro]
+                groupvals[gro].append(result[key][gro])
 
         for gro in group:
-            stats["mean"][gro] = stats["mean"][gro] / size
-
-        # Calc variant
-        for key in result.keys():
-            for gro in group:
-                stats["variant"][gro] = stats["variant"][gro] + (result[key][gro] - stats["mean"][gro]) ** 2
-
-        for gro in group:
-            stats["stddeviation"][gro] = math.sqrt(stats["variant"][gro])
+            stats["mean"][gro] = np.mean(groupvals[gro])
+            stats["variant"][gro] = np.var(groupvals[gro])
+            stats["stddeviation"][gro] = np.std(groupvals[gro])
 
         w = csv.writer(f)
         w.writerow(
@@ -88,7 +114,7 @@ def write_result_to_file():
 
 
 def main(spearpath, profilepath):
-    iterations = range(0, 1000, 100)
+    iterations = range(0, 5000, 10)
 
     for its in iterations:
         abspahts = {"profile": os.path.abspath(profilepath), "savedir": os.path.abspath("./stability")}
