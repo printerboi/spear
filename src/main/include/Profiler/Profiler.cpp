@@ -31,6 +31,7 @@ double Profiler::measureFile(const std::string& file) const {
     double energy = 0.0;
     auto powReader = new RegisterReader(0);
     auto *sharedEnergyBefore  = (double *) mmap(nullptr, sizeof (int) , PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
     double accumulatedEnergy = 0.0;
     cpu_set_t cpuMask;
 
@@ -39,21 +40,16 @@ double Profiler::measureFile(const std::string& file) const {
         pid_t childProcessId = fork();
 
         if(childProcessId == 0){
-            //std::cout << "\t\tChild with pid " << childProcessId << " executing the file. \n" << std::flush;
-            CPU_ZERO(&cpuMask);        // clear cpu mask
-            CPU_SET(0, &cpuMask);      // cpuMask cpu 3
-            sched_setaffinity(childProcessId, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
             *sharedEnergyBefore = powReader->getEnergy();
 
             execv(file.c_str(), new char*);
+
             exit(1);
 
         }else{
-            CPU_ZERO(&cpuMask);        // clear cpu mask
-            CPU_SET(3, &cpuMask);      // cpuMask cpu 3
-            sched_setaffinity(childProcessId, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
+            //waitpid(childProcessId, nullptr, 0);
             wait(nullptr);
 
             double energyAfter = powReader->getEnergy();
@@ -63,9 +59,6 @@ double Profiler::measureFile(const std::string& file) const {
                 pid_t ic_pid = fork();
 
                 if(ic_pid == 0){
-                    CPU_ZERO(&cpuMask);        // clear cpu mask
-                    CPU_SET(0, &cpuMask);      // cpuMask cpu 3
-                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
                     *sharedEnergyBefore = powReader->getEnergy();
 
@@ -73,9 +66,6 @@ double Profiler::measureFile(const std::string& file) const {
                     exit(1);
 
                 }else {
-                    CPU_ZERO(&cpuMask);        // clear cpu mask
-                    CPU_SET(3, &cpuMask);      // cpuMask cpu 3
-                    sched_setaffinity(ic_pid, sizeof(cpu_set_t), &cpuMask);  // 0 is the calling process
 
                     wait(nullptr);
 
