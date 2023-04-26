@@ -17,16 +17,15 @@ core = 1
 
 def runprogram(file, iterations):
     ges_energy = 0
-    beforeeng = readRapl()
+
     for iteration in range(0, iterations):
-        os.sched_setaffinity(0, {core})
+        beforeeng = readRapl()
         process = subprocess.Popen([file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
-        os.sched_setaffinity(0, list(range(0, os.cpu_count())))
 
-    aftereng = readRapl()
+        aftereng = readRapl()
 
-    ges_energy += aftereng - beforeeng
+        ges_energy += aftereng - beforeeng
 
     return ges_energy / iterations
 
@@ -71,6 +70,8 @@ def execute_analysis(file, strategy, loopbound, libpath, modelpath):
 
 
 def write_analysis_result_to_csv(result):
+    toround = 5
+
     with open('analysis_result.csv', 'w') as f:
         w = csv.writer(f)
         w.writerow(["File", "Worstcase", "Averagecase", "Bestcase", "Mean", "Variance", "Standard Deviation", "Measurement"])
@@ -79,7 +80,7 @@ def write_analysis_result_to_csv(result):
             mean = (entry["worst"] + entry["average"] + entry["best"])/3
             variant = ((entry["worst"]-mean)**2 + (entry["average"]-mean)**2 + (entry["best"]-mean)**2)/3
             deviation = math.sqrt(variant)
-            w.writerow([entry["name"], entry["worst"], entry["average"], entry["best"], mean, variant, deviation, entry["measurement"]])
+            w.writerow([entry["name"], round(entry["worst"], toround), round(entry["average"], toround), round(entry["best"], toround), round(mean, toround), round(variant, toround), round(deviation, toround), round(entry["measurement"], toround)])
 
 
 def main(libpath, modelpath, bound, iterations, analysispath):

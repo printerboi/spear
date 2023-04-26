@@ -101,7 +101,7 @@ int main(int argc, char *argv[]){
                 std::cerr << "The given arguments are not useable as ints";
                 return 1;
             }
-        }else if(std::strcmp( argv[1], "-a" ) == 0 && argc == 12) {
+        }else if(std::strcmp( argv[1], "-a" ) == 0 && argc == 13) {
             llvm::LLVMContext context;
             llvm::SMDiagnostic error;
             llvm::PassBuilder passBuilder;
@@ -114,8 +114,10 @@ int main(int argc, char *argv[]){
             llvm::CGSCCPassManager callgraphPassManager;
 
 
-            if (std::filesystem::exists(argv[2]) && std::filesystem::exists(argv[11])) {
-                auto module_up = llvm::parseIRFile(argv[11], error, context).release();
+            if (std::filesystem::exists(argv[3]) && std::filesystem::exists(argv[12])) {
+                auto module_up = llvm::parseIRFile(argv[12], error, context).release();
+
+                std::vector<std::string> arguments(argv + 1, argv + argc);
 
                 passBuilder.registerModuleAnalyses(moduleAnalysisManager);
                 passBuilder.registerCGSCCAnalyses(cGSCCAnalysisManager);
@@ -143,23 +145,23 @@ int main(int argc, char *argv[]){
                 std::string loopbound;
 
 
-                if (std::strcmp(argv[3], "--mode") == 0) {
-                    mode = argv[4];
+                if (std::strcmp(argv[4], "--mode") == 0) {
+                    mode = argv[5];
                 }
 
-                if (std::strcmp(argv[5], "--format") == 0) {
-                    format = argv[6];
+                if (std::strcmp(argv[6], "--format") == 0) {
+                    format = argv[7];
                 }
 
-                if (std::strcmp(argv[7], "--strategy") == 0) {
-                    strategy = argv[8];
+                if (std::strcmp(argv[8], "--strategy") == 0) {
+                    strategy = argv[9];
                 }
 
-                if (std::strcmp(argv[9], "--loopbound") == 0) {
-                    loopbound = argv[10];
+                if (std::strcmp(argv[10], "--loopbound") == 0) {
+                    loopbound = argv[11];
                 }
 
-                modulePassManager.addPass(Energy(argv[2], mode, format, strategy, loopbound));
+                modulePassManager.addPass(Energy(argv[3], mode, format, strategy, loopbound));
                 modulePassManager.run(*module_up, moduleAnalysisManager);
 
             } else {
