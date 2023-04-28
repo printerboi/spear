@@ -1,12 +1,13 @@
 #include <iostream>
+#include "../helper/randomFiller.cpp"
 
 int add(int a, int b){
     return a + b;
 }
 
 int main(){
-    int a = 1025;
-    int b = 3000;
+    int a = getRandomInt(9000);
+    int b = getRandomInt(9000);
 
     std::cout << add(a, b) << "\n";
 }

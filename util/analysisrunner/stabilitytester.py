@@ -5,6 +5,7 @@ import json
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 result = {}
 stats = {"mean": {}, "variant": {}, "stddeviation": {}}
@@ -115,6 +116,8 @@ def write_result_to_file():
 
 def main(spearpath, profilepath):
     iterations = range(0, 5010, 10)
+
+    time.sleep(120)
 
     for its in iterations:
         abspahts = {"profile": os.path.abspath(profilepath), "savedir": os.path.abspath("./stability")}

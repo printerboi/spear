@@ -29,8 +29,10 @@
 "bits/istream.tcc"
 "bits/istream.tcc"
 "bits/istream.tcc"
+#include "../helper/randomFiller.cpp"
 
-void fib(int max){
+int main(){
+    int max = 1024;
     int a = 1;
     int b = 1;
 
@@ -40,11 +42,6 @@ void fib(int max){
         a = b;
         b = c;
     }
-}
-
-int main(){
-    int max = 1024;
-    fib(max);
 
     return 0;
 }
