@@ -53,12 +53,13 @@ int main(int argc, char *argv[]){
                     profileCode["division"] = compiledPath + "/" + "src/compiled/division";
                     profileCode["others"] = compiledPath + "/" + "src/compiled/stdbinary";
 
+                    std::cout << profileCode["call"] << std::endl;
+                    std::cout << profileCode["memory"] << std::endl;
+                    std::cout << profileCode["programflow"] << std::endl;
+                    std::cout << profileCode["division"] << std::endl;
+                    std::cout << profileCode["others"] << std::endl;
+
                     if(std::filesystem::exists(profileCode["call"]) && std::filesystem::exists(profileCode["memory"]) && std::filesystem::exists(profileCode["programflow"]) && std::filesystem::exists(profileCode["division"]) && std::filesystem::exists(profileCode["others"])){
-                        std::cout << profileCode["call"] << std::endl;
-                        std::cout << profileCode["memory"] << std::endl;
-                        std::cout << profileCode["programflow"] << std::endl;
-                        std::cout << profileCode["division"] << std::endl;
-                        std::cout << profileCode["others"] << std::endl;
 
                         std::cout << "Starting the profile..." << std::endl;
 
