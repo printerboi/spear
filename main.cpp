@@ -7,6 +7,7 @@
 
 #include "iostream"
 #include "filesystem"
+#include <stdexcept>
 #include <chrono>
 #include <getopt.h>
 
@@ -39,7 +40,7 @@ int main(int argc, char *argv[]){
                 //Get the parameters from the arguments
                 int rep = std::stoi( argv[2] );
 
-                std::cout << "Starting the profile..." << std::endl;
+
 
                 if(std::filesystem::exists(argv[3])){
 
@@ -52,45 +53,60 @@ int main(int argc, char *argv[]){
                     profileCode["division"] = compiledPath + "/" + "src/compiled/division";
                     profileCode["others"] = compiledPath + "/" + "src/compiled/stdbinary";
 
-                    Profiler profiler = Profiler(rep, &profileCode);
+                    if(std::filesystem::exists(profileCode["call"]) && std::filesystem::exists(profileCode["memory"]) && std::filesystem::exists(profileCode["programflow"]) && std::filesystem::exists(profileCode["division"]) && std::filesystem::exists(profileCode["others"])){
+                        std::cout << profileCode["call"] << std::endl;
+                        std::cout << profileCode["memory"] << std::endl;
+                        std::cout << profileCode["programflow"] << std::endl;
+                        std::cout << profileCode["division"] << std::endl;
+                        std::cout << profileCode["others"] << std::endl;
 
-                    //Start the time measurement
-                    auto start = std::chrono::system_clock::now();
-                    //Launch the benchmarking
-                    std::map<std::string, double> result = profiler.profile();
-                    //Stop the time measurement
-                    auto end = std::chrono::system_clock::now();
-                    //Calculate the elapsed time by substracting the two timestamps
-                    std::chrono::duration<double> timerun = end - start;
+                        std::cout << "Starting the profile..." << std::endl;
 
-                    std::stringstream starttimestream;
-                    std::stringstream endtimestream;
-                    starttimestream << start.time_since_epoch().count();
-                    endtimestream << end.time_since_epoch().count();
+                        Profiler profiler = Profiler(rep, &profileCode);
 
-                    std::map<std::string, std::string> cpu = {
-                            {"name", Profiler::getCPUName()},
-                            {"architecture", Profiler::getArchitecture()},
-                            {"cores", Profiler::getNumberOfCores()}
-                    };
+                        //Start the time measurement
+                        auto start = std::chrono::system_clock::now();
+                        //Launch the benchmarking
+                        std::map<std::string, double> result = profiler.profile();
+                        //Stop the time measurement
+                        auto end = std::chrono::system_clock::now();
+                        //Calculate the elapsed time by substracting the two timestamps
+                        std::chrono::duration<double> timerun = end - start;
 
-                    //Group the vector format of the results
-                    std::map<std::string, double> data = {
-                            {InstructionCategory::toString(InstructionCategory::Category::CALL),        result.at("call")},
-                            {InstructionCategory::toString(InstructionCategory::Category::MEMORY),     result.at("memory")},
-                            {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result.at("programflow")},
-                            {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result.at("division")},
-                            {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result.at("others")},
-                    };
-                    //Pass the grouped values to the csv handler, so it can be written to a file
-                    //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
-                    char *outputpath = new char[255];
-                    sprintf(outputpath, "%s/profile.json", argv[4]);
-                    std::cout << "Writing " << outputpath << "\n";
-                    JSONHandler::write(outputpath, cpu, starttimestream.str(), endtimestream.str(), std::to_string(profiler.repetitions),  data, Profiler::getUnit());
+                        std::stringstream starttimestream;
+                        std::stringstream endtimestream;
+                        starttimestream << start.time_since_epoch().count();
+                        endtimestream << end.time_since_epoch().count();
 
-                    std::cout << "Profiling finished!" << std::endl;
-                    std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
+                        std::map<std::string, std::string> cpu = {
+                                {"name", Profiler::getCPUName()},
+                                {"architecture", Profiler::getArchitecture()},
+                                {"cores", Profiler::getNumberOfCores()}
+                        };
+
+                        //Group the vector format of the results
+                        std::map<std::string, double> data = {
+                                {InstructionCategory::toString(InstructionCategory::Category::CALL),        result.at("call")},
+                                {InstructionCategory::toString(InstructionCategory::Category::MEMORY),     result.at("memory")},
+                                {InstructionCategory::toString(InstructionCategory::Category::PROGRAMFLOW), result.at("programflow")},
+                                {InstructionCategory::toString(InstructionCategory::Category::DIVISION),    result.at("division")},
+                                {InstructionCategory::toString(InstructionCategory::Category::OTHER),       result.at("others")},
+                        };
+                        //Pass the grouped values to the csv handler, so it can be written to a file
+                        //CSVHandler::writeCSV("benchmarkresult.csv", ',' , data);
+                        char *outputpath = new char[255];
+                        sprintf(outputpath, "%s/profile.json", argv[4]);
+                        std::cout << "Writing " << outputpath << "\n";
+                        JSONHandler::write(outputpath, cpu, starttimestream.str(), endtimestream.str(), std::to_string(profiler.repetitions),  data, Profiler::getUnit());
+
+                        std::cout << "Profiling finished!" << std::endl;
+                        std::cout << "Elapsed Time: " << timerun.count() << "s" << std::endl;
+                    }else{
+                        std::cerr << "The given to the profile does not contain a /src/compiled folder!" << "\n";
+                        return 1;
+                    }
+
+
                 }else{
                     std::cerr << "The given path to the profile does not exist!!!";
                     return 1;
