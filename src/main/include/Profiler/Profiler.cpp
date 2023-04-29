@@ -43,9 +43,11 @@ double Profiler::measureFile(const std::string& file) const {
 
             *sharedEnergyBefore = powReader->getEnergy();
 
-            execv(file.c_str(), new char*);
-
-            exit(1);
+            if(execv(file.c_str(), new char*) == -1){
+                throw std::invalid_argument("Profilecode not found!!!");
+                exit(1);
+                break;
+            }
 
         }else{
 
@@ -62,8 +64,11 @@ double Profiler::measureFile(const std::string& file) const {
 
                     *sharedEnergyBefore = powReader->getEnergy();
 
-                    execv(file.c_str(), new char*);
-                    exit(1);
+                    if(execv(file.c_str(), new char*) == -1){
+                        throw std::invalid_argument("Profilecode not found!!!");
+                        exit(1);
+                        break;
+                    }
 
                 }else {
 
