@@ -13,23 +13,20 @@ void sort(int *array, int length){
     }
 }
 
-void print(int *array, int length){
-    std::cout << "[";
-
-
-    for(int index = 0; index < length; index++){
-        std::cout << array[index] << ",";
-    }
-
-    std::cout << "]\n";
-}
-
 int main(){
     int length = 9000;
     int *sortarr = new int[length];
     fillArrayRandom(sortarr, length, length*2);
 
-    sort(sortarr, length);
+    for(int index = length; index > 1; index--){
+        for(int j=0; j < index-1; j++){
+            if(sortarr[j] > sortarr[j+1]){
+                int c = sortarr[j];
+                sortarr[j] = sortarr[j+1];
+                sortarr[j+1] = c;
+            }
+        }
+    }
 
     return 0;
 }
