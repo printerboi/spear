@@ -115,7 +115,7 @@ def write_result_to_file():
 
 
 def main(spearpath, profilepath):
-    iterations = range(0, 5010, 10)
+    iterations = range(0, 10100, 100)
 
     time.sleep(120)
 

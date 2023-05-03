@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/wait.h>
+#include <cassert>
 #include "../JSON-Handler/JSONHandler.h"
 
 
@@ -45,6 +46,7 @@ double Profiler::measureFile(const std::string& file) const {
 
             if(execv(file.c_str(), new char*) == -1){
                 throw std::invalid_argument("Profilecode not found!!!");
+                assert(false);
                 exit(1);
                 break;
             }
@@ -66,6 +68,7 @@ double Profiler::measureFile(const std::string& file) const {
 
                     if(execv(file.c_str(), new char*) == -1){
                         throw std::invalid_argument("Profilecode not found!!!");
+                        assert(false);
                         exit(1);
                         break;
                     }

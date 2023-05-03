@@ -5,6 +5,7 @@ import json
 import struct
 import sys
 import subprocess
+import time
 from pathlib import Path
 
 # libpath = "../../cmake-build-debug/src/main/passes/energy/Energy.so"
@@ -26,6 +27,7 @@ def runprogram(file, iterations):
         aftereng = readRapl()
 
         ges_energy += aftereng - beforeeng
+        time.sleep(1)
 
     return ges_energy / iterations
 
@@ -95,7 +97,7 @@ def main(libpath, modelpath, bound, iterations, analysispath):
             filename = Path(file).stem
 
             relpath = "{0}/{1}".format(simpledirpath, file)
-            print("Running analysis for file {}".format(filename))
+            print("Running analysis for file {} [{}]".format(filename, relpath))
             analysis_dict[file] = {}
             for strategy in stategies:
                 # print("\t{}...".format(strategy))

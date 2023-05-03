@@ -9,5 +9,7 @@ int main(){
     int a = getRandomInt(9000);
     int b = getRandomInt(9000);
 
-    std::cout << add(a, b) << "\n";
+    int result = add(a, b);
+
+    std::cout << result << "\n";
 }
