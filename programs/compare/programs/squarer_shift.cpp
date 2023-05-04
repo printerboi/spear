@@ -9,6 +9,7 @@ int main(){
     fillArrayRandom(elements, n, n*4);
 
     int before = elements[0];
+    int square = before * before;
 
     for(int i=0; i < n; i++){
         elements[i] = elements[i] + elements[i];

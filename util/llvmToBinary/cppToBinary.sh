@@ -19,7 +19,7 @@ function compileFile() {
   llc -filetype=obj "$path/compiled/$filename.bc"
   echo "Generating the binary $path/compiled/$filename"
 
-  clang++ -no-pie "$path/compiled/$filename.o" -o "$path/compiled/$filename"
+  clang++ -O0 -no-pie "$path/compiled/$filename.o" -o "$path/compiled/$filename"
 
   rm "$path/compiled/$filename.bc"
   rm "$path/compiled/$filename.o"
