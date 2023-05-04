@@ -8,10 +8,12 @@ int main(){
     int a = a_init;
     int b = b_init;
 
-    while(b != 0){
-        int t = b;
-        b = a % b;
-        a = t;
+    while(a != b){
+        if(a > b){
+            a = a - b;
+        }else{
+            b = b - a;
+        }
     }
 
     std::cout << "ggt of " << a_init << " and " << b_init << " is " << a << "\n";

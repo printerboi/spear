@@ -8,10 +8,6 @@ function compileFile() {
   extension="${filename##*.}"
   filename="${filename%.*}"
 
-
-
-  mkdir -p "$path/compiled"
-
   echo "Generating the llvm-IR"
   clang++ -O0 -Xclang -disable-O0-optnone -fno-discard-value-names -S -emit-llvm -o "$path/compiled/$filename.ll" "$path/$filename.cpp"
 
@@ -29,6 +25,17 @@ function compileFile() {
   rm "$path/compiled/$filename.o"
 }
 
+if [ -d "$path/compiled" ]; then
+    rm -R "$path/compiled"
+    echo "Deleting the old folder..."
+fi
+echo "Creating the compiled folder..."
+
+if [[ -z "$path" ]]; then
+  echo "-> the given path is empty!!! Folder can't be created"
+else
+  mkdir -p "$path/compiled"
+fi
 
 for f in $1/*.cpp
 do
