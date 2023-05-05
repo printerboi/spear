@@ -2,10 +2,7 @@
 #include "../helper/randomFiller.cpp"
 
 int main(){
-    int a = 42;
-    int b = 1111;
+    char msg[] = "Hello World";
 
-    int result = a + b;
-
-    std::cout << result << "\n";
+    std::cout << msg << "\n";
 }
