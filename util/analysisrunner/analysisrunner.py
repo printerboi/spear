@@ -29,6 +29,7 @@ def runprogram(file, iterations):
         ges_energy += aftereng - beforeeng
         #os.system("/bin/insmod /home/maximiliank/Dokumente/workbench/cache_invalidator/clearer/cacheclearer.ko")
         #os.system("/bin/rmmod /home/maximiliank/Dokumente/workbench/cache_invalidator/clearer/cacheclearer.ko")
+        time.sleep(2)
         os.system("../cacheclearer/cacheclearer")
 
     return ges_energy / iterations
