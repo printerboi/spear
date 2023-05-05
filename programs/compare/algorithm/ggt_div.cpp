@@ -2,8 +2,8 @@
 #include "../../helper/randomFiller.cpp"
 
 int main(){
-    int a_init = getRandomInt(3333);
-    int b_init = getRandomInt(9000);
+    int a_init = 3333;
+    int b_init = 9000;
 
     int a = a_init;
     int b = b_init;

@@ -27,7 +27,9 @@ def runprogram(file, iterations):
         aftereng = readRapl()
 
         ges_energy += aftereng - beforeeng
-        time.sleep(1)
+        #os.system("/bin/insmod /home/maximiliank/Dokumente/workbench/cache_invalidator/clearer/cacheclearer.ko")
+        #os.system("/bin/rmmod /home/maximiliank/Dokumente/workbench/cache_invalidator/clearer/cacheclearer.ko")
+        os.system("../cacheclearer/cacheclearer")
 
     return ges_energy / iterations
 
