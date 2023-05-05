@@ -32,5 +32,7 @@ int main(){
         sortarr[iter + 1] = toSort;
     }
 
+    std::cout << "sorted " << sortarr[0] << "\n";
+
     return 0;
 }

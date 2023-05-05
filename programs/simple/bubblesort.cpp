@@ -28,5 +28,7 @@ int main(){
         }
     }
 
+    std::cout << "sorted " << sortarr[0] << "\n";
+
     return 0;
 }

@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <chrono>
 #include <getopt.h>
+#include <csignal>
 
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Analysis/RegionPass.h"
@@ -190,6 +191,15 @@ int main(int argc, char *argv[]){
                 std::cerr << helpString;
                 return 1;
             }
+        }else if(std::strcmp( argv[1], "-a" ) == 0 && argc == 4){
+            double eng = 0.00;
+            std::string cmd = argv[3];
+            if(access( cmd.c_str(), F_OK ) != -1){
+                auto *profile = new Profiler(std::stoi(argv[2]), cmd, &eng);
+            }
+
+            std::cout << eng << "\n";
+
         }else if(std::strcmp( argv[1], "-h" ) == 0){
             std::cerr << helpString;
             return 1;

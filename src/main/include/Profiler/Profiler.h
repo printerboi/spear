@@ -25,7 +25,10 @@ class Profiler {
          * @param it Iterations for the average
          * @param rep Times a program will be executed repeatedly
          */
-        explicit Profiler(int rep, std::map<std::string, std::string> *profileCode);
+        Profiler(int rep, std::map<std::string, std::string> *profileCode);
+
+        Profiler(int rep, std::string path, double *val);
+
         /**
          * Runs the profile and returns the values for the benchmarked files
          */
@@ -45,6 +48,8 @@ class Profiler {
          * @return The used energy
          */
         double measureFile(const std::string& file) const;
+
+        double measureProgram(const std::string& file) const;
 };
 
 

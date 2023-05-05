@@ -16,23 +16,13 @@ core = 1
 # iterations = 100
 
 
-def runprogram(file, iterations):
+def runprogram(spear, file, iterations):
     ges_energy = 0
 
-    for iteration in range(0, iterations):
-        beforeeng = readRapl()
-        process = subprocess.Popen([file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
+    process = subprocess.Popen([spear, "-a", str(iterations), file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
 
-        aftereng = readRapl()
-
-        ges_energy += aftereng - beforeeng
-        #os.system("/bin/insmod /home/maximiliank/Dokumente/workbench/cache_invalidator/clearer/cacheclearer.ko")
-        #os.system("/bin/rmmod /home/maximiliank/Dokumente/workbench/cache_invalidator/clearer/cacheclearer.ko")
-        time.sleep(2)
-        os.system("../cacheclearer/cacheclearer")
-
-    return ges_energy / iterations
+    return float(stdout)
 
 
 def readRapl():
@@ -88,7 +78,7 @@ def write_analysis_result_to_csv(result):
             w.writerow([entry["name"], round(entry["worst"], toround), round(entry["average"], toround), round(entry["best"], toround), round(mean, toround), round(variant, toround), round(deviation, toround), round(entry["measurement"], toround)])
 
 
-def main(libpath, modelpath, bound, iterations, analysispath):
+def main(builddir, bound, iterations, analysispath):
     simpledirpath = analysispath
     simpledir = os.listdir(simpledirpath)
     stategies = ["worst", "best", "average"]
@@ -104,12 +94,12 @@ def main(libpath, modelpath, bound, iterations, analysispath):
             analysis_dict[file] = {}
             for strategy in stategies:
                 # print("\t{}...".format(strategy))
-                json_result = execute_analysis(relpath, strategy, int(bound), libpath, modelpath)
+                json_result = execute_analysis(relpath, strategy, int(bound), "{}/src/main/passes/energy/Energy.so".format(builddir), "{}/profile.json".format(builddir))
                 analysis_dict[file][strategy] = json_result["main"]["energy"]
 
             analysis_dict[file]["name"] = file
 
-            measurement = runprogram("{}/{}".format(simpledirpath, filename), int(iterations))
+            measurement = runprogram("{}/spear".format(builddir), "{}/{}".format(simpledirpath, filename), int(iterations))
             analysis_dict[file]["measurement"] = measurement
 
     write_analysis_result_to_csv(analysis_dict)
@@ -123,7 +113,7 @@ def main(libpath, modelpath, bound, iterations, analysispath):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 6:
-        main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+    if len(sys.argv) == 5:
+        main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     else:
         print("Please provide a path to a folder containing .ll files")
