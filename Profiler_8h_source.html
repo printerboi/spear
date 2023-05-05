@@ -84,26 +84,31 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classProfiler.html#a2daf73634ad81f8b48294d4839a5182b">   19</a></span>&#160;        <span class="keywordtype">long</span> <a class="code" href="classProfiler.html#a2daf73634ad81f8b48294d4839a5182b">repetitions</a>;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        std::map&lt;std::string, std::string&gt; *profileCode;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985">Profiler</a>(<span class="keywordtype">int</span> rep, std::map&lt;std::string, std::string&gt; *profileCode);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        std::map&lt;std::string, double&gt; <a class="code" href="classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e">profile</a>();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">static</span> std::string getCPUName();</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">static</span> std::string getArchitecture();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">static</span> std::string getNumberOfCores();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">static</span> std::string getUnit();</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">double</span> measureFile(<span class="keyword">const</span> std::string&amp; file) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;};</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_PROFILER_H</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985">Profiler</a>(<span class="keywordtype">int</span> rep, std::map&lt;std::string, std::string&gt; *profileCode);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985">Profiler</a>(<span class="keywordtype">int</span> rep, std::string path, <span class="keywordtype">double</span> *val);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        std::map&lt;std::string, double&gt; <a class="code" href="classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e">profile</a>();</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">static</span> std::string getCPUName();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">static</span> std::string getArchitecture();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keyword">static</span> std::string getNumberOfCores();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">static</span> std::string getUnit();</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordtype">double</span> measureFile(<span class="keyword">const</span> std::string&amp; file) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">double</span> measureProgram(<span class="keyword">const</span> std::string&amp; file) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;};</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_PROFILER_H</span></div>
 <div class="ttc" id="aclassProfiler_html"><div class="ttname"><a href="classProfiler.html">Profiler</a></div><div class="ttdef"><b>Definition:</b> Profiler.h:14</div></div>
 <div class="ttc" id="aclassProfiler_html_a2daf73634ad81f8b48294d4839a5182b"><div class="ttname"><a href="classProfiler.html#a2daf73634ad81f8b48294d4839a5182b">Profiler::repetitions</a></div><div class="ttdeci">long repetitions</div><div class="ttdef"><b>Definition:</b> Profiler.h:19</div></div>
-<div class="ttc" id="aclassProfiler_html_a9b9cb84a298e9eb9c8f5d9a824264985"><div class="ttname"><a href="classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985">Profiler::Profiler</a></div><div class="ttdeci">Profiler(int rep, std::map&lt; std::string, std::string &gt; *profileCode)</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:12</div></div>
-<div class="ttc" id="aclassProfiler_html_af59ebc3f4d8f4663dd07a3ff0364ff1e"><div class="ttname"><a href="classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e">Profiler::profile</a></div><div class="ttdeci">std::map&lt; std::string, double &gt; profile()</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:17</div></div>
+<div class="ttc" id="aclassProfiler_html_a9b9cb84a298e9eb9c8f5d9a824264985"><div class="ttname"><a href="classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985">Profiler::Profiler</a></div><div class="ttdeci">Profiler(int rep, std::map&lt; std::string, std::string &gt; *profileCode)</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:14</div></div>
+<div class="ttc" id="aclassProfiler_html_af59ebc3f4d8f4663dd07a3ff0364ff1e"><div class="ttname"><a href="classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e">Profiler::profile</a></div><div class="ttdeci">std::map&lt; std::string, double &gt; profile()</div><div class="ttdef"><b>Definition:</b> Profiler.cpp:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
