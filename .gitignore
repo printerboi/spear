@@ -39,4 +39,5 @@ venv/
 
 compiled/
 util/analysisrunner/analysis_result.csv
+util/analysisrunner/durationanalysis.csv
 util/analysisrunner/stability
