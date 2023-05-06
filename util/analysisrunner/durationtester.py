@@ -18,18 +18,10 @@ core = 1
 
 
 def runprogram(spear, file, iterations):
-    total_diff = 0
+    process = subprocess.Popen([spear, "-t", str(iterations), file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout, stderr = process.communicate()
 
-    for i in range(iterations):
-        before = timer()
-        process = subprocess.Popen([file], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        after = timer()
-        stdout, stderr = process.communicate()
-
-        difference = after - before
-        total_diff = total_diff + difference
-
-    return total_diff / iterations
+    return float(stdout)
 
 
 def execute_analysis(file, strategy, loopbound, libpath, modelpath, iterations):

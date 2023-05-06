@@ -195,10 +195,20 @@ int main(int argc, char *argv[]){
             double eng = 0.00;
             std::string cmd = argv[3];
             if(access( cmd.c_str(), F_OK ) != -1){
-                auto *profile = new Profiler(std::stoi(argv[2]), cmd, &eng);
+                eng = Profiler::measureProgram(cmd, std::stoi(argv[2]));
             }
 
             std::cout << eng << "\n";
+
+        }else if(std::strcmp( argv[1], "-t" ) == 0 && argc == 4){
+            double time = 0.00;
+            std::string cmd = argv[3];
+            if(access( cmd.c_str(), F_OK ) != -1){
+                time = Profiler::timeProgram(cmd, std::stoi(argv[2]));
+            }
+
+            std::cout << time << "\n";
+
 
         }else if(std::strcmp( argv[1], "-h" ) == 0){
             std::cerr << helpString;

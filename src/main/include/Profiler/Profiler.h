@@ -27,8 +27,6 @@ class Profiler {
          */
         Profiler(int rep, std::map<std::string, std::string> *profileCode);
 
-        Profiler(int rep, std::string path, double *val);
-
         /**
          * Runs the profile and returns the values for the benchmarked files
          */
@@ -41,6 +39,10 @@ class Profiler {
         static std::string getNumberOfCores();
 
         static std::string getUnit();
+
+        static double measureProgram(const std::string& file, long repetitions);
+
+        static double timeProgram(const std::string& file, long repetitions);
     private:
         /**
          * Benchmarks a single file, calculates the used energy and returns the calculated value
@@ -48,8 +50,6 @@ class Profiler {
          * @return The used energy
          */
         double measureFile(const std::string& file) const;
-
-        double measureProgram(const std::string& file) const;
 };
 
 
