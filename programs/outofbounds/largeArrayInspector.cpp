@@ -1,13 +1,14 @@
 #include <iostream>
+#include "vector"
 
 int main()
 {
-    int length = 1000000;
-    int *elements = (int *) malloc(length * sizeof (int));
+    //allocate 2G of char data...
+    int length = 2000 * 1024 * 1024;
+    std::vector<char> elements(length);
 
-    elements[0] = 42;
-    elements[length-1] = 42;
+    std::fill(elements.begin(), elements.end(), 'c');
 
-    std::cout << "First Element at address " << elements << "\n";
-    std::cout << "Last Element at address " << (elements + length-1) << "\n";
+    std::cout << "First Element at address " << elements[0] << "\n";
+    std::cout << "Last Element at address " << elements[length-1] << "\n";
 }

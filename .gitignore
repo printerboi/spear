@@ -37,13 +37,6 @@ docs
 .idea
 venv/
 
-profile/src/compiled/
-programs/debug/compiled/
-programs/simple/compiled/
-programs/advanced/compiled/
-programs/examples/compiled/
-programs/outofbounds/compiled/
-programs/compare/algorithm/compiled/
-programs/advanced/programs/compiled/
+compiled/
 util/analysisrunner/analysis_result.csv
 util/analysisrunner/stability

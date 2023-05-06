@@ -13,7 +13,7 @@ int fib(int n){
 
 int main(){
     //int randomNumber = getRandomInt(40);
-    int randomNumber = 35;
+    int randomNumber = 37;
     std::cout << "The " << randomNumber << "-th number is: " << fib(randomNumber) << "\n";
 
 }

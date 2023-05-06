@@ -2,11 +2,11 @@
 #include "../../helper/randomFiller.cpp"
 
 int main(){
-    int a_init = 3333;
-    int b_init = 9000;
+    uint64_t a_init = 2147483647;
+    uint64_t b_init = 2;
 
-    int a = a_init;
-    int b = b_init;
+    uint64_t a = a_init;
+    uint64_t b = b_init;
 
     while(a != b){
         if(a > b){

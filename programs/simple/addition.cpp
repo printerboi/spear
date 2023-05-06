@@ -1,8 +1,10 @@
 #include <iostream>
-#include "../helper/randomFiller.cpp"
 
 int main(){
-    char msg[] = "Hello World";
+    int a = 100;
+    int b = 42;
 
-    std::cout << msg << "\n";
+    int result = a + b;
+
+    std::cout << result << "\n";
 }
