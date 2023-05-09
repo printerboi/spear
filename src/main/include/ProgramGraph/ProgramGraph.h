@@ -55,6 +55,8 @@ class Node {
          */
         virtual double getNodeEnergy(LLVMHandler *handler);
 
+        virtual bool isExceptionFollowUp();
+
 protected:
     /**
      * Calculates the adjacent Nodes extending through vertices in the parent ProgramGraph from this Node outwards
@@ -160,6 +162,8 @@ public:
      * LoopNodes Destructor
      */
     ~LoopNode();
+
+    bool isExceptionFollowUp() override;
 };
 
 
