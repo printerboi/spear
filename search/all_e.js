@@ -8,5 +8,5 @@ var searchData=
   ['removeorphanededges_56',['removeOrphanedEdges',['../classProgramGraph.html#afc10742190eb8fa0610e975032d71491',1,'ProgramGraph']]],
   ['repetitions_57',['repetitions',['../classProfiler.html#a2daf73634ad81f8b48294d4839a5182b',1,'Profiler']]],
   ['replacenodeswithloopnode_58',['replaceNodesWithLoopNode',['../classProgramGraph.html#a2463f6a911a85ed865ad09c26dc5c3a6',1,'ProgramGraph']]],
-  ['run_59',['run',['../structEnergy.html#a1e013d10f54e4a491f6f77c5bcd8b456',1,'Energy']]]
+  ['run_59',['run',['../structEnergy.html#a3497eaef311ec2ecb0b55552f6e0aa9b',1,'Energy']]]
 ];
