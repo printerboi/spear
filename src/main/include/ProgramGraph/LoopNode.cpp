@@ -97,10 +97,10 @@ double LoopNode::getNodeEnergy(LLVMHandler *handler) {
                 sum = (double) this->loopTree->iterations * sum;
             break;
         case AnalysisStrategy::BESTCASE :
-                sum = 1 * sum;
+                sum = 0 * sum;
             break;
         case AnalysisStrategy::AVERAGECASE :
-                sum = round((double)  this->loopTree->iterations/2) * sum;
+                sum = (double) this->loopTree->iterations * sum;
             break;
     }
 
