@@ -132,11 +132,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].asInt()  << "\n";
                 llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].asDouble()  << " J\n";
                 llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].asDouble() << " J\n";
-                llvm::outs() << "The Analysis took: " << timeused << " s\n";
                 llvm::outs() << "======================================================================" << "\n";
                 llvm::outs() << "\n";
             }
         }
+        llvm::outs() << "The Analysis took: " << timeused << " s\n";
     }
 
     /**
