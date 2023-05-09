@@ -91,7 +91,18 @@ double LoopNode::getNodeEnergy(LLVMHandler *handler) {
     }
 
     //Multiply the calculated energy from the subgraphs by the iterations of this LoopNode's loop
-    sum = (double) this->loopTree->iterations * sum;
+
+    switch (this->strategy) {
+        case AnalysisStrategy::WORSTCASE :
+                sum = (double) this->loopTree->iterations * sum;
+            break;
+        case AnalysisStrategy::BESTCASE :
+                sum = 1 * sum;
+            break;
+        case AnalysisStrategy::AVERAGECASE :
+                sum = round((double)  this->loopTree->iterations/2) * sum;
+            break;
+    }
 
     //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
     if(!adjacentNodes.empty()){
