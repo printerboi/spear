@@ -37,11 +37,13 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
                 //Iterate over the adjacent nodes
                 for(auto node : adjacentNodes){
                     //Calculate the sum of the node
-                    double locsum = node->getNodeEnergy(handler);
+                    if(!node->isExceptionFollowUp()){
+                        double locsum = node->getNodeEnergy(handler);
 
-                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (locsum > compare){
-                        compare = locsum;
+                        //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                        if (locsum > compare){
+                            compare = locsum;
+                        }
                     }
                 }
 
@@ -56,8 +58,10 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
                     double locsum = node->getNodeEnergy(handler);
 
                     //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (locsum < compare){
-                        compare = locsum;
+                    if(!node->isExceptionFollowUp()){
+                        if (locsum < compare){
+                            compare = locsum;
+                        }
                     }
                 }
 
@@ -71,11 +75,28 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
                     double rightSum = adjacentNodes[1]->getNodeEnergy(handler);
 
                     if(handler->inefficient <= handler->efficient){
-                        locsum += std::max(leftSum, rightSum);
-                        handler->inefficient++;
+                        if(adjacentNodes[0]->isExceptionFollowUp()){
+                            locsum += rightSum;
+                            handler->inefficient++;
+                        }else if(adjacentNodes[1]->isExceptionFollowUp()){
+                            locsum += leftSum;
+                            handler->inefficient++;
+                        }else{
+                            locsum += std::max(leftSum, rightSum);
+                            handler->inefficient++;
+                        }
+
                     }else{
-                        locsum += std::min(leftSum, rightSum);
-                        handler->efficient++;
+                        if(adjacentNodes[0]->isExceptionFollowUp()){
+                            locsum += rightSum;
+                            handler->inefficient++;
+                        }else if(adjacentNodes[1]->isExceptionFollowUp()){
+                            locsum += leftSum;
+                            handler->inefficient++;
+                        }else{
+                            locsum += std::min(leftSum, rightSum);
+                            handler->inefficient++;
+                        }
                     }
                 }else{
                     locsum = adjacentNodes[0]->getNodeEnergy(handler);
@@ -113,4 +134,8 @@ std::vector<Node *> Node::getAdjacentNodes() {
 
     //Return the adjacent nodes vector
     return adjacent;
+}
+
+bool Node::isExceptionFollowUp(){
+    return this->block->isLandingPad();
 }

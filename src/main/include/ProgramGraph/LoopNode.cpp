@@ -97,7 +97,7 @@ double LoopNode::getNodeEnergy(LLVMHandler *handler) {
                 sum = (double) this->loopTree->iterations * sum;
             break;
         case AnalysisStrategy::BESTCASE :
-                sum = 0 * sum;
+                sum = (double) this->loopTree->iterations * sum;
             break;
         case AnalysisStrategy::AVERAGECASE :
                 sum = (double) this->loopTree->iterations * sum;
@@ -219,4 +219,8 @@ LoopNode::~LoopNode() {
     for (auto subtree : this->subgraphs) {
         delete subtree;
     }
+}
+
+bool LoopNode::isExceptionFollowUp(){
+    return false;
 }
