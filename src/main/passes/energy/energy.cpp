@@ -31,6 +31,8 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     std::string format;
     std::string strategy;
     std::string loopbound;
+    std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000000000>>> stopwatch_start;
+    std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000000000>>> stopwatch_end;
 
     /**
      * Constructor to run, when called from a method
@@ -48,6 +50,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             this->format = std::move(format);
             this->strategy = std::move(strategy);
             this->loopbound = std::move(loopbound);
+            this->stopwatch_start = std::chrono::high_resolution_clock::now();
         }
     }
 
@@ -62,6 +65,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             this->format = formatParameter.c_str();
             this->strategy = analysisStrategyParameter.c_str();
             this->loopbound = loopboundParameter.c_str();
+            this->stopwatch_start = std::chrono::high_resolution_clock::now();
         }
     }
 
@@ -81,7 +85,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             functionObject["numberOfBasicBlocks"] = energyFunction->func->getBasicBlockList().size();
             functionObject["numberOfInstructions"] = energyFunction->func->getInstructionCount();
 
-            if(energyFunction->func->getBasicBlockList().size() > 0){
+            if(!energyFunction->func->getBasicBlockList().empty()){
                 functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->getBasicBlockList().size();
             } else {
                 functionObject["averageEnergyPerBlock"] = 0;
@@ -112,19 +116,26 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * Print the provided JSON-Object as string
      * @param outputObject JSON-Object containing information about the analysis
      */
-    static void outputMetricsPlain(const Json::Value& outputObject){
+    static void outputMetricsPlain(Json::Value& outputObject){
+
+        auto timeused = outputObject["duration"].asDouble();
+        outputObject.removeMember("duration");
 
         for(auto functionObject : outputObject){
-            llvm::outs() << "\n";
-            llvm::outs() << "Function " << functionObject["name"].asString() << "\n";
-            llvm::outs() << "======================================================================" << "\n";
-            llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].asDouble()  << " J\n";
-            llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].asInt()  << "\n";
-            llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].asInt()  << "\n";
-            llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].asDouble()  << " J\n";
-            llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].asDouble() << " J\n";
-            llvm::outs() << "======================================================================" << "\n";
-            llvm::outs() << "\n";
+            if(functionObject.isMember("name")){
+                llvm::errs() << functionObject.toStyledString() << "\n\n\n";
+                llvm::outs() << "\n";
+                llvm::outs() << "Function " << functionObject["name"].asString() << "\n";
+                llvm::outs() << "======================================================================" << "\n";
+                llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].asDouble()  << " J\n";
+                llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].asInt()  << "\n";
+                llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].asInt()  << "\n";
+                llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].asDouble()  << " J\n";
+                llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].asDouble() << " J\n";
+                llvm::outs() << "The Analysis took: " << timeused << " s\n";
+                llvm::outs() << "======================================================================" << "\n";
+                llvm::outs() << "\n";
+            }
         }
     }
 
@@ -195,7 +206,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param analysisStrategy Strategy to analyze the module with
      * @param maxiterations Upper bound of loops
      */
-    void analysisRunner(llvm::Module &module, llvm::ModuleAnalysisManager &MAM, AnalysisStrategy::Strategy analysisStrategy, int maxiterations) const{
+    void analysisRunner(llvm::Module &module, llvm::ModuleAnalysisManager &MAM, AnalysisStrategy::Strategy analysisStrategy, int maxiterations) {
         //Get the FunctionAnalysisManager from the ModuleAnalysisManager
         auto &functionAnalysisManager = MAM.getResult<llvm::FunctionAnalysisManagerModuleProxy>(module).getManager();
 
@@ -263,6 +274,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             //Construct the output
             Json::Value output = constructOutputObject(handler);
 
+            this->stopwatch_end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> ms_double = this->stopwatch_end - this->stopwatch_start;
+
+            output["duration"] = ms_double.count()/1000;
+
             //Check which output-format the user requested
             if(format == "json"){
                 outputMetricsJSON(output);
@@ -282,7 +298,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param module Reference to a Module
      * @param moduleAnalysisManager Reference to a ModuleAnalysisManager
      */
-    llvm::PreservedAnalyses run(llvm::Module &module, llvm::ModuleAnalysisManager &moduleAnalysisManager) const {
+    llvm::PreservedAnalyses run(llvm::Module &module, llvm::ModuleAnalysisManager &moduleAnalysisManager) {
 
         //Try to get the requested loopbound value
         try {

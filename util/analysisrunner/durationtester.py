@@ -28,7 +28,6 @@ def execute_analysis(file, strategy, loopbound, libpath, modelpath, iterations):
     total_diff = 0
 
     for i in range(iterations):
-        before = timer()
         command = 'opt -disable-output ' \
               '-load-pass-plugin {0} ' \
               '--passes="function(mem2reg,loop-rotate),energy" ' \
@@ -37,14 +36,12 @@ def execute_analysis(file, strategy, loopbound, libpath, modelpath, iterations):
               '--format json ' \
               '--strategy {2} ' \
               '--loopbound {3} {4}'.format(libpath, modelpath, strategy, loopbound, file)
-        after = timer()
 
         outputstream = os.popen(command)
         output = outputstream.read()
         energy = json.loads(output)
 
-        difference = after - before
-        total_diff =  total_diff + difference
+        total_diff = energy["duration"]
 
     return total_diff/iterations
 
