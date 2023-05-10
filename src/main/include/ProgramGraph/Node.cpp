@@ -77,10 +77,8 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
                     if(handler->inefficient <= handler->efficient){
                         if(adjacentNodes[0]->isExceptionFollowUp()){
                             locsum += rightSum;
-                            handler->inefficient++;
                         }else if(adjacentNodes[1]->isExceptionFollowUp()){
                             locsum += leftSum;
-                            handler->inefficient++;
                         }else{
                             locsum += std::max(leftSum, rightSum);
                             handler->inefficient++;
@@ -89,13 +87,11 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
                     }else{
                         if(adjacentNodes[0]->isExceptionFollowUp()){
                             locsum += rightSum;
-                            handler->inefficient++;
                         }else if(adjacentNodes[1]->isExceptionFollowUp()){
                             locsum += leftSum;
-                            handler->inefficient++;
                         }else{
                             locsum += std::min(leftSum, rightSum);
-                            handler->inefficient++;
+                            handler->efficient++;
                         }
                     }
                 }else{
