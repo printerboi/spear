@@ -1,11 +1,10 @@
 var searchData=
 [
-  ['read_119',['read',['../classJSONHandler.html#a497824aafc1a48b6a4364ae96af40150',1,'JSONHandler']]],
-  ['readmultiplier_120',['readMultiplier',['../classRegisterReader.html#a119b1f2fa4619881dd10e704650c1ca3',1,'RegisterReader']]],
-  ['registerreader_121',['RegisterReader',['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader']]],
-  ['removeloopedgesfromsubgraphs_122',['removeLoopEdgesFromSubGraphs',['../classLoopNode.html#ae2c48a161e3fca624295b9c608c6e560',1,'LoopNode']]],
-  ['removenode_123',['removeNode',['../classProgramGraph.html#a3d7172355f93bc903a9a3f6bdf215451',1,'ProgramGraph']]],
-  ['removeorphanededges_124',['removeOrphanedEdges',['../classProgramGraph.html#afc10742190eb8fa0610e975032d71491',1,'ProgramGraph']]],
-  ['replacenodeswithloopnode_125',['replaceNodesWithLoopNode',['../classProgramGraph.html#a2463f6a911a85ed865ad09c26dc5c3a6',1,'ProgramGraph']]],
-  ['run_126',['run',['../structEnergy.html#a3497eaef311ec2ecb0b55552f6e0aa9b',1,'Energy']]]
+  ['powercapreader_123',['PowercapReader',['../classPowercapReader.html#a415424eaa546b2b86202ba6b06fe2a3c',1,'PowercapReader']]],
+  ['printedges_124',['printEdges',['../classProgramGraph.html#a9e653f7294600e06d970989638aa3d59',1,'ProgramGraph']]],
+  ['printnodes_125',['printNodes',['../classProgramGraph.html#a31499bd68418b43bda45e0d76799744b',1,'ProgramGraph']]],
+  ['printpreorder_126',['printPreOrder',['../classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34',1,'LoopTree']]],
+  ['printpreorder_127',['printPreorder',['../classFunctionTree.html#ad338d9921dc8a5f50788079eb8c4b508',1,'FunctionTree']]],
+  ['profile_128',['profile',['../classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e',1,'Profiler']]],
+  ['profiler_129',['Profiler',['../classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985',1,'Profiler']]]
 ];

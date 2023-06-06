@@ -1,10 +1,5 @@
 var searchData=
 [
-  ['powercapreader_112',['PowercapReader',['../classPowercapReader.html#a415424eaa546b2b86202ba6b06fe2a3c',1,'PowercapReader']]],
-  ['printedges_113',['printEdges',['../classProgramGraph.html#a9e653f7294600e06d970989638aa3d59',1,'ProgramGraph']]],
-  ['printnodes_114',['printNodes',['../classProgramGraph.html#a31499bd68418b43bda45e0d76799744b',1,'ProgramGraph']]],
-  ['printpreorder_115',['printPreorder',['../classFunctionTree.html#ad338d9921dc8a5f50788079eb8c4b508',1,'FunctionTree']]],
-  ['printpreorder_116',['printPreOrder',['../classLoopTree.html#ad97586e2ef41e7fa8f720ee920b3db34',1,'LoopTree']]],
-  ['profile_117',['profile',['../classProfiler.html#af59ebc3f4d8f4663dd07a3ff0364ff1e',1,'Profiler']]],
-  ['profiler_118',['Profiler',['../classProfiler.html#a9b9cb84a298e9eb9c8f5d9a824264985',1,'Profiler']]]
+  ['outputmetricsjson_121',['outputMetricsJSON',['../structEnergy.html#a00eb76c7c891d94f0170c83539eb9a32',1,'Energy']]],
+  ['outputmetricsplain_122',['outputMetricsPlain',['../structEnergy.html#a0ac5ca363596e1b8370f0d481c527adf',1,'Energy']]]
 ];

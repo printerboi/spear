@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['powercapreader_82',['PowercapReader',['../classPowercapReader.html',1,'']]],
-  ['profiler_83',['Profiler',['../classProfiler.html',1,'']]],
-  ['programgraph_84',['ProgramGraph',['../classProgramGraph.html',1,'']]]
+  ['powercapreader_88',['PowercapReader',['../classPowercapReader.html',1,'']]],
+  ['profiler_89',['Profiler',['../classProfiler.html',1,'']]],
+  ['programgraph_90',['ProgramGraph',['../classProgramGraph.html',1,'']]]
 ];
