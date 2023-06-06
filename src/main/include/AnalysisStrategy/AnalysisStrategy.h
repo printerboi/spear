@@ -10,7 +10,7 @@
 class AnalysisStrategy {
 public:
     /**
-     * Basic Enum to distinguish different types of analysis
+     * Basic Enum to distinguish the different types of analysis
      */
     enum Strategy { WORSTCASE, AVERAGECASE, BESTCASE };
 };

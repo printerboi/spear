@@ -10,8 +10,11 @@
 
 class EnergyFunction {
 public:
+    //Reference to the corresponding function
     llvm::Function * func;
+    //The energy used by the function
     double energy;
+    //Simple constructor
     explicit EnergyFunction(llvm::Function *function);
 };
 

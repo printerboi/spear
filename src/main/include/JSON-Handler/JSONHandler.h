@@ -30,8 +30,6 @@ class JSONHandler {
          * @return Return the JSON::Value which was read from the provided file
          */
         static Json::Value read(const std::string& filename);
-
-        static Json::Value parse(const std::string& json);
 };
 
 

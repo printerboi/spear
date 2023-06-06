@@ -2,6 +2,7 @@
 #include "RegisterReader.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <cstdint>
 #include "iostream"
 #include "cstdio"
 #include "cmath"

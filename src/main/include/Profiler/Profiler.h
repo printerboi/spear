@@ -32,16 +32,44 @@ class Profiler {
          */
         std::map<std::string, double> profile();
 
+        /**
+         * Get the name of the cpu used by the system
+         * @return string representation of the cpu name
+         */
         static std::string getCPUName();
 
+        /**
+         * Get the name of the architecture used by the cpu
+         * @return string representation of the cpu architecture
+         */
         static std::string getArchitecture();
 
+        /**
+         * Get the number of cpu cores
+         * @return string representation of the number of cpu cores
+         */
         static std::string getNumberOfCores();
 
+        /**
+         * Get the energy unit of the system
+         * @return string representation of energy unit of the system
+         */
         static std::string getUnit();
 
+        /**
+         * Calculate the energy used by the given program and average it
+         * @param file path to the program to profile
+         * @param repetitions repetitions used to average the energy used by the program
+         * @return energy value of the given program
+         */
         static double measureProgram(const std::string& file, long repetitions);
 
+        /**
+         * Calculate the time used by the given program
+         * @param file path to the program
+         * @param repetitions repetitions used to average the energy used by the program
+         * @return time used by the given function as double
+         */
         static double timeProgram(const std::string& file, long repetitions);
     private:
         /**

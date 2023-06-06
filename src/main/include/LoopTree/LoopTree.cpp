@@ -125,34 +125,6 @@ void LoopTree::printPreOrder() {
     }
 }
 
-/*
-double LoopTree::calcEnergy() {
-    double sum = 0;
-    double result = 0;
-
-    if(this->isLeaf()){
-        for (auto &BB : this->blocks) {
-            sum = sum + this->handler->getBasicBlockSum(*BB);
-        }
-
-        result = sum * (double) this->iterations;
-
-        return result;
-    }else{
-        for (auto &BB : this->blocks) {
-            sum = sum + this->handler->getBasicBlockSum(*BB);
-        }
-
-        for (auto subTree : this->subTrees) {
-            sum = sum + subTree->calcEnergy();
-        }
-
-        result = sum * (double) this->iterations;
-
-        return result;
-    }
-}*/
-
 std::vector<llvm::BasicBlock *> LoopTree::getLatches() {
     if(this->isLeaf()){
         std::vector<llvm::BasicBlock *> latches;

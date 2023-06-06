@@ -137,6 +137,8 @@ int main(int argc, char *argv[]){
             llvm::CGSCCPassManager callgraphPassManager;
 
 
+            std::cout << std::filesystem::exists(argv[3]) << "\n";
+            std::cout << std::filesystem::exists(argv[12]) << "\n";
             if (std::filesystem::exists(argv[3]) && std::filesystem::exists(argv[12])) {
                 auto module_up = llvm::parseIRFile(argv[12], error, context).release();
 
@@ -209,6 +211,14 @@ int main(int argc, char *argv[]){
 
             std::cout << time << "\n";
 
+        }else if(std::strcmp( argv[1], "-s" ) == 0 && argc == 4){
+            double time = 0.00;
+            std::string cmd = argv[3];
+            if(access( cmd.c_str(), F_OK ) != -1){
+                time = Profiler::timeProgram(cmd, std::stoi(argv[2]));
+            }
+
+            std::cout << time << "\n";
 
         }else if(std::strcmp( argv[1], "-h" ) == 0){
             std::cerr << helpString;

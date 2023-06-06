@@ -113,68 +113,6 @@ double LoopNode::getNodeEnergy(LLVMHandler *handler) {
             sum += node->getNodeEnergy(handler);
 
         }
-
-        /*switch (this->strategy) {
-            case AnalysisStrategy::WORSTCASE :
-                compare = DBL_MIN;
-
-                //Iterate over the adjacent nodes
-                for(auto node : adjacentNodes){
-                    //Calculate the sum of the node
-                    double localSum = node->getEnergy(handler);
-
-                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (localSum > compare){
-                        compare = localSum;
-                    }
-                }
-
-                sum += compare;
-                break;
-            case AnalysisStrategy::BESTCASE :
-                compare = DBL_MAX;
-
-                //Iterate over the adjacent nodes
-                for(auto node : adjacentNodes){
-                    //Calculate the sum of the node
-                    double localSum = node->getEnergy(handler);
-
-                    //Set the minimal energy value if the calculated energy is smaller than the current minimum
-                    if (localSum < compare){
-                        compare = localSum;
-                    }
-                }
-
-                sum += compare;
-                break;
-            case AnalysisStrategy::AVERAGECASE :
-                compare = 0.00;
-                double localSum = 0.00;
-
-                if(adjacentNodes.size() > 1){
-                    double leftSum = adjacentNodes[0]->getEnergy(handler);
-                    double rightSum = adjacentNodes[1]->getEnergy(handler);
-
-                    if(handler->inefficient <= handler->efficient){
-                        localSum += std::max(leftSum, rightSum);
-                        handler->inefficient++;
-                    }else{
-                        localSum += std::min(leftSum, rightSum);
-                        handler->efficient++;
-                    }
-                }else{
-                    localSum = adjacentNodes[0]->getNodeEnergy(handler);
-                }
-
-*//*                srand(time(nullptr));
-                int randomIndex = rand() % adjacentNodes.size();
-                double localSum = adjacentNodes[randomIndex]->getNodeEnergy(handler);
-                compare = localSum;
-                sum += compare;*//*
-                sum += localSum;
-
-                break;
-        }*/
     }
 
 

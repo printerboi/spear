@@ -114,12 +114,12 @@ double Profiler::measureProgram(const std::string& file, long repetitions) {
 
         if(childProcessId == 0){
 
-            /* open /dev/null for writing */
+            // open /dev/null for writing
             int fd = open("/dev/null", O_WRONLY);
 
-            dup2(fd, 1);    /* make stdout a copy of fd (> /dev/null) */
-            dup2(fd, 2);    /* ...and same with stderr */
-            close(fd);      /* close fd */
+            dup2(fd, 1);
+            dup2(fd, 2);
+            close(fd);
 
             //Clear the cache....
             const size_t bigger_than_cachesize = 20 * 1024 * 1024;
@@ -207,12 +207,12 @@ double Profiler::timeProgram(const std::string& file, long repetitions) {
 
         if(childProcessId == 0){
 
-            /* open /dev/null for writing */
+            // open /dev/null for writing
             int fd = open("/dev/null", O_WRONLY);
 
-            dup2(fd, 1);    /* make stdout a copy of fd (> /dev/null) */
-            dup2(fd, 2);    /* ...and same with stderr */
-            close(fd);      /* close fd */
+            dup2(fd, 1);
+            dup2(fd, 2);
+            close(fd);
 
             //Clear the cache....
             const size_t bigger_than_cachesize = 20 * 1024 * 1024;

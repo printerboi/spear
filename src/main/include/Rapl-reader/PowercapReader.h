@@ -6,6 +6,7 @@
 #define BA_POWERCAPREADER_H
 
 
+#include <cstdint>
 #include "string"
 
 /**

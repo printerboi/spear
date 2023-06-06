@@ -1,5 +1,5 @@
-; ModuleID = '../../programs/compare/programs/squarer.cpp'
-source_filename = "../../programs/compare/programs/squarer.cpp"
+; ModuleID = '../../programs/compare/programs/squarer_shift.cpp'
+source_filename = "../../programs/compare/programs/squarer_shift.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-linux-gnu"
 
@@ -122,7 +122,7 @@ $_ZNK9__gnu_cxx17__normal_iteratorIPiSt6vectorIiSaIiEEE4baseEv = comdat any
 @__dso_handle = external hidden global i8
 @_ZSt4cout = external global %"class.std::basic_ostream", align 8
 @.str = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
-@llvm.global_ctors = appending global [1 x { i32, ptr, ptr }] [{ i32, ptr, ptr } { i32 65535, ptr @_GLOBAL__sub_I_squarer.cpp, ptr null }]
+@llvm.global_ctors = appending global [1 x { i32, ptr, ptr }] [{ i32, ptr, ptr } { i32 65535, ptr @_GLOBAL__sub_I_squarer_shift.cpp, ptr null }]
 
 ; Function Attrs: noinline sspstrong uwtable
 define internal void @__cxx_global_var_init() #0 section ".text.startup" {
@@ -154,6 +154,10 @@ entry:
   %agg.tmp = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %agg.tmp1 = alloca %"class.__gnu_cxx::__normal_iterator", align 8
   %agg.tmp4 = alloca %class.anon, align 8
+  %additionalwork = alloca i32, align 4
+  %half = alloca i32, align 4
+  %quart = alloca i32, align 4
+  %eight = alloca i32, align 4
   %i = alloca i32, align 4
   store i32 0, ptr %retval, align 4
   store i32 1000, ptr %datapoints, align 4
@@ -165,7 +169,7 @@ entry:
 
 invoke.cont:                                      ; preds = %entry
   call void @_ZNSaIiED2Ev(ptr noundef nonnull align 1 dereferenceable(1) %ref.tmp) #3
-  store i32 100, ptr %maxval, align 4
+  store i32 1000, ptr %maxval, align 4
   store i32 0, ptr %n, align 4
   %call = call ptr @_ZNSt6vectorIiSaIiEE5beginEv(ptr noundef nonnull align 8 dereferenceable(24) %elements) #3
   %coerce.dive = getelementptr inbounds %"class.__gnu_cxx::__normal_iterator", ptr %agg.tmp, i32 0, i32 0
@@ -189,82 +193,102 @@ invoke.cont:                                      ; preds = %entry
           to label %invoke.cont8 unwind label %lpad7
 
 invoke.cont8:                                     ; preds = %invoke.cont
+  store i32 3333, ptr %additionalwork, align 4
+  %9 = load i32, ptr %additionalwork, align 4
+  %rem = srem i32 %9, 2
+  store i32 %rem, ptr %half, align 4
+  %10 = load i32, ptr %additionalwork, align 4
+  %rem9 = srem i32 %10, 4
+  store i32 %rem9, ptr %quart, align 4
+  %11 = load i32, ptr %additionalwork, align 4
+  %rem10 = srem i32 %11, 8
+  store i32 %rem10, ptr %eight, align 4
   store i32 0, ptr %i, align 4
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %invoke.cont8
-  %9 = load i32, ptr %i, align 4
-  %10 = load i32, ptr %datapoints, align 4
-  %cmp = icmp slt i32 %9, %10
+  %12 = load i32, ptr %i, align 4
+  %13 = load i32, ptr %datapoints, align 4
+  %cmp = icmp slt i32 %12, %13
   br i1 %cmp, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %11 = load i32, ptr %i, align 4
-  %conv9 = sext i32 %11 to i64
-  %call10 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv9) #3
-  %12 = load i32, ptr %call10, align 4
-  %13 = load i32, ptr %i, align 4
-  %conv11 = sext i32 %13 to i64
+  %14 = load i32, ptr %i, align 4
+  %conv11 = sext i32 %14 to i64
   %call12 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv11) #3
-  %14 = load i32, ptr %call12, align 4
-  %mul = mul nsw i32 %12, %14
-  %15 = load i32, ptr %i, align 4
-  %conv13 = sext i32 %15 to i64
+  %15 = load i32, ptr %call12, align 4
+  %16 = load i32, ptr %i, align 4
+  %conv13 = sext i32 %16 to i64
   %call14 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv13) #3
-  store i32 %mul, ptr %call14, align 4
+  %17 = load i32, ptr %call14, align 4
+  %add = add nsw i32 %15, %17
+  %18 = load i32, ptr %i, align 4
+  %conv15 = sext i32 %18 to i64
+  %call16 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv15) #3
+  store i32 %add, ptr %call16, align 4
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
-  %16 = load i32, ptr %i, align 4
-  %inc = add nsw i32 %16, 1
+  %19 = load i32, ptr %i, align 4
+  %inc = add nsw i32 %19, 1
   store i32 %inc, ptr %i, align 4
   br label %for.cond, !llvm.loop !6
 
 lpad:                                             ; preds = %entry
-  %17 = landingpad { ptr, i32 }
-          cleanup
-  %18 = extractvalue { ptr, i32 } %17, 0
-  store ptr %18, ptr %exn.slot, align 8
-  %19 = extractvalue { ptr, i32 } %17, 1
-  store i32 %19, ptr %ehselector.slot, align 4
-  call void @_ZNSaIiED2Ev(ptr noundef nonnull align 1 dereferenceable(1) %ref.tmp) #3
-  br label %eh.resume
-
-lpad7:                                            ; preds = %invoke.cont17, %for.end, %invoke.cont
   %20 = landingpad { ptr, i32 }
           cleanup
   %21 = extractvalue { ptr, i32 } %20, 0
   store ptr %21, ptr %exn.slot, align 8
   %22 = extractvalue { ptr, i32 } %20, 1
   store i32 %22, ptr %ehselector.slot, align 4
+  call void @_ZNSaIiED2Ev(ptr noundef nonnull align 1 dereferenceable(1) %ref.tmp) #3
+  br label %eh.resume
+
+lpad7:                                            ; preds = %invoke.cont24, %for.end, %invoke.cont
+  %23 = landingpad { ptr, i32 }
+          cleanup
+  %24 = extractvalue { ptr, i32 } %23, 0
+  store ptr %24, ptr %exn.slot, align 8
+  %25 = extractvalue { ptr, i32 } %23, 1
+  store i32 %25, ptr %ehselector.slot, align 4
   call void @_ZNSt6vectorIiSaIiEED2Ev(ptr noundef nonnull align 8 dereferenceable(24) %elements) #3
   br label %eh.resume
 
 for.end:                                          ; preds = %for.cond
-  %23 = load i32, ptr %datapoints, align 4
-  %sub = sub nsw i32 %23, 1
-  %conv15 = sext i32 %sub to i64
-  %call16 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv15) #3
-  %24 = load i32, ptr %call16, align 4
-  %call18 = invoke noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEi(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i32 noundef %24)
-          to label %invoke.cont17 unwind label %lpad7
+  %26 = load i32, ptr %half, align 4
+  %27 = load i32, ptr %quart, align 4
+  %add17 = add nsw i32 %26, %27
+  %28 = load i32, ptr %eight, align 4
+  %add18 = add nsw i32 %add17, %28
+  %29 = load i32, ptr %datapoints, align 4
+  %sub = sub nsw i32 %29, 1
+  %conv19 = sext i32 %sub to i64
+  %call20 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv19) #3
+  store i32 %add18, ptr %call20, align 4
+  %30 = load i32, ptr %datapoints, align 4
+  %sub21 = sub nsw i32 %30, 1
+  %conv22 = sext i32 %sub21 to i64
+  %call23 = call noundef nonnull align 4 dereferenceable(4) ptr @_ZNSt6vectorIiSaIiEEixEm(ptr noundef nonnull align 8 dereferenceable(24) %elements, i64 noundef %conv22) #3
+  %31 = load i32, ptr %call23, align 4
+  %call25 = invoke noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEi(ptr noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i32 noundef %31)
+          to label %invoke.cont24 unwind label %lpad7
 
-invoke.cont17:                                    ; preds = %for.end
-  %call20 = invoke noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEPFRSoS_E(ptr noundef nonnull align 8 dereferenceable(8) %call18, ptr noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %invoke.cont19 unwind label %lpad7
+invoke.cont24:                                    ; preds = %for.end
+  %call27 = invoke noundef nonnull align 8 dereferenceable(8) ptr @_ZNSolsEPFRSoS_E(ptr noundef nonnull align 8 dereferenceable(8) %call25, ptr noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+          to label %invoke.cont26 unwind label %lpad7
 
-invoke.cont19:                                    ; preds = %invoke.cont17
+invoke.cont26:                                    ; preds = %invoke.cont24
   store i32 0, ptr %retval, align 4
   call void @_ZNSt6vectorIiSaIiEED2Ev(ptr noundef nonnull align 8 dereferenceable(24) %elements) #3
-  %25 = load i32, ptr %retval, align 4
-  ret i32 %25
+  %32 = load i32, ptr %retval, align 4
+  ret i32 %32
 
 eh.resume:                                        ; preds = %lpad7, %lpad
   %exn = load ptr, ptr %exn.slot, align 8
   %sel = load i32, ptr %ehselector.slot, align 4
   %lpad.val = insertvalue { ptr, i32 } undef, ptr %exn, 0
-  %lpad.val21 = insertvalue { ptr, i32 } %lpad.val, i32 %sel, 1
-  resume { ptr, i32 } %lpad.val21
+  %lpad.val28 = insertvalue { ptr, i32 } %lpad.val, i32 %sel, 1
+  resume { ptr, i32 } %lpad.val28
 }
 
 ; Function Attrs: noinline nounwind sspstrong uwtable
@@ -1251,7 +1275,7 @@ entry:
 }
 
 ; Function Attrs: noinline sspstrong uwtable
-define internal void @_GLOBAL__sub_I_squarer.cpp() #0 section ".text.startup" {
+define internal void @_GLOBAL__sub_I_squarer_shift.cpp() #0 section ".text.startup" {
 entry:
   call void @__cxx_global_var_init()
   ret void

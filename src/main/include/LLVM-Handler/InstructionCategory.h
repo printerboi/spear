@@ -32,13 +32,19 @@ class InstructionCategory {
          */
         static std::string toString( Category category );
 
+        //Checks if the given instruction is a call instruction
         static bool isCallInstruction( llvm::Instruction &Instruction );
-        static bool isMemloadInstruction( llvm::Instruction &Instruction );
-        static bool isMemstoreInstruction( llvm::Instruction &Instruction );
+
+        //Checks if the given instruction interacts with the memory
         static bool isMemoryInstruction( llvm::Instruction &Instruction );
+
+        //Checks if the given instruction is a programflow-instruction
         static bool isProgramFlowInstruction( llvm::Instruction &Instruction );
-        static bool isCastInstruction( llvm::Instruction &Instruction );
+
+        //Checks if the given instruction calculates a division
         static bool isDivisionInstruction( llvm::Instruction &Instruction );
+
+        //Calculated the energy of the function called by the given instruction
         static double getCalledFunctionEnergy( llvm::Instruction &Instruction, std::map<std::string, EnergyFunction*>& poolOfFunctions);
 };
 
