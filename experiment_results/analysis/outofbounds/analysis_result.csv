@@ -1,0 +1,4 @@
+File,Worstcase,Averagecase,Bestcase,Mean,Variance,Standard Deviation,Measurement
+libcaller.ll,1.59799,1.59799,1.59799,1.59799,0.0,0.0,4.84622
+smallArrayInspector.ll,0.38569,0.38569,0.38569,0.38569,0.0,0.0,0.10722
+largeArrayInspector.ll,0.38569,0.38569,0.38569,0.38569,0.0,0.0,10.8874

@@ -1,0 +1,18 @@
+{
+   "cpu" : {
+      "architecture" : "6",
+      "cores" : "4",
+      "name" : "Intel(R) Core(TM) i5-6500T CPU @ 2.50GHz"
+   },
+   "endOfExecution" : "1682779547493448956",
+   "iterationsString" : "10000",
+   "profile" : {
+      "Call" : 0.0065301635742187501,
+      "Division" : 0.0062995239257812499,
+      "Memory" : 0.0061413330078125003,
+      "Other" : 0.0066533996582031248,
+      "Programflow" : 0.0062373291015625004
+   },
+   "startOfExecution" : "1682779376426502068",
+   "unit" : "0.000061"
+}

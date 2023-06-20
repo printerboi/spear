@@ -1,0 +1,6 @@
+File,Analyse,Ausführung
+rsa_encrypt.ll,2.871e-05,0.0185401
+aeskeywrap.ll,2.325e-05,0.0145801
+hmac_sha512.ll,2.2403e-05,0.0136193
+x25519.ll,2.902e-05,0.0152212
+EVP_RSA_keygen.ll,3.5509e-05,1.77877

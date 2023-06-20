@@ -1,0 +1,18 @@
+{
+   "cpu" : {
+      "architecture" : "6",
+      "cores" : "12",
+      "name" : "11th Gen Intel(R) Core(TM) i5-11400F @ 2.60GHz"
+   },
+   "endOfExecution" : "1682778029829106255",
+   "iterationsString" : "10000",
+   "profile" : {
+      "Call" : 0.015221923828124999,
+      "Division" : 0.0087887573242187503,
+      "Memory" : 0.0063278442382812498,
+      "Other" : 0.01375208740234375,
+      "Programflow" : 0.016498193359375
+   },
+   "startOfExecution" : "1682777897096904302",
+   "unit" : "0.000061"
+}

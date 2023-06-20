@@ -1,0 +1,5 @@
+File,Worstcase,Averagecase,Bestcase,Mean,Variance,Standard Deviation,Measurement
+squarer_shift.ll,194.51628,194.51628,194.51628,194.51628,0.0,0.0,0.10958
+meaner_overhead.ll,110.4896,110.4896,110.4896,110.4896,0.0,0.0,0.11017
+meaner.ll,97.49556,97.49556,97.49556,97.49556,0.0,0.0,0.11054
+squarer.ll,194.4257,194.4257,194.4257,194.4257,0.0,0.0,0.10439
