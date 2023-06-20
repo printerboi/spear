@@ -6,7 +6,8 @@ Welcome to SPEAR, the
 The tool will be developed for my bachelor-thesis
 **"Predictive, static energy consumption analysis based on experimentally determined energy models"**
 
-[![DOI](https://zenodo.org/badge/569807503.svg)](https://zenodo.org/badge/latestdoi/569807503)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8061579.svg)](https://doi.org/10.5281/zenodo.8061579)
+
 
 ## Introduction
 
