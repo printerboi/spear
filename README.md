@@ -6,6 +6,8 @@ Welcome to SPEAR, the
 The tool will be developed for my bachelor-thesis
 **"Predictive, static energy consumption analysis based on experimentally determined energy models"**
 
+[![DOI](https://zenodo.org/badge/569807503.svg)](https://zenodo.org/badge/latestdoi/569807503)
+
 ## Introduction
 
 Modern computers, especially in high computing applications require a lot of energy.
