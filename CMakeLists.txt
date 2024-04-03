@@ -18,7 +18,7 @@ list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
 include(AddLLVM)
 
 
-add_executable(spear)
+add_executable(spear src/main/include/CLIHandler/CLIHandler.cpp src/main/include/CLIHandler/CLIHandler.h src/main/include/CLIHandler/CLIOptions.cpp src/main/include/CLIHandler/CLIOptions.h src/main/include/CLIHandler/CLIExceptions.h)
 add_subdirectory(src)
 target_sources(spear
         PUBLIC main.cpp

@@ -16,6 +16,7 @@
 #include "../../include/ProgramGraph/ProgramGraph.h"
 #include "../../include/FunctionTree/FunctionTree.h"
 #include "../../include/LLVM-Handler//EnergyFunction.h"
+#include "../../include/CLIHandler/CLIOptions.h"
 
 
 llvm::cl::opt<std::string> energyModelPath("profile", llvm::cl::desc("Energymodel as JSON"), llvm::cl::value_desc("filepath to .json file"));
@@ -27,10 +28,10 @@ llvm::cl::opt<std::string> loopboundParameter("loopbound", llvm::cl::desc("A val
 
 struct Energy : llvm::PassInfoMixin<Energy> {
     Json::Value energyJson;
-    std::string mode;
-    std::string format;
-    std::string strategy;
-    std::string loopbound;
+    Mode mode;
+    Format format;
+    Strategy strategy;
+    int loopbound;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000000000>>> stopwatch_start;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000000000>>> stopwatch_end;
 
@@ -42,14 +43,14 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param strategy Strategy to analyze the program with
      * @param loopbound Upper bound of loops that can't be analyzed
      */
-    explicit Energy(const std::string& filename, std::string mode, std::string format, std::string strategy, std::string loopbound){
+    explicit Energy(const std::string& filename, Mode mode, Format format, Strategy strategy, int loopbound){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( filename )["profile"];
-            this->mode = std::move(mode);
-            this->format = std::move(format);
-            this->strategy = std::move(strategy);
-            this->loopbound = std::move(loopbound);
+            this->mode = mode;
+            this->format = format;
+            this->strategy = strategy;
+            this->loopbound = loopbound;
             this->stopwatch_start = std::chrono::high_resolution_clock::now();
         }
     }
@@ -61,12 +62,27 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         if( llvm::sys::fs::exists( energyModelPath ) && !llvm::sys::fs::is_directory( energyModelPath ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read( energyModelPath.c_str() )["profile"];
-            this->mode = modeParameter.c_str();
-            this->format = formatParameter.c_str();
-            this->strategy = analysisStrategyParameter.c_str();
-            this->loopbound = loopboundParameter.c_str();
+            this->mode = CLIOptions::strToMode(modeParameter.c_str());
+            this->format = CLIOptions::strToFormat(formatParameter.c_str());
+            this->strategy = CLIOptions::strToStrategy(analysisStrategyParameter.c_str());
+
+            //Try to get the requested loopbound value
+            try {
+                this->loopbound = std::stoi(loopboundParameter.c_str());
+
+                if(this->loopbound < 0){
+                    throw std::invalid_argument("Loopbound can't be negative");
+                }
+            }catch(std::invalid_argument &I){
+                llvm::errs() << "Please provide a positive integer for the loopbound" << "\n";
+                return;
+            }
+
+
             this->stopwatch_start = std::chrono::high_resolution_clock::now();
         }
+
+
     }
 
     /**
@@ -82,11 +98,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             Json::Value functionObject;
             functionObject["name"] = energyFunction->func->getName().str();
             functionObject["energy"] = energyFunction->energy;
-            functionObject["numberOfBasicBlocks"] = energyFunction->func->getBasicBlockList().size();
+            functionObject["numberOfBasicBlocks"] = energyFunction->func->size();
             functionObject["numberOfInstructions"] = energyFunction->func->getInstructionCount();
 
-            if(!energyFunction->func->getBasicBlockList().empty()){
-                functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->getBasicBlockList().size();
+            if(!energyFunction->func->empty()){
+                functionObject["averageEnergyPerBlock"] = energyFunction->energy / (double) energyFunction->func->size();
             } else {
                 functionObject["averageEnergyPerBlock"] = 0;
             }
@@ -123,7 +139,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
         for(auto functionObject : outputObject){
             if(functionObject.isMember("name")){
-                llvm::errs() << functionObject.toStyledString() << "\n\n\n";
+                //llvm::errs() << functionObject.toStyledString() << "\n\n\n";
                 llvm::outs() << "\n";
                 llvm::outs() << "Function " << functionObject["name"].asString() << "\n";
                 llvm::outs() << "======================================================================" << "\n";
@@ -225,10 +241,10 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             }
 
             //Init the LLVMHandler with the given model and the upper bound for unbounded loops
-            LLVMHandler handler = LLVMHandler( this->energyJson, maxiterations);
+            LLVMHandler handler = LLVMHandler(this->energyJson, maxiterations, (this->mode == Mode::PROGRAM));
 
             //Check with analysis-mode was provided
-            if(this->mode == "program"){
+            if(this->mode == Mode::PROGRAM){
                 //If the user requested the program-mode we have to consider function calls and their energy-usage
 
                 std::vector<llvm::StringRef> names;
@@ -253,17 +269,30 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                     }
 
                 }
-            }else if(this->mode == "function"){
-                //If the user requested the function-mode, calls only add their own energy-usage without the energy of the called function
-                //Iterate over the list of functions
-                for(auto &function : *funcList){
+            }else if(this->mode == Mode::FUNCTION){
+                //If the user requested the program-mode we have to consider function calls and their energy-usage
+
+                std::vector<llvm::StringRef> names;
+                for(auto function : functionTree->getPreOrderVector()){
+                    names.push_back(function->getName());
+                }
+
+
+                for(auto function : functionTree->getPreOrderVector()){
+                    //Construct a new EnergyFunction to the current function
+                    auto newFuntion = new EnergyFunction(function);
+
+                    //Add the EnergyFunction to the queue
+                    //handler.funcqueue.push_back(newFuntion);
+                    handler.funcmap[function->getName().str()] = newFuntion;
+                    auto energyFunction = handler.funcmap.at(function->getName().str());
+
                     //Check if the current function is external. Analysis of external functions, that only were declared, will result in an infinite loop
-                    if(!function.isDeclarationForLinker()){
+                    if(!function->isDeclarationForLinker()){
                         //Calculate the energy
-                        constructProgramRepresentation(&function, &handler, &functionAnalysisManager, analysisStrategy);
-
-
+                        constructProgramRepresentation(function, &handler, &functionAnalysisManager, analysisStrategy);
                     }
+
                 }
             }else{
                 llvm::errs() << "Please specify the mode the pass should run on:\n\t-mode program analyzes the program starting in the main function\n\t-mode function analyzes all functions, without respect to calls" << "\n";
@@ -280,9 +309,9 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             output["duration"] = ms_double.count()/1000;
 
             //Check which output-format the user requested
-            if(format == "json"){
+            if(format == Format::JSON){
                 outputMetricsJSON(output);
-            }else if(format == "plain"){
+            }else if(format == Format::PLAIN){
                 outputMetricsPlain(output);
             }else{
                 llvm::errs() << "Please provide a valid output format: plain/JSON" << "\n";
@@ -300,31 +329,19 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      */
     llvm::PreservedAnalyses run(llvm::Module &module, llvm::ModuleAnalysisManager &moduleAnalysisManager) {
 
-        //Try to get the requested loopbound value
-        try {
-            //Get the int-value from the provided string
-            int maxiterations = std::stoi(this->loopbound);
+        //Get the int-value from the provided string
+        int maxiterations = this->loopbound;
 
-            //Check whether the value is greater than 0
-            if(maxiterations >= 0){
-                //Check the analysis-strategy the user requestet
-                if(strcmp(this->strategy.c_str(), "best") == 0){
-                    analysisRunner(module, moduleAnalysisManager, AnalysisStrategy::BESTCASE, maxiterations);
-                }else if(strcmp(this->strategy.c_str(), "worst") == 0){
-                    analysisRunner(module, moduleAnalysisManager, AnalysisStrategy::WORSTCASE, maxiterations);
-                }else if(strcmp(this->strategy.c_str(), "average") == 0){
-                    analysisRunner(module, moduleAnalysisManager, AnalysisStrategy::AVERAGECASE, maxiterations);
-                }else{
-                    llvm::errs() << "Please provide a valid analysis strategy: best/worst/average" << "\n";
-                }
-            }else{
-                throw std::invalid_argument("Loopbound can't be negative");
-            }
-
-        }catch(std::invalid_argument &I){
-            llvm::errs() << "Please provide a positive integer for the loopbound" << "\n";
+        //Check the analysis-strategy the user requestet
+        if(this->strategy == Strategy::BEST){
+            analysisRunner(module, moduleAnalysisManager, AnalysisStrategy::BESTCASE, maxiterations);
+        }else if(this->strategy == Strategy::WORST){
+            analysisRunner(module, moduleAnalysisManager, AnalysisStrategy::WORSTCASE, maxiterations);
+        }else if(this->strategy == Strategy::AVERAGE){
+            analysisRunner(module, moduleAnalysisManager, AnalysisStrategy::AVERAGECASE, maxiterations);
+        }else{
+            llvm::errs() << "Please provide a valid analysis strategy: best/worst/average" << "\n";
         }
-
 
         return llvm::PreservedAnalyses::all();
 

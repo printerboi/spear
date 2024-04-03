@@ -53,4 +53,4 @@ add_library(spearlib SHARED
         ProgramGraph/Node.cpp
         ProgramGraph/Edge.cpp
         FunctionTree/FunctionTree.cpp
-        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h LLVM-Handler/EnergyFunction.h LLVM-Handler/EnergyFunction.cpp)
+        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h LLVM-Handler/EnergyFunction.h LLVM-Handler/EnergyFunction.cpp CLIHandler/CLIHandler.cpp CLIHandler/CLIHandler.h CLIHandler/CLIOptions.cpp CLIHandler/CLIOptions.h CLIHandler/CLIExceptions.h)

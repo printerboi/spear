@@ -23,12 +23,14 @@ class LLVMHandler {
 
         std::map<std::string, EnergyFunction*> funcmap;
 
+        bool useCallAnalysis;
+
         /**
          * Constructor receiving a string to file. Loads the IR from the file to the class
          * @param energyModel JSON Object containing the energy model
          * @param file String containing a valid file path
          */
-        explicit LLVMHandler( Json::Value energyModel, int valueIfIndeterminable );
+        explicit LLVMHandler( Json::Value energyModel, int valueIfIndeterminable, bool useCallAnalysis );
 
         /**
          * Method to calculate the energy-consumption of block with respect to the given energy model

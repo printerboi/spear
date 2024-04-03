@@ -64,7 +64,7 @@ long LoopTree::getLoopUpperBound(llvm::Loop *loop, llvm::ScalarEvolution *scalar
     auto loopBound = loop->getBounds(*scalarEvolution);
     //Assume the number to compare with is the second argument of the instruction
 
-    if(loopBound.hasValue()){
+    if(loopBound.has_value()){
         auto &endValueObj = loopBound->getFinalIVValue();
         auto &startValueObj = loopBound->getInitialIVValue();
         auto stepValueObj = loopBound->getStepValue();
