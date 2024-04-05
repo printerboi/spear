@@ -2,8 +2,12 @@
 #define BA_LOOPTREE_H
 
 #include <vector>
+#include <cmath>
 #include <llvm/Analysis/LoopInfo.h>
 #include "../LLVM-Handler/LLVMHandler.h"
+
+
+class LLVMHandler;
 
 /**
  * LoopTree - A recursive datastructure to handle encapsulated loops

@@ -45,7 +45,7 @@ class InstructionCategory {
         static bool isDivisionInstruction( llvm::Instruction &Instruction );
 
         //Calculated the energy of the function called by the given instruction
-        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, std::map<std::string, EnergyFunction*>& poolOfFunctions);
+        static double getCalledFunctionEnergy( llvm::Instruction &Instruction, const std::vector<EnergyFunction *>& pool);
 };
 
 #endif //BA_INSTRUCTIONCATEGORY_H

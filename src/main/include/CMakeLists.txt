@@ -14,8 +14,6 @@ target_sources(spear
         PUBLIC LLVM-Handler/EnergyFunction.cpp
         PUBLIC LLVM-Handler/LLVMHandler.cpp
         PUBLIC LLVM-Handler/LLVMHandler.h
-        PUBLIC ../../../external/json/json.h;
-        PUBLIC ../../../external/json/jsoncpp.cpp;
         PUBLIC Profiler/Profiler.cpp
         PUBLIC Profiler/Profiler.h
         PUBLIC ProgramGraph/ProgramGraph.cpp
@@ -42,8 +40,6 @@ add_library(spearlib SHARED
         LLVM-Handler/InstructionCategory.h
         Profiler/Profiler.cpp
         Profiler/Profiler.h
-        ../../../external/json/json.h;
-        ../../../external/json/jsoncpp.cpp
         ProgramGraph/ProgramGraph.cpp
         ProgramGraph/ProgramGraph.h
         ../passes/energy/energy.cpp
@@ -53,4 +49,4 @@ add_library(spearlib SHARED
         ProgramGraph/Node.cpp
         ProgramGraph/Edge.cpp
         FunctionTree/FunctionTree.cpp
-        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h LLVM-Handler/EnergyFunction.h LLVM-Handler/EnergyFunction.cpp)
+        FunctionTree/FunctionTree.h AnalysisStrategy/AnalysisStrategy.h LLVM-Handler/EnergyFunction.h LLVM-Handler/EnergyFunction.cpp CLIHandler/CLIHandler.cpp CLIHandler/CLIHandler.h CLIHandler/CLIOptions.cpp CLIHandler/CLIOptions.h CLIHandler/CLIExceptions.h ProgramGraph/InstructionElement.cpp)

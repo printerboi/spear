@@ -5,7 +5,8 @@
 #ifndef BA_JSONHANDLER_H
 #define BA_JSONHANDLER_H
 
-#include "json/json.h"
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 /**
  * Class for handling the reading and writing of JSON files to save and load the energy data measured in the profile
@@ -29,7 +30,7 @@ class JSONHandler {
          * @param filename Path to the file that should be read
          * @return Return the JSON::Value which was read from the provided file
          */
-        static Json::Value read(const std::string& filename);
+        static json read(const std::string& filename);
 };
 
 

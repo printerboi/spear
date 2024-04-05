@@ -7,6 +7,7 @@
 
 
 #include <llvm/IR/Function.h>
+class ProgramGraph;
 
 class EnergyFunction {
 public:
@@ -14,8 +15,11 @@ public:
     llvm::Function * func;
     //The energy used by the function
     double energy;
+
+    ProgramGraph* programGraph;
+
     //Simple constructor
-    explicit EnergyFunction(llvm::Function *function);
+    explicit EnergyFunction();
 };
 
 
