@@ -14,9 +14,7 @@ void ProgramGraph::construct(ProgramGraph* pGraph, const std::vector<llvm::Basic
         for(llvm::Instruction &inst : *basicBlock){
             auto instElement = InstructionElement(&inst);
             node->instructions.push_back(instElement);
-            std::cout << inst.getOpcodeName() << std::endl;
         }
-        std::cout << "----" << std::endl;
 
         node->energy = 0.0;
 

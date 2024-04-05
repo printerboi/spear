@@ -110,9 +110,10 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
     }
 
     //Calculate the energy-cost of this node's basic blocks and add it to the sum
-    sum = sum + handler->getNodeSum(*this);
+    double localEnergy = handler->getNodeSum(*this);
+    sum = sum + localEnergy;
 
-    this->energy = sum;
+    this->energy = localEnergy;
 
     //Return the calculated energy
     return sum;

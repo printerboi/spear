@@ -52,7 +52,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read(filename)["profile"];
-            std::cout << this->energyJson.dump() << std::endl;
 
             this->mode = mode;
             this->format = format;
@@ -141,14 +140,8 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
                             if(Node->block){
                                 nodeObject["name"] = Node->block->getName().str();
-                                if(Node->energy > 0){
-                                    nodeObject["energy"] = Node->energy;
-                                    functionObject["nodes"][j] = nodeObject;
-                                }else{
-                                    std::cout << "";
-                                }
-
-
+                                nodeObject["energy"] = Node->energy;
+                                functionObject["nodes"][j] = nodeObject;
                             }
                         }
                     }
