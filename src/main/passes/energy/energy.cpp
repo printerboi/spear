@@ -1,7 +1,5 @@
 #include <llvm/Passes/PassBuilder.h>
-#include <llvm/Analysis/RegionInfo.h>
 
-#include <utility>
 #include "llvm/Passes/PassPlugin.h"
 #include "llvm/IR/Function.h"
 #include "llvm/Support/raw_ostream.h"
@@ -264,11 +262,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }
 
     }
-
-    /*static void energyCalculation(ProgramGraph *programGraph, LLVMHandler *handler, llvm::Function *function){
-        auto energyFunction = handler->funcmap[function->getName().str()];
-        energyFunction->energy = programGraph->getEnergy(handler);
-    }*/
 
     /**
      * Function to run the analysis on a given module
