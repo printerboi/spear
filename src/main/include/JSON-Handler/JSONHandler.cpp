@@ -9,17 +9,15 @@
 JSONHandler::JSONHandler() = default;
 
 //Read the data from the provided file
-Json::Value JSONHandler::read(const std::string& filename) {
+json JSONHandler::read(const std::string& filename) {
     //init reader and data
-    Json::Reader reader;
-    Json::Value data;
+    json data;
 
     //Create a filestream to the provided file
-    std::ifstream fileStream;
-    fileStream.open(filename);
+    std::ifstream fileStream(filename);
 
     //Move the data from the stream to our initialized JSON::Value object
-    fileStream >> data;
+    data = json::parse(fileStream);
 
     return data;
 }
@@ -36,10 +34,9 @@ void JSONHandler::write(
     ) {
 
     //Init the writer, data and some help-objects
-    Json::StyledWriter styledWriter;
-    Json::Value data;
-    Json::Value cpuJson;
-    Json::Value profileJson;
+    json data;
+    json cpuJson;
+    json profileJson;
 
     //Open an output-filestream to the provided filename
     std::ofstream fileStream;
@@ -66,7 +63,7 @@ void JSONHandler::write(
         }
 
         //write the data to the filestream
-        fileStream << styledWriter.write(data);
+        fileStream << data.dump(4);
         fileStream.close();
     }else{
         std::cout << "ERROR opening the file" << "\n";

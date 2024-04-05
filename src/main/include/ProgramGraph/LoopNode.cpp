@@ -32,11 +32,12 @@ bool LoopNode::isLeafNode() const {
 LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, AnalysisStrategy::Strategy strategy) {
     //Create a Toplevel LoopNode
     auto *loopNode = new LoopNode(loopTree, parent, strategy);
+    ProgramGraph *programGraph = new ProgramGraph();
 
     //End-condition
     if(loopNode->isLeafNode()){
         //Create a ProgramGraph from this LoopTrees mainloop
-        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), strategy);
+        ProgramGraph::construct(programGraph, loopNode->loopTree->mainloop->getBlocksVector(), strategy);
 
         //Add the ProgramGraph to the list of subgraphs
         loopNode->subgraphs.push_back(programGraph);
@@ -44,7 +45,7 @@ LoopNode* LoopNode::construct(LoopTree *loopTree, ProgramGraph *parent, Analysis
         //Further recursion
 
         //Create a ProgramGraph from this LoopTrees mainloop
-        ProgramGraph *programGraph = ProgramGraph::construct(loopNode->loopTree->mainloop->getBlocksVector(), strategy);
+        ProgramGraph::construct(programGraph, loopNode->loopTree->mainloop->getBlocksVector(), strategy);
         //Add the ProgramGraph to the list of subgraphs
         loopNode->subgraphs.push_back(programGraph);
 

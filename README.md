@@ -28,16 +28,17 @@ Therefore, you have to compile the profile-scripts for your machine. We provided
 Run the script `utils/llvmToBinary/irToBinary.sh` and provide the path to the profile-folder e.g `../../profile/src`
 as argument to prepare the files. 
 
-After the compilation run spear with the flag `-p` and provide the number of iterations the profile gets averaged over.
+After the compilation run spear with the command `profile` and provide the number of iterations the profile gets averaged over.
+The parameter `<savelocation>` specifies the location where the generated profile will be saved
 E.g.:
 
 ```
-spear -p 10000
+spear profile 10000 <savelocation>
 ```
 Please execute the command above with elevated rights. Otherwise, Spear can not interfere the energy-values from the system,
 as the RAPL Interface is limited to elevated rights only.
 
-Choose value used for averaging with respect to your setup.
+Choose the value used for averaging with respect to your setup.
 A larger count of iterations will increase the accuracy of the calculated model, but will also increase the time the profiler runs.
 
 ## Running an Analysis
@@ -58,13 +59,13 @@ otherwise the behaviour of spear will be undefined or the analysis will crash.
 Spear provided a custom flag `-a`, which expects the following parameters:
 
 ```
-spear -a
-      --model <profile> 
+spear analyze
+      --profile <profile> 
       --mode <mode> 
       --format <format> 
       --strategy <strategy> 
       --loopbound <loopbound> 
-      <llvmirpath>
+      --program <llvmirpath>
 ```
 
 `<profile>`: Path to a profile calculated by spear with the `-p` flag
@@ -99,7 +100,7 @@ opt -disable-output
     --format <format> 
     --strategy <strategy> 
     --loopbound <loopbound>
-    <llvmirpath>
+    --program <llvmirpath>
 ```
 
 `<libpath>`: Path to the compiled energy-library `Energy.so`

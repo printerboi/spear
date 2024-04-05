@@ -46,6 +46,8 @@ bool InstructionCategory::isDivisionInstruction( llvm::Instruction &Instruction 
 InstructionCategory::Category InstructionCategory::getCategory( llvm::Instruction &Instruction ){
     //check the given instruction with the instruction-methods and the return the corresponding InstructionsCategory
 
+    std::string name = Instruction.getOpcodeName();
+
     if( isMemoryInstruction( Instruction ) ){
         return InstructionCategory::Category::MEMORY;
     }else if( isProgramFlowInstruction( Instruction ) ){
@@ -87,7 +89,7 @@ std::string InstructionCategory::toString(InstructionCategory::Category category
 }
 
 
-double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, std::map<std::string, EnergyFunction*>& poolOfFunctions) {
+double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instruction, const std::vector<EnergyFunction*>& pool) {
     //Init the energy as 0.00 J
     double energy = 0.00;
 
@@ -101,8 +103,17 @@ double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instructi
             auto called_function = call_instruction->getCalledFunction();
 
             //Get the Energyfunction object from the functionmap
-            auto energyFunction = poolOfFunctions[called_function->getName().str()];
-            energy = energyFunction->energy;
+            EnergyFunction* foundObject = nullptr;
+            for(auto efR : pool){
+                if(called_function->getName() == efR->func->getName()){
+                    foundObject = efR;
+                }
+            }
+
+            //auto energyFunction = poolOfFunctions[called_function->getName().str()];
+            if(foundObject != nullptr){
+                energy = foundObject->energy;
+            }
         }
     }
 

@@ -1,20 +1,31 @@
 #include "ProgramGraph.h"
 
 //Static method for ProgramGraph-Graph construction
-ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blockset, AnalysisStrategy::Strategy strategy) {
+void ProgramGraph::construct(ProgramGraph* pGraph, const std::vector<llvm::BasicBlock *>& blockset, AnalysisStrategy::Strategy strategy) {
     //Create a dummy-Object
-    auto *programGraph = new ProgramGraph();
     //Create an empty list for the BasicBlocks
     std::vector<llvm::BasicBlock *> basicBlockSet;
 
     //Iterate over the given list of BasicBlock-References
-    for(auto basicBlock : blockset){
+    for(llvm::BasicBlock* basicBlock : blockset){
         //For each block create a new Node
-        auto *node = new Node(programGraph, strategy);
+        auto node = new Node(pGraph, strategy);
+
+        for(llvm::Instruction &inst : *basicBlock){
+            auto instElement = InstructionElement(&inst);
+            node->instructions.push_back(instElement);
+            std::cout << inst.getOpcodeName() << std::endl;
+        }
+        std::cout << "----" << std::endl;
+
+        node->energy = 0.0;
+
         //Add the block to the Node
         node->block = basicBlock;
         //Add the node to the graph
-        programGraph->nodes.push_back(node);
+        pGraph->nodes.push_back(node);
+
+
     }
 
     //Iterate over the blocks to create the edges of the graph
@@ -22,30 +33,29 @@ ProgramGraph* ProgramGraph::construct(const std::vector<llvm::BasicBlock *>& blo
         //Determine the successors to the current block in the cfg
         for (auto successor : llvm::successors(basicBlock)) {
             //Get the nodes defining the edge
-            Node *start = programGraph->findBlock(basicBlock);
-            Node *end = programGraph->findBlock(successor);
+            Node *start = pGraph->findBlock(basicBlock);
+            Node *end = pGraph->findBlock(successor);
 
             //If both of the defining nodes were found
             if(start != nullptr && end != nullptr){
                 //Create the edge
-                auto *edge = new Edge(start, end);
+                auto edge = new Edge(start, end);
                 //Add the edge to the edge-list of the graph
-                programGraph->edges.push_back(edge);
+                pGraph->edges.push_back(edge);
             }
         }
     }
 
     //Return the graph
-    return programGraph;
 }
 
 ProgramGraph::~ProgramGraph() {
     for (auto node : this->nodes) {
-        delete node;
+        //delete node;
     }
 
     for (auto edge : this->edges) {
-        delete edge;
+        //delete edge;
     }
 }
 
@@ -56,7 +66,7 @@ void ProgramGraph::printNodes(LLVMHandler *handler) {
         llvm::outs() << "\n----------------------------------------------------------------------\n";
         llvm::outs() << node->toString() << "\n";
         //If the current Node is a LoopNode...
-        if(dynamic_cast<LoopNode*>(node) != nullptr){
+        if(node != nullptr){
             //Print a special representation if we are dealing with a LoopNode
             llvm::outs() << "(" << dynamic_cast<LoopNode*>(node)->loopTree->iterations << ") " << this->getEnergy(handler) << " µJ" << ")";
             for (auto subProgramGraph : dynamic_cast<LoopNode*>(node)->subgraphs) {
@@ -65,20 +75,30 @@ void ProgramGraph::printNodes(LLVMHandler *handler) {
                 llvm::outs() << "\n|\t\t\t\t\tEND Subnodes\t\t\t\t\t|\n";
             }
         }
+
         llvm::outs() << "----------------------------------------------------------------------\n";
     }
+}
 
+std::vector<Node*> ProgramGraph::getNodes(){
+    std::vector<Node*> nodelist;
+
+    for(auto node : this->nodes){
+        nodelist.push_back(node);
+    }
+
+    return nodelist;
 }
 
 //Search for the given block in the graph
-Node *ProgramGraph::findBlock(llvm::BasicBlock *basicBlock) {
+Node* ProgramGraph::findBlock(llvm::BasicBlock *basicBlock) {
     //Iterate over the nodes
-    for(auto Node : this->nodes){
+    for(int i=0; i < nodes.size(); i++){
 
         //Use the standard find method to search the vector
-        if(Node->block == basicBlock){
+        if(nodes[i]->block == basicBlock){
             //If found return the node
-            return Node;
+            return nodes[i];
         }
     }
 
@@ -211,8 +231,10 @@ double ProgramGraph::getEnergy(LLVMHandler *handler) {
     double sum = 0.0;
     //Get the first node of the graph
     auto currentNode = this->nodes[0];
+    auto name = currentNode->block->getName();
 
-    //Start the energy-calculation from the start node
+
+                               //Start the energy-calculation from the start node
     //Uses the recursvice calculation of the nodes by itself
     sum = currentNode->getNodeEnergy(handler);
 

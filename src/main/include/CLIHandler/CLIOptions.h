@@ -29,6 +29,14 @@ enum class Mode {
 };
 
 /**
+ * Enum to distinguish the analysis target in the application
+ */
+enum class DeepCalls {
+    UNDEFINED,
+    ENABLED,
+};
+
+/**
  * Enum used to specify the output format
  */
 enum class Format {
@@ -85,6 +93,11 @@ public:
     Strategy strategy;
 
     /**
+     * Parsed check if the user requests the calculation with calls or not
+     */
+    DeepCalls deepCalls;
+
+    /**
      * Parsed loopbound;
      */
     int loopBound;
@@ -117,7 +130,7 @@ public:
 class AnalysisOptions : public CLIOptions{
 public:
 
-    AnalysisOptions(std::string profilePath, Mode mode, Format format, Strategy strategy, int loopBound, std::string programPath);
+    AnalysisOptions(std::string profilePath, Mode mode, Format format, Strategy strategy, int loopBound, std::string programPath, DeepCalls deepCalls);
 };
 
 
