@@ -25,7 +25,7 @@ class Node;
 class LLVMHandler {
     public:
 
-        std::map<std::string, EnergyFunction*> funcmap;
+        std::vector<EnergyFunction*> funcmap;
 
         bool useCallAnalysis;
 
@@ -34,7 +34,7 @@ class LLVMHandler {
          * @param energyModel JSON Object containing the energy model
          * @param file String containing a valid file path
          */
-        explicit LLVMHandler( json energyModel, int valueIfIndeterminable, bool useCallAnalysis );
+        explicit LLVMHandler( json energyModel, int valueIfIndeterminable, bool useCallAnalysis, EnergyFunction pool[], int poolSize );
 
         /**
          * Method to calculate the energy-consumption of block with respect to the given energy model

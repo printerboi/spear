@@ -7,12 +7,16 @@
 
 #include <utility>
 
-LLVMHandler::LLVMHandler( json energy, int valueIfIndeterminable, bool useCallAnalysis) {
+LLVMHandler::LLVMHandler( json energy, int valueIfIndeterminable, bool useCallAnalysis, EnergyFunction *funcPool, int funcPoolSize) {
     this->energyValues = energy;
     this->valueIfIndeterminable = valueIfIndeterminable;
     this->inefficient = 0;
     this->efficient = 0;
     this->useCallAnalysis = useCallAnalysis;
+
+    for(int i=0; i < funcPoolSize; i++){
+        this->funcmap.push_back(&funcPool[i]);
+    }
 }
 
 double LLVMHandler::getNodeSum(const Node& node){

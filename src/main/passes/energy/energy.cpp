@@ -265,10 +265,10 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
     }
 
-    static void energyCalculation(ProgramGraph *programGraph, LLVMHandler *handler, llvm::Function *function){
+    /*static void energyCalculation(ProgramGraph *programGraph, LLVMHandler *handler, llvm::Function *function){
         auto energyFunction = handler->funcmap[function->getName().str()];
         energyFunction->energy = programGraph->getEnergy(handler);
-    }
+    }*/
 
     /**
      * Function to run the analysis on a given module
@@ -280,8 +280,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     void analysisRunner(llvm::Module &module, llvm::ModuleAnalysisManager &MAM, AnalysisStrategy::Strategy analysisStrategy, int maxiterations) {
         //Get the FunctionAnalysisManager from the ModuleAnalysisManager
         auto &functionAnalysisManager = MAM.getResult<llvm::FunctionAnalysisManagerModuleProxy>(module).getManager();
-        static ProgramGraph* pGraph = new ProgramGraph();
-
 
         //If a model was provided
         if( this->energyJson.contains("Division") && this->energyJson.contains("Memory") ){
@@ -297,8 +295,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 }
             }
 
-            //Init the LLVMHandler with the given model and the upper bound for unbounded loops
-            LLVMHandler handler = LLVMHandler(this->energyJson, maxiterations, deepCallsEnabled);
+
 
             std::vector<llvm::StringRef> names;
             for (auto function: functionTree->getPreOrderVector()) {
@@ -318,16 +315,21 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 //auto energyFunction = handler.funcmap.at(function->getName().str());
 
                 funcPool[i].func = function;
+            }
+
+            //Init the LLVMHandler with the given model and the upper bound for unbounded loops
+            LLVMHandler handler = LLVMHandler(this->energyJson, maxiterations, deepCallsEnabled, funcPool, functionTree->getPreOrderVector().size());
+
+            for(int i = 0; i < functionTree->getPreOrderVector().size(); i++){
+                llvm::Function * function = functionTree->getPreOrderVector()[i];
 
                 //Check if the current function is external. Analysis of external functions, that only were declared, will result in an infinite loop
                 if (!function->isDeclarationForLinker()) {
                     //Calculate the energy
-                    constructProgramRepresentation(pGraph, &funcPool[i], &handler, &functionAnalysisManager, analysisStrategy);
-                    funcPool[i].programGraph = pGraph;
+                    constructProgramRepresentation(funcPool[i].programGraph, &funcPool[i], &handler, &functionAnalysisManager, analysisStrategy);
                 }else{
                     funcPool[i].programGraph = nullptr;
                 }
-
             }
 
             //Construct the output
