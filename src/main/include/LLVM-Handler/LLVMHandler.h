@@ -14,6 +14,10 @@
 #include "llvm/Analysis/CostModel.h"
 #include "llvm/IR/CFG.h"
 #include "llvm/IR/Constants.h"
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
+class Node;
 
 /**
  * LLVMHandler -  Class for combining LLVM IR with energy values to reason about the energy consumption of a program
@@ -30,14 +34,14 @@ class LLVMHandler {
          * @param energyModel JSON Object containing the energy model
          * @param file String containing a valid file path
          */
-        explicit LLVMHandler( Json::Value energyModel, int valueIfIndeterminable, bool useCallAnalysis );
+        explicit LLVMHandler( json energyModel, int valueIfIndeterminable, bool useCallAnalysis );
 
         /**
          * Method to calculate the energy-consumption of block with respect to the given energy model
          * @param basicBlock Basic block to analyze
          * @return Double value of the approximated energy
          */
-        double getBasicBlockSum(llvm::BasicBlock &basicBlock);
+        double getNodeSum(const Node& node);
 
          int efficient;
          int inefficient;
@@ -51,7 +55,7 @@ private:
     /**
      * JSON-Value containin the energy model used for the calculations
      */
-    Json::Value energyValues;
+    json energyValues;
 
 };
 

@@ -78,6 +78,7 @@ CLIOptions CLIHandler::parseCLI(int argc, char **argv) {
             std::string profilePath;
             Mode mode = Mode::UNDEFINED;
             Format format = Format::UNDEFINED;
+            DeepCalls deepCalls = DeepCalls::UNDEFINED;
             Strategy strategy = Strategy::UNDEFINED;
             int loopBound = -1;
             std::string programPath;
@@ -135,6 +136,10 @@ CLIOptions CLIHandler::parseCLI(int argc, char **argv) {
                     }
                 }
 
+                if(arg == "--withCalls"){
+                    deepCalls = DeepCalls::ENABLED;
+                }
+
                 if(arg == "--loopbound"){
                     if(hasOption(arguments, "--loopbound")){
                         const std::string_view loopboundString = get_option(arguments, "--loopbound");
@@ -159,7 +164,7 @@ CLIOptions CLIHandler::parseCLI(int argc, char **argv) {
 
             }
 
-            return AnalysisOptions(profilePath, mode, format, strategy, loopBound, programPath);
+            return AnalysisOptions(profilePath, mode, format, strategy, loopBound, programPath, deepCalls);
         }
 
     }

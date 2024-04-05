@@ -10,7 +10,6 @@ add_llvm_library(Energy MODULE
         ../../../main/include/LLVM-Handler/EnergyFunction.cpp
         ../../../main/include/LLVM-Handler/LLVMHandler.cpp
         ../../../main/include/LLVM-Handler/LLVMHandler.h
-         ../../../../external/json/jsoncpp.cpp;
         ../../../main/include/Profiler/Profiler.cpp
         ../../../main/include/Profiler/Profiler.h
         ../../include/ProgramGraph/ProgramGraph.cpp

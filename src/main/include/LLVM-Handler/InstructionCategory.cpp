@@ -46,6 +46,8 @@ bool InstructionCategory::isDivisionInstruction( llvm::Instruction &Instruction 
 InstructionCategory::Category InstructionCategory::getCategory( llvm::Instruction &Instruction ){
     //check the given instruction with the instruction-methods and the return the corresponding InstructionsCategory
 
+    std::string name = Instruction.getOpcodeName();
+
     if( isMemoryInstruction( Instruction ) ){
         return InstructionCategory::Category::MEMORY;
     }else if( isProgramFlowInstruction( Instruction ) ){

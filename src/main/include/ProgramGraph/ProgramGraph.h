@@ -14,6 +14,15 @@
 //Pre-declaration of the ProgramGraph Class
 class ProgramGraph;
 
+
+class InstructionElement {
+public:
+    double energy;
+    llvm::Instruction* inst;
+
+    explicit InstructionElement(llvm::Instruction* instruction);
+};
+
 /**
  * Node - A Node in the Programtree. Represents a set of BasicBlocks, which may contain if-statements but is loop-free
  */
@@ -29,10 +38,14 @@ class Node {
          */
         llvm::BasicBlock * block;
 
+        double energy;
+
         /**
          * The strategy the analysis should follow
          */
         AnalysisStrategy::Strategy strategy;
+
+        std::vector<InstructionElement> instructions;
 
         /**
          * Constructor taking the surrounding ProgramGraph
@@ -188,7 +201,7 @@ class ProgramGraph {
          * @param blockset Vector with references to a set of basic blocks
          * @return Returns the constructed ProgramGraph
          */
-        static ProgramGraph* construct(const std::vector<llvm::BasicBlock *>& blockset, AnalysisStrategy::Strategy strategy);
+        static void construct(ProgramGraph* pGraph, const std::vector<llvm::BasicBlock *>& blockset, AnalysisStrategy::Strategy strategy);
 
         /**
          * ProgramGraph destructor
@@ -200,6 +213,8 @@ class ProgramGraph {
          * @param handler A LLVMHandler used for energy calculation
          */
         void printNodes(LLVMHandler *handler);
+
+        std::vector<Node*> getNodes();
 
         /**
          * Method for printing the string representations of the graphs edges
