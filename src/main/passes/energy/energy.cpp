@@ -73,7 +73,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             this->format = CLIOptions::strToFormat(formatParameter.c_str());
             this->strategy = CLIOptions::strToStrategy(analysisStrategyParameter.c_str());
             this->strategy = CLIOptions::strToStrategy(analysisStrategyParameter.c_str());
-            this->deepCallsEnabled = !analysisStrategyParameter.empty();
+            this->deepCallsEnabled = !deepCallsParameter.empty();
 
             //Try to get the requested loopbound value
             try {
