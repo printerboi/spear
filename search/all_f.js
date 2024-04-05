@@ -1,9 +1,13 @@
 var searchData=
 [
-  ['start_64',['start',['../classEdge.html#acb0a11f7502dad1933c71477d8b97ad4',1,'Edge']]],
-  ['strategy_65',['Strategy',['../classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b',1,'AnalysisStrategy']]],
-  ['strategy_66',['strategy',['../classNode.html#aab149ed1099b53c3f3954d20718f511e',1,'Node']]],
-  ['subgraphs_67',['subgraphs',['../classLoopNode.html#a8bead89b1a891b5dea0fa6c11ba75455',1,'LoopNode']]],
-  ['subtrees_68',['subTrees',['../classLoopTree.html#a032808e139ad8b36c3eaa909dedb930a',1,'LoopTree']]],
-  ['subtrees_69',['subtrees',['../classFunctionTree.html#a1a252c462191b511e15f6f679529f5f3',1,'FunctionTree']]]
+  ['read_70',['read',['../classJSONHandler.html#a0a04b903d5d929cf0dda3ef99835ce34',1,'JSONHandler']]],
+  ['readmultiplier_71',['readMultiplier',['../classRegisterReader.html#a119b1f2fa4619881dd10e704650c1ca3',1,'RegisterReader']]],
+  ['registerreader_72',['RegisterReader',['../classRegisterReader.html',1,'RegisterReader'],['../classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189',1,'RegisterReader::RegisterReader()']]],
+  ['removeloopedgesfromsubgraphs_73',['removeLoopEdgesFromSubGraphs',['../classLoopNode.html#ae2c48a161e3fca624295b9c608c6e560',1,'LoopNode']]],
+  ['removenode_74',['removeNode',['../classProgramGraph.html#a3d7172355f93bc903a9a3f6bdf215451',1,'ProgramGraph']]],
+  ['removeorphanededges_75',['removeOrphanedEdges',['../classProgramGraph.html#afc10742190eb8fa0610e975032d71491',1,'ProgramGraph']]],
+  ['repeatamount_76',['repeatAmount',['../classCLIOptions.html#af5437b11c7ee1c45fa4f1ac2a56f2a52',1,'CLIOptions']]],
+  ['repetitions_77',['repetitions',['../classProfiler.html#a2daf73634ad81f8b48294d4839a5182b',1,'Profiler']]],
+  ['replacenodeswithloopnode_78',['replaceNodesWithLoopNode',['../classProgramGraph.html#a2463f6a911a85ed865ad09c26dc5c3a6',1,'ProgramGraph']]],
+  ['run_79',['run',['../structEnergy.html#a3497eaef311ec2ecb0b55552f6e0aa9b',1,'Energy']]]
 ];

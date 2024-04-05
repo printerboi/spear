@@ -1,5 +1,10 @@
 var searchData=
 [
-  ['timeprogram_70',['timeProgram',['../classProfiler.html#aa8ae68fc06962a7e5dcdad1fee8172ca',1,'Profiler']]],
-  ['tostring_71',['toString',['../classInstructionCategory.html#a057f079222bee2c118ec344f5e7e7601',1,'InstructionCategory::toString()'],['../classNode.html#ab68ba2e4b8b4b4aa5cd9cdcfe03277f3',1,'Node::toString()'],['../classEdge.html#a17a5eaaeaf6fa7a3bc9fe01a630bd6e4',1,'Edge::toString()'],['../classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e',1,'LoopNode::toString()']]]
+  ['savelocation_80',['saveLocation',['../classCLIOptions.html#a6a49db80821fcead53ed4ed6b43a90f4',1,'CLIOptions']]],
+  ['start_81',['start',['../classEdge.html#acb0a11f7502dad1933c71477d8b97ad4',1,'Edge']]],
+  ['strategy_82',['Strategy',['../classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b',1,'AnalysisStrategy']]],
+  ['strategy_83',['strategy',['../classCLIOptions.html#a33c9cb6d5a22fd7aee4c3391afa9ef91',1,'CLIOptions::strategy()'],['../classNode.html#aab149ed1099b53c3f3954d20718f511e',1,'Node::strategy()']]],
+  ['subgraphs_84',['subgraphs',['../classLoopNode.html#a8bead89b1a891b5dea0fa6c11ba75455',1,'LoopNode']]],
+  ['subtrees_85',['subTrees',['../classLoopTree.html#a032808e139ad8b36c3eaa909dedb930a',1,'LoopTree']]],
+  ['subtrees_86',['subtrees',['../classFunctionTree.html#a1a252c462191b511e15f6f679529f5f3',1,'FunctionTree']]]
 ];

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['llvmhandler_84',['LLVMHandler',['../classLLVMHandler.html',1,'']]],
-  ['loopnode_85',['LoopNode',['../classLoopNode.html',1,'']]],
-  ['looptree_86',['LoopTree',['../classLoopTree.html',1,'']]]
+  ['jsonhandler_105',['JSONHandler',['../classJSONHandler.html',1,'']]]
 ];

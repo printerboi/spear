@@ -79,8 +79,8 @@ Inheritance diagram for Energy:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aafb27f344d125abe05f24a02c4b60b2d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#aafb27f344d125abe05f24a02c4b60b2d">Energy</a> (const std::string &amp;filename, std::string mode, std::string format, std::string strategy, std::string loopbound)</td></tr>
-<tr class="separator:aafb27f344d125abe05f24a02c4b60b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7ea9c619ca83b298b0c777e103f399c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ab7ea9c619ca83b298b0c777e103f399c">Energy</a> (const std::string &amp;filename, Mode mode, Format format, Strategy strategy, int loopbound, DeepCalls deepCalls)</td></tr>
+<tr class="separator:ab7ea9c619ca83b298b0c777e103f399c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace7d4d30b4d89e661e169c299d65cad9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ace7d4d30b4d89e661e169c299d65cad9">Energy</a> ()</td></tr>
 <tr class="separator:ace7d4d30b4d89e661e169c299d65cad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c548280be5dc9bbdf7fe6b41fd30e6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a9c548280be5dc9bbdf7fe6b41fd30e6d">analysisRunner</a> (llvm::Module &amp;module, llvm::ModuleAnalysisManager &amp;MAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy, int maxiterations)</td></tr>
@@ -90,38 +90,38 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad85aaa6f5e4ce15fd306f3d2c3e71bef"><td class="memItemLeft" align="right" valign="top">static Json::Value&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ad85aaa6f5e4ce15fd306f3d2c3e71bef">constructOutputObject</a> (<a class="el" href="classLLVMHandler.html">LLVMHandler</a> &amp;handler)</td></tr>
-<tr class="separator:ad85aaa6f5e4ce15fd306f3d2c3e71bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00eb76c7c891d94f0170c83539eb9a32"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a00eb76c7c891d94f0170c83539eb9a32">outputMetricsJSON</a> (Json::Value outputObject)</td></tr>
-<tr class="separator:a00eb76c7c891d94f0170c83539eb9a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ac5ca363596e1b8370f0d481c527adf"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a0ac5ca363596e1b8370f0d481c527adf">outputMetricsPlain</a> (Json::Value &amp;outputObject)</td></tr>
-<tr class="separator:a0ac5ca363596e1b8370f0d481c527adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e5db2491e04b4af1e11dfc3e48f19e2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a6e5db2491e04b4af1e11dfc3e48f19e2">constructProgramRepresentation</a> (llvm::Function *function, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler, llvm::FunctionAnalysisManager *FAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy)</td></tr>
-<tr class="separator:a6e5db2491e04b4af1e11dfc3e48f19e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78d5fa6c54500eeed78477bdec87c7d9"><td class="memItemLeft" align="right" valign="top"><a id="a78d5fa6c54500eeed78477bdec87c7d9"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>energyCalculation</b> (<a class="el" href="classProgramGraph.html">ProgramGraph</a> *programGraph, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler, llvm::Function *function)</td></tr>
-<tr class="separator:a78d5fa6c54500eeed78477bdec87c7d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26c01b715c0ab87d3d2769d089200f4a"><td class="memItemLeft" align="right" valign="top">static json&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a26c01b715c0ab87d3d2769d089200f4a">constructOutputObject</a> (<a class="el" href="classEnergyFunction.html">EnergyFunction</a> funcpool[], int numberOfFuncs, Mode mode)</td></tr>
+<tr class="separator:a26c01b715c0ab87d3d2769d089200f4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44ce0b6ccf49a865b0c8689c7c56e923"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#a44ce0b6ccf49a865b0c8689c7c56e923">outputMetricsJSON</a> (json outputObject, Mode mode)</td></tr>
+<tr class="separator:a44ce0b6ccf49a865b0c8689c7c56e923"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9e5eeb832d9aa56dbbfe70151cdad83"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#aa9e5eeb832d9aa56dbbfe70151cdad83">outputMetricsPlain</a> (json &amp;outputObject, Mode mode)</td></tr>
+<tr class="separator:aa9e5eeb832d9aa56dbbfe70151cdad83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1af9c262647e7b2553634c2960d62ef"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structEnergy.html#ab1af9c262647e7b2553634c2960d62ef">constructProgramRepresentation</a> (<a class="el" href="classProgramGraph.html">ProgramGraph</a> *pGraph, <a class="el" href="classEnergyFunction.html">EnergyFunction</a> *energyFunc, <a class="el" href="classLLVMHandler.html">LLVMHandler</a> *handler, llvm::FunctionAnalysisManager *FAM, <a class="el" href="classAnalysisStrategy.html#a4f55ee7abd18085d3a94537512fb673b">AnalysisStrategy::Strategy</a> analysisStrategy)</td></tr>
+<tr class="separator:ab1af9c262647e7b2553634c2960d62ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0475b6aa5a23fb4c549b4abf5a67f3b"><td class="memItemLeft" align="right" valign="top"><a id="af0475b6aa5a23fb4c549b4abf5a67f3b"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isRequired</b> ()</td></tr>
 <tr class="separator:af0475b6aa5a23fb4c549b4abf5a67f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac8bd4889a9fa1795576acf76d3b06101"><td class="memItemLeft" align="right" valign="top"><a id="ac8bd4889a9fa1795576acf76d3b06101"></a>
-Json::Value&#160;</td><td class="memItemRight" valign="bottom"><b>energyJson</b></td></tr>
-<tr class="separator:ac8bd4889a9fa1795576acf76d3b06101"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5665ba1eebac18f3c5226705ec30d8ec"><td class="memItemLeft" align="right" valign="top"><a id="a5665ba1eebac18f3c5226705ec30d8ec"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>mode</b></td></tr>
-<tr class="separator:a5665ba1eebac18f3c5226705ec30d8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecd3b149785dd4e2840b410ce131c44b"><td class="memItemLeft" align="right" valign="top"><a id="aecd3b149785dd4e2840b410ce131c44b"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
-<tr class="separator:aecd3b149785dd4e2840b410ce131c44b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ebd8c22c796bd46ab2800a6b10e8702"><td class="memItemLeft" align="right" valign="top"><a id="a3ebd8c22c796bd46ab2800a6b10e8702"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>strategy</b></td></tr>
-<tr class="separator:a3ebd8c22c796bd46ab2800a6b10e8702"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a4a9355e9e2a0ea607b3ddf5329f4d3"><td class="memItemLeft" align="right" valign="top"><a id="a9a4a9355e9e2a0ea607b3ddf5329f4d3"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b></td></tr>
-<tr class="separator:a9a4a9355e9e2a0ea607b3ddf5329f4d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acba205e48d4f4754aae90c1cb1e51818"><td class="memItemLeft" align="right" valign="top"><a id="acba205e48d4f4754aae90c1cb1e51818"></a>
+json&#160;</td><td class="memItemRight" valign="bottom"><b>energyJson</b></td></tr>
+<tr class="separator:acba205e48d4f4754aae90c1cb1e51818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91ce1c8c48a719926e4521975b5060bf"><td class="memItemLeft" align="right" valign="top"><a id="a91ce1c8c48a719926e4521975b5060bf"></a>
+Mode&#160;</td><td class="memItemRight" valign="bottom"><b>mode</b></td></tr>
+<tr class="separator:a91ce1c8c48a719926e4521975b5060bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a033bd94f10394c30ea10b1317e56413f"><td class="memItemLeft" align="right" valign="top"><a id="a033bd94f10394c30ea10b1317e56413f"></a>
+Format&#160;</td><td class="memItemRight" valign="bottom"><b>format</b></td></tr>
+<tr class="separator:a033bd94f10394c30ea10b1317e56413f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4019130cc3e5ca13a3014c207e87239"><td class="memItemLeft" align="right" valign="top"><a id="ad4019130cc3e5ca13a3014c207e87239"></a>
+Strategy&#160;</td><td class="memItemRight" valign="bottom"><b>strategy</b></td></tr>
+<tr class="separator:ad4019130cc3e5ca13a3014c207e87239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e73cfd2e7dde3fc24efeecff7bea113"><td class="memItemLeft" align="right" valign="top"><a id="a7e73cfd2e7dde3fc24efeecff7bea113"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>loopbound</b></td></tr>
+<tr class="separator:a7e73cfd2e7dde3fc24efeecff7bea113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabc9124c0d4ecca898a6bef58b79a931"><td class="memItemLeft" align="right" valign="top"><a id="aabc9124c0d4ecca898a6bef58b79a931"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>deepCallsEnabled</b></td></tr>
+<tr class="separator:aabc9124c0d4ecca898a6bef58b79a931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a311a70b19fa17bbb4d5565481846d8ee"><td class="memItemLeft" align="right" valign="top"><a id="a311a70b19fa17bbb4d5565481846d8ee"></a>
 std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt; long, std::ratio&lt; 1, 1000000000 &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>stopwatch_start</b></td></tr>
 <tr class="separator:a311a70b19fa17bbb4d5565481846d8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,8 +130,8 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
 <tr class="separator:ada270250879209dfd70a521387b4aa22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aafb27f344d125abe05f24a02c4b60b2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aafb27f344d125abe05f24a02c4b60b2d">&#9670;&nbsp;</a></span>Energy() <span class="overload">[1/2]</span></h2>
+<a id="ab7ea9c619ca83b298b0c777e103f399c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7ea9c619ca83b298b0c777e103f399c">&#9670;&nbsp;</a></span>Energy() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,26 +148,32 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">Mode&#160;</td>
           <td class="paramname"><em>mode</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">Format&#160;</td>
           <td class="paramname"><em>format</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">Strategy&#160;</td>
           <td class="paramname"><em>strategy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>loopbound</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>loopbound</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DeepCalls&#160;</td>
+          <td class="paramname"><em>deepCalls</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -278,8 +284,8 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
 
 </div>
 </div>
-<a id="ad85aaa6f5e4ce15fd306f3d2c3e71bef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad85aaa6f5e4ce15fd306f3d2c3e71bef">&#9670;&nbsp;</a></span>constructOutputObject()</h2>
+<a id="a26c01b715c0ab87d3d2769d089200f4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26c01b715c0ab87d3d2769d089200f4a">&#9670;&nbsp;</a></span>constructOutputObject()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -288,11 +294,27 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static Json::Value Energy::constructOutputObject </td>
+          <td class="memname">static json Energy::constructOutputObject </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classLLVMHandler.html">LLVMHandler</a> &amp;&#160;</td>
-          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classEnergyFunction.html">EnergyFunction</a>&#160;</td>
+          <td class="paramname"><em>funcpool</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>numberOfFuncs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Mode&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -311,8 +333,8 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
 
 </div>
 </div>
-<a id="a6e5db2491e04b4af1e11dfc3e48f19e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e5db2491e04b4af1e11dfc3e48f19e2">&#9670;&nbsp;</a></span>constructProgramRepresentation()</h2>
+<a id="ab1af9c262647e7b2553634c2960d62ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1af9c262647e7b2553634c2960d62ef">&#9670;&nbsp;</a></span>constructProgramRepresentation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -323,8 +345,14 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
         <tr>
           <td class="memname">static void Energy::constructProgramRepresentation </td>
           <td>(</td>
-          <td class="paramtype">llvm::Function *&#160;</td>
-          <td class="paramname"><em>function</em>, </td>
+          <td class="paramtype"><a class="el" href="classProgramGraph.html">ProgramGraph</a> *&#160;</td>
+          <td class="paramname"><em>pGraph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEnergyFunction.html">EnergyFunction</a> *&#160;</td>
+          <td class="paramname"><em>energyFunc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -369,8 +397,8 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
 
 </div>
 </div>
-<a id="a00eb76c7c891d94f0170c83539eb9a32"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a00eb76c7c891d94f0170c83539eb9a32">&#9670;&nbsp;</a></span>outputMetricsJSON()</h2>
+<a id="a44ce0b6ccf49a865b0c8689c7c56e923"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44ce0b6ccf49a865b0c8689c7c56e923">&#9670;&nbsp;</a></span>outputMetricsJSON()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -381,9 +409,19 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
         <tr>
           <td class="memname">static void Energy::outputMetricsJSON </td>
           <td>(</td>
-          <td class="paramtype">Json::Value&#160;</td>
-          <td class="paramname"><em>outputObject</em></td><td>)</td>
+          <td class="paramtype">json&#160;</td>
+          <td class="paramname"><em>outputObject</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Mode&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -401,8 +439,8 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
 
 </div>
 </div>
-<a id="a0ac5ca363596e1b8370f0d481c527adf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ac5ca363596e1b8370f0d481c527adf">&#9670;&nbsp;</a></span>outputMetricsPlain()</h2>
+<a id="aa9e5eeb832d9aa56dbbfe70151cdad83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9e5eeb832d9aa56dbbfe70151cdad83">&#9670;&nbsp;</a></span>outputMetricsPlain()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -413,9 +451,19 @@ std::chrono::time_point&lt; std::chrono::system_clock, std::chrono::duration&lt;
         <tr>
           <td class="memname">static void Energy::outputMetricsPlain </td>
           <td>(</td>
-          <td class="paramtype">Json::Value &amp;&#160;</td>
-          <td class="paramname"><em>outputObject</em></td><td>)</td>
+          <td class="paramtype">json &amp;&#160;</td>
+          <td class="paramname"><em>outputObject</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Mode&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>

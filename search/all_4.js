@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['findblock_14',['findBlock',['../classProgramGraph.html#a9450ec4e99c330c26535491056e8a639',1,'ProgramGraph']]],
-  ['findedgesstartingatnode_15',['findEdgesStartingAtNode',['../classProgramGraph.html#acef8229424136eb7f7cf35038d831e59',1,'ProgramGraph']]],
-  ['func_16',['func',['../classFunctionTree.html#a9130c65e97bdf6bd10c3eea431809760',1,'FunctionTree']]],
-  ['functiontree_17',['FunctionTree',['../classFunctionTree.html',1,'FunctionTree'],['../classFunctionTree.html#a53962ae644f6cbfa614728aa09f32c5a',1,'FunctionTree::FunctionTree()']]]
+  ['edge_15',['Edge',['../classEdge.html',1,'Edge'],['../classEdge.html#ad22b6fa890c4cd35bcf530f577d52ac0',1,'Edge::Edge()']]],
+  ['edges_16',['edges',['../classProgramGraph.html#ae927ef254ad8e7203acaf11d9e05db48',1,'ProgramGraph']]],
+  ['end_17',['end',['../classEdge.html#ad79a4cd623798339d6f68febbe5cd171',1,'Edge']]],
+  ['energy_18',['Energy',['../structEnergy.html',1,'Energy'],['../structEnergy.html#ab7ea9c619ca83b298b0c777e103f399c',1,'Energy::Energy(const std::string &amp;filename, Mode mode, Format format, Strategy strategy, int loopbound, DeepCalls deepCalls)'],['../structEnergy.html#ace7d4d30b4d89e661e169c299d65cad9',1,'Energy::Energy()']]],
+  ['energyfunction_19',['EnergyFunction',['../classEnergyFunction.html',1,'']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['edge_78',['Edge',['../classEdge.html',1,'']]],
-  ['energy_79',['Energy',['../structEnergy.html',1,'']]],
-  ['energyfunction_80',['EnergyFunction',['../classEnergyFunction.html',1,'']]]
+  ['cliexceptions_96',['CLIExceptions',['../classCLIExceptions.html',1,'']]],
+  ['clihandler_97',['CLIHandler',['../classCLIHandler.html',1,'']]],
+  ['clioptions_98',['CLIOptions',['../classCLIOptions.html',1,'']]]
 ];
