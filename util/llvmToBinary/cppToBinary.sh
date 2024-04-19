@@ -9,7 +9,7 @@ function compileFile() {
   filename="${filename%.*}"
 
   echo "Generating the llvm-IR"
-  clang++ -O0 -Xclang -disable-O0-optnone -fno-discard-value-names -S -emit-llvm -o "$path/compiled/$filename.ll" "$path/$filename.cpp"
+  clang++ -g -O0 -Xclang -disable-O0-optnone -fno-discard-value-names -S -emit-llvm -o "$path/compiled/$filename.ll" "$path/$filename.cpp"
 
   echo "Compiling the file $path/compiled/$filename.ll downto binary..."
 

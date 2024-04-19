@@ -281,3 +281,76 @@ std::vector<LoopNode *> ProgramGraph::getLoopNodes() {
     //Return the list of LoopNodes
     return loopnodes;
 }
+
+std::string ProgramGraph::printDotRepresentation() {
+    std::string dotStr;
+
+    // Iterate over the nodes
+    for(int i=0; i < this->nodes.size(); i++){
+        auto node = this->nodes[i];
+        // Get the address of the node as 64-bit number for printing
+        auto startAddress = (unsigned long long)(void**)node;
+        std::string name = node->toString();
+
+        // Check if the current node is a loop node...
+        auto *loopNodeCandidate = dynamic_cast<LoopNode *>(node);
+        if(loopNodeCandidate != nullptr){
+            // If we encountered a loopnode we should to create a subgraph/cluster to represent it
+            for(auto subgraph : loopNodeCandidate->subgraphs){
+                dotStr += "subgraph cluster_LOOPNODE_" + std::to_string(startAddress) + "{\n";
+                dotStr += "cluster=true\n";
+                dotStr += "\tlabel=<<b>" + name + "</b>>\n";
+                // Add invisible nodes to the cluster where we can link afterwards, so it looks like we are pointing
+                // to the clusters box instead of a node
+                dotStr += "invisible_start" + std::to_string(startAddress) + " [shape=point style=invis]\n";
+                dotStr += "invisible_end" + std::to_string(startAddress) + " [shape=point style=invis]\n";
+                // Get the subgraphs dot representation
+                dotStr += subgraph->printDotRepresentation();
+                dotStr += "};\n";
+            }
+        }else{
+            // If we didn't encounter a loopnode, we just add a normal node, prefixed with n, followed by the nodes address
+            dotStr += "n" + std::to_string(startAddress) + " [label=<<b>";
+            dotStr += node->toString()+"</b>> fillcolor=lightgreen style=filled ]\n";
+        }
+
+        // Add the edges of the current programgraph
+        for(auto edge : findEdgesStartingAtNode(node)){
+            // Calculate the address of the end node reached by the edge
+            auto endAddress = (unsigned long long)(void**)edge->end;
+            // Cas the start node and the end node as loop nodes
+            auto *loopStartNodeCandidate = dynamic_cast<LoopNode *>(edge->start);
+            auto *loopEndNodeCandidate = dynamic_cast<LoopNode *>(edge->end);
+
+            // Check if the start node is a loopnode...
+            if(loopStartNodeCandidate != nullptr){
+                // Start the dot pointer in the invisible node of the loopnode
+                dotStr += "invisible_end" + std::to_string(startAddress) + "->";
+
+                // If the end node is a loopnode end the dot pointer in the invisible start of the loopnode
+                if(loopEndNodeCandidate != nullptr){
+                    dotStr += "invisible_start" + std::to_string(endAddress) + " [lhead=" + "cluster_LOOPNODE_" + std::to_string(startAddress) + " ltail=" + "cluster_LOOPNODE_" + std::to_string(startAddress) +"]\n";
+                }else{
+                    // Otherwise just link to the node by its name prefixed with n and the address
+                    dotStr += "n" + std::to_string(endAddress) + "[ltail=" + "cluster_LOOPNODE_" + std::to_string(startAddress) +"]\n";
+                }
+            }else{
+                // If the start node is not a loopnode start the edge at n + address
+                dotStr += "n" + std::to_string(startAddress) + "->";
+
+                // If the end node is a loopnode end the dot pointer in the invisible start of the loopnode
+                if(loopEndNodeCandidate != nullptr){
+                    dotStr += "invisible_start" + std::to_string(endAddress) + " [lhead=" + "cluster_LOOPNODE_" + std::to_string(startAddress) + "]\n";
+                }else{
+                    // Otherwise just link to the node by its name prefixed with n and the address
+                    dotStr += "n" + std::to_string(endAddress) + "\n";
+                }
+            }
+
+
+        }
+
+    }
+    return dotStr;
+
+}

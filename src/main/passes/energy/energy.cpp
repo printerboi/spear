@@ -13,6 +13,8 @@
 #include "llvm/Analysis/PostDominators.h"
 
 #include <nlohmann/json.hpp>
+#include <cxxabi.h>
+
 using json = nlohmann::json;
 
 
@@ -28,6 +30,7 @@ llvm::cl::opt<std::string> formatParameter("format", llvm::cl::desc("Format to p
 llvm::cl::opt<std::string> analysisStrategyParameter("strategy", llvm::cl::desc("The strategy to analyze"), llvm::cl::value_desc("Please choose out of the options worst/average/best"));
 llvm::cl::opt<std::string> loopboundParameter("loopbound", llvm::cl::desc("A value to over-approximate loops, which upper bound can't be calculated"), llvm::cl::value_desc("Please provide a positive integer value"));
 llvm::cl::opt<std::string> deepCallsParameter("withcalls", llvm::cl::desc("If flag is provided calls will contribute their own energy usage and the usage of the called function to the result"), llvm::cl::value_desc(""));
+
 
 
 struct Energy : llvm::PassInfoMixin<Energy> {
@@ -97,11 +100,14 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param handler LLVMHandler so we can get the functionQueue
      * @return Retuns a JSON-Object containing all needed information for the output
      */
-    static json constructOutputObject(EnergyFunction funcpool[], int numberOfFuncs, Mode mode){
-        json outputObject = json::object();
-        outputObject["functions"] = json::array();
+    static json constructOutputObject(EnergyFunction funcpool[], int numberOfFuncs, double duration, Mode mode){
+        json outputObject = nullptr;
 
         if(mode == Mode::PROGRAM){
+            outputObject = json::object();
+            outputObject["functions"] = json::array();
+            outputObject["duration"] = duration;
+
             for (int i=0; i < numberOfFuncs; i++){
                 auto energyFunction = &funcpool[i];
                 json functionObject = json::object();
@@ -125,6 +131,10 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 outputObject["functions"][i] = functionObject;
             }
         }else if(mode == Mode::BLOCK){
+            outputObject = json::object();
+            outputObject["functions"] = json::array();
+            outputObject["duration"] = duration;
+
             for (int i=0; i < numberOfFuncs; i++){
                 auto energyFunction = &funcpool[i];
                 json functionObject = json::object();
@@ -149,6 +159,86 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
                 outputObject["functions"][i] = functionObject;
             }
+        }else if(mode == Mode::INSTRUCTION){
+            outputObject = json::object();
+            outputObject["functions"] = json::array();
+            outputObject["duration"] = duration;
+
+            for (int i=0; i < numberOfFuncs; i++){
+                auto energyFunction = &funcpool[i];
+                json functionObject = json::object();
+                functionObject["name"] = energyFunction->func->getName().str();
+                functionObject["nodes"] = json::array();
+
+                if(energyFunction->programGraph != nullptr){
+                    std::vector<Node *> nodelist = energyFunction->programGraph->getNodes();
+                    if(!nodelist.empty()){
+                        for(int j=0; j < nodelist.size(); j++){
+                            json nodeObject = json::object();
+                            Node* Node = nodelist[j];
+
+                            if(Node->block){
+                                nodeObject["name"] = Node->block->getName().str();
+                                nodeObject["energy"] = Node->energy;
+                                nodeObject["instructions"] = json::array();
+
+                                for(int k=0; k < Node->instructions.size(); k++) {
+                                    json instructionObject = json::object();
+                                    InstructionElement Inst = Node->instructions[k];
+
+                                    instructionObject["opcode"] = Inst.inst->getOpcodeName();
+                                    instructionObject["energy"] = Inst.energy;
+                                    json locationObj = json::object();
+                                    const llvm::DebugLoc &dbl = Inst.inst->getDebugLoc();
+                                    unsigned int line = -1;
+                                    unsigned int col  = -1;
+                                    std::string filename = "undefined";
+
+                                    // Check if the debug information is present
+                                    // If the instruction i.e. is inserted by the compiler no debug info is present
+                                    if(dbl){
+                                        line = dbl->getLine();
+                                        col = dbl->getColumn();
+                                        filename = dbl->getFilename();
+                                    }
+
+                                    locationObj["line"] = line;
+                                    locationObj["column"] = col;
+                                    locationObj["file"] = filename;
+                                    instructionObject["location"] = locationObj;
+                                    nodeObject["instructions"][k] = instructionObject;
+                                }
+
+                                functionObject["nodes"][j] = nodeObject;
+
+                            }
+                        }
+                    }
+                }
+
+                outputObject["functions"][i] = functionObject;
+            }
+        }else if(mode == Mode::GRAPH){
+            llvm::outs() << "digraph " << "SPEARGRAPH" << "{\n";
+            llvm::outs() << "compound=true;\n";
+            llvm::outs() << "nodesep=1.5;\n";
+            llvm::outs() << "ranksep=1.5;\n";
+            llvm::outs() << "graph[fontname=Rajdhani, color=\"#242038\"]\n";
+            llvm::outs() << "node[fontname=Rajdhani, color=\"#242038\", shape=\"square\"]\n";
+            llvm::outs() << "edge[fontname=Rajdhani, color=\"#242038\"]\n";
+            for (int i=0; i < numberOfFuncs; i++){
+                auto energyFunction = &funcpool[i];
+                json functionObject = json::object();
+                if(energyFunction->programGraph != nullptr){
+                    llvm::outs() << "subgraph cluster_" << energyFunction->func->getName() << "{\n";
+                    llvm::outs() << "margin=40\n";
+                    llvm::outs() << "cluster=true\n";
+                    llvm::outs() << "\tlabel=<<b>Function " + energyFunction->func->getName() + "</b>>\n";
+                    llvm::outs() << energyFunction->programGraph->printDotRepresentation();
+                    llvm::outs() << "}" << "\n";
+                }
+            }
+            llvm::outs() << "}\n";
         }
 
         return outputObject;
@@ -160,7 +250,9 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      */
     static void outputMetricsJSON(json outputObject, Mode mode){
 
-        llvm::outs() << outputObject.dump(4) << "\n";
+        if(outputObject != nullptr){
+            llvm::outs() << outputObject.dump(4) << "\n";
+        }
     }
 
     /**
@@ -169,30 +261,32 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      */
     static void outputMetricsPlain(json& outputObject, Mode mode){
 
-        if(mode == Mode::PROGRAM){
-            auto timeused = outputObject["duration"].get<double>();
-            outputObject.erase("duration");
+        if(outputObject != nullptr){
+            if(mode == Mode::PROGRAM){
+                auto timeused = outputObject["duration"].get<double>();
+                outputObject.erase("duration");
 
-            for(auto functionObject : outputObject){
-                if(functionObject.contains("name")){
-                    //llvm::errs() << functionObject.toStyledString() << "\n\n\n";
-                    llvm::outs() << "\n";
-                    llvm::outs() << "Function " << functionObject["name"].dump() << "\n";
-                    llvm::outs() << "======================================================================" << "\n";
-                    llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].get<double>()  << " J\n";
-                    llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].get<int>()  << "\n";
-                    llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].get<int>() << "\n";
-                    llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].get<double>()  << " J\n";
-                    llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].get<double>() << " J\n";
-                    llvm::outs() << "======================================================================" << "\n";
-                    llvm::outs() << "\n";
+                for(auto functionObject : outputObject){
+                    if(functionObject.contains("name")){
+                        //llvm::errs() << functionObject.toStyledString() << "\n\n\n";
+                        llvm::outs() << "\n";
+                        llvm::outs() << "Function " << functionObject["name"].dump() << "\n";
+                        llvm::outs() << "======================================================================" << "\n";
+                        llvm::outs() << "Estimated energy consumption: " << functionObject["energy"].get<double>()  << " J\n";
+                        llvm::outs() << "Number of basic blocks: " << functionObject["numberOfBasicBlocks"].get<int>()  << "\n";
+                        llvm::outs() << "Number of instruction: " << functionObject["numberOfInstructions"].get<int>() << "\n";
+                        llvm::outs() << "Ø energy per block: " << functionObject["averageEnergyPerBlock"].get<double>()  << " J\n";
+                        llvm::outs() << "Ø energy per instruction: " << functionObject["averageEnergyPerInstruction"].get<double>() << " J\n";
+                        llvm::outs() << "======================================================================" << "\n";
+                        llvm::outs() << "\n";
+                    }
                 }
-            }
-            llvm::outs() << "The Analysis took: " << timeused << " s\n";
-        }else if(mode == Mode::BLOCK){
+                llvm::outs() << "The Analysis took: " << timeused << " s\n";
+            }else if(mode == Mode::BLOCK){
 
-        }else{
-            llvm::errs() << "Please specify the mode the pass should run on:\n\t-mode program analyzes the program starting in the main function\n\t-mode function analyzes all functions, without respect to calls" << "\n";
+            }else{
+                llvm::errs() << "Please specify the mode the pass should run on:\n\t-mode program analyzes the program starting in the main function\n\t-mode function analyzes all functions, without respect to calls" << "\n";
+            }
         }
     }
 
@@ -318,13 +412,13 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 }
             }
 
-            //Construct the output
-            json output = constructOutputObject(funcPool, functionTree->getPreOrderVector().size(),  this->mode);
-
             this->stopwatch_end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double, std::milli> ms_double = this->stopwatch_end - this->stopwatch_start;
 
-            output["duration"] = ms_double.count()/1000;
+            double duration = ms_double.count()/1000;
+
+            //Construct the output
+            json output = constructOutputObject(funcPool, functionTree->getPreOrderVector().size(), duration,  this->mode);
 
             if(format == Format::JSON){
                 outputMetricsJSON(output, this->mode);

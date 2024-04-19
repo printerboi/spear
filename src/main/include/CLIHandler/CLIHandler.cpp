@@ -106,6 +106,8 @@ CLIOptions CLIHandler::parseCLI(int argc, char **argv) {
                             mode = Mode::BLOCK;
                         }else if(modeString == "instruction"){
                             mode = Mode::INSTRUCTION;
+                        }else if(modeString == "graph"){
+                            mode = Mode::GRAPH;
                         }
                     }
                 }

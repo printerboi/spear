@@ -214,6 +214,16 @@ class ProgramGraph {
          */
         void printNodes(LLVMHandler *handler);
 
+        /**
+         * Prints the ProgramGraph in the Graphviz dot format recursivly
+         * @return Returns the string representation of the graph in the dot format
+         */
+        std::string printDotRepresentation();
+
+        /**
+         * Returns a vector of pointers to the nodes of this ProgramGraph
+         * @return Vector containing pointers to the nodes of the graph
+         */
         std::vector<Node*> getNodes();
 
         /**

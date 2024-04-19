@@ -25,7 +25,8 @@ enum class Mode {
     PROGRAM,
     BLOCK,
     FUNCTION,
-    INSTRUCTION
+    INSTRUCTION,
+    GRAPH
 };
 
 /**
