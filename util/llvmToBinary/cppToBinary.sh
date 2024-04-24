@@ -31,10 +31,11 @@ if [ -d "$path/compiled" ]; then
 fi
 echo "Creating the compiled folder..."
 
-if [[ -z "$path" ]]; then
+if [[ -z "$1" ]]; then
+  echo $1
   echo "-> the given path is empty!!! Folder can't be created"
 else
-  mkdir -p "$path/compiled"
+  mkdir -p "$1/compiled"
 fi
 
 for f in $1/*.cpp
