@@ -23,7 +23,7 @@ void ProgramGraph::construct(ProgramGraph* pGraph, const std::vector<llvm::Basic
         //Add the node to the graph
         pGraph->nodes.push_back(node);
 
-
+        pGraph->maxEnergy = 0.0;
     }
 
     //Iterate over the blocks to create the edges of the graph
@@ -284,6 +284,7 @@ std::vector<LoopNode *> ProgramGraph::getLoopNodes() {
 
 std::string ProgramGraph::printDotRepresentation() {
     std::string dotStr;
+    double globalMaxEng = this->findMaxEnergy();
 
     // Iterate over the nodes
     for(int i=0; i < this->nodes.size(); i++){
@@ -295,12 +296,15 @@ std::string ProgramGraph::printDotRepresentation() {
         // Check if the current node is a loop node...
         auto *loopNodeCandidate = dynamic_cast<LoopNode *>(node);
         if(loopNodeCandidate != nullptr){
+            double maxEng = this->findMaxEnergy();
             // If we encountered a loopnode we should to create a subgraph/cluster to represent it
             for(auto subgraph : loopNodeCandidate->subgraphs){
                 dotStr += "subgraph cluster_LOOPNODE_" + std::to_string(startAddress) + "{\n";
                 dotStr += "cluster=true\n";
-                dotStr += "\tlabel=<<b>" + name + "</b>>\n";
-                // Add invisible nodes to the cluster where we can link afterwards, so it looks like we are pointing
+                dotStr += "bgcolor=\"" + getNodeColor(maxEng, globalMaxEng) + "11\"\n";
+
+                dotStr += "\tlabel=<<b>" + name + "</b><br/>" + std::to_string(maxEng) + " J>\n";
+                // Add invisible nodes to the cluster where we can link afterward, so it looks like we are pointing
                 // to the clusters box instead of a node
                 dotStr += "invisible_start" + std::to_string(startAddress) + " [shape=point style=invis]\n";
                 dotStr += "invisible_end" + std::to_string(startAddress) + " [shape=point style=invis]\n";
@@ -309,9 +313,10 @@ std::string ProgramGraph::printDotRepresentation() {
                 dotStr += "};\n";
             }
         }else{
+            double maxEng = this->findMaxEnergy();
             // If we didn't encounter a loopnode, we just add a normal node, prefixed with n, followed by the nodes address
-            dotStr += "n" + std::to_string(startAddress) + " [label=<<b>";
-            dotStr += node->toString()+"</b>> fillcolor=lightgreen style=filled ]\n";
+            dotStr += "n" + std::to_string(startAddress) + " [label=<";
+            dotStr += node->toString()+"<br/>" + std::to_string(node->energy) + " J> fillcolor=\"" + this->getNodeColor(node, maxEng) + "\" style=filled ]\n";
         }
 
         // Add the edges of the current programgraph
@@ -352,5 +357,51 @@ std::string ProgramGraph::printDotRepresentation() {
 
     }
     return dotStr;
+}
 
+double ProgramGraph::findMaxEnergy(){
+    double maxEng = 0.0;
+
+    auto curentNode = this->nodes[0];
+
+    maxEng = curentNode->getMaxEnergy();
+    return maxEng;
+}
+
+std::string ProgramGraph::getNodeColor(Node *node, double maxEng){
+    double actValue = 0.0;
+
+    Color goodColor = Color(0, 255, 0);
+    Color badColor = Color(255, 0, 0);
+
+    Color interpolated = goodColor;
+
+    if(maxEng != 0){
+        interpolated = Color::interpolate(goodColor, badColor, node->energy/ maxEng);
+    }else{
+        interpolated = Color::interpolate(goodColor, badColor, 0);
+    }
+
+    std::string result = Color::toHtmlColor(interpolated);
+
+    return result;
+}
+
+std::string ProgramGraph::getNodeColor(double nodeEnergy, double maxEng){
+    double actValue = 0.0;
+
+    Color goodColor = Color(0, 255, 0);
+    Color badColor = Color(255, 0, 0);
+
+    Color interpolated = goodColor;
+
+    if(maxEng != 0){
+        interpolated = Color::interpolate(goodColor, badColor, nodeEnergy/ maxEng);
+    }else{
+        interpolated = Color::interpolate(goodColor, badColor, 0);
+    }
+
+    std::string result = Color::toHtmlColor(interpolated);
+
+    return result;
 }

@@ -137,3 +137,37 @@ std::vector<Node *> Node::getAdjacentNodes() {
 bool Node::isExceptionFollowUp(){
     return this->block->isLandingPad();
 }
+
+double Node::getMaxEnergy() {
+    double maxEng = 0.0;
+
+    //Calculate the adjacent nodes of this node
+    auto adjacentNodes = this->getAdjacentNodes();
+
+    //If there are adjacent nodes...
+    if(!adjacentNodes.empty()){
+        //Find the smallest energy-value-path of all the adjacent nodes
+        //Init the minimal pathvalue
+
+        for(auto node : adjacentNodes){
+            //Calculate the sum of the node
+            if(!node->isExceptionFollowUp()){
+                double locMaxEng = node->getMaxEnergy();
+
+                //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                if (locMaxEng > maxEng){
+                    maxEng = locMaxEng;
+                }
+            }
+        }
+    }
+
+    //Calculate the energy-cost of this node's basic blocks and add it to the sum
+    double localEnergy = this->energy;
+    if(localEnergy > maxEng){
+        maxEng = localEnergy;
+    }
+
+    //Return the calculated energy
+    return maxEng;
+}

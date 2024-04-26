@@ -46,6 +46,8 @@ add_library(SpearLib
         src/main/include/LLVM-Handler/LLVMHandler.h
         src/main/include/Profiler/Profiler.cpp
         src/main/include/Profiler/Profiler.h
+        src/main/include/ProgramGraph/Color.cpp
+        src/main/include/ProgramGraph/Color.h
         src/main/include/ProgramGraph/ProgramGraph.cpp
         src/main/include/ProgramGraph/ProgramGraph.h
         src/main/include/LoopTree/LoopTree.cpp

@@ -221,23 +221,33 @@ struct Energy : llvm::PassInfoMixin<Energy> {
         }else if(mode == Mode::GRAPH){
             llvm::outs() << "digraph " << "SPEARGRAPH" << "{\n";
             llvm::outs() << "compound=true;\n";
+            llvm::outs() << "rankdir=\"TB\";\n";
             llvm::outs() << "nodesep=1.5;\n";
             llvm::outs() << "ranksep=1.5;\n";
-            llvm::outs() << "graph[fontname=Rajdhani, color=\"#242038\"]\n";
-            llvm::outs() << "node[fontname=Rajdhani, color=\"#242038\", shape=\"square\"]\n";
-            llvm::outs() << "edge[fontname=Rajdhani, color=\"#242038\"]\n";
+            llvm::outs() << "linelength=30;\n";
+            llvm::outs() << "graph[fontname=Arial]\n";
+            llvm::outs() << "node[fontname=Arial, shape=\"rect\"]\n";
+            llvm::outs() << "edge[fontname=Arial]\n";
             for (int i=0; i < numberOfFuncs; i++){
                 auto energyFunction = &funcpool[i];
                 json functionObject = json::object();
                 if(energyFunction->programGraph != nullptr){
+                    double maxEng = energyFunction->programGraph->findMaxEnergy();
                     llvm::outs() << "subgraph cluster_" << energyFunction->func->getName() << "{\n";
+                    llvm::outs() << "rank=\"same\"\n";
                     llvm::outs() << "margin=40\n";
+                    llvm::outs() << "bgcolor=white\n";
                     llvm::outs() << "cluster=true\n";
-                    llvm::outs() << "\tlabel=<<b>Function " + energyFunction->func->getName() + "</b>>\n";
+                    llvm::outs() << "\tlabel=<<b>Function " + energyFunction->func->getName() + "</b><br/>" + std::to_string(maxEng) + " J>\n";
                     llvm::outs() << energyFunction->programGraph->printDotRepresentation();
                     llvm::outs() << "}" << "\n";
                 }
             }
+            llvm::outs() << "subgraph scale {\n";
+            llvm::outs() << "scale_image [label=\"\" shape=none image=\"scale.png\"];\n";
+            llvm::outs() << "margin=40\n";
+            llvm::outs() << "bgcolor=white\n";
+            llvm::outs() << "}";
             llvm::outs() << "}\n";
         }
 
@@ -330,10 +340,10 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 auto topLoop= *liiter;
 
                 //Construct the LoopTree from the Information of the current top-level loop
-                LoopTree LT = LoopTree(topLoop, topLoop->getSubLoops(), handler, &scalarEvolution);
+                LoopTree *LT = new LoopTree(topLoop, topLoop->getSubLoops(), handler, &scalarEvolution);
 
                 //Construct a LoopNode for the current loop
-                LoopNode *loopNode = LoopNode::construct(&LT, pGraph, analysisStrategy);
+                LoopNode *loopNode = LoopNode::construct(LT, pGraph, analysisStrategy);
                 //Replace the blocks used by loop in the previous created ProgramGraph
                 pGraph->replaceNodesWithLoopNode(topLoop->getBlocksVector(), loopNode);
             }
@@ -347,7 +357,6 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             //energyCalculation(pGraph, handler, function);
             energyFunc->energy = pGraph->getEnergy(handler);
         }
-
     }
 
     /**
@@ -407,6 +416,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 if (!function->isDeclarationForLinker()) {
                     //Calculate the energy
                     constructProgramRepresentation(funcPool[i].programGraph, &funcPool[i], &handler, &functionAnalysisManager, analysisStrategy);
+                    // Calculate the maximal amount of energy of the programgraph
                 }else{
                     funcPool[i].programGraph = nullptr;
                 }

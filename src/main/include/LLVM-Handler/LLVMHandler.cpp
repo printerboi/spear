@@ -34,6 +34,7 @@ double LLVMHandler::getNodeSum(Node& node){
         //Get the energy from the JSON energy values by referencing the category
         double instructionValue = 0.00;
         if(category == InstructionCategory::Category::CALL && useCallAnalysis){
+            double testval = InstructionCategory::getCalledFunctionEnergy(*instruction, this->funcmap);
             double calledValue = InstructionCategory::getCalledFunctionEnergy(*instruction, this->funcmap);
             instructionValue = this->energyValues[InstructionCategory::toString(category)].get<double>();
 

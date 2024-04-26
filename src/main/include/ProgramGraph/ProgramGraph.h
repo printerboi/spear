@@ -9,6 +9,8 @@
 #include "../LoopTree/LoopTree.h"
 #include <cfloat>
 #include "../AnalysisStrategy/AnalysisStrategy.h"
+#include "./Color.h"
+
 
 
 //Pre-declaration of the ProgramGraph Class
@@ -67,6 +69,8 @@ class Node {
          * @return Returns the esitmated energy for this Node as double
          */
         virtual double getNodeEnergy(LLVMHandler *handler);
+
+        virtual double getMaxEnergy();
 
         virtual bool isExceptionFollowUp();
 
@@ -158,6 +162,8 @@ public:
      */
     double getNodeEnergy(LLVMHandler *handler) override;
 
+    double getMaxEnergy() override;
+
     /**
      * Method for breaking cycles in the subgraphs of this LoopNode.
      * Prevents infity-calculations while dealing with recursion.
@@ -195,6 +201,8 @@ class ProgramGraph {
          * Vector containing references to the edges of the graph
          */
         std::vector<Edge *> edges;
+
+        double maxEnergy;
 
         /**
          * Static method for creating a ProgramGraph from a given set of BasicBlocks
@@ -281,6 +289,11 @@ class ProgramGraph {
          * @return Returns true if the ProgramGraph contains LoopNodes. False if otherwise
          */
         bool containsLoopNodes();
+
+        double findMaxEnergy();
+
+        std::string getNodeColor(Node *node, double maxEng);
+        std::string getNodeColor(double nodeEnergy, double maxEng);
 };
 
 

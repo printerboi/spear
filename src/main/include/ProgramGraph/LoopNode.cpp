@@ -163,3 +163,38 @@ LoopNode::~LoopNode() {
 bool LoopNode::isExceptionFollowUp(){
     return false;
 }
+
+double LoopNode::getMaxEnergy() {
+    double maxEnergy = 0.0;
+    auto adjacentNodes = this->getAdjacentNodes();
+
+    //Get the energy from all contained subgraphs
+    for(auto subTrees : this->subgraphs){
+        double maxEnergyOfSubtree = subTrees->findMaxEnergy();
+        if(maxEnergyOfSubtree > maxEnergy){
+            maxEnergy = maxEnergyOfSubtree;
+        }
+    }
+
+    //Multiply the calculated energy from the subgraphs by the iterations of this LoopNode's loop
+
+    maxEnergy = (double) this->loopTree->iterations * maxEnergy;
+
+    //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
+    if(!adjacentNodes.empty()){
+
+        //Iterate over the adjacent nodes
+        for(auto node : adjacentNodes){
+            //Calculate the sum of the node
+            double maxEnergyOfAdjNode = node->getMaxEnergy();
+            if(maxEnergyOfAdjNode > maxEnergy){
+                maxEnergy = maxEnergyOfAdjNode;
+            }
+
+        }
+    }
+
+
+    //Return the calculation result
+    return maxEnergy;
+}
