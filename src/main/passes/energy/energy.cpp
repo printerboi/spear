@@ -244,7 +244,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 }
             }
             llvm::outs() << "subgraph scale {\n";
-            llvm::outs() << "scale_image [label=\"\" shape=none image=\"scale.png\"];\n";
+            llvm::outs() << "scale_image [label=\"\" shape=none image=\"/usr/share/spear/scale.png\"];\n";
             llvm::outs() << "margin=40\n";
             llvm::outs() << "bgcolor=white\n";
             llvm::outs() << "}";

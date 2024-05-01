@@ -30,14 +30,14 @@ function compileFile() {
 
 mkdir build
 cd build || exit
-echo "[1/5] Compiling SPEAR"
+echo "[1/6] Compiling SPEAR"
 cmake ..
 make -j"$(nproc)"
-echo "[2/5] Copying profiling programs"
+echo "[2/6] Copying profiling programs"
 mkdir profile
 cd profile || exit
 cp ../../profile/src/*.ll -R .
-echo "[3/5] Compiling profiling programs"
+echo "[3/6] Compiling profiling programs"
 
 for f in *.ll
 do
@@ -46,10 +46,10 @@ done
 
 cd ..
 
-echo "[4/5] Copying spear to /usr/bin"
+echo "[4/6] Copying spear to /usr/bin"
 sudo install spear /usr/bin
 
-echo "[5/5] Copying profile programs to /usr/share"
+echo "[5/6] Copying profile programs to /usr/share"
 sudo install -d profile /usr/share/spear/profile
 cd profile || exit
 cd compiled || exit
@@ -60,3 +60,9 @@ sudo install memoryread /usr/share/spear/profile/memoryread
 sudo install memorywrite /usr/share/spear/profile/memorywrite
 sudo install programflow /usr/share/spear/profile/programflow
 sudo install stdbinary /usr/share/spear/profile/stdbinary
+
+cd ../../../
+
+echo "[6/6] Copying additional assets"
+sudo install scale.png /usr/share/spear/scale.png
+echo "[DONE] SPEAR was installed successfully!"
