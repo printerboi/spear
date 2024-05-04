@@ -373,11 +373,17 @@ std::string ProgramGraph::getNodeColor(Node *node, double maxEng){
 
     Color goodColor = Color(0, 255, 0);
     Color badColor = Color(255, 0, 0);
+    Color mediumColor = Color(255, 255, 0);
+
 
     Color interpolated = goodColor;
 
     if(maxEng != 0){
-        interpolated = Color::interpolate(goodColor, badColor, node->energy/ maxEng);
+        if(node->energy < maxEng/2){
+            interpolated = Color::interpolate(goodColor, mediumColor, node->energy/(maxEng/2));
+        }else{
+            interpolated = Color::interpolate(mediumColor, badColor, (node->energy - maxEng/2)/ (maxEng/2));
+        }
     }else{
         interpolated = Color::interpolate(goodColor, badColor, 0);
     }
@@ -392,11 +398,16 @@ std::string ProgramGraph::getNodeColor(double nodeEnergy, double maxEng){
 
     Color goodColor = Color(0, 255, 0);
     Color badColor = Color(255, 0, 0);
+    Color mediumColor = Color(255, 255, 0);
 
     Color interpolated = goodColor;
 
     if(maxEng != 0){
-        interpolated = Color::interpolate(goodColor, badColor, nodeEnergy/ maxEng);
+        if(nodeEnergy < maxEng/2){
+            interpolated = Color::interpolate(goodColor, mediumColor, nodeEnergy/(maxEng/2));
+        }else{
+            interpolated = Color::interpolate(mediumColor, badColor, (nodeEnergy - maxEng/2)/ (maxEng/2));
+        }
     }else{
         interpolated = Color::interpolate(goodColor, badColor, 0);
     }
