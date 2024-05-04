@@ -62,7 +62,8 @@ add_library(SpearLib
         src/main/include/CLIHandler/CLIOptions.cpp
         src/main/include/CLIHandler/CLIOptions.h
         src/main/include/ProgramGraph/InstructionElement.cpp
-)
+        src/main/include/LLVM-Handler/DeMangler.cpp
+        src/main/include/LLVM-Handler/DeMangler.h)
 
 # Add spear as exeexecutable depending on main.cpp
 add_executable(spear main.cpp)

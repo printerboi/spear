@@ -131,7 +131,7 @@ void runAnalysisRoutine(CLIOptions opts){
 
 
 
-    modulePassManager.addPass(Energy(opts.profilePath, opts.mode, opts.format, opts.strategy, opts.loopBound, opts.deepCalls));
+    modulePassManager.addPass(Energy(opts.profilePath, opts.mode, opts.format, opts.strategy, opts.loopBound, opts.deepCalls, opts.forFunction));
     modulePassManager.run(*module_up, moduleAnalysisManager);
 }
 

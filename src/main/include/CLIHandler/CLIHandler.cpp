@@ -82,6 +82,7 @@ CLIOptions CLIHandler::parseCLI(int argc, char **argv) {
             Strategy strategy = Strategy::UNDEFINED;
             int loopBound = -1;
             std::string programPath;
+            std::string forFunction;
 
             for(const auto &arg : arguments){
                 if(arg == "--profile"){
@@ -164,9 +165,16 @@ CLIOptions CLIHandler::parseCLI(int argc, char **argv) {
                     }
                 }
 
+                if(arg == "--forFunction"){
+                    if(hasOption(arguments, "--forFunction")){
+                        const std::string_view functionName = get_option(arguments, "--forFunction");
+                        forFunction = functionName;
+                    }
+                }
+
             }
 
-            return AnalysisOptions(profilePath, mode, format, strategy, loopBound, programPath, deepCalls);
+            return AnalysisOptions(profilePath, mode, format, strategy, loopBound, programPath, deepCalls, forFunction);
         }
 
     }

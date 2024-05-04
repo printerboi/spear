@@ -11,6 +11,8 @@
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Analysis/PostDominators.h"
+#include "../../include/LLVM-Handler/DeMangler.h"
+
 
 #include <nlohmann/json.hpp>
 #include <cxxabi.h>
@@ -40,6 +42,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
     Strategy strategy;
     int loopbound;
     bool deepCallsEnabled;
+    std::string forFunction;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000000000>>> stopwatch_start;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::duration<long, std::ratio<1, 1000000000>>> stopwatch_end;
 
@@ -51,7 +54,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param strategy Strategy to analyze the program with
      * @param loopbound Upper bound of loops that can't be analyzed
      */
-    explicit Energy(const std::string& filename, Mode mode, Format format, Strategy strategy, int loopbound, DeepCalls deepCalls){
+    explicit Energy(const std::string& filename, Mode mode, Format format, Strategy strategy, int loopbound, DeepCalls deepCalls, std::string forFunction){
         if( llvm::sys::fs::exists( filename ) && !llvm::sys::fs::is_directory( filename ) ){
             //Create a JSONHandler object and read in the energypath
             this->energyJson = JSONHandler::read(filename)["profile"];
@@ -62,6 +65,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             this->loopbound = loopbound;
             this->stopwatch_start = std::chrono::high_resolution_clock::now();
             this->deepCallsEnabled = (deepCalls == DeepCalls::ENABLED);
+            this->forFunction = std::move(forFunction);
         }
     }
 
@@ -100,7 +104,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
      * @param handler LLVMHandler so we can get the functionQueue
      * @return Retuns a JSON-Object containing all needed information for the output
      */
-    static json constructOutputObject(EnergyFunction funcpool[], int numberOfFuncs, double duration, Mode mode){
+    static json constructOutputObject(EnergyFunction funcpool[], int numberOfFuncs, double duration, Mode mode, std::string forFunction){
         json outputObject = nullptr;
 
         if(mode == Mode::PROGRAM){
@@ -110,8 +114,11 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
             for (int i=0; i < numberOfFuncs; i++){
                 auto energyFunction = &funcpool[i];
+                std::string fName = energyFunction->func->getName().str();
+
                 json functionObject = json::object();
-                functionObject["name"] = energyFunction->func->getName().str();
+                functionObject["name"] = fName;
+                functionObject["nM"] = llvm::itaniumDemangle(fName.c_str(), nullptr, nullptr, nullptr);
                 functionObject["energy"] = energyFunction->energy;
                 functionObject["numberOfBasicBlocks"] = energyFunction->func->size();
                 functionObject["numberOfInstructions"] = energyFunction->func->getInstructionCount();
@@ -138,7 +145,10 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             for (int i=0; i < numberOfFuncs; i++){
                 auto energyFunction = &funcpool[i];
                 json functionObject = json::object();
-                functionObject["name"] = energyFunction->func->getName().str();
+                std::string fName = energyFunction->func->getName().str();
+
+                functionObject["name"] = fName;
+                functionObject["demangled"] = DeMangler::demangle(fName);
                 functionObject["nodes"] = json::array();
 
                 if(energyFunction->programGraph != nullptr){
@@ -167,88 +177,118 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             for (int i=0; i < numberOfFuncs; i++){
                 auto energyFunction = &funcpool[i];
                 json functionObject = json::object();
-                functionObject["name"] = energyFunction->func->getName().str();
-                functionObject["nodes"] = json::array();
+                std::string fName = energyFunction->func->getName().str();
+                std::string dMnglName = DeMangler::demangle(fName);
 
-                if(energyFunction->programGraph != nullptr){
-                    std::vector<Node *> nodelist = energyFunction->programGraph->getNodes();
-                    if(!nodelist.empty()){
-                        for(int j=0; j < nodelist.size(); j++){
-                            json nodeObject = json::object();
-                            Node* Node = nodelist[j];
+                if(forFunction.empty() || forFunction == dMnglName){
+                    functionObject["name"] = fName;
+                    functionObject["demangled"] = dMnglName;
+                    functionObject["nodes"] = json::array();
 
-                            if(Node->block){
-                                nodeObject["name"] = Node->block->getName().str();
-                                nodeObject["energy"] = Node->energy;
-                                nodeObject["instructions"] = json::array();
+                    if(energyFunction->programGraph != nullptr){
+                        std::vector<Node *> nodelist = energyFunction->programGraph->getNodes();
+                        if(!nodelist.empty()){
+                            for(int j=0; j < nodelist.size(); j++){
+                                json nodeObject = json::object();
+                                Node* Node = nodelist[j];
 
-                                for(int k=0; k < Node->instructions.size(); k++) {
-                                    json instructionObject = json::object();
-                                    InstructionElement Inst = Node->instructions[k];
+                                if(Node->block){
+                                    nodeObject["name"] = Node->block->getName().str();
+                                    nodeObject["energy"] = Node->energy;
+                                    nodeObject["instructions"] = json::array();
 
-                                    instructionObject["opcode"] = Inst.inst->getOpcodeName();
-                                    instructionObject["energy"] = Inst.energy;
-                                    json locationObj = json::object();
-                                    const llvm::DebugLoc &dbl = Inst.inst->getDebugLoc();
-                                    unsigned int line = -1;
-                                    unsigned int col  = -1;
-                                    std::string filename = "undefined";
+                                    for(int k=0; k < Node->instructions.size(); k++) {
+                                        json instructionObject = json::object();
+                                        InstructionElement Inst = Node->instructions[k];
 
-                                    // Check if the debug information is present
-                                    // If the instruction i.e. is inserted by the compiler no debug info is present
-                                    if(dbl){
-                                        line = dbl->getLine();
-                                        col = dbl->getColumn();
-                                        filename = dbl->getFilename();
+                                        instructionObject["opcode"] = Inst.inst->getOpcodeName();
+                                        instructionObject["energy"] = Inst.energy;
+                                        json locationObj = json::object();
+                                        const llvm::DebugLoc &dbl = Inst.inst->getDebugLoc();
+                                        unsigned int line = -1;
+                                        unsigned int col  = -1;
+                                        std::string filename = "undefined";
+
+                                        // Check if the debug information is present
+                                        // If the instruction i.e. is inserted by the compiler no debug info is present
+                                        if(dbl){
+                                            line = dbl->getLine();
+                                            col = dbl->getColumn();
+                                            filename = dbl->getFilename();
+                                        }
+
+                                        locationObj["line"] = line;
+                                        locationObj["column"] = col;
+                                        locationObj["file"] = filename;
+                                        instructionObject["location"] = locationObj;
+                                        nodeObject["instructions"][k] = instructionObject;
                                     }
 
-                                    locationObj["line"] = line;
-                                    locationObj["column"] = col;
-                                    locationObj["file"] = filename;
-                                    instructionObject["location"] = locationObj;
-                                    nodeObject["instructions"][k] = instructionObject;
+                                    functionObject["nodes"][j] = nodeObject;
+
                                 }
-
-                                functionObject["nodes"][j] = nodeObject;
-
                             }
                         }
                     }
+                    //outputObject["functions"][i] = functionObject;
+                    outputObject["functions"].push_back(functionObject);
                 }
 
-                outputObject["functions"][i] = functionObject;
             }
         }else if(mode == Mode::GRAPH){
-            llvm::outs() << "digraph " << "SPEARGRAPH" << "{\n";
-            llvm::outs() << "compound=true;\n";
-            llvm::outs() << "rankdir=\"TB\";\n";
-            llvm::outs() << "nodesep=1.5;\n";
-            llvm::outs() << "ranksep=1.5;\n";
-            llvm::outs() << "linelength=30;\n";
-            llvm::outs() << "graph[fontname=Arial]\n";
-            llvm::outs() << "node[fontname=Arial, shape=\"rect\"]\n";
-            llvm::outs() << "edge[fontname=Arial]\n";
-            for (int i=0; i < numberOfFuncs; i++){
-                auto energyFunction = &funcpool[i];
-                json functionObject = json::object();
-                if(energyFunction->programGraph != nullptr){
-                    double maxEng = energyFunction->programGraph->findMaxEnergy();
-                    llvm::outs() << "subgraph cluster_" << energyFunction->func->getName() << "{\n";
-                    llvm::outs() << "rank=\"same\"\n";
-                    llvm::outs() << "margin=40\n";
-                    llvm::outs() << "bgcolor=white\n";
-                    llvm::outs() << "cluster=true\n";
-                    llvm::outs() << "\tlabel=<<b>Function " + energyFunction->func->getName() + "</b><br/>" + std::to_string(maxEng) + " J>\n";
-                    llvm::outs() << energyFunction->programGraph->printDotRepresentation();
-                    llvm::outs() << "}" << "\n";
+            bool functionExists = false;
+            if(!forFunction.empty()){
+                for (int i=0; i < numberOfFuncs; i++) {
+                    auto energyFunction = &funcpool[i];
+                    json functionObject = json::object();
+                    std::string fName = energyFunction->func->getName().str();
+                    std::string dMnglName = DeMangler::demangle(fName);
+                    functionExists = functionExists || dMnglName == forFunction;
                 }
+            }else{
+                functionExists = true;
             }
-            llvm::outs() << "subgraph scale {\n";
-            llvm::outs() << "scale_image [label=\"\" shape=none image=\"/usr/share/spear/scale.png\"];\n";
-            llvm::outs() << "margin=40\n";
-            llvm::outs() << "bgcolor=white\n";
-            llvm::outs() << "}";
-            llvm::outs() << "}\n";
+
+            if(functionExists){
+                llvm::outs() << "digraph " << "SPEARGRAPH" << "{\n";
+                llvm::outs() << "compound=true;\n";
+                llvm::outs() << "rankdir=\"TB\";\n";
+                llvm::outs() << "nodesep=1.5;\n";
+                llvm::outs() << "ranksep=1.5;\n";
+                llvm::outs() << "linelength=30;\n";
+                llvm::outs() << "graph[fontname=Arial]\n";
+                llvm::outs() << "node[fontname=Arial, shape=\"rect\"]\n";
+                llvm::outs() << "edge[fontname=Arial]\n";
+                for (int i=0; i < numberOfFuncs; i++){
+                    auto energyFunction = &funcpool[i];
+                    json functionObject = json::object();
+                    std::string fName = energyFunction->func->getName().str();
+                    std::string dMnglName = DeMangler::demangle(fName);
+
+                    if(forFunction.empty() || forFunction == dMnglName){
+                        if(energyFunction->programGraph != nullptr){
+                            double maxEng = energyFunction->programGraph->findMaxEnergy();
+                            llvm::outs() << "subgraph cluster_" << energyFunction->func->getName() << "{\n";
+                            llvm::outs() << "rank=\"same\"\n";
+                            llvm::outs() << "margin=40\n";
+                            llvm::outs() << "bgcolor=white\n";
+                            llvm::outs() << "cluster=true\n";
+                            llvm::outs() << "\tlabel=<<b>Function " + energyFunction->func->getName() + "</b><br/>" + std::to_string(maxEng) + " J>\n";
+                            llvm::outs() << energyFunction->programGraph->printDotRepresentation();
+                            llvm::outs() << "}" << "\n";
+                        }
+                    }
+
+                }
+                llvm::outs() << "subgraph scale {\n";
+                llvm::outs() << "scale_image [label=\"\" shape=none image=\"/usr/share/spear/scale.png\"];\n";
+                llvm::outs() << "margin=40\n";
+                llvm::outs() << "bgcolor=white\n";
+                llvm::outs() << "}";
+                llvm::outs() << "}\n";
+            }else{
+                throw std::invalid_argument("Function does not exist!");
+            }
         }
 
         return outputObject;
@@ -428,7 +468,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
             double duration = ms_double.count()/1000;
 
             //Construct the output
-            json output = constructOutputObject(funcPool, functionTree->getPreOrderVector().size(), duration,  this->mode);
+            json output = constructOutputObject(funcPool, functionTree->getPreOrderVector().size(), duration,  this->mode, this->forFunction);
 
             if(format == Format::JSON){
                 outputMetricsJSON(output, this->mode);
