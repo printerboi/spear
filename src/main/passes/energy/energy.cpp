@@ -214,7 +214,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                                         if(dbl){
                                             line = dbl->getLine();
                                             col = dbl->getColumn();
-                                            filename = dbl->getFilename();
+                                            filename = dbl->getFile()->getDirectory().str() + "/" + dbl->getFile()->getFilename().str();
                                         }
 
                                         locationObj["line"] = line;
