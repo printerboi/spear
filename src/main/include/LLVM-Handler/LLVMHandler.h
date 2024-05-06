@@ -41,7 +41,7 @@ class LLVMHandler {
          * @param basicBlock Basic block to analyze
          * @return Double value of the approximated energy
          */
-        double getNodeSum(Node& node);
+        double getNodeSum(Node *node);
 
          int efficient;
          int inefficient;

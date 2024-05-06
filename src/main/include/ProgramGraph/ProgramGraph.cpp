@@ -159,6 +159,9 @@ void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *
         Node *exit = this->findBlock(loopNode->loopTree->mainloop->getLoopLatch());
         auto exiname = exit->toString();
 
+        Node *header = this->findBlock(loopNode->loopTree->mainloop->getHeader());
+        auto headername = header->toString();
+
         //Iterate over the edges of this graph
         for (auto edge : this->edges) {
             //If we find an edge, which end-node is the entry-node of the loop
@@ -169,6 +172,11 @@ void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *
 
             //If we find an edge, which start-node is the exit-node of the loop
             if(edge->start == exit){
+                //Change the edges startpoint to the LoopNode
+                edge->start = loopNode;
+            }
+
+            if(edge->start == header){
                 //Change the edges startpoint to the LoopNode
                 edge->start = loopNode;
             }

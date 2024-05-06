@@ -19,14 +19,16 @@ LLVMHandler::LLVMHandler( json energy, int valueIfIndeterminable, bool useCallAn
     }
 }
 
-double LLVMHandler::getNodeSum(Node& node){
+double LLVMHandler::getNodeSum(Node *node){
     //Init the sum of this block
     double blocksum = 0.0;
-    std::vector<InstructionElement> workingInstList = node.instructions;
+    std::vector<InstructionElement> workingInstList = node->instructions;
+    auto nodename = node->block->getName();
 
     //Iterate over the instructions in this block
-    for ( int i=0; i < node.instructions.size(); i++ ) {
-        auto &instruction = node.instructions[i].inst;
+    for ( int i=0; i < node->instructions.size(); i++ ) {
+        auto &instruction = node->instructions[i].inst;
+        auto name = instruction->getOpcodeName();
 
         //Categorize the current instruction
         InstructionCategory::Category category = InstructionCategory::getCategory(*instruction);
@@ -43,7 +45,7 @@ double LLVMHandler::getNodeSum(Node& node){
             instructionValue = this->energyValues[InstructionCategory::toString(category)].get<double>();
         }
 
-        node.instructions[i].energy = instructionValue;
+        node->instructions[i].energy = instructionValue;
 
         //Add the value to the sum
         blocksum += instructionValue;
