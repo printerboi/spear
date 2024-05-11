@@ -202,3 +202,22 @@ double LoopNode::getMaxEnergy() {
     //Return the calculation result
     return maxEnergy;
 }
+
+
+json LoopNode::getJsonRepresentation() {
+    json nodeObject;
+
+    nodeObject["type"] = NodeType::LOOPNODE;
+    nodeObject["name"] = "";
+    nodeObject["repetitions"] = loopTree->iterations;
+    nodeObject["subgraphs"] = json::array();
+
+    for(int i = 0; i < this->subgraphs.size(); i++){
+        json subGraphObject;
+        subGraphObject = this->subgraphs[i]->populateJsonRepresentation(subGraphObject);
+
+        nodeObject["subgraphs"][i] = subGraphObject;
+    }
+
+    return nodeObject;
+}

@@ -45,6 +45,13 @@ double LLVMHandler::getNodeSum(Node *node){
             instructionValue = this->energyValues[InstructionCategory::toString(category)].get<double>();
         }
 
+        // We catch the energy value of phi nodes here as they are a feature of llvm
+        // Their energy usage can not be translated directly to the energy usage of the source code
+        // Therefore we make the energy usage zero
+        if(llvm::isa<llvm::PHINode>(instruction)){
+            instructionValue = 0;
+        }
+
         node->instructions[i].energy = instructionValue;
 
         //Add the value to the sum

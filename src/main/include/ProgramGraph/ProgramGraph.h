@@ -10,6 +10,9 @@
 #include <cfloat>
 #include "../AnalysisStrategy/AnalysisStrategy.h"
 #include "./Color.h"
+#include "llvm/IR/DebugLoc.h"
+#include "llvm/IR/DebugInfoMetadata.h"
+
 
 
 
@@ -23,6 +26,12 @@ public:
     llvm::Instruction* inst;
 
     explicit InstructionElement(llvm::Instruction* instruction);
+};
+
+enum NodeType {
+    UNDEFINED,
+    NODE,
+    LOOPNODE
 };
 
 /**
@@ -73,6 +82,8 @@ class Node {
         virtual double getMaxEnergy();
 
         virtual bool isExceptionFollowUp();
+
+        virtual json getJsonRepresentation();
 
 protected:
     /**
@@ -183,6 +194,8 @@ public:
     ~LoopNode();
 
     bool isExceptionFollowUp() override;
+
+    json getJsonRepresentation() override;
 };
 
 
@@ -294,6 +307,8 @@ class ProgramGraph {
 
         std::string getNodeColor(Node *node, double maxEng);
         std::string getNodeColor(double nodeEnergy, double maxEng);
+
+        json populateJsonRepresentation(json functionObject);
 };
 
 

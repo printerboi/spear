@@ -173,3 +173,42 @@ double Node::getMaxEnergy() {
     //Return the calculated energy
     return maxEng;
 }
+
+json Node::getJsonRepresentation() {
+    json nodeObject = json::object();
+    if(block != nullptr){
+        nodeObject["type"] = NodeType::NODE;
+        nodeObject["name"] = block->getName().str();
+        nodeObject["energy"] = energy;
+        nodeObject["instructions"] = json::array();
+
+        for(int k=0; k < instructions.size(); k++) {
+            json instructionObject = json::object();
+            InstructionElement Inst = instructions[k];
+
+            instructionObject["opcode"] = Inst.inst->getOpcodeName();
+            instructionObject["energy"] = Inst.energy;
+            json locationObj = json::object();
+            const llvm::DebugLoc &dbl = Inst.inst->getDebugLoc();
+            unsigned int line = -1;
+            unsigned int col  = -1;
+            std::string filename = "undefined";
+
+            // Check if the debug information is present
+            // If the instruction i.e. is inserted by the compiler no debug info is present
+            if(dbl){
+                line = dbl.getLine();
+                col = dbl->getColumn();
+                filename = dbl->getFile()->getDirectory().str() + "/" + dbl->getFile()->getFilename().str();
+            }
+
+            locationObj["line"] = line;
+            locationObj["column"] = col;
+            locationObj["file"] = filename;
+            instructionObject["location"] = locationObj;
+            nodeObject["instructions"][k] = instructionObject;
+        }
+    }
+
+    return nodeObject;
+}

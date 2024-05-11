@@ -424,3 +424,16 @@ std::string ProgramGraph::getNodeColor(double nodeEnergy, double maxEng){
 
     return result;
 }
+
+json ProgramGraph::populateJsonRepresentation(json functionObject) {
+    std::vector<Node *> nodelist = getNodes();
+    std::vector<LoopNode *> loopNodeList = getLoopNodes();
+
+    //nodelist.insert(nodelist.end(), loopNodeList.begin(), loopNodeList.end());
+
+    for(int j = 0; j < nodelist.size(); j++){
+        functionObject["nodes"][j] = nodelist[j]->getJsonRepresentation();
+    }
+
+    return functionObject;
+}

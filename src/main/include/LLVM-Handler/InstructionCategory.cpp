@@ -28,7 +28,7 @@ bool InstructionCategory::isProgramFlowInstruction( llvm::Instruction &Instructi
             llvm::isa<llvm::SwitchInst>(Instruction) ||
             llvm::isa<llvm::CatchSwitchInst>(Instruction) ||
             llvm::isa<llvm::CatchReturnInst>(Instruction) ||
-            llvm::isa<llvm::PHINode>(Instruction) ||
+            //llvm::isa<llvm::PHINode>(Instruction) ||
             llvm::isa<llvm::ReturnInst>(Instruction);
 }
 
