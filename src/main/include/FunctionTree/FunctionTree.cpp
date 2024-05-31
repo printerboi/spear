@@ -44,12 +44,20 @@ std::vector<llvm::Function *> FunctionTree::getCalledFunctions() const {
         //Iterate over the instructions of the function
         for( auto &instruction : basicBlock){
             //If we find an instruction, that is a call-instruction
-            if(llvm::isa<llvm::CallInst>(instruction )){
+            if(llvm::isa<llvm::CallInst>( instruction ) || llvm::isa<llvm::CallBrInst>( instruction )){
                 auto calleeInst = llvm::cast<llvm::CallInst>(&instruction);
                 //Get the called function
                 auto *calledFunction = calleeInst->getCalledFunction();
                 //Add the function to the list
                 functions.push_back(calledFunction);
+            }else if(llvm::isa<llvm::InvokeInst>( instruction )){
+                auto calleeInst = llvm::cast<llvm::InvokeInst>(&instruction);
+                //Get the called function
+                auto *calledFunction = calleeInst->getCalledFunction();
+                //Add the function to the list
+                if(calledFunction != nullptr){
+                    functions.push_back(calledFunction);
+                }
             }
         }
     }

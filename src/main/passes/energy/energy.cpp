@@ -471,7 +471,8 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
             //Construct the functionTrees to the functions of the module
             for(auto &function : *funcList){
-                if(function.getName() == "main"){
+                auto name = function.getName();
+                if(name == "main"){
                     auto mainFunctionTree = FunctionTree::construct(&function);
                     functionTree = (mainFunctionTree);
                 }
@@ -497,6 +498,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 //auto energyFunction = handler.funcmap.at(function->getName().str());
 
                 funcPool[i].func = function;
+                funcPool[i].name = DeMangler::demangle(function->getName().str());
             }
 
             //Init the LLVMHandler with the given model and the upper bound for unbounded loops

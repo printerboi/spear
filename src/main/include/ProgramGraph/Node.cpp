@@ -1,4 +1,5 @@
 #include "ProgramGraph.h"
+#include "../LLVM-Handler/DeMangler.h"
 
 //Create a Node by setting the parent property with the given ProgramGraph
 Node::Node(ProgramGraph *parent, AnalysisStrategy::Strategy strategy) {
@@ -188,6 +189,27 @@ json Node::getJsonRepresentation() {
 
             instructionObject["opcode"] = Inst.inst->getOpcodeName();
             instructionObject["energy"] = Inst.energy;
+
+            if(llvm::isa<llvm::CallInst>( Inst.inst ) || llvm::isa<llvm::CallBrInst>( Inst.inst )){
+                auto calleeInst = llvm::cast<llvm::CallInst>(Inst.inst);
+                //Get the called function
+                auto *calledFunction = calleeInst->getCalledFunction();
+                //Add the function to the list
+
+                std::string functionName = DeMangler::demangle(calledFunction->getName().str());
+                instructionObject["calledFunction"] = functionName;
+
+            }else if(llvm::isa<llvm::InvokeInst>( Inst.inst )){
+                auto calleeInst = llvm::cast<llvm::InvokeInst>(Inst.inst);
+                //Get the called function
+                auto *calledFunction = calleeInst->getCalledFunction();
+                //Add the function to the list
+                if(calledFunction != nullptr){
+                    std::string functionName = DeMangler::demangle(calledFunction->getName().str());
+                    instructionObject["calledFunction"] = functionName;
+                }
+            }
+
             json locationObj = json::object();
             const llvm::DebugLoc &dbl = Inst.inst->getDebugLoc();
             unsigned int line = -1;

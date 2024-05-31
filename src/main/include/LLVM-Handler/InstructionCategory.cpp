@@ -6,6 +6,13 @@
 
 bool InstructionCategory::isCallInstruction(llvm::Instruction &Instruction) {
     //check if the given instruciton is either a call, callbr or an invoke instruction
+
+    auto repre = Instruction.getOpcodeName();
+
+    bool checkval = llvm::isa<llvm::CallInst>( Instruction ) ||
+                    llvm::isa<llvm::CallBrInst>( Instruction ) ||
+                    llvm::isa<llvm::InvokeInst>( Instruction );
+
     return llvm::isa<llvm::CallInst>( Instruction ) ||
         llvm::isa<llvm::CallBrInst>( Instruction ) ||
         llvm::isa<llvm::InvokeInst>( Instruction );
@@ -95,7 +102,7 @@ double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instructi
     double energy = 0.00;
 
     //Check if the given instruction is a call instruction
-    if(llvm::isa<llvm::CallInst>( Instruction ) ){
+    if(llvm::isa<llvm::CallInst>( Instruction ) || llvm::isa<llvm::CallBrInst>( Instruction )  ){
         //Get the call-instruction object of the given instruction
         auto call_instruction = llvm::cast<llvm::CallInst>(&Instruction);
         //If the cast of the given instruction worked as intended
@@ -114,6 +121,29 @@ double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instructi
             //auto energyFunction = poolOfFunctions[called_function->getName().str()];
             if(foundObject != nullptr){
                 energy = foundObject->energy;
+            }
+        }
+    }else if(llvm::isa<llvm::InvokeInst>( Instruction ) ){
+        //Get the call-instruction object of the given instruction
+        auto call_instruction = llvm::cast<llvm::InvokeInst>(&Instruction);
+        //If the cast of the given instruction worked as intended
+        if(call_instruction != nullptr){
+            //Get the called instruction from the object
+            auto called_function = call_instruction->getCalledFunction();
+
+            if(called_function != nullptr){
+                //Get the Energyfunction object from the functionmap
+                EnergyFunction* foundObject = nullptr;
+                for(auto efR : pool){
+                    if(called_function->getName() == efR->func->getName()){
+                        foundObject = efR;
+                    }
+                }
+
+                //auto energyFunction = poolOfFunctions[called_function->getName().str()];
+                if(foundObject != nullptr){
+                    energy = foundObject->energy;
+                }
             }
         }
     }
