@@ -179,6 +179,15 @@ struct Energy : llvm::PassInfoMixin<Energy> {
                 json functionObject = json::object();
                 std::string fName = energyFunction->func->getName().str();
                 std::string dMnglName = DeMangler::demangle(fName);
+                functionObject["external"] = energyFunction->func->isDeclarationForLinker();
+                const auto subProgram = energyFunction->func->getSubprogram();
+                if(subProgram != nullptr){
+                    functionObject["file"] = subProgram->getFile()->getDirectory().str() + "/" + subProgram->getFile()->getFilename().str();
+                }else{
+                    functionObject["file"] = "";
+                }
+
+                functionObject["energy"] = energyFunction->energy;
 
                 if(forFunction.empty() || forFunction == dMnglName){
                     functionObject["name"] = fName;
