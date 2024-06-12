@@ -5,7 +5,7 @@
 #include "llvm/Support/raw_ostream.h"
 
 #include "llvm/IR/LegacyPassManager.h"
-#include "llvm/Transforms/IPO/PassManagerBuilder.h"
+//#include "llvm/Transforms/IPO/PassManagerBuilder.h"
 #include "../../include/LLVM-Handler/LLVMHandler.h"
 #include "../../include/JSON-Handler/JSONHandler.h"
 #include "llvm/Support/CommandLine.h"
@@ -118,7 +118,7 @@ struct Energy : llvm::PassInfoMixin<Energy> {
 
                 json functionObject = json::object();
                 functionObject["name"] = fName;
-                functionObject["nM"] = llvm::itaniumDemangle(fName.c_str(), nullptr, nullptr, nullptr);
+                functionObject["nM"] = llvm::itaniumDemangle(fName.c_str());
                 functionObject["energy"] = energyFunction->energy;
                 functionObject["numberOfBasicBlocks"] = energyFunction->func->size();
                 functionObject["numberOfInstructions"] = energyFunction->func->getInstructionCount();
