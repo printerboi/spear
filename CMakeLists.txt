@@ -3,7 +3,7 @@ project(spear VERSION 0.2.0 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 17)
 
 # Should we use the external version of the json lib or use the locally installed version
-option(USE_EXTERNAL_JSON "Use external JSON lib" OFF)
+option(USE_EXTERNAL_JSON "Use external JSON lib" Off)
 
 # ========= LLVM DANGER ZONE =========
 # ===== PLEASE EDIT WITH CAUTION =====
@@ -69,8 +69,8 @@ add_library(SpearLib
 add_executable(spear main.cpp)
 
 # Link the json lib and LLVM to spears lib
-target_link_libraries(SpearLib PRIVATE LLVM nlohmann_json::nlohmann_json)
+target_link_libraries(SpearLib PRIVATE LLVM nlohmann_json)
 # Link the lib itself to the executable of spear
-target_link_libraries(spear PRIVATE SpearLib LLVM nlohmann_json::nlohmann_json)
+target_link_libraries(spear PRIVATE SpearLib LLVM nlohmann_json)
 
 enable_testing()
