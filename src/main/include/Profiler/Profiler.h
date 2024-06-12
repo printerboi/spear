@@ -6,7 +6,7 @@
 #include "../Rapl-reader/PowercapReader.h"
 #include "string"
 #include "vector"
-#include "json/json.h"
+#include "nlohmann/json.hpp"
 
 /**
  * Simple class to profile the llvm-code and output the data in an appropriate format

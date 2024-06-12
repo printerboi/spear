@@ -1,6 +1,6 @@
 
 
-if(FOO_USE_EXTERNAL_JSON)
+if(USE_EXTERNAL_JSON)
     message("Using installed Version of nlohmann_json")
     find_package(nlohmann_json 3.2.0 REQUIRED)
 else()

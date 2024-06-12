@@ -9,7 +9,7 @@
 #include <llvm/Support/SourceMgr.h>
 #include <llvm/IR/Instructions.h>
 #include <llvm/Analysis/LoopInfo.h>
-#include "json/json.h"
+#include "nlohmann/json.hpp"
 #include "InstructionCategory.h"
 #include "llvm/Analysis/CostModel.h"
 #include "llvm/IR/CFG.h"

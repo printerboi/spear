@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(spear VERSION 0.2.0 LANGUAGES CXX)
+project(spear VERSION 0.2.0 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 17)
 
 # Should we use the external version of the json lib or use the locally installed version
