@@ -51,6 +51,8 @@ then
   ln -s /usr/bin/clang++-17 /usr/bin/clang++
   ln -s /usr/bin/llvm-as-17 /usr/bin/llvm-as
   ln -s /usr/bin/llc-17 /usr/bin/llc
+  ln -s /usr/bin/llvm-link-17 /usr/bin/llvm-link
+  ln -s /usr/bin/llvm-dis-17 /usr/bin/llvm-dis
 fi
 
 if ! dpkg -s nlohmann-json3-dev &> /dev/null

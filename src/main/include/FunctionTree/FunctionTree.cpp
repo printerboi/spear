@@ -22,10 +22,12 @@ FunctionTree* FunctionTree::construct(llvm::Function *func) {
         for (auto &function : calls) {
             //If we have a function that isn't the function we started at...
             if(function != functionTree->func){
-                //Call construct recursively, as there might be further calls in the called functions
-                auto subFunctionTree = construct(function);
-                //Add the constructed tree to the subgraphs list
-                functionTree->subtrees.push_back(subFunctionTree);
+                if(function != nullptr){
+                    //Call construct recursively, as there might be further calls in the called functions
+                    auto subFunctionTree = construct(function);
+                    //Add the constructed tree to the subgraphs list
+                    functionTree->subtrees.push_back(subFunctionTree);
+                }
             }
         }
     }
@@ -48,15 +50,37 @@ std::vector<llvm::Function *> FunctionTree::getCalledFunctions() const {
                 auto calleeInst = llvm::cast<llvm::CallInst>(&instruction);
                 //Get the called function
                 auto *calledFunction = calleeInst->getCalledFunction();
-                //Add the function to the list
-                functions.push_back(calledFunction);
+
+                if(calledFunction != nullptr){
+                    //Add the function to the list
+                    functions.push_back(calledFunction);
+                }else{
+                    // If the called functions a zero, the function musst be indirect...
+
+                    /*auto operand = calleeInst->getCalledOperand();
+                    auto val = operand->stripPointerCasts();
+                    auto ref = val->getName();
+                    auto refname = ref.str();*/
+                    //TODO Here, of course, it would be necessary to analyze the indirect function. However, there is currently no proper way of reliably accessing the object here...
+                }
+
             }else if(llvm::isa<llvm::InvokeInst>( instruction )){
                 auto calleeInst = llvm::cast<llvm::InvokeInst>(&instruction);
                 //Get the called function
                 auto *calledFunction = calleeInst->getCalledFunction();
                 //Add the function to the list
                 if(calledFunction != nullptr){
+                    //Add the function to the list
                     functions.push_back(calledFunction);
+                }else{
+                    // If the called functions a zero, the function musst be indirect...
+
+                    /*auto operand = calleeInst->getCalledOperand();
+                    auto val = operand->stripPointerCasts();
+                    auto ref = val->getName();
+                    auto refname = ref.str();*/
+
+                    //TODO Here, of course, it would be necessary to analyze the indirect function. However, there is currently no proper way of reliably accessing the object here...
                 }
             }
         }

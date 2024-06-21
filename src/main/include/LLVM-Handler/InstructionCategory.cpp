@@ -110,17 +110,19 @@ double InstructionCategory::getCalledFunctionEnergy(llvm::Instruction &Instructi
             //Get the called instruction from the object
             auto called_function = call_instruction->getCalledFunction();
 
-            //Get the Energyfunction object from the functionmap
-            EnergyFunction* foundObject = nullptr;
-            for(auto efR : pool){
-                if(called_function->getName() == efR->func->getName()){
-                    foundObject = efR;
+            if(called_function != nullptr){
+                //Get the Energyfunction object from the functionmap
+                EnergyFunction* foundObject = nullptr;
+                for(auto efR : pool){
+                    if(called_function->getName() == efR->func->getName()){
+                        foundObject = efR;
+                    }
                 }
-            }
 
-            //auto energyFunction = poolOfFunctions[called_function->getName().str()];
-            if(foundObject != nullptr){
-                energy = foundObject->energy;
+                //auto energyFunction = poolOfFunctions[called_function->getName().str()];
+                if(foundObject != nullptr){
+                    energy = foundObject->energy;
+                }
             }
         }
     }else if(llvm::isa<llvm::InvokeInst>( Instruction ) ){

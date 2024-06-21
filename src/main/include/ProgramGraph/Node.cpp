@@ -196,8 +196,18 @@ json Node::getJsonRepresentation() {
                 auto *calledFunction = calleeInst->getCalledFunction();
                 //Add the function to the list
 
-                std::string functionName = DeMangler::demangle(calledFunction->getName().str());
-                instructionObject["calledFunction"] = functionName;
+                if(calledFunction != nullptr){
+                    std::string functionName = DeMangler::demangle(calledFunction->getName().str());
+                    instructionObject["calledFunction"] = calledFunction->getName().str();
+                }else{
+                    auto operand = calleeInst->getCalledOperand();
+                    auto val = operand->stripPointerCasts();
+                    if(val != nullptr){
+                        auto ref = val->getName();
+                        auto refname = ref.str();
+                        instructionObject["calledFunction"] = refname;
+                    }
+                }
 
             }else if(llvm::isa<llvm::InvokeInst>( Inst.inst )){
                 auto calleeInst = llvm::cast<llvm::InvokeInst>(Inst.inst);
@@ -206,7 +216,15 @@ json Node::getJsonRepresentation() {
                 //Add the function to the list
                 if(calledFunction != nullptr){
                     std::string functionName = DeMangler::demangle(calledFunction->getName().str());
-                    instructionObject["calledFunction"] = functionName;
+                    instructionObject["calledFunction"] = calledFunction->getName().str();
+                }else{
+                    auto operand = calleeInst->getCalledOperand();
+                    auto val = operand->stripPointerCasts();
+                    if(val != nullptr){
+                        auto ref = val->getName();
+                        auto refname = ref.str();
+                        instructionObject["calledFunction"] = refname;
+                    }
                 }
             }
 
