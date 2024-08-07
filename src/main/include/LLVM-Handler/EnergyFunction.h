@@ -16,6 +16,8 @@ public:
     //The energy used by the function
     double energy;
 
+    std::string name;
+
     ProgramGraph* programGraph;
 
     //Simple constructor

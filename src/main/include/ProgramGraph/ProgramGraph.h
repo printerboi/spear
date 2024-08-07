@@ -9,6 +9,11 @@
 #include "../LoopTree/LoopTree.h"
 #include <cfloat>
 #include "../AnalysisStrategy/AnalysisStrategy.h"
+#include "./Color.h"
+#include "llvm/IR/DebugLoc.h"
+#include "llvm/IR/DebugInfoMetadata.h"
+
+
 
 
 //Pre-declaration of the ProgramGraph Class
@@ -21,6 +26,12 @@ public:
     llvm::Instruction* inst;
 
     explicit InstructionElement(llvm::Instruction* instruction);
+};
+
+enum NodeType {
+    UNDEFINED,
+    NODE,
+    LOOPNODE
 };
 
 /**
@@ -68,7 +79,11 @@ class Node {
          */
         virtual double getNodeEnergy(LLVMHandler *handler);
 
+        virtual double getMaxEnergy();
+
         virtual bool isExceptionFollowUp();
+
+        virtual json getJsonRepresentation();
 
 protected:
     /**
@@ -158,6 +173,8 @@ public:
      */
     double getNodeEnergy(LLVMHandler *handler) override;
 
+    double getMaxEnergy() override;
+
     /**
      * Method for breaking cycles in the subgraphs of this LoopNode.
      * Prevents infity-calculations while dealing with recursion.
@@ -177,6 +194,8 @@ public:
     ~LoopNode();
 
     bool isExceptionFollowUp() override;
+
+    json getJsonRepresentation() override;
 };
 
 
@@ -196,6 +215,8 @@ class ProgramGraph {
          */
         std::vector<Edge *> edges;
 
+        double maxEnergy;
+
         /**
          * Static method for creating a ProgramGraph from a given set of BasicBlocks
          * @param blockset Vector with references to a set of basic blocks
@@ -214,6 +235,16 @@ class ProgramGraph {
          */
         void printNodes(LLVMHandler *handler);
 
+        /**
+         * Prints the ProgramGraph in the Graphviz dot format recursivly
+         * @return Returns the string representation of the graph in the dot format
+         */
+        std::string printDotRepresentation();
+
+        /**
+         * Returns a vector of pointers to the nodes of this ProgramGraph
+         * @return Vector containing pointers to the nodes of the graph
+         */
         std::vector<Node*> getNodes();
 
         /**
@@ -271,6 +302,13 @@ class ProgramGraph {
          * @return Returns true if the ProgramGraph contains LoopNodes. False if otherwise
          */
         bool containsLoopNodes();
+
+        double findMaxEnergy();
+
+        std::string getNodeColor(Node *node, double maxEng);
+        std::string getNodeColor(double nodeEnergy, double maxEng);
+
+        json populateJsonRepresentation(json functionObject);
 };
 
 

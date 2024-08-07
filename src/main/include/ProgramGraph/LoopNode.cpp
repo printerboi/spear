@@ -108,9 +108,12 @@ double LoopNode::getNodeEnergy(LLVMHandler *handler) {
     //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
     if(!adjacentNodes.empty()){
 
+
         //Iterate over the adjacent nodes
         for(auto node : adjacentNodes){
             //Calculate the sum of the node
+            auto nodename = node->block->getName();
+
             sum += node->getNodeEnergy(handler);
 
         }
@@ -130,6 +133,7 @@ void LoopNode::removeLoopEdgesFromSubGraphs(){
         auto *latchblock = this->loopTree->mainloop->getLoopLatch();
         //Get the Node the latchblock is contained in
         auto *latchnode = subgraph->findBlock(latchblock);
+        auto lnname = latchblock->getName();
         //Init the list of edges we want to keep
         std::vector<Edge *> tempedges;
 
@@ -162,4 +166,58 @@ LoopNode::~LoopNode() {
 
 bool LoopNode::isExceptionFollowUp(){
     return false;
+}
+
+double LoopNode::getMaxEnergy() {
+    double maxEnergy = 0.0;
+    auto adjacentNodes = this->getAdjacentNodes();
+
+    //Get the energy from all contained subgraphs
+    for(auto subTrees : this->subgraphs){
+        double maxEnergyOfSubtree = subTrees->findMaxEnergy();
+        if(maxEnergyOfSubtree > maxEnergy){
+            maxEnergy = maxEnergyOfSubtree;
+        }
+    }
+
+    //Multiply the calculated energy from the subgraphs by the iterations of this LoopNode's loop
+
+    maxEnergy = (double) this->loopTree->iterations * maxEnergy;
+
+    //Handle if-conditions contained in this LoopNode, if we're dealing with a leaf-Node
+    if(!adjacentNodes.empty()){
+
+        //Iterate over the adjacent nodes
+        for(auto node : adjacentNodes){
+            //Calculate the sum of the node
+            double maxEnergyOfAdjNode = node->getMaxEnergy();
+            if(maxEnergyOfAdjNode > maxEnergy){
+                maxEnergy = maxEnergyOfAdjNode;
+            }
+
+        }
+    }
+
+
+    //Return the calculation result
+    return maxEnergy;
+}
+
+
+json LoopNode::getJsonRepresentation() {
+    json nodeObject;
+
+    nodeObject["type"] = NodeType::LOOPNODE;
+    nodeObject["name"] = "";
+    nodeObject["repetitions"] = loopTree->iterations;
+    nodeObject["subgraphs"] = json::array();
+
+    for(int i = 0; i < this->subgraphs.size(); i++){
+        json subGraphObject;
+        subGraphObject = this->subgraphs[i]->populateJsonRepresentation(subGraphObject);
+
+        nodeObject["subgraphs"][i] = subGraphObject;
+    }
+
+    return nodeObject;
 }

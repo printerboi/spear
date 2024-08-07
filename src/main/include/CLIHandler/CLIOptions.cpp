@@ -15,7 +15,7 @@ ProfileOptions::ProfileOptions(std::string codePath, int repeatAmount, std::stri
 }
 
 AnalysisOptions::AnalysisOptions(std::string profilePath, Mode mode, Format format, Strategy strategy, int loopBound,
-                       std::string programPath, DeepCalls deepCalls) {
+                                 std::string programPath, DeepCalls deepCalls, std::string forFunction) {
     this->profilePath = std::move(profilePath);
     this->mode = mode;
     this-> format = format;
@@ -23,6 +23,7 @@ AnalysisOptions::AnalysisOptions(std::string profilePath, Mode mode, Format form
     this->loopBound = loopBound;
     this->deepCalls = deepCalls;
     this->programPath = std::move(programPath);
+    this->forFunction = std::move(forFunction);
 
     this->operation = Operation::ANALYZE;
 }

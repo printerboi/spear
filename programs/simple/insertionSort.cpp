@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "vector"
 
+
 void sort(int *array, int length){
 
     for(int index = 0; index < length; index++){

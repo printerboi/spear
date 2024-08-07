@@ -9,7 +9,7 @@ function compileFile() {
   filename="${filename%.*}"
 
   echo "Generating the llvm-IR"
-  clang++ -O0 -Xclang -disable-O0-optnone -fno-discard-value-names -S -emit-llvm -o "$path/compiled/$filename.ll" "$path/$filename.cpp"
+  clang++ -g -O0 -Xclang -disable-O0-optnone -fno-discard-value-names -S -emit-llvm -o "$path/compiled/$filename.ll" "$path/$filename.cpp"
 
   echo "Compiling the file $path/compiled/$filename.ll downto binary..."
 
@@ -31,10 +31,11 @@ if [ -d "$path/compiled" ]; then
 fi
 echo "Creating the compiled folder..."
 
-if [[ -z "$path" ]]; then
+if [[ -z "$1" ]]; then
+  echo $1
   echo "-> the given path is empty!!! Folder can't be created"
 else
-  mkdir -p "$path/compiled"
+  mkdir -p "$1/compiled"
 fi
 
 for f in $1/*.cpp

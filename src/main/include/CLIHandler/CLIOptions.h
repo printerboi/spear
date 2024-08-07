@@ -25,7 +25,8 @@ enum class Mode {
     PROGRAM,
     BLOCK,
     FUNCTION,
-    INSTRUCTION
+    INSTRUCTION,
+    GRAPH
 };
 
 /**
@@ -108,6 +109,11 @@ public:
     std::string programPath;
 
     /**
+     * Parameter specifying if the user limits their execution to a function with the given name
+     */
+    std::string forFunction;
+
+    /**
      * Path where the profile should be read from
      */
     std::string codePath;
@@ -130,7 +136,8 @@ public:
 class AnalysisOptions : public CLIOptions{
 public:
 
-    AnalysisOptions(std::string profilePath, Mode mode, Format format, Strategy strategy, int loopBound, std::string programPath, DeepCalls deepCalls);
+    AnalysisOptions(std::string profilePath, Mode mode, Format format, Strategy strategy, int loopBound,
+                    std::string programPath, DeepCalls deepCalls, std::string forFunction);
 };
 
 

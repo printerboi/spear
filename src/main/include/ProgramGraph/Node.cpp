@@ -1,4 +1,5 @@
 #include "ProgramGraph.h"
+#include "../LLVM-Handler/DeMangler.h"
 
 //Create a Node by setting the parent property with the given ProgramGraph
 Node::Node(ProgramGraph *parent, AnalysisStrategy::Strategy strategy) {
@@ -109,10 +110,13 @@ double Node::getNodeEnergy(LLVMHandler *handler) {
         }
     }
 
-    //Calculate the energy-cost of this node's basic blocks and add it to the sum
-    sum = sum + handler->getNodeSum(*this);
+    auto nodename = this->block->getName();
 
-    this->energy = sum;
+    //Calculate the energy-cost of this node's basic blocks and add it to the sum
+    double localEnergy = handler->getNodeSum(this);
+    sum = sum + localEnergy;
+
+    this->energy = localEnergy;
 
     //Return the calculated energy
     return sum;
@@ -135,4 +139,116 @@ std::vector<Node *> Node::getAdjacentNodes() {
 
 bool Node::isExceptionFollowUp(){
     return this->block->isLandingPad();
+}
+
+double Node::getMaxEnergy() {
+    double maxEng = 0.0;
+
+    //Calculate the adjacent nodes of this node
+    auto adjacentNodes = this->getAdjacentNodes();
+
+    //If there are adjacent nodes...
+    if(!adjacentNodes.empty()){
+        //Find the smallest energy-value-path of all the adjacent nodes
+        //Init the minimal pathvalue
+
+        for(auto node : adjacentNodes){
+            //Calculate the sum of the node
+            if(!node->isExceptionFollowUp()){
+                double locMaxEng = node->getMaxEnergy();
+
+                //Set the minimal energy value if the calculated energy is smaller than the current minimum
+                if (locMaxEng > maxEng){
+                    maxEng = locMaxEng;
+                }
+            }
+        }
+    }
+
+    //Calculate the energy-cost of this node's basic blocks and add it to the sum
+    double localEnergy = this->energy;
+    if(localEnergy > maxEng){
+        maxEng = localEnergy;
+    }
+
+    //Return the calculated energy
+    return maxEng;
+}
+
+json Node::getJsonRepresentation() {
+    json nodeObject = json::object();
+    if(block != nullptr){
+        nodeObject["type"] = NodeType::NODE;
+        nodeObject["name"] = block->getName().str();
+        nodeObject["energy"] = energy;
+        nodeObject["instructions"] = json::array();
+
+        for(int k=0; k < instructions.size(); k++) {
+            json instructionObject = json::object();
+            InstructionElement Inst = instructions[k];
+
+            instructionObject["opcode"] = Inst.inst->getOpcodeName();
+            instructionObject["energy"] = Inst.energy;
+
+            if(llvm::isa<llvm::CallInst>( Inst.inst ) || llvm::isa<llvm::CallBrInst>( Inst.inst )){
+                auto calleeInst = llvm::cast<llvm::CallInst>(Inst.inst);
+                //Get the called function
+                auto *calledFunction = calleeInst->getCalledFunction();
+                //Add the function to the list
+
+                if(calledFunction != nullptr){
+                    std::string functionName = DeMangler::demangle(calledFunction->getName().str());
+                    instructionObject["calledFunction"] = calledFunction->getName().str();
+                }else{
+                    auto operand = calleeInst->getCalledOperand();
+                    auto val = operand->stripPointerCasts();
+                    if(val != nullptr){
+                        auto ref = val->getName();
+                        auto refname = ref.str();
+                        instructionObject["calledFunction"] = refname;
+                    }
+                }
+
+            }else if(llvm::isa<llvm::InvokeInst>( Inst.inst )){
+                auto calleeInst = llvm::cast<llvm::InvokeInst>(Inst.inst);
+                //Get the called function
+                auto *calledFunction = calleeInst->getCalledFunction();
+                //Add the function to the list
+                if(calledFunction != nullptr){
+                    std::string functionName = DeMangler::demangle(calledFunction->getName().str());
+                    instructionObject["calledFunction"] = calledFunction->getName().str();
+                }else{
+                    auto operand = calleeInst->getCalledOperand();
+                    auto val = operand->stripPointerCasts();
+                    if(val != nullptr){
+                        auto ref = val->getName();
+                        auto refname = ref.str();
+                        instructionObject["calledFunction"] = refname;
+                    }
+                }
+            }
+
+            json locationObj = json::object();
+            const llvm::DebugLoc &dbl = Inst.inst->getDebugLoc();
+            unsigned int line = -1;
+            unsigned int col  = -1;
+            std::string filename = "undefined";
+
+            // Check if the debug information is present
+            // If the instruction i.e. is inserted by the compiler no debug info is present
+            if(dbl){
+                line = dbl.getLine();
+                col = dbl->getColumn();
+                filename = dbl->getFile()->getDirectory().str() + "/" + dbl->getFile()->getFilename().str();
+            }
+
+            locationObj["line"] = line;
+            locationObj["column"] = col;
+            locationObj["file"] = filename;
+            instructionObject["location"] = locationObj;
+            nodeObject["instructions"][k] = instructionObject;
+        }
+    }
+
+    return nodeObject;
 }

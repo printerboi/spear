@@ -14,9 +14,7 @@ void ProgramGraph::construct(ProgramGraph* pGraph, const std::vector<llvm::Basic
         for(llvm::Instruction &inst : *basicBlock){
             auto instElement = InstructionElement(&inst);
             node->instructions.push_back(instElement);
-            std::cout << inst.getOpcodeName() << std::endl;
         }
-        std::cout << "----" << std::endl;
 
         node->energy = 0.0;
 
@@ -25,7 +23,7 @@ void ProgramGraph::construct(ProgramGraph* pGraph, const std::vector<llvm::Basic
         //Add the node to the graph
         pGraph->nodes.push_back(node);
 
-
+        pGraph->maxEnergy = 0.0;
     }
 
     //Iterate over the blocks to create the edges of the graph
@@ -161,6 +159,9 @@ void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *
         Node *exit = this->findBlock(loopNode->loopTree->mainloop->getLoopLatch());
         auto exiname = exit->toString();
 
+        Node *header = this->findBlock(loopNode->loopTree->mainloop->getHeader());
+        auto headername = header->toString();
+
         //Iterate over the edges of this graph
         for (auto edge : this->edges) {
             //If we find an edge, which end-node is the entry-node of the loop
@@ -171,6 +172,11 @@ void ProgramGraph::replaceNodesWithLoopNode(const std::vector<llvm::BasicBlock *
 
             //If we find an edge, which start-node is the exit-node of the loop
             if(edge->start == exit){
+                //Change the edges startpoint to the LoopNode
+                edge->start = loopNode;
+            }
+
+            if(edge->start == header){
                 //Change the edges startpoint to the LoopNode
                 edge->start = loopNode;
             }
@@ -282,4 +288,152 @@ std::vector<LoopNode *> ProgramGraph::getLoopNodes() {
 
     //Return the list of LoopNodes
     return loopnodes;
+}
+
+std::string ProgramGraph::printDotRepresentation() {
+    std::string dotStr;
+    double globalMaxEng = this->findMaxEnergy();
+
+    // Iterate over the nodes
+    for(int i=0; i < this->nodes.size(); i++){
+        auto node = this->nodes[i];
+        // Get the address of the node as 64-bit number for printing
+        auto startAddress = (unsigned long long)(void**)node;
+        std::string name = node->toString();
+
+        // Check if the current node is a loop node...
+        auto *loopNodeCandidate = dynamic_cast<LoopNode *>(node);
+        if(loopNodeCandidate != nullptr){
+            double maxEng = this->findMaxEnergy();
+            // If we encountered a loopnode we should to create a subgraph/cluster to represent it
+            for(auto subgraph : loopNodeCandidate->subgraphs){
+                dotStr += "subgraph cluster_LOOPNODE_" + std::to_string(startAddress) + "{\n";
+                dotStr += "cluster=true\n";
+                dotStr += "bgcolor=\"" + getNodeColor(maxEng, globalMaxEng) + "11\"\n";
+
+                dotStr += "\tlabel=<<b>" + name + "</b><br/>" + std::to_string(maxEng) + " J>\n";
+                // Add invisible nodes to the cluster where we can link afterward, so it looks like we are pointing
+                // to the clusters box instead of a node
+                dotStr += "invisible_start" + std::to_string(startAddress) + " [shape=point style=invis]\n";
+                dotStr += "invisible_end" + std::to_string(startAddress) + " [shape=point style=invis]\n";
+                // Get the subgraphs dot representation
+                dotStr += subgraph->printDotRepresentation();
+                dotStr += "};\n";
+            }
+        }else{
+            double maxEng = this->findMaxEnergy();
+            // If we didn't encounter a loopnode, we just add a normal node, prefixed with n, followed by the nodes address
+            dotStr += "n" + std::to_string(startAddress) + " [label=<";
+            dotStr += node->toString()+"<br/>" + std::to_string(node->energy) + " J> fillcolor=\"" + this->getNodeColor(node, maxEng) + "\" style=filled ]\n";
+        }
+
+        // Add the edges of the current programgraph
+        for(auto edge : findEdgesStartingAtNode(node)){
+            // Calculate the address of the end node reached by the edge
+            auto endAddress = (unsigned long long)(void**)edge->end;
+            // Cas the start node and the end node as loop nodes
+            auto *loopStartNodeCandidate = dynamic_cast<LoopNode *>(edge->start);
+            auto *loopEndNodeCandidate = dynamic_cast<LoopNode *>(edge->end);
+
+            // Check if the start node is a loopnode...
+            if(loopStartNodeCandidate != nullptr){
+                // Start the dot pointer in the invisible node of the loopnode
+                dotStr += "invisible_end" + std::to_string(startAddress) + "->";
+
+                // If the end node is a loopnode end the dot pointer in the invisible start of the loopnode
+                if(loopEndNodeCandidate != nullptr){
+                    dotStr += "invisible_start" + std::to_string(endAddress) + " [lhead=" + "cluster_LOOPNODE_" + std::to_string(startAddress) + " ltail=" + "cluster_LOOPNODE_" + std::to_string(startAddress) +"]\n";
+                }else{
+                    // Otherwise just link to the node by its name prefixed with n and the address
+                    dotStr += "n" + std::to_string(endAddress) + "[ltail=" + "cluster_LOOPNODE_" + std::to_string(startAddress) +"]\n";
+                }
+            }else{
+                // If the start node is not a loopnode start the edge at n + address
+                dotStr += "n" + std::to_string(startAddress) + "->";
+
+                // If the end node is a loopnode end the dot pointer in the invisible start of the loopnode
+                if(loopEndNodeCandidate != nullptr){
+                    dotStr += "invisible_start" + std::to_string(endAddress) + " [lhead=" + "cluster_LOOPNODE_" + std::to_string(startAddress) + "]\n";
+                }else{
+                    // Otherwise just link to the node by its name prefixed with n and the address
+                    dotStr += "n" + std::to_string(endAddress) + "\n";
+                }
+            }
+
+
+        }
+
+    }
+    return dotStr;
+}
+
+double ProgramGraph::findMaxEnergy(){
+    double maxEng = 0.0;
+
+    auto curentNode = this->nodes[0];
+
+    maxEng = curentNode->getMaxEnergy();
+    return maxEng;
+}
+
+std::string ProgramGraph::getNodeColor(Node *node, double maxEng){
+    double actValue = 0.0;
+
+    Color goodColor = Color(0, 255, 0);
+    Color badColor = Color(255, 0, 0);
+    Color mediumColor = Color(255, 255, 0);
+
+
+    Color interpolated = goodColor;
+
+    if(maxEng != 0){
+        if(node->energy < maxEng/2){
+            interpolated = Color::interpolate(goodColor, mediumColor, node->energy/(maxEng/2));
+        }else{
+            interpolated = Color::interpolate(mediumColor, badColor, (node->energy - maxEng/2)/ (maxEng/2));
+        }
+    }else{
+        interpolated = Color::interpolate(goodColor, badColor, 0);
+    }
+
+    std::string result = Color::toHtmlColor(interpolated);
+
+    return result;
+}
+
+std::string ProgramGraph::getNodeColor(double nodeEnergy, double maxEng){
+    double actValue = 0.0;
+
+    Color goodColor = Color(0, 255, 0);
+    Color badColor = Color(255, 0, 0);
+    Color mediumColor = Color(255, 255, 0);
+
+    Color interpolated = goodColor;
+
+    if(maxEng != 0){
+        if(nodeEnergy < maxEng/2){
+            interpolated = Color::interpolate(goodColor, mediumColor, nodeEnergy/(maxEng/2));
+        }else{
+            interpolated = Color::interpolate(mediumColor, badColor, (nodeEnergy - maxEng/2)/ (maxEng/2));
+        }
+    }else{
+        interpolated = Color::interpolate(goodColor, badColor, 0);
+    }
+
+    std::string result = Color::toHtmlColor(interpolated);
+
+    return result;
+}
+
+json ProgramGraph::populateJsonRepresentation(json functionObject) {
+    std::vector<Node *> nodelist = getNodes();
+    std::vector<LoopNode *> loopNodeList = getLoopNodes();
+
+    //nodelist.insert(nodelist.end(), loopNodeList.begin(), loopNodeList.end());
+
+    for(int j = 0; j < nodelist.size(); j++){
+        functionObject["nodes"][j] = nodelist[j]->getJsonRepresentation();
+    }
+
+    return functionObject;
 }
