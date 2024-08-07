@@ -80,7 +80,7 @@ $(function() {
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;llvm/Support/SourceMgr.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;llvm/IR/Instructions.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;llvm/Analysis/LoopInfo.h&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;json/json.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;nlohmann/json.hpp&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;InstructionCategory.h&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;llvm/Analysis/CostModel.h&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;llvm/IR/CFG.h&quot;</span></div>
@@ -99,7 +99,7 @@ $(function() {
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classLLVMHandler.html#abc36c7facc34793b6636f7bd61bcc477">LLVMHandler</a>( json energyModel, <span class="keywordtype">int</span> <a class="code" href="classLLVMHandler.html#ad013cd1f31a0ed8edaeb3863654bd8cd">valueIfIndeterminable</a>, <span class="keywordtype">bool</span> useCallAnalysis, <a class="code" href="classEnergyFunction.html">EnergyFunction</a> pool[], <span class="keywordtype">int</span> poolSize );</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classLLVMHandler.html#a4202dd682d22c07cb1c135422dcb5d51">getNodeSum</a>(<span class="keyword">const</span> <a class="code" href="classNode.html">Node</a>&amp; node);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classLLVMHandler.html#a01a198ecdfee6b3e833715de3877107f">getNodeSum</a>(<a class="code" href="classNode.html">Node</a> *node);</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;         <span class="keywordtype">int</span> efficient;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;         <span class="keywordtype">int</span> inefficient;</div>
@@ -115,10 +115,10 @@ $(function() {
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//BA_LLVMHANDLER_H</span></div>
 <div class="ttc" id="aclassEnergyFunction_html"><div class="ttname"><a href="classEnergyFunction.html">EnergyFunction</a></div><div class="ttdef"><b>Definition:</b> EnergyFunction.h:12</div></div>
 <div class="ttc" id="aclassLLVMHandler_html"><div class="ttname"><a href="classLLVMHandler.html">LLVMHandler</a></div><div class="ttdef"><b>Definition:</b> LLVMHandler.h:25</div></div>
-<div class="ttc" id="aclassLLVMHandler_html_a4202dd682d22c07cb1c135422dcb5d51"><div class="ttname"><a href="classLLVMHandler.html#a4202dd682d22c07cb1c135422dcb5d51">LLVMHandler::getNodeSum</a></div><div class="ttdeci">double getNodeSum(const Node &amp;node)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:22</div></div>
+<div class="ttc" id="aclassLLVMHandler_html_a01a198ecdfee6b3e833715de3877107f"><div class="ttname"><a href="classLLVMHandler.html#a01a198ecdfee6b3e833715de3877107f">LLVMHandler::getNodeSum</a></div><div class="ttdeci">double getNodeSum(Node *node)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:22</div></div>
 <div class="ttc" id="aclassLLVMHandler_html_abc36c7facc34793b6636f7bd61bcc477"><div class="ttname"><a href="classLLVMHandler.html#abc36c7facc34793b6636f7bd61bcc477">LLVMHandler::LLVMHandler</a></div><div class="ttdeci">LLVMHandler(json energyModel, int valueIfIndeterminable, bool useCallAnalysis, EnergyFunction pool[], int poolSize)</div><div class="ttdef"><b>Definition:</b> LLVMHandler.cpp:10</div></div>
 <div class="ttc" id="aclassLLVMHandler_html_ad013cd1f31a0ed8edaeb3863654bd8cd"><div class="ttname"><a href="classLLVMHandler.html#ad013cd1f31a0ed8edaeb3863654bd8cd">LLVMHandler::valueIfIndeterminable</a></div><div class="ttdeci">int valueIfIndeterminable</div><div class="ttdef"><b>Definition:</b> LLVMHandler.h:52</div></div>
-<div class="ttc" id="aclassNode_html"><div class="ttname"><a href="classNode.html">Node</a></div><div class="ttdef"><b>Definition:</b> ProgramGraph.h:29</div></div>
+<div class="ttc" id="aclassNode_html"><div class="ttname"><a href="classNode.html">Node</a></div><div class="ttdef"><b>Definition:</b> ProgramGraph.h:40</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

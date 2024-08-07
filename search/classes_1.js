@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['cliexceptions_96',['CLIExceptions',['../classCLIExceptions.html',1,'']]],
-  ['clihandler_97',['CLIHandler',['../classCLIHandler.html',1,'']]],
-  ['clioptions_98',['CLIOptions',['../classCLIOptions.html',1,'']]]
+  ['clihandler_100',['CLIHandler',['../classCLIHandler.html',1,'']]],
+  ['clioptions_101',['CLIOptions',['../classCLIOptions.html',1,'']]],
+  ['color_102',['Color',['../classColor.html',1,'']]]
 ];

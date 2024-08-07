@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['jsonhandler_105',['JSONHandler',['../classJSONHandler.html',1,'']]]
+  ['instructioncategory_108',['InstructionCategory',['../classInstructionCategory.html',1,'']]],
+  ['instructionelement_109',['InstructionElement',['../classInstructionElement.html',1,'']]]
 ];
