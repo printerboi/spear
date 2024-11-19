@@ -138,7 +138,7 @@ void runAnalysisRoutine(CLIOptions opts){
 
 int main(int argc, char *argv[]){
     std::string helpString = "Usage: spear option <arguments>\n==============================\nOptions:"
-                             "\n\tprogram\t Profile the system and generate the estimated energy usage of the device. Used for any further analysis"
+                             "\n\tprofile\t Profile the system and generate the estimated energy usage of the device. Used for any further analysis"
                              "\n\tanalyze\t Analyzes a given program. Further parameters are needed:"
                              "\n\t\t\t --mode Type of analysis (program/function)"
                              "\n\t\t\t --format Format of the result to print (plain/json)"
