@@ -12,8 +12,6 @@ Welcome to SPEAR, the
 The tool will be developed for my bachelor-thesis
 **"Predictive, static energy consumption analysis based on experimentally determined energy models"**
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8061579.svg)](https://doi.org/10.5281/zenodo.8061579)
-
 
 ## Installation
 
@@ -122,3 +120,19 @@ spear analyze
 `<llvmirpath>` Path to a compiled llvm-ir file, the analysis should run on
 
 `<function>`: Name of the function to analysed. Can be used if only a single function should be analyzed. (Currently only used for graph generation)
+
+## SPEAR-Viewer
+
+SPEAR now has a Visual Studio Code extension called "SPEAR-Viewer" which applies the algorithms directly on C/C++ code in the editor.
+Check out the project [here](https://github.com/printerboi/spear-viewer)
+
+
+## Contribute
+
+Please feel free to open issues in this repository and create merge request if you like. Please respect, that I run this repository as side project and can only spend my time partly on developing SPEAR.
+
+If you encounter a problem an want to create a issue, please describe your system and problem detailed as possible. A detailed explanation on how to reproduce the problem should be provided.
+
+## Licensing
+
+As SPEAR was created with the goal of improving the enviromental impact of software development, the usage, reuse in different projects etc. are free under the GPL-3.0 license. Please see the license supplied within this repository for further details.
