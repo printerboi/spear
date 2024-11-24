@@ -15,6 +15,21 @@ The tool will be developed for my bachelor-thesis
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8061579.svg)](https://doi.org/10.5281/zenodo.8061579)
 
 
+## Installation
+
+We added an installation script to automate the building and copying of the application. The script was designed to be run under Debian and uses the apt package manager.
+If you want to use the script on a different distribution adapt the installation script accordingly. Alternativly you could build SPEAR using the build commands, see section [building](#building) for further details.
+
+⚠️ The installation script requires you to have elevated rights. Please execute it using sudo. The application will be installed for all users of the machine.
+
+To run the script execute:
+```
+chmod +x install.sh
+sudo ./install.sh
+```
+
+
+
 ## Introduction
 
 Modern computers, especially in high computing applications require a lot of energy.
@@ -30,16 +45,22 @@ from the Intel RAPL Interface.
 ## Running the profiler
 
 Before running an analysis with spear, you have to profile your device with the built-in profiler.
-Therefore, you have to compile the profile-scripts for your machine. We provided a shell-script to simplify this step.
+
+Run spear with the command `profile` and provide the number of iterations the profile gets averaged over as `<iterations>`.
+The parameter `<model>` expects the spear profile programs.
+Normally the profile model is found aftert the installation in the folder `/usr/share/spear/profile`
+
+You can compile the profile-scripts for your machine manually. We provided a shell-script to simplify this step.
 Run the script `utils/llvmToBinary/irToBinary.sh` and provide the path to the profile-folder e.g `../../profile/src`
 as argument to prepare the files. 
 
-After the compilation run spear with the command `profile` and provide the number of iterations the profile gets averaged over.
 The parameter `<savelocation>` specifies the location where the generated profile will be saved
 E.g.:
 
 ```
-spear profile 10000 <savelocation>
+spear profile --iterations <iterations>
+              --model <model>
+              --savelocation <savelocation>
 ```
 Please execute the command above with elevated rights. Otherwise, Spear can not interfere the energy-values from the system,
 as the RAPL Interface is limited to elevated rights only.
@@ -60,9 +81,9 @@ Where `<path>` is the path to your program files. The script will compile all `.
 Please compile your source-files with this script,
 otherwise the behaviour of spear will be undefined or the analysis will crash.
 
-### 1) Using Spear
+### Using Spear
 
-Spear provided a custom flag `-a`, which expects the following parameters:
+Spear provided a custom flag `analyze`, which expects the following parameters:
 
 ```
 spear analyze
@@ -71,7 +92,9 @@ spear analyze
       --format <format> 
       --strategy <strategy> 
       --loopbound <loopbound> 
+      --withCalls <withcalls>
       --program <llvmirpath>
+      --forFunction <function>
 ```
 
 `<profile>`: Path to a profile calculated by spear with the `-p` flag
@@ -79,6 +102,9 @@ spear analyze
 `<mode>`: Mode the analysis should run on. Choose between the following options
 - `function` - Analyses every function by itself. Takes no respect to calls
 - `program` - Analyses the whole program with respect to calls.
+- `block`- 
+- `instruction` - 
+- `graph`- 
 
 `<format>`: Outputformat to print after the calculation. Choose between the following options
 - `json` - json formatted output
@@ -89,43 +115,10 @@ spear analyze
 - `best` - Best case analysis. During the calculation the paths with the most energy consumption, will be used
 - `average` - Average case analysis. Attempts to balance the number of energy efficient and energy inefficient paths
 
+`<withcalls>`: Determines if the analysis should use analyse called functions.
+
 `<loopbound>`: A positive integer defining a value, the iterations of loops will be approximated with, if spear can't interfere the iteration count trough llvm. E.g. in a while-loop
 
 `<llvmirpath>` Path to a compiled llvm-ir file, the analysis should run on
 
-### 2) Using the LLVM pass
-
-We provided a custom LLVM pass to run with the `opt` tool. To run the analysis, use the following preset:
-
-```
-opt -disable-output 
-    -load-pass-plugin <libpath>
-    --passes="function(mem2reg,loop-rotate),energy"
-    --profile <profilepath>
-    --mode <mode> 
-    --format <format> 
-    --strategy <strategy> 
-    --loopbound <loopbound>
-    --program <llvmirpath>
-```
-
-`<libpath>`: Path to the compiled energy-library `Energy.so`
-
-`<profilepath>`: Path to a profile calculated by spear with the `-p` flag
-
-`<mode>`: Mode the analysis should run on. Choose between the following options
-- `function` - Analyses every function by itself. Takes no respect to calls
-- `program` - Analyses the whole program with respect to calls.
-
-`<format>`: Outputformat to print after the calculation. Choose between the following options
-- `json` - Json-Format
-- `plain` - Human-readable plaintext
-
-`<strategy>`: Analysis-strategy to calculate. Choose between the following options
-- `worst` - Worst case analysis. During the calculation the paths with the most energy consumption, will be used
-- `best` - Best case analysis. During the calculation the paths with the most energy consumption, will be used
-- `average` - Average case analysis. Attempts to balance the number of energy efficient and energy inefficient paths
-
-`<loopbound>`: A positive integer defining a value, loops will be over-approximated, if spear can't interfere the iteration count from a loop. E.g. in a while-loop
-
-`<llvmirpath>` Path to compiled llvm-ir file, the analysis should run on
+`<function>`: Name of the function to analysed. Can be used if only a single function should be analyzed.
