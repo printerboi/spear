@@ -1,6 +1,3 @@
-//
-// Created by maximiliank on 04.04.24.
-//
 
 #include "ProgramGraph.h"
 

@@ -1,7 +1,3 @@
-//
-// Created by max on 26.04.24.
-//
-
 #include <iomanip>
 #include <cmath>
 #include "Color.h"

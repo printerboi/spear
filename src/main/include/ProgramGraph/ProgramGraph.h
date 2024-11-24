@@ -20,14 +20,27 @@
 class ProgramGraph;
 
 
+/**
+ * Defines a instruction with attached energy value
+ * 
+ */
 class InstructionElement {
 public:
     double energy;
     llvm::Instruction* inst;
 
+    /**
+     * Construct a new Instruction Element object
+     * 
+     * @param instruction Instruction the element belongs to
+     */
     explicit InstructionElement(llvm::Instruction* instruction);
 };
 
+/**
+ * Enum to distinguish node types 
+ * 
+ */
 enum NodeType {
     UNDEFINED,
     NODE,

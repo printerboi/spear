@@ -1,7 +1,3 @@
-//
-// Created by maximiliank on 03.04.24.
-//
-
 #ifndef SPEAR_CLIOPTIONS_H
 #define SPEAR_CLIOPTIONS_H
 
@@ -56,6 +52,9 @@ enum class Strategy {
     BEST
 };
 
+/**
+ * CLIOptions class to encapsulate the parsed command line arguments
+ */
 class CLIOptions {
 public:
     /**
@@ -118,21 +117,51 @@ public:
      */
     std::string codePath;
 
+    /**
+     * Construct a new CLIOptions object
+     * 
+     */
     CLIOptions();
 
+    /**
+     * Convert a string to mode enum type
+     * 
+     * @param str String to convert
+     * @return Mode enum type
+     */
     static Mode strToMode(const std::string& str);
 
+    /**
+     * Convert a string to format enum type
+     * 
+     * @param str String to convert
+     * @return Format enum type
+     */
     static Format strToFormat(const std::string& str);
 
+    /**
+     * Convert a string to strategy enum type
+     * 
+     * @param str String to convert
+     * @return Strategy enum type
+     */
     static Strategy strToStrategy(const std::string& str);
 };
 
+/**
+ * Subclass to distinguish options related to profiling
+ * 
+ */
 class ProfileOptions : public CLIOptions{
 public:
 
     ProfileOptions(std::string codePath,  int repeatAmount, std::string saveLocation);
 };
 
+/**
+ * Subclass to distinguish options related to the analysis
+ * 
+ */
 class AnalysisOptions : public CLIOptions{
 public:
 

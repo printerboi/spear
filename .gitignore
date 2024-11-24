@@ -43,3 +43,5 @@ util/analysisrunner/durationanalysis.csv
 util/analysisrunner/stability
 
 build/
+
+.vscode/

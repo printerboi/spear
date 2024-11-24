@@ -27,9 +27,9 @@ opt -disable-output
 `<mode>`: Mode the analysis should run on. Choose between the following options
 - `function` - Analyses every function by itself. Takes no respect to calls
 - `program` - Analyses the whole program with respect to calls.
-- `block`- 
-- `instruction` - 
-- `graph`- 
+- `block`- Analyses the whole program but will output the nodes of the programgraph for each function. Denotes the nodes with their energy usage.
+- `instruction` - Analyses the whole program and will output a JSON representing the programgraph down to the used instructions of each node.
+- `graph`- Analyses the program and will print out a DOT graph to stdout.
 
 `<format>`: Outputformat to print after the calculation. Choose between the following options
 - `json` - Json-Format
@@ -46,4 +46,4 @@ opt -disable-output
 
 `<llvmirpath>` Path to compiled llvm-ir file, the analysis should run on
 
-`<function>`: Name of the function to analysed. Can be used if only a single function should be analyzed.
+`<function>`: Name of the function to analysed. Can be used if only a single function should be analyzed. (Currently only used for graph generation)

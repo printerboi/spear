@@ -1,7 +1,3 @@
-//
-// Created by max on 27.12.22.
-//
-
 #ifndef BA_POWERCAPREADER_H
 #define BA_POWERCAPREADER_H
 

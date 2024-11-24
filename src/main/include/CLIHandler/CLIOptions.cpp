@@ -1,7 +1,3 @@
-//
-// Created by maximiliank on 03.04.24.
-//
-
 #include "CLIOptions.h"
 
 #include <utility>

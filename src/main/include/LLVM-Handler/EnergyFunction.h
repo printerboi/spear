@@ -1,7 +1,3 @@
-//
-// Created by maximiliank on 24.03.23.
-//
-
 #ifndef SPEAR_ENERGYFUNCTION_H
 #define SPEAR_ENERGYFUNCTION_H
 
@@ -9,6 +5,10 @@
 #include <llvm/IR/Function.h>
 class ProgramGraph;
 
+/**
+ * Class abstracting functions with attached energy value 
+ * 
+ */
 class EnergyFunction {
 public:
     //Reference to the corresponding function
