@@ -69,28 +69,27 @@ $(function() {
 <div class="title">RegisterReader.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#ifndef RAPL_READER_REGISTERREADER_H</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#define RAPL_READER_REGISTERREADER_H</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classRegisterReader.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRegisterReader.html">RegisterReader</a> {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keywordtype">int</span> energyReg;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keywordtype">int</span> unitReg;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordtype">char</span>* regFile = <span class="keyword">new</span> <span class="keywordtype">char</span>[15];</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189">RegisterReader</a>(<span class="keywordtype">int</span> core);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classRegisterReader.html#a6649a75a1a466543fab025c99452d555">getEnergy</a>();</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classRegisterReader.html#a119b1f2fa4619881dd10e704650c1ca3">readMultiplier</a>();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">long</span> read(<span class="keywordtype">int</span> registerOffset);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;};</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef RAPL_READER_REGISTERREADER_H</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define RAPL_READER_REGISTERREADER_H</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;string&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classRegisterReader.html">    9</a></span>&#160;<span class="keyword">class </span><a class="code" href="classRegisterReader.html">RegisterReader</a> {</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keywordtype">int</span> energyReg;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">int</span> unitReg;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">char</span>* regFile = <span class="keyword">new</span> <span class="keywordtype">char</span>[15];</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189">RegisterReader</a>(<span class="keywordtype">int</span> core);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classRegisterReader.html#a6649a75a1a466543fab025c99452d555">getEnergy</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="classRegisterReader.html#a119b1f2fa4619881dd10e704650c1ca3">readMultiplier</a>();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">long</span> <span class="keywordtype">long</span> read(<span class="keywordtype">int</span> registerOffset);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//RAPL_READER_REGISTERREADER_H</span></div>
-<div class="ttc" id="aclassRegisterReader_html"><div class="ttname"><a href="classRegisterReader.html">RegisterReader</a></div><div class="ttdef"><b>Definition:</b> RegisterReader.h:10</div></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//RAPL_READER_REGISTERREADER_H</span></div>
+<div class="ttc" id="aclassRegisterReader_html"><div class="ttname"><a href="classRegisterReader.html">RegisterReader</a></div><div class="ttdef"><b>Definition:</b> RegisterReader.h:9</div></div>
 <div class="ttc" id="aclassRegisterReader_html_a119b1f2fa4619881dd10e704650c1ca3"><div class="ttname"><a href="classRegisterReader.html#a119b1f2fa4619881dd10e704650c1ca3">RegisterReader::readMultiplier</a></div><div class="ttdeci">double readMultiplier()</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:41</div></div>
 <div class="ttc" id="aclassRegisterReader_html_a6649a75a1a466543fab025c99452d555"><div class="ttname"><a href="classRegisterReader.html#a6649a75a1a466543fab025c99452d555">RegisterReader::getEnergy</a></div><div class="ttdeci">double getEnergy()</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:34</div></div>
 <div class="ttc" id="aclassRegisterReader_html_ae6c04ca1a23d22c2dcd5adcde62d6189"><div class="ttname"><a href="classRegisterReader.html#ae6c04ca1a23d22c2dcd5adcde62d6189">RegisterReader::RegisterReader</a></div><div class="ttdeci">RegisterReader(int core)</div><div class="ttdef"><b>Definition:</b> RegisterReader.cpp:11</div></div>

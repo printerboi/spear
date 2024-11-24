@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['_7eloopnode_171',['~LoopNode',['../classLoopNode.html#aeef0c735da0948bbeaedc474a6c75709',1,'LoopNode']]],
-  ['_7elooptree_172',['~LoopTree',['../classLoopTree.html#ac7a3306c81d41d6cea849992f3fec9ce',1,'LoopTree']]],
-  ['_7eprogramgraph_173',['~ProgramGraph',['../classProgramGraph.html#af44e4d1105e7b04a53afe76a8350d303',1,'ProgramGraph']]]
+  ['timeprogram_186',['timeProgram',['../classProfiler.html#aa8ae68fc06962a7e5dcdad1fee8172ca',1,'Profiler']]],
+  ['tohexval_187',['toHexVal',['../classColor.html#abed14bf54e8ecb3173378ef6dc83e58b',1,'Color']]],
+  ['tohtmlcolor_188',['toHtmlColor',['../classColor.html#a8c0e2ae003235a81392ce314f980cc54',1,'Color']]],
+  ['tostring_189',['toString',['../classInstructionCategory.html#a057f079222bee2c118ec344f5e7e7601',1,'InstructionCategory::toString()'],['../classNode.html#ab68ba2e4b8b4b4aa5cd9cdcfe03277f3',1,'Node::toString()'],['../classEdge.html#a17a5eaaeaf6fa7a3bc9fe01a630bd6e4',1,'Edge::toString()'],['../classLoopNode.html#af948b34b636a7ae9dabfd7ae25b76f0e',1,'LoopNode::toString()']]]
 ];
