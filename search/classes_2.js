@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['demangler_112',['DeMangler',['../classDeMangler.html',1,'']]]
+  ['demangler_0',['DeMangler',['../classDeMangler.html',1,'']]]
 ];

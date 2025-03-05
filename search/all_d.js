@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['operation_60',['operation',['../classCLIOptions.html#a843ce59621f2fd7a67ab2b4e570f95f9',1,'CLIOptions']]],
-  ['outputmetricsjson_61',['outputMetricsJSON',['../structEnergy.html#a44ce0b6ccf49a865b0c8689c7c56e923',1,'Energy']]],
-  ['outputmetricsplain_62',['outputMetricsPlain',['../structEnergy.html#aa9e5eeb832d9aa56dbbfe70151cdad83',1,'Energy']]]
+  ['operation_0',['operation',['../classCLIOptions.html#a843ce59621f2fd7a67ab2b4e570f95f9',1,'CLIOptions']]],
+  ['outputmetricsjson_1',['outputMetricsJSON',['../structEnergy.html#a44ce0b6ccf49a865b0c8689c7c56e923',1,'Energy']]],
+  ['outputmetricsplain_2',['outputMetricsPlain',['../structEnergy.html#aa9e5eeb832d9aa56dbbfe70151cdad83',1,'Energy']]]
 ];

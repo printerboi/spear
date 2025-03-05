@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['analysisoptions_107',['AnalysisOptions',['../classAnalysisOptions.html',1,'']]],
-  ['analysisstrategy_108',['AnalysisStrategy',['../classAnalysisStrategy.html',1,'']]]
+  ['analysisoptions_0',['AnalysisOptions',['../classAnalysisOptions.html',1,'']]],
+  ['analysisstrategy_1',['AnalysisStrategy',['../classAnalysisStrategy.html',1,'']]]
 ];
